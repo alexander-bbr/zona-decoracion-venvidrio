@@ -1,0 +1,11 @@
+#ORDEN SUGERIDO PARA EMPEZAR
+1. BASE DE DATOS - Tabla usuarios (base para todo lo demás)
+2. BASE DE DATOS - Tabla turnos y turno_asignaciones
+3. BASE DE DATOS - Tabla historial
+4. BASE DE DATOS - Relacionar "elaborado_por" y similares con usuarios (FK)
+5. MODULO LOGIN
+6. MODULO GESTION DE USUARIOS
+7. MODULO DE PRODUCCION LISA (relacion de claves foraneas)
+8. MODULO DE INSUMOS (PINTURA)
+9. DASHBOARD (depende de que todo lo anterior ya exista)
+10. OBSERVACIONES FRONTEND (ajustes visuales, se pueden hacer en paralelo)

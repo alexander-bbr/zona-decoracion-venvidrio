@@ -1,0 +1,25 @@
+.header {
+  background: var(--primary-color);
+  color: #ffffff;
+  padding: 18px 24px;
+  box-shadow: 0 6px 20px rgba(16, 93, 255, 0.12);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.logo {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.32);
+  background: #ffffff;
+  padding: 4px;
+}
+
+.title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}

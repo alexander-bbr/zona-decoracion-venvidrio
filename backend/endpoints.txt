@@ -1,0 +1,264 @@
+Ruta 1: Ingreso de Pintura (Registro)
+Endpoint: http://127.0.0.1:8000/api/pintura/registro
+Método: POST
+
+JSON (Envía el Frontend):
+
+json
+{
+  "idPinturaInventario": int (1 o 2),
+  "proveedor": "String",
+  "fechaRegistro": "2026-06-24",
+  "unidadDeMedida": "String",
+  "cantidadRegistrada": 100.00,
+  "registradoPor": "String",
+  "observaciones": "String"
+}
+
+
+JSON (Respuesta al Frontend en caso de exito ):
+
+{
+  "mensaje": "Registro ingresado con éxito",
+  "id": 
+}
+
+JSON (Respuesta al Frontend en caso de error ):
+{
+  "detail": "Insumo no encontrado en inventario"
+}
+
+
+---
+
+
+Ruta 2: Formato de Consumo (Salida)
+Endpoint: http://127.0.0.1:8000/api/pintura/consumo
+Método: POST
+
+JSON (Envía el Frontend):
+
+json
+{
+  "idPinturaInventario": int (1 o 2),
+  "proveedor": "String",
+  "fechaInicio": "2026-06-24",
+  "numeroDeLote": "String",
+  "unidadDeMedida": "String",
+  "cantidadConsumida": 12.50,
+  "fechaDeFinalizacion": "2026-06-25",
+  "revisadoPor": "String",
+  "observaciones": "String"
+}
+
+JSON (Respuesta al Frontend en caso de exito ):
+
+#en caso de exito (200)
+json
+{
+  "mensaje": "Consumo ingresado con éxito",
+  "id": 
+}
+
+JSON (Respuesta al Frontend en caso de error ):
+#caso 1
+{
+  "detail": "Insumo no encontrado"
+}
+
+#caso 2
+{
+  "detail": "Stock insuficiente. Disponible: {inventario.cantidad_actual}"
+}
+
+
+---
+
+
+Ruta 3: Inventario de pintura
+Endpoint: http://127.0.0.1:8000/api/pintura/inventario
+Método: GET
+
+Estructura de los datos que recibirá:
+json
+{
+  "data": [
+    {
+      "id": "number",
+      "color": "string",
+      "cantidad_actual": "number", 
+      "cantidad_minima_alerta": "number"
+    }
+  ]
+}
+
+
+---
+
+
+Ruta 4: Endpoint para los datos del dashboard
+Endpoint: http://127.0.0.1:8000/api/dashboard/datos?fromDate=YYYY-MM-DD&toDate=YYYY-MM-DD
+NOTA: Recuerda agregar los parámetros a la consulta
+Método: GET
+
+json
+{
+  "status": "string",
+  "data": [
+    {
+      "date": "string",
+      "produceLisa": "number",
+      "envasesDecorados": "number",
+      "envasesDefectuosos": "number"
+    }
+  ]
+}
+
+
+
+#GESTION DE USUARIOS
+
+Ruta 1: Crear Usuario
+Endpoint: [http://127.0.0.1:8000/api/usuarios](http://127.0.0.1:8000/api/usuarios)
+Método: POST
+
+JSON (Envía el Frontend):
+{
+"cedula": "String",
+"carnetUsuario": "String",
+"contrasena": "String",
+"nombres": "String",
+"apellidos": "String",
+"telefono": "String",
+"correo": "String",
+"rol": "administrador" | "operador",
+"activoUsuario": true,
+"idsPermisos": [1, 2]
+}
+
+JSON (Respuesta en caso de éxito):
+{
+"mensaje": "Usuario creado con éxito",
+"id": 1
+}
+
+JSON (Respuesta en caso de error):
+#caso 1
+{
+"detail": "El carnet ya está registrado"
+}
+
+#caso 2
+{
+"detail": "La cédula ya está registrada"
+}
+
+#caso 3
+{
+"detail": "El correo ya está registrado"
+}
+
+---
+
+Ruta 2: Listar Usuarios
+Endpoint: [http://127.0.0.1:8000/api/usuarios](http://127.0.0.1:8000/api/usuarios)
+Método: GET
+
+Estructura de los datos que recibirá:
+{
+"data": [
+{
+"id_usuario": "number",
+"cedula": "string",
+"carnet_usuario": "string",
+"nombres": "string",
+"apellidos": "string",
+"telefono": "string",
+"correo": "string",
+"rol": "string",
+"activo_usuario": "boolean"
+}
+]
+}
+
+---
+
+Ruta 3: Obtener Usuario por ID (para prellenar formulario de edición)
+Endpoint: [http://127.0.0.1:8000/api/usuarios/](http://127.0.0.1:8000/api/usuarios/){id_usuario}
+Método: GET
+
+Estructura de los datos que recibirá:
+{
+"data": {
+"usuario": {
+"id_usuario": "number",
+"cedula": "string",
+"carnet_usuario": "string",
+"nombres": "string",
+"apellidos": "string",
+"telefono": "string",
+"correo": "string",
+"rol": "string",
+"activo_usuario": "boolean",
+},
+"permisos": [
+{
+"id_permisom": "number",
+"modulo": "string",
+"accion": "string"
+}
+]
+}
+}
+
+JSON (Respuesta en caso de error):
+{
+"detail": "Usuario no encontrado"
+}
+
+---
+
+Ruta 4: Editar Usuario
+Endpoint: [http://127.0.0.1:8000/api/usuarios/](http://127.0.0.1:8000/api/usuarios/){id_usuario}
+Método: PUT
+
+JSON (Envía el Frontend):
+{
+"cedula": "String",
+"carnetUsuario": "String",
+"nombres": "String",
+"apellidos": "String",
+"telefono": "String",
+"correo": "String",
+"rol": "administrador" | "operador",
+"activoUsuario": true,
+"idsPermisos": [1, 2]
+}
+
+JSON (Respuesta en caso de éxito):
+{
+"mensaje": "Usuario actualizado con éxito",
+"id": 1
+}
+
+JSON (Respuesta en caso de error):
+{
+"detail": "Usuario no encontrado"
+}
+
+---
+
+Ruta 5: Catálogo de Permisos
+Endpoint: [http://127.0.0.1:8000/api/usuarios/permisos/catalogo](http://127.0.0.1:8000/api/usuarios/permisos/catalogo)
+Método: GET
+
+Estructura de los datos que recibirá:
+{
+"data": [
+{
+"id_permisom": "number",
+"modulo": "string",
+"accion": "string"
+}
+]
+}

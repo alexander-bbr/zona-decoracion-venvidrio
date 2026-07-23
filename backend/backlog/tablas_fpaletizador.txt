@@ -1,0 +1,36 @@
+#BASE DE DATOS ACTUALIZADA (TABLA ENVASES)
+#MODULO DE ENVASES AGREGADO (REGISTRAR,CONSULTAR)
+					
+
+
+#EXPLICACION DE CADA TABLA
+Tabla: inspeccion_cabecera
+Esta tabla actúa como el contenedor principal de cada inspección, registrando los datos únicos que identifican cuándo, dónde y quién realizó el chequeo. Su función principal es almacenar la información general (como la fecha, el turno, el grupo y el equipo evaluado) para que cada formato tenga un identificador único que permita agrupar los resultados de forma ordenada.
+
+Tabla: catalogo_preguntas
+Esta tabla funciona como un diccionario maestro que contiene la lista fija de las 21 preguntas de inspección. Su objetivo es evitar la duplicidad de información al guardar el texto completo de cada elemento a inspeccionar una sola vez, asignándole a cada pregunta un número de identificación (ID) permanente que el sistema utilizará para hacer referencia a ellas sin necesidad de escribir el texto repetidamente.
+
+Tabla: inspeccion_respuestas
+Esta es la tabla central que vincula el evento de la inspección con las preguntas del catálogo para registrar la calificación final de cada punto. Funciona guardando únicamente los números de referencia (el ID del formato y el ID de la pregunta) junto con el resultado ('A', 'NA', 'C', 'NC'), lo que permite que el sistema procese y consulte miles de registros de forma extremadamente rápida y eficiente.
+
+
+#EXPLICACION DE CADA FUNCION DE BUSQUEDA
+La **primera búsqueda**, la de creación, se encarga de preparar el lienzo para un documento nuevo consultando exclusivamente tu catálogo (la `Tabla 2`); aquí el sistema aplica el filtro `estado = 1` para que el usuario solo vea y rellene los campos que están vigentes hoy, ignorando cualquier cosa que ya no se utilice.
+
+La **segunda búsqueda**, el buscador o filtrado, es la que hace el trabajo sucio de localizar documentos; esta consulta mira directamente la `Tabla 1` y devuelve una lista de resultados basada únicamente en lo que el usuario escribió (como un nombre o fecha), permitiendo que aparezcan tanto documentos viejos como actuales sin restricciones de estados o campos.
+
+La **tercera búsqueda**, la de carga al abrir, es la que reconstruye el documento basándose solo en su propia historia; al consultar únicamente la `Tabla 3` con el `id_cabecera` específico, el sistema simplemente muestra los datos que se guardaron en ese momento exacto, ignorando por completo el catálogo actual, por lo que nunca aparecerán campos nuevos ni se ocultarán los que ya fueron eliminados.
+
+
+
+#EXPLICACION DEL COMO FUNCIONA
+Si usáramos una sola tabla gigante y guardáramos los textos repetidos, tu base de datos pesaría muchísimo en el disco duro.
+Pero en la tabla inspeccion_respuestas, ¿qué estamos guardando realmente en esas 23,000 filas?
+Puros números enteros (el ID del formato y el ID de la pregunta) y una o dos letras ('C', 'NC').
+Los motores de bases de datos como el de XAMPP están optimizados a un nivel extremo para leer y almacenar números enteros. Esas 23,000 filas de puros numeritos van a pesar apenas unos pocos Kilobytes (menos de lo que pesa una foto borrosa en tu celular). Puedes tener 10 años de registros (230,000 filas) y el sistema ni siquiera va a sudar.
+
+2. Cómo busca la información (Los Índices)
+Seguro piensas: "Si hay 23,000 filas, cuando el frontend pida el formato de hoy, ¿la base de datos tiene que leer las 23,000 para encontrar las 21 correctas?"
+No. Las Llaves Primarias (PK) y Foráneas (FK) que definimos (el id, id_cabecera, id_pregunta) funcionan como un índice de un libro. Cuando desde tu código en FastAPI (usando SQLAlchemy) le pidas a la base de datos: "Dame las respuestas del formato 105", MySQL no lee toda la tabla. Va directo a la página del índice, ubica el 105, extrae esas 21 filas de golpe y te las devuelve en milisegundos.
+
+

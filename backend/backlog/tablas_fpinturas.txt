@@ -1,0 +1,11 @@
+1. Tabla pintura_inventario (El catálogo central)
+Esta tabla funciona como el catálogo único de tu almacén. Aquí registras solo una vez cada tipo de pintura que existe (por ejemplo, "Blanco del Proveedor X en Galones") y mantienes el registro en tiempo real de la cantidad actual disponible. Es el único lugar donde FastAPI consultará cuánta pintura queda realmente para saber si debe enviarte la alerta de que se está agotando.
+
+2. Tabla formato_formato_pintura_consumo (El registro de entradas)
+Esta tabla es tu historial de compras o pedidos. Cada vez que llega pintura nueva, se crea una fila aquí detallando la fecha, quién la pidió y cuánta llegó, pero en lugar de volver a escribir "Blanco del Proveedor X", simplemente guarda el número de ID que esa pintura tiene en el catálogo central. Al guardarse, tu código suma automáticamente esta nueva cantidad a la tabla de inventario.
+
+3. Tabla formato_formato_pintura_consumo (El registro de salidas)
+Esta es la tabla que guarda el historial del formato que se llena a diario en la planta cuando alguien gasta material. Al igual que las solicitudes, solo guarda el ID de la pintura junto con la cantidad consumida, el lote y las fechas. Cada vez que se inserta un registro aquí, el sistema va al inventario central, resta lo que se gastó y verifica si se llegó al límite mínimo para disparar la notificación por correo.
+
+¿Por qué lo hicimos así? (La regla de no repetir)
+Si guardaras todo en una sola tabla, tendrías escrita la palabra "Blanco" y "Proveedor X" miles de veces con el paso de los meses. Si un operador escribe "Blaco" por error, el sistema colapsaría al intentar sumar o restar porque pensaría que es un insumo nuevo. Al separar el catálogo central de los movimientos diarios, garantizas que los cálculos de la cantidad actual sean matemáticamente perfectos, evitas que tu base de datos se vuelva lenta y pesada, y le entregas a tu compañero de frontend datos limpios y rápidos a través de la API.

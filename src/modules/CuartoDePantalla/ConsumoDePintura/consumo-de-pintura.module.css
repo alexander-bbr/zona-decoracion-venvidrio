@@ -1,0 +1,138 @@
+.container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.moduleHeader {
+  margin-bottom: 32px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.moduleTitle {
+  font-size: 28px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 4px 0;
+}
+
+.moduleSubtitle {
+  font-size: 16px;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* Links - Acciones */
+.actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 32px;
+  max-width: 800px;
+  margin: auto;
+}
+
+.actionCard {
+  background: white;
+  padding: 40px 32px;
+  border-radius: 15px;
+  text-decoration: none;
+  border: 2px solid #f3f4f6;
+  transition: all 0.3s ease;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.actionCard:hover {
+  transform: translateY(-8px);
+  border-color: #2563eb;
+  box-shadow: 0 12px 32px rgba(37, 99, 235, 0.15);
+}
+
+.actionIcon {
+  font-size: 64px;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.actionCard h3 {
+  color: #1f2937;
+  font-size: 22px;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+}
+
+.actionCard p {
+  color: #6b7280;
+  font-size: 15px;
+  margin: 0 0 16px 0;
+  line-height: 1.6;
+}
+
+.actionBadge {
+  display: inline-block;
+  background: #eff6ff;
+  color: #2563eb;
+  padding: 4px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* Sub navegación (cuando estás en un submódulo) */
+.subNav {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding: 12px 16px;
+  background: #f9fafb;
+  border-radius: 8px;
+}
+
+.subNavLink {
+  color: #6b7280;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.subNavLink:hover {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.subNavTitle {
+  font-weight: 600;
+  color: #1f2937;
+  font-size: 16px;
+}
+
+.content {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Animación */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .actions {
+    grid-template-columns: 1fr;
+  }
+
+  .actionCard {
+    padding: 32px 20px;
+  }
+}

@@ -1,0 +1,77 @@
+# backend/modules/dashboard/services.py
+
+# Importamos tu función genérica tal como está ahora
+from backend.utils.funciones import obtener_registros
+
+def obtener_actualizaciones_dashboard(nombre_tabla: str, ultimo_id_visto: int = 0):
+    """
+    Recibe el nombre de la tabla y el último ID que el frontend llegó a registrar.
+    Devuelve ÚNICAMENTE los datos nuevos que se crearon después de ese ID.
+    """
+    
+    #Le pasamos el 'ultimo_id_visto' a tu función.
+    # Así, MySQL se encarga de hacer el filtro pesado y no satura la red.
+    respuesta = obtener_registros(nombre_tabla, desde_id=ultimo_id_visto)
+    
+    # Control de seguridad: Si la consulta falla en la base de datos, abortamos.
+    if respuesta.get("status") == "error":
+        return respuesta
+        
+    # Como MySQL YA filtró los datos en la consulta, lo que viene en 'data' 
+    # son SÓLO los registros nuevos. Ya no hace falta el filtrado manual con el ciclo 'for'.
+    nuevos_registros = respuesta.get("data", [])
+    
+    #Calcular el nuevo punto de referencia para el frontend
+    total_nuevos = len(nuevos_registros)
+    
+    # El frontend necesita saber cuál es el nuevo ID más alto que acaba de recibir
+    if total_nuevos > 0:
+        # Tomamos el 'id' del último elemento de la lista de nuevos registros
+        nuevo_ultimo_id = nuevos_registros[-1].get("id")
+    else:
+        # Si no hay nada nuevo, el último ID visto sigue siendo el mismo que mandó el front
+        nuevo_ultimo_id = ultimo_id_visto
+        
+    #Respuesta estructurada
+    return {
+        "status": "success",
+        "data": {
+            "modulo": nombre_tabla,
+            "ultimo_id_servidor": nuevo_ultimo_id,  # El frontend guardará este número en su estado
+            "nuevos_registros_encontrados": total_nuevos,
+            "actualizaciones": nuevos_registros      # Aquí van solo las filas nuevas de la tabla
+        }
+    }
+
+
+def obtener_actualizaciones_envases(ultimo_id_visto: int = 0):
+    """
+    Recibe el último ID que el frontend llegó a registrar para envases.
+    Devuelve ÚNICAMENTE los datos nuevos de la tabla 'produccion_envases'.
+    """
+    # Definimos de forma fija la tabla de envases
+    nombre_tabla = "produccion_envases"
+    
+    # Reutilizamos tu función genérica de consulta pasándole la tabla de envases
+    respuesta = obtener_registros(nombre_tabla, desde_id=ultimo_id_visto)
+    
+    if respuesta.get("status") == "error":
+        return respuesta
+        
+    nuevos_registros = respuesta.get("data", [])
+    total_nuevos = len(nuevos_registros)
+    
+    if total_nuevos > 0:
+        nuevo_ultimo_id = nuevos_registros[-1].get("id")
+    else:
+        nuevo_ultimo_id = ultimo_id_visto
+        
+    return {
+        "status": "success",
+        "data": {
+            "modulo": nombre_tabla,
+            "ultimo_id_servidor": nuevo_ultimo_id,
+            "nuevos_registros_encontrados": total_nuevos,
+            "actualizaciones": nuevos_registros
+        }
+    }

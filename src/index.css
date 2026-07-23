@@ -1,0 +1,49 @@
+* {
+  font-family: Montserrat, sans-serif;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+:root {
+  --primary-color: rgb(53, 116, 211);
+  --secondary-color: rgba(133, 133, 133, 0.664);
+  --background-color: #e0eaf3;
+  --primary-text-color: rgb(33, 33, 34);
+  --secondary-text-color: #34495e;
+  --third-text-color: #ffffff;
+}
+
+body {
+  background: var(--background-color);
+  color: var(--primary-text-color);
+}
+
+#root {
+  min-height: 100vh; /* Mantiene abajo del todo el footer */
+  display: grid;
+  grid-template-columns: auto 1fr 1fr;
+  grid-template-rows: auto 1fr auto;
+  gap: 0px 0px;
+  grid-auto-flow: row;
+  grid-template-areas:
+    "header header header"
+    "sidebar main main"
+    "footer footer footer";
+}
+
+#header {
+  grid-area: header;
+}
+
+#sidebar {
+  grid-area: sidebar;
+}
+
+#main {
+  grid-area: main;
+}
+
+#footer {
+  grid-area: footer;
+}

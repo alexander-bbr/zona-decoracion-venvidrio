@@ -1,0 +1,55 @@
+.paintingContainer {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.painting {
+  font-size: 1.1rem;
+  flex-grow: 1;
+  max-width: 300px;
+  padding: 1rem;
+  border-radius: 8px;
+  background: var(--third-text-color);
+}
+
+/* Añade un estilo único para cada color de pintura */
+.color-blanco {
+  border: 1px solid rgba(48, 48, 48, 0.7);
+  color: rgb(48, 48, 48);
+}
+.color-azul {
+  border: 1px solid var(--primary-color);
+  color: var(--primary-color);
+}
+.color-rojo {
+  border: 1px solid rgba(245, 40, 40, 0.7);
+  color: rgb(245, 40, 40);
+}
+.color-verde {
+  border: 1px solid rgba(31, 141, 64, 0.7);
+  color: rgb(31, 141, 64);
+}
+.color-amarillo {
+  border: 1px solid rgba(248, 194, 46, 0.7);
+  color: rgb(248, 194, 46);
+}
+
+.paintingName {
+  text-align: center;
+}
+
+.stock {
+  margin: 1rem 0;
+  text-align: center;
+  color: black;
+}
+
+/* Mensaje de alerta en caso de bajo stock */
+.alert {
+  display: block;
+  border-radius: 5px;
+  text-align: center;
+  background-color: rgba(248, 248, 94, 0.801);
+  padding: 0.2rem;
+}

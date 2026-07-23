@@ -1,0 +1,137 @@
+.container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.moduleHeader {
+  margin-bottom: 2rem;
+}
+
+.moduleTitle {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #1a1a2e;
+  margin-bottom: 0.5rem;
+}
+
+.moduleSubtitle {
+  color: #6c757d;
+  font-size: 1rem;
+  margin: 0;
+}
+
+.gestion {
+  margin: auto;
+  width: 90%;
+  background: white;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0.4rem 0 2.3rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.subtitle {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: var(--primary-text-color);
+  margin-left: 1rem;
+}
+
+.buttons {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.btnAgregar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+  text-decoration: none;
+}
+
+.btnAgregar:hover {
+  background: rgb(41, 91, 165);
+}
+
+.btnAgregar svg {
+  width: 20px;
+  height: 20px;
+}
+
+.tableContainer {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+thead {
+  background: #5181b1;
+  color: var(--third-text-color);
+}
+
+th {
+  text-align: left;
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+  border-bottom: 2px solid #dee2e6;
+  white-space: nowrap;
+}
+
+td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #e9ecef;
+}
+
+tr:nth-child(2) {
+  background-color: #ececec;
+}
+
+.filaClickable {
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.filaClickable:hover {
+  background: #d4d8da;
+}
+
+.estadoActivo {
+  display: inline-block;
+  padding: 0.2rem 0.8rem;
+  background: #d4edda;
+  color: #155724;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.estadoInactivo {
+  display: inline-block;
+  padding: 0.2rem 0.8rem;
+  background: #f8d7da;
+  color: #721c24;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}

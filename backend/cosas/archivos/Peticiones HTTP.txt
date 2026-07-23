@@ -1,0 +1,12 @@
+Sobre el módulo Inventario de Producción Lis:
+
+	El Front-End hará una petición fetch para ver todos los registros de producción Lisa. La petición fetch tendrá como parámetros: Fecha Desde (fromDate), Fecha Hasta (toDate) y modelo (model).
+
+	El backend entonces debe regresar un json con todos los campos de la tabala produccion_lisa_registro que cumplan con la petición fetch.
+
+
+Sobre el súbmodulo de Historial de Salida de la Producción Lisa
+
+	El Front-End hará una petición fetch para ver todos los registros de producción Lisa. La petición fetch tendrá como parámetros: Fecha Desde (fromDate), Fecha Hasta (toDate) y modelo (model) (tal cual como la del otro módulo).
+
+	El backend entonces debe regresar un json con todos los campos de la tabala produccion_lisa_registro EXEPTO el campo id (porque al usuario no le interesa eso), que cumplan con la petición fetch.

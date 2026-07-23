@@ -1,0 +1,13 @@
+.chartWrapper {
+  width: 100%;
+  height: 100%;
+}
+
+.noData {
+  width: 100%;
+  min-height: 240px;
+  display: grid;
+  place-items: center;
+  color: var(--secondary-text-color);
+  font-size: 0.98rem;
+}

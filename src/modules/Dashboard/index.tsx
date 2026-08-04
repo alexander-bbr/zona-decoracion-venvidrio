@@ -93,7 +93,7 @@ export const Dashboard = () => {
         </p>
       </header>
 
-      <section className={styles.dashboard}>
+      <section className={`${styles.dashboard} content`}>
         {/* Panel de control */}
         <section className={styles.controls}>
           {/* Fecha Desde */}

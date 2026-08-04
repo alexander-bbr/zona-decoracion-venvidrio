@@ -30,6 +30,8 @@ pip freeze > requirements.txt
 3. COMANDOS DE VERIFICACION Y EJECUCION DEL BACKEND
 Encender el servidor backend de FastAPI con auto-recarga automática:
 uvicorn backend.main:app --reload
+o
+python -m uvicorn backend.main:app --reload
 
 (Para apagar el servidor en la terminal, presiona la combinación de teclas CTRL + C).
 

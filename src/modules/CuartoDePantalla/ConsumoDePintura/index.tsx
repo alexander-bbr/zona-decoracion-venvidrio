@@ -29,35 +29,26 @@ export const ConsumoDePintura = () => {
 
       {/* Si estamos en la raíz del módulo, mostramos las tarjetas */}
       {isRoot ? (
-        <div className={styles.actions}>
-          <NavLink to="/consumo-pintura/consumir" className={styles.actionCard}>
+        <div className={`${styles.actions} content`}>
+          <NavLink to="consumir" className={styles.actionCard}>
             <div className={styles.actionIcon}>📤</div>
             <h3>Consumir Pintura</h3>
             <p>Registra la salida de pintura del inventario</p>
           </NavLink>
 
-          <NavLink
-            to="/consumo-pintura/suministrar"
-            className={styles.actionCard}
-          >
+          <NavLink to="suministrar" className={styles.actionCard}>
             <div className={styles.actionIcon}>📥</div>
             <h3>Suministrar Pintura</h3>
             <p>Registra la entrada de pintura al inventario</p>
           </NavLink>
 
-          <NavLink
-            to="/consumo-pintura/historialconsumo"
-            className={styles.actionCard}
-          >
+          <NavLink to="historial-consumo" className={styles.actionCard}>
             <div className={styles.actionIcon}>📋</div>
             <h3>Historial de Consumo</h3>
             <p>Revisa el historial de consumo de pintura</p>
           </NavLink>
 
-          <NavLink
-            to="/consumo-pintura/inventario"
-            className={styles.actionCard}
-          >
+          <NavLink to="inventario" className={styles.actionCard}>
             <div className={styles.actionIcon}>📦</div>
             <h3>Ver Inventario</h3>
             <p>Revisa la cantidad de pintura en el inventario</p>
@@ -80,7 +71,7 @@ export const ConsumoDePintura = () => {
             <span className={styles.subNavTitle}>{getTitle()}</span>
           </nav>
 
-          <div className={styles.content}>
+          <div className="content">
             <Outlet />
           </div>
         </>

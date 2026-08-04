@@ -1,0 +1,15 @@
+--- ESENCIAL
+- Historial de Consumo de Pintura
+- Login
+- Modulo del Profesor
+- Producción Lisa (CRUD)
+- Monitoreo de Cambio de Pantalla y los Defectos del Decorado (CRUD)
+- Reporte por Turno de Cuarto de Pantalla (CRUD)
+- Generador de PDF
+
+
+---- NO TAN ESENCIAL
+- Historia de Trabajo (CRUD)
+- Chequeo del Equipo Paletizador (CRUD)
+- Lista de Verificación Diaria (CRUD)
+- Recepción y Chequeo de Cajas de Cartón (CRUD)

@@ -252,7 +252,7 @@ export const Usuarios = () => {
     }
 
     return (
-      <section className={styles.gestion}>
+      <section className={`${styles.gestion} content`}>
         <section className={styles.controls}>
           <h3 className={styles.subtitle}>
             Total de Usuarios Registrados: {usuarios.length}
@@ -336,6 +336,7 @@ export const Usuarios = () => {
     );
   };
 
+  /* === RENDERIZADO === */
   return (
     <div className={styles.container}>
       <header className={styles.moduleHeader}>

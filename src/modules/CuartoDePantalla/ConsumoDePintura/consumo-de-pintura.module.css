@@ -25,14 +25,17 @@
 
 /* Links - Acciones */
 .actions {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 32px;
-  max-width: 800px;
   margin: auto;
+  width: 90%;
+
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 3.5rem 4rem;
 }
 
 .actionCard {
+  width: 400px;
   background: white;
   padding: 40px 32px;
   border-radius: 15px;
@@ -108,22 +111,6 @@
   font-weight: 600;
   color: #1f2937;
   font-size: 16px;
-}
-
-.content {
-  animation: fadeIn 0.3s ease-in-out;
-}
-
-/* Animación */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 /* Responsive */

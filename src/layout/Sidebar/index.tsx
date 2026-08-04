@@ -12,6 +12,9 @@ export const Sidebar = () => {
           <Link to="/consumo-pintura">Consumo de Pintura</Link>
         </li>
         <li>
+          <Link to="/produccion-lisa">Producción Lisa</Link>
+        </li>
+        <li>
           <Link to="/gestion-usuarios">Gestión de Usuarios</Link>
         </li>
       </ul>

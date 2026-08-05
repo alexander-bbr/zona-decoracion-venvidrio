@@ -23,8 +23,8 @@ export const InventarioPintura = () => {
         }
         return response.json();
       })
-      .then((data: ApiResponse) => {
-        setPinturas(data.data);
+      .then((response: ApiResponse) => {
+        setPinturas(response.data);
       })
       .catch((e) => {
         console.log(`Error en la búsqueda del inventario: ${e}`);

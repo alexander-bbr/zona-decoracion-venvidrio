@@ -11,7 +11,7 @@ from backend.modules.insumos.pintura.router import router as pintura_router
 from backend.modules.dashboard.router import router as dashboard_router
 
 #  Importamos el router frl módulo de producción lisa
-from backend.modules.produccion_lisa.router import router as produccion_lisa_router
+from backend.modules.produccion.produccion_lisa.router import router as produccion_lisa_router
 
 # Importamos el router del módulo de gestión de usuarios
 from backend.modules.gestion_usuarios.router import router as gestion_usuarios_router

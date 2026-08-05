@@ -1,187 +1,268 @@
-import React, { useState } from "react";
+// ConsumirProduccionLisa.tsx
+import React, { useEffect, useState, type ChangeEvent } from "react";
 import styles from "./consumir-produccion-lisa.module.css";
 import headerLogo from "../../../assets/images/logo-segun-controles.png";
 
-// Tipado para los campos del formulario
-type consumirProduccionLisaProps = {
-  fechaInicio: string;
-  proveedor: string;
-  idPinturaInventario: string;
-  numeroDeLote: string;
-  cantidadConsumida: string;
-  unidadDeMedida: string;
-  fechaDeFinalizacion: string;
-  revisadoPor: string;
-  observaciones: string;
+type camposFormulario = {
+  fechaSalida: string;
+  modelo: string;
+  cantidad: number;
 };
 
-// Tipado para el estado del mensaje de envío
-type MessageState = {
-  text: string;
-  isSuccess: boolean;
+type modelos = {
+  id_inventariopl: number;
+  modelo: string;
+  cantidad_actual: number;
+};
+
+type ApiResponse = {
+  data: modelos[];
 };
 
 export const ConsumirProduccionLisa = () => {
-  /* Variables de estado para los campos del formulario */
-  const [formData, setFormData] = useState<consumirProduccionLisaProps>({
-    fechaInicio: "",
-    proveedor: "",
-    idPinturaInventario: "",
-    numeroDeLote: "",
-    cantidadConsumida: "",
-    unidadDeMedida: "Litros",
-    fechaDeFinalizacion: "",
-    revisadoPor: "",
-    observaciones: "",
+  /* === VARIABLES DE ESTADO === */
+  const [modelos, setModelos] = useState<modelos[]>([]);
+  const [cargando, setCargando] = useState(false);
+  const [cantidadActualModelo, setCantidadActualModelo] = useState<
+    number | null
+  >(null);
+  const [modeloSeleccionadoId, setModeloSeleccionadoId] = useState<
+    number | null
+  >(null);
+
+  const [formData, setFormData] = useState<camposFormulario>({
+    fechaSalida: "",
+    modelo: "",
+    cantidad: 0,
   });
 
   const [enviado, setEnviado] = useState(false);
-  const [message, setMessage] = useState<MessageState>({
-    text: "",
-    isSuccess: false,
-  });
+  const [mensajeError, setMensajeError] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  /* === LÓGICA === */
 
   // Almacenar los datos de los campos
   const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >,
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: name === "cantidad" ? Number(value) : value,
     }));
   };
 
   // Resetear los campos
   const handleReset = () => {
     setFormData({
-      fechaInicio: "",
-      proveedor: "",
-      idPinturaInventario: "",
-      numeroDeLote: "",
-      cantidadConsumida: "",
-      unidadDeMedida: "Litros",
-      fechaDeFinalizacion: "",
-      revisadoPor: "",
-      observaciones: "",
+      fechaSalida: "",
+      modelo: "",
+      cantidad: 0,
     });
+    setCantidadActualModelo(null);
+    setModeloSeleccionadoId(null);
+    setMensajeError("");
   };
 
-  // Cerrar la notificación de envío
-  const closeModal = () => {
-    setEnviado(false);
-  };
+  // Buscar los modelos de envase existentes para listarlos en el formulario
+  useEffect(() => {
+    const fetchModelos = async () => {
+      setCargando(true);
+      try {
+        const response = await fetch(
+          "http://127.0.0.1:8000/api/produccion-lisa/inventario",
+        );
+
+        if (!response.ok) {
+          throw new Error("Código de Error -> " + response.status);
+        }
+
+        const data: ApiResponse = await response.json();
+        setModelos(data.data);
+      } catch (error) {
+        console.error("Error al cargar modelos:", error);
+        setMensajeError("Error al cargar los modelos disponibles");
+      } finally {
+        setCargando(false);
+      }
+    };
+
+    fetchModelos();
+  }, []);
 
   // Enviar el Formulario
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setMensajeError("");
 
     if (isSubmitting) return;
     setIsSubmitting(true);
 
     try {
+      // Validar que se haya seleccionado un modelo
+      if (!formData.modelo) {
+        setMensajeError("Debe seleccionar un modelo");
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Validar cantidad
+      if (formData.cantidad <= 0) {
+        setMensajeError("La cantidad debe ser mayor a 0");
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Validar que no se quiera sacar más de lo que hay en stock
+      if (
+        cantidadActualModelo !== null &&
+        formData.cantidad > cantidadActualModelo
+      ) {
+        setMensajeError(
+          `Stock insuficiente. Disponible: ${cantidadActualModelo.toLocaleString()} unidades`,
+        );
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Preparar datos para enviar
+      if (!modeloSeleccionadoId) {
+        setMensajeError("El modelo seleccionado no es válido");
+        setIsSubmitting(false);
+        return;
+      }
+
+      const payload = {
+        fecha_salida: formData.fechaSalida,
+        id_inventariopl: modeloSeleccionadoId,
+        cantidad_sacada: formData.cantidad,
+      };
+
+      console.log("Enviando datos de salida:", payload);
+
       const response = await fetch(
-        "http://127.0.0.1:8000/api/pintura/consumo",
+        "http://127.0.0.1:8000/api/produccion-lisa/salida",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(formData),
+          body: JSON.stringify(payload),
         },
       );
 
       const data = await response.json();
 
       if (!response.ok) {
-        const errorMsg =
-          data.detail || data.mensaje || `Error ${response.status}`;
-        setMessage({
-          text: errorMsg,
-          isSuccess: false,
-        });
-        setEnviado(true);
-        throw new Error(errorMsg);
+        throw new Error(
+          data.detail || `Error ${response.status}: ${response.statusText}`,
+        );
       }
 
-      setMessage({
-        text: data.mensaje || "Consumo realizado con éxito",
-        isSuccess: true,
-      });
+      console.log("Respuesta del servidor:", data);
 
+      // Mostrar mensaje de éxito
       setEnviado(true);
-    } catch (err) {
-      console.error("Error en el envío:", err);
+      setTimeout(() => {
+        setEnviado(false);
+      }, 3000);
+
+      // Resetear formulario después del envío exitoso
+      setTimeout(() => {
+        handleReset();
+        // Recargar los modelos para actualizar el stock
+        fetchModelos();
+      }, 3000);
+    } catch (error) {
+      console.error("Error en el envío:", error);
+
+      // Manejar específicamente el error de stock insuficiente
+      if (
+        error instanceof Error &&
+        error.message.includes("Stock insuficiente")
+      ) {
+        setMensajeError(error.message);
+      } else {
+        setMensajeError(
+          error instanceof Error
+            ? error.message
+            : "Error al registrar la salida",
+        );
+      }
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  // Función para recargar los modelos (usada después de una salida exitosa)
+  const fetchModelos = async () => {
+    setCargando(true);
+    try {
+      const response = await fetch(
+        "http://127.0.0.1:8000/api/produccion-lisa/inventario",
+      );
+
+      if (!response.ok) {
+        throw new Error("Código de Error -> " + response.status);
+      }
+
+      const data: ApiResponse = await response.json();
+      setModelos(data.data);
+
+      // Si hay un modelo seleccionado, actualizar su cantidad actual
+      if (formData.modelo) {
+        const modeloActualizado = data.data.find(
+          (m) => m.modelo === formData.modelo,
+        );
+        if (modeloActualizado) {
+          setCantidadActualModelo(modeloActualizado.cantidad_actual);
+          setModeloSeleccionadoId(modeloActualizado.id_inventariopl);
+        }
+      }
+    } catch (error) {
+      console.error("Error al cargar modelos:", error);
+    } finally {
+      setCargando(false);
+    }
+  };
+
+  // Manejar selección de modelo
+  const handleModeloChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value;
+
+    // Buscar la cantidad actual del modelo seleccionado
+    const modeloSeleccionado = modelos.find((m) => m.modelo === value);
+
+    if (modeloSeleccionado) {
+      setCantidadActualModelo(modeloSeleccionado.cantidad_actual);
+      setModeloSeleccionadoId(modeloSeleccionado.id_inventariopl);
+    } else {
+      setCantidadActualModelo(null);
+      setModeloSeleccionadoId(null);
+    }
+
+    setFormData((prev) => ({
+      ...prev,
+      modelo: value,
+    }));
+  };
+
+  /* === RENDERIZADO === */
   return (
     <>
-      {/* Notificación de Envío - Modal */}
+      {/* Notificación de Éxito */}
       {enviado && (
-        <div className={styles.modal} onClick={closeModal}>
-          <div
-            className={`${styles.modalContent} ${
-              message.isSuccess ? styles.successful : styles.failed
-            }`}
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Botón de cerrar */}
-            <button
-              onClick={closeModal}
-              className={styles.closeButton}
-              aria-label="Cerrar modal"
-            >
-              ×
-            </button>
-
-            {/* Ícono según éxito/error */}
-            {message.isSuccess ? (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="1.1"
-                stroke="currentColor"
-                width="120"
-                height="120"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                />
-              </svg>
-            ) : (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="1.1"
-                stroke="currentColor"
-                width="110"
-                height="110"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                />
-              </svg>
-            )}
-
-            {/* Mensaje */}
-            <p className={styles.modalMessage}>{message.text}</p>
-          </div>
+        <div className={styles.successMessage}>
+          ¡Salida de producción registrada con éxito!
         </div>
       )}
 
-      {/* Formulario */}
+      {/* Mensaje de Error */}
+      {mensajeError && (
+        <div className={styles.errorMessage}>{mensajeError}</div>
+      )}
+
       <form className={styles.form} onSubmit={handleSubmit}>
         <header className={styles.headerForm}>
           <div className={styles.logoWrapper}>
@@ -193,178 +274,114 @@ export const ConsumirProduccionLisa = () => {
           </div>
           <h2 className={styles.headerTitle}>
             GERENCIA DE ZONA FRÍA Y PROCESOS FINALES INTENDENCIA DE PROCESOS
-            FINALES
+            FINALES - SALIDA DE PRODUCCIÓN
           </h2>
           <div className={styles.codeWrapper}>
             <p className={styles.headerCode}>Sin Código</p>
           </div>
         </header>
 
+        {/* === CAMPOS === */}
         <section className={styles.dataWrapper}>
-          {/* Fecha de Inicio */}
+          {/* Fecha de Salida */}
           <div className={styles.inputWrapper}>
-            <label htmlFor="fechaInicio" className={styles.label}>
-              Fecha de Inicio <span className={styles.requireSymbol}>*</span>
+            <label htmlFor="fechaSalida" className={styles.label}>
+              Fecha de Salida <span className={styles.requireSymbol}>*</span>
             </label>
             <input
               className={styles.input}
               type="date"
-              id="fechaInicio"
-              name="fechaInicio"
-              value={formData.fechaInicio}
+              id="fechaSalida"
+              name="fechaSalida"
+              value={formData.fechaSalida}
               onChange={handleChange}
               required
             />
           </div>
 
-          {/* Proveedor */}
+          {/* Modelo y Cantidad Actual */}
+          <div className={styles.modeloWrapper}>
+            <div className={styles.inputWrapper}>
+              <label htmlFor="modelo" className={styles.label}>
+                Modelo <span className={styles.requireSymbol}>*</span>
+              </label>
+              <select
+                name="modelo"
+                id="modelo"
+                className={styles.select}
+                onChange={handleModeloChange}
+                value={formData.modelo}
+                disabled={cargando}
+              >
+                <option value="">Seleccione un modelo...</option>
+                {cargando ? (
+                  <option value="" disabled>
+                    Cargando modelos...
+                  </option>
+                ) : (
+                  modelos.map((modelo) => (
+                    <option key={modelo.id_inventariopl} value={modelo.modelo}>
+                      {modelo.modelo}
+                    </option>
+                  ))
+                )}
+              </select>
+            </div>
+
+            {/* Mostrar cantidad actual del modelo seleccionado */}
+            {cantidadActualModelo !== null && (
+              <div
+                className={`${styles.inputWrapper} ${styles.cantidadActualWrapper}`}
+              >
+                <label className={styles.label}>Stock Actual</label>
+                <div className={styles.cantidadActualDisplay}>
+                  {cantidadActualModelo.toLocaleString()} unidades
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Cantidad a Sacar */}
           <div className={styles.inputWrapper}>
-            <label htmlFor="proveedor" className={styles.label}>
-              Proveedor <span className={styles.requireSymbol}>*</span>
+            <label htmlFor="cantidad" className={styles.label}>
+              Cantidad a Sacar <span className={styles.requireSymbol}>*</span>
             </label>
             <input
               className={styles.input}
-              type="text"
-              id="proveedor"
-              name="proveedor"
-              value={formData.proveedor}
+              type="number"
+              id="cantidad"
+              name="cantidad"
+              value={formData.cantidad || ""}
               onChange={handleChange}
+              min="1"
+              step="1"
               required
+              placeholder="Ingrese la cantidad a sacar"
+              disabled={!modeloSeleccionadoId}
             />
-          </div>
-
-          {/* Color */}
-          <div className={styles.inputWrapper}>
-            <label htmlFor="idPinturaInventario" className={styles.label}>
-              Color <span className={styles.requireSymbol}>*</span>
-            </label>
-            <select
-              className={styles.select}
-              id="idPinturaInventario"
-              name="idPinturaInventario"
-              value={formData.idPinturaInventario}
-              onChange={handleChange}
-              required
-            >
-              <option value="">Selecciona un color</option>
-              <option value="1">Blanco</option>
-              <option value="2">Azul</option>
-              <option value="3">Rojo</option>
-              <option value="4">Amarillo</option>
-              <option value="5">Verde</option>
-            </select>
-          </div>
-
-          {/* Número de Lote */}
-          <div className={styles.inputWrapper}>
-            <label htmlFor="numeroDeLote" className={styles.label}>
-              Número de Lote <span className={styles.requireSymbol}>*</span>
-            </label>
-            <input
-              className={styles.input}
-              type="text"
-              id="numeroDeLote"
-              name="numeroDeLote"
-              value={formData.numeroDeLote}
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          {/* Cantidad Recibida */}
-          <div className={styles.inputWrapper}>
-            <label htmlFor="cantidadConsumida" className={styles.label}>
-              Cantidad Recibida <span className={styles.requireSymbol}>*</span>
-            </label>
-            <input
-              className={styles.input}
-              type="text"
-              id="cantidadConsumida"
-              name="cantidadConsumida"
-              value={formData.cantidadConsumida}
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          {/* Unidad de Medida */}
-          <div className={styles.inputWrapper}>
-            <label htmlFor="unidadDeMedida" className={styles.label}>
-              Unidad de Medida <span className={styles.requireSymbol}>*</span>
-            </label>
-            <input
-              className={styles.input}
-              id="unidadDeMedida"
-              name="unidadDeMedida"
-              value={formData.unidadDeMedida}
-              onChange={handleChange}
-              required
-              readOnly
-            />
-          </div>
-
-          {/* Fecha de Finalización */}
-          <div className={styles.inputWrapper}>
-            <label htmlFor="fechaDeFinalizacion" className={styles.label}>
-              Fecha de Finalización{" "}
-              <span className={styles.requireSymbol}>*</span>
-            </label>
-            <input
-              className={styles.input}
-              type="date"
-              id="fechaDeFinalizacion"
-              name="fechaDeFinalizacion"
-              value={formData.fechaDeFinalizacion}
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          {/* Revisado por */}
-          <div className={styles.inputWrapper}>
-            <label htmlFor="revisadoPor" className={styles.label}>
-              Revisado Por <span className={styles.requireSymbol}>*</span>
-            </label>
-            <input
-              className={styles.input}
-              type="text"
-              id="revisadoPor"
-              name="revisadoPor"
-              value={formData.revisadoPor}
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          {/* Observaciones */}
-          <div className={styles.inputWrapper}>
-            <label htmlFor="observaciones" className={styles.label}>
-              Observaciones (opcional)
-            </label>
-            <textarea
-              className={styles.textarea}
-              id="observaciones"
-              name="observaciones"
-              value={formData.observaciones}
-              onChange={handleChange}
-              rows={8}
-              placeholder="Describe cualquier información relevante"
-            />
+            {cantidadActualModelo !== null && (
+              <div className={styles.stockHint}>
+                Stock disponible: {cantidadActualModelo.toLocaleString()}{" "}
+                unidades
+              </div>
+            )}
           </div>
         </section>
 
+        {/* === BOTONES === */}
         <div className={styles.buttonWrapper}>
           <button
             type="submit"
             className={styles.saveButton}
-            disabled={isSubmitting}
+            disabled={isSubmitting || !modeloSeleccionadoId}
           >
-            {isSubmitting ? "Enviando..." : "Guardar"}
+            {isSubmitting ? "Registrando salida..." : "Registrar Salida"}
           </button>
           <button
             type="button"
             onClick={handleReset}
             className={styles.resetButton}
+            disabled={isSubmitting}
           >
             Resetear
           </button>

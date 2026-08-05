@@ -1,2 +1,4 @@
-#MODULO DE PRODUCCION LISA
-- EL OBJETIVO ES QUE LA CLAVE FORANEA HAGA REFERENCIA A LOS CAMPOS (NUMERO DE LOTE Y MODELO) DE LA TABLA PRODUCCION_LISA_REGISTRO Y ASI PODER MOSTRARLOS EN EL FRONTEND DEL HISTORIAL DE SALIDA QUE SERIA LA TABLA PRODUCCION_LISA_SALIDA
+#registro de produccion lisa, y registrar un nuevo modelo
+#mostrar el inventario con los modelos activos
+#salida de produccion lisa, se llama a la tabla de inventario para l select motrar los modelos y la cantidad
+#historial salida/entrada 

@@ -15,6 +15,7 @@ SET time_zone = "+00:00";
 CREATE DATABASE IF NOT EXISTS `venvidrio_zona_decoracion` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE `venvidrio_zona_decoracion`;
 
+
 -- --------------------------------------------------------
 
 --
@@ -223,6 +224,13 @@ CREATE TABLE `formato_pintura_consumo` (
   `revisado_por` varchar(100) NOT NULL,
   `observaciones` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `formato_pintura_consumo`
+--
+
+INSERT INTO `formato_pintura_consumo` (`id`, `id_pintura_inventario`, `proveedor`, `fecha_inicio_consumo`, `numero_lote`, `unidad_medida`, `cantidad_consumida`, `fecha_finalizacion_consumo`, `revisado_por`, `observaciones`) VALUES
+(34, 1, 'string', '2026-08-01', 'string', 'string', 1.00, '2026-08-01', 'string', 'string');
 
 -- --------------------------------------------------------
 
@@ -537,7 +545,7 @@ INSERT INTO `permisos_modulos` (`id_permisom`, `modulo`, `accion`) VALUES
 (9, 'produccion_lisa', 'crear_salida'),
 (10, 'produccion_lisa', 'eliminar_registro'),
 (16, 'dashboard', 'ver'),
-(17, 'gestion_usuarios', 'ver_usuario'),
+(17, 'gestion_usuarios', 'ver_usuarios'),
 (18, 'gestion_usuarios', 'crear_editar'),
 (19, 'insumo_pintura', 'ver_historial_consumo');
 
@@ -552,6 +560,15 @@ CREATE TABLE `permisos_usuarios` (
   `id_usuario` int(11) NOT NULL,
   `id_permisom` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `permisos_usuarios`
+--
+
+INSERT INTO `permisos_usuarios` (`id_permisou`, `id_usuario`, `id_permisom`) VALUES
+(19, 8, 16),
+(20, 8, 17),
+(21, 8, 18);
 
 -- --------------------------------------------------------
 
@@ -571,7 +588,7 @@ CREATE TABLE `pintura_inventario` (
 --
 
 INSERT INTO `pintura_inventario` (`id`, `color`, `cantidad_actual`, `cantidad_minima_alerta`) VALUES
-(1, 'Blanco', 25.00, 10.00),
+(1, 'Blanco', 45.00, 10.00),
 (2, 'Azul', 20.00, 10.00),
 (3, 'Rojo', 20.00, 10.00),
 (4, 'Amarillo', 20.00, 10.00),
@@ -594,45 +611,25 @@ CREATE TABLE `pintura_registro` (
   `observaciones` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
 --
--- Estructura de tabla para la tabla `produccion_lisa`
+-- Volcado de datos para la tabla `pintura_registro`
 --
 
-CREATE TABLE `produccion_lisa` (
-  `id` int(11) NOT NULL,
-  `fecha_produccion_lisa` date NOT NULL,
-  `cantidad_produccion` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `produccion_lisa`
---
-
-INSERT INTO `produccion_lisa` (`id`, `fecha_produccion_lisa`, `cantidad_produccion`) VALUES
-(1, '2026-06-01', 100),
-(2, '2026-06-02', 120),
-(3, '2026-06-03', 110),
-(4, '2026-06-04', 130),
-(5, '2026-06-05', 105),
-(6, '2026-06-06', 140),
-(7, '2026-06-07', 125),
-(8, '2026-06-08', 115),
-(9, '2026-06-09', 135),
-(10, '2026-06-10', 150);
+INSERT INTO `pintura_registro` (`id`, `id_pintura_inventario`, `proveedor`, `fecha_registro`, `unidad_medida`, `cantidad_registrada`, `registrado_por`, `observaciones`) VALUES
+(17, 1, 'string', '2026-07-23', 'string', 20.00, 'string', 'string'),
+(18, 1, 'string', '2026-07-23', 'string', 1.00, 'string', 'string');
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `produccion_lisa_historial_salida`
+-- Estructura de tabla para la tabla `produccion_lisa_inventario`
 --
 
-CREATE TABLE `produccion_lisa_historial_salida` (
-  `id` int(11) NOT NULL,
-  `nro_lote` varchar(50) NOT NULL,
-  `fecha_salida` date NOT NULL,
-  `cantidad_sacada` int(11) NOT NULL
+CREATE TABLE `produccion_lisa_inventario` (
+  `id_inventariopl` int(11) NOT NULL,
+  `modelo` varchar(100) NOT NULL,
+  `cantidad` int(11) NOT NULL DEFAULT 0,
+  `estado` tinyint(4) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -642,12 +639,23 @@ CREATE TABLE `produccion_lisa_historial_salida` (
 --
 
 CREATE TABLE `produccion_lisa_registro` (
-  `id` int(11) NOT NULL,
-  `nro_lote` varchar(50) NOT NULL,
+  `id_registro` varchar(10) NOT NULL,
   `fecha_registro` date NOT NULL,
-  `modelo` varchar(100) NOT NULL,
-  `cantidad_registrada` int(11) NOT NULL,
-  `stock_disponible` int(11) NOT NULL
+  `id_inventariopl` int(11) NOT NULL,
+  `cantidad` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `produccion_lisa_salida`
+--
+
+CREATE TABLE `produccion_lisa_salida` (
+  `id_salida` int(11) NOT NULL,
+  `fecha_salida` date NOT NULL,
+  `id_inventariopl` int(11) NOT NULL,
+  `cantidad_sacada` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -675,7 +683,7 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id_usuario`, `cedula`, `carnet_usuario`, `contrasena`, `nombres`, `apellidos`, `telefono`, `correo`, `rol`, `activo_usuario`, `creado_en`) VALUES
-(4, '35', 'string', '$2b$12$m77XWcinevrc/79xA0e3xukmZiinCYfA407CdpF2rOP26TJx22XBW', 'string', 'string', 'string', 'string', '', 1, '2026-07-22 19:39:56');
+(8, 'string', 'string', '$argon2id$v=19$m=65536,t=3,p=4$Q4gxplQKAQCgdC4lJCQkxA$i8THi4yUj7njhrXniimd2lSs6GX9UC5xNysrllCGi0Y', 'string', 'string', 'string', 'string', '', 1, '2026-07-23 02:47:09');
 
 --
 -- Índices para tablas volcadas
@@ -842,24 +850,24 @@ ALTER TABLE `pintura_registro`
   ADD KEY `id_pintura_inventario` (`id_pintura_inventario`);
 
 --
--- Indices de la tabla `produccion_lisa`
+-- Indices de la tabla `produccion_lisa_inventario`
 --
-ALTER TABLE `produccion_lisa`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indices de la tabla `produccion_lisa_historial_salida`
---
-ALTER TABLE `produccion_lisa_historial_salida`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `nro_lote` (`nro_lote`);
+ALTER TABLE `produccion_lisa_inventario`
+  ADD PRIMARY KEY (`id_inventariopl`);
 
 --
 -- Indices de la tabla `produccion_lisa_registro`
 --
 ALTER TABLE `produccion_lisa_registro`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `nro_lote` (`nro_lote`);
+  ADD PRIMARY KEY (`id_registro`),
+  ADD KEY `id_inventariopl` (`id_inventariopl`);
+
+--
+-- Indices de la tabla `produccion_lisa_salida`
+--
+ALTER TABLE `produccion_lisa_salida`
+  ADD PRIMARY KEY (`id_salida`),
+  ADD KEY `id_inventariopl` (`id_inventariopl`);
 
 --
 -- Indices de la tabla `usuarios`
@@ -926,7 +934,7 @@ ALTER TABLE `formato_pantalla_cambio_respuestas`
 -- AUTO_INCREMENT de la tabla `formato_pintura_consumo`
 --
 ALTER TABLE `formato_pintura_consumo`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT de la tabla `formato_recepcion_carton_cabecera`
@@ -1004,7 +1012,7 @@ ALTER TABLE `permisos_modulos`
 -- AUTO_INCREMENT de la tabla `permisos_usuarios`
 --
 ALTER TABLE `permisos_usuarios`
-  MODIFY `id_permisou` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id_permisou` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT de la tabla `pintura_inventario`
@@ -1016,31 +1024,25 @@ ALTER TABLE `pintura_inventario`
 -- AUTO_INCREMENT de la tabla `pintura_registro`
 --
 ALTER TABLE `pintura_registro`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
--- AUTO_INCREMENT de la tabla `produccion_lisa`
+-- AUTO_INCREMENT de la tabla `produccion_lisa_inventario`
 --
-ALTER TABLE `produccion_lisa`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+ALTER TABLE `produccion_lisa_inventario`
+  MODIFY `id_inventariopl` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `produccion_lisa_historial_salida`
+-- AUTO_INCREMENT de la tabla `produccion_lisa_salida`
 --
-ALTER TABLE `produccion_lisa_historial_salida`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `produccion_lisa_registro`
---
-ALTER TABLE `produccion_lisa_registro`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `produccion_lisa_salida`
+  MODIFY `id_salida` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- Restricciones para tablas volcadas
@@ -1110,10 +1112,16 @@ ALTER TABLE `pintura_registro`
   ADD CONSTRAINT `pintura_registro_ibfk_1` FOREIGN KEY (`id_pintura_inventario`) REFERENCES `pintura_inventario` (`id`) ON DELETE CASCADE;
 
 --
--- Filtros para la tabla `produccion_lisa_historial_salida`
+-- Filtros para la tabla `produccion_lisa_registro`
 --
-ALTER TABLE `produccion_lisa_historial_salida`
-  ADD CONSTRAINT `produccion_lisa_historial_salida_ibfk_1` FOREIGN KEY (`nro_lote`) REFERENCES `produccion_lisa_registro` (`nro_lote`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `produccion_lisa_registro`
+  ADD CONSTRAINT `produccion_lisa_registro_ibfk_1` FOREIGN KEY (`id_inventariopl`) REFERENCES `produccion_lisa_inventario` (`id_inventariopl`);
+
+--
+-- Filtros para la tabla `produccion_lisa_salida`
+--
+ALTER TABLE `produccion_lisa_salida`
+  ADD CONSTRAINT `produccion_lisa_salida_ibfk_1` FOREIGN KEY (`id_inventariopl`) REFERENCES `produccion_lisa_inventario` (`id_inventariopl`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

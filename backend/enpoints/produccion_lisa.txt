@@ -1,0 +1,97 @@
+Ruta 1: Ingreso de Producción Lisa (Registro)
+Endpoint: http://127.0.0.1:8000/api/produccion-lisa/registro
+Método: POST
+
+JSON (Envía el Frontend):
+{
+  "fecha_registro": "2026-08-04",
+  "id_inventariopl": 1,
+  "cantidad_registrada": 1000,
+  "nuevo_modelo": null
+}
+
+JSON (Respuesta en caso de éxito):
+{
+  "status": "Registro insertado con éxito",
+  "id": 1
+}
+
+JSON (Respuesta en caso de error):
+{
+  "detail": "Debe seleccionar un modelo o ingresar uno nuevo"
+}
+
+
+---
+
+
+Ruta 2: Salida de Producción Lisa
+Endpoint: http://127.0.0.1:8000/api/produccion-lisa/salida
+Método: POST
+
+JSON (Envía el Frontend):
+{
+  "fecha_salida": "2026-08-04",
+  "id_inventariopl": 1,
+  "cantidad_sacada": 500
+}
+
+JSON (Respuesta en caso de éxito):
+{
+  "status": "Operacion exitosa",
+  "id": 1
+}
+
+JSON (Respuesta en caso de error):
+{
+  "detail": "Stock insuficiente. Disponible: {cantidad_actual} unidades"
+}
+
+
+---
+
+
+Ruta 3: Inventario de Producción Lisa
+Endpoint: http://127.0.0.1:8000/api/produccion-lisa/inventario
+Método: GET
+
+Estructura de los datos que recibirá:
+{
+  "data": [
+    {
+      "id_inventariopl": "number",
+      "modelo": "string",
+      "cantidad_actual": "number"
+    }
+  ]
+}
+
+
+---
+
+
+Ruta 4: Historial de Producción Lisa
+Endpoint: http://127.0.0.1:8000/api/produccion-lisa/historial?from_date=YYYY-MM-DD&to_date=YYYY-MM-DD
+Método: GET
+
+Estructura de los datos que recibirá:
+{
+  "data": {
+    "registros": [
+      {
+        "id_registro": "number",
+        "fecha_registro": "date",
+        "id_inventariopl": "number",
+        "cantidad_registrada": "number"
+      }
+    ],
+    "salidas": [
+      {
+        "id_salida": "number",
+        "fecha_salida": "date",
+        "id_inventariopl": "number",
+        "cantidad_sacada": "number"
+      }
+    ]
+  }
+}

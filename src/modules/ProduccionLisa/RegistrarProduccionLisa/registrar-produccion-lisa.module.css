@@ -71,8 +71,7 @@
 }
 
 .input,
-.select,
-.textarea {
+.select {
   padding: 12px 16px;
   border: 2px solid #e0e0e0;
   border-radius: 10px;
@@ -83,16 +82,14 @@
 }
 
 .input:focus,
-.select:focus,
-.textarea:focus {
+.select:focus {
   outline: none;
   border-color: var(--primary-color);
   box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
 }
 
 .input:hover,
-.select:hover,
-.textarea:hover {
+.select:hover {
   border-color: var(--primary-color);
 }
 
@@ -100,8 +97,32 @@
   background-color: var(--third-text-color);
 }
 
-.textarea {
-  resize: none;
+/* Estilos para el wrapper de stock disponible */
+.modeloWrapper {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-end;
+  width: 100%;
+}
+.modeloWrapper .inputWrapper {
+  flex: 1;
+}
+.cantidadActualWrapper {
+  flex: 0 0 auto;
+  min-width: 150px;
+}
+.cantidadActualDisplay {
+  background-color: #f0f4f8;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.95rem;
+  color: #1f2937;
+  font-weight: 500;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Botones del Formulario */

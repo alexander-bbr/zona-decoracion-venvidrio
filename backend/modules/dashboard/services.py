@@ -9,7 +9,7 @@ from collections import defaultdict
 from sqlalchemy.orm import Session
 
 # Importamos tu modelo real de producción lisa
-from backend.modules.produccion_lisa.models import RegistroProduccionLisa
+from backend.modules.produccion.produccion_lisa.models import RegistroProduccionLisa
 
 def obtener_datos_dashboard(db: Session, fromDate: str, toDate: str):
     """

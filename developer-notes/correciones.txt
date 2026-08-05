@@ -1,4 +1,7 @@
 Correcciones Generales
 
 - Hacer responsive la App
+
 - Corregir los nombres de archivos, componentes, y clases en CSS. O sea, hay nombres en español que deberían estar en inglés, no están en PascalCase o camelCase, etc.
+
+- Quitarle el apagado al botón de Consumir en el formulario de Consumir Producción Lisa.

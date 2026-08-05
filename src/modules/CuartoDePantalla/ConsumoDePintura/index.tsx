@@ -11,7 +11,7 @@ export const ConsumoDePintura = () => {
 
     if (path.includes("consumir")) return "Consumir Pintura";
     if (path.includes("suministrar")) return "Suministrar Pintura";
-    if (path.includes("historialconsumo")) return "Historial de Consumo";
+    if (path.includes("historial-consumo")) return "Historial de Consumo";
     if (path.includes("inventario")) return "Inventario de Pintura";
   };
 

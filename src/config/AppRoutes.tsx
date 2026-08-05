@@ -14,6 +14,7 @@ import { HistorialConsumo } from "../modules/CuartoDePantalla/ConsumoDePintura/H
 import { ProduccionLisa } from "../modules/ProduccionLisa";
 import { RegistrarProduccionLisa } from "../modules/ProduccionLisa/RegistrarProduccionLisa";
 import { ConsumirProduccionLisa } from "../modules/ProduccionLisa/ConsumirProduccionLisa";
+import { HistorialProduccionLisa } from "../modules/ProduccionLisa/HistorialProduccionLisa";
 import { InventarioProduccionLisa } from "../modules/ProduccionLisa/InventarioProduccionLisa";
 
 // Módulo - Gestión de Usuarios
@@ -37,6 +38,7 @@ export const AppRoutes = () => {
       <Route path="/produccion-lisa" element={<ProduccionLisa />}>
         <Route path="registrar" element={<RegistrarProduccionLisa />} />
         <Route path="consumir" element={<ConsumirProduccionLisa />} />
+        <Route path="historial" element={<HistorialProduccionLisa />} />
         <Route path="inventario" element={<InventarioProduccionLisa />} />
       </Route>
 

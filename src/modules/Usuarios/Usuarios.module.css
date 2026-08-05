@@ -79,18 +79,18 @@
   overflow-x: auto;
 }
 
-table {
+.usersTable {
   width: 100%;
   border-collapse: collapse;
   font-size: 0.95rem;
 }
 
-thead {
+.usersTable thead {
   background: #5181b1;
   color: var(--third-text-color);
 }
 
-th {
+.usersTable th {
   text-align: left;
   padding: 0.75rem 1rem;
   font-weight: 600;
@@ -98,12 +98,12 @@ th {
   white-space: nowrap;
 }
 
-td {
+.usersTable td {
   padding: 0.75rem 1rem;
   border-bottom: 1px solid #e9ecef;
 }
 
-tr:nth-child(2) {
+.usersTable tr:nth-child(2) {
   background-color: #ececec;
 }
 

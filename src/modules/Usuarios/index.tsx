@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import styles from "./Usuarios.module.css";
+import styles from "./usuarios.module.css";
 import { FormularioUsuario } from "./components/FormularioUsuario";
 
 // Tipos para la permisologia (genérico y flexible)
@@ -51,7 +51,7 @@ export const Usuarios = () => {
   const [error, setError] = useState<string | null>(null);
   const [mensajeExito, setMensajeExito] = useState<string | null>(null);
 
-  // Obtener los datos del usuarios
+  // Obtener datos de los usuarios
   const obtenerUsuarios = async () => {
     try {
       setCargando(true);
@@ -287,7 +287,7 @@ export const Usuarios = () => {
               <p>No hay usuarios registrados</p>
             </div>
           ) : (
-            <table>
+            <table className={styles.usersTable}>
               <thead>
                 <tr>
                   <th>Cédula</th>

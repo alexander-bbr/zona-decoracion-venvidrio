@@ -11,6 +11,7 @@ export const ProduccionLisa = () => {
 
     if (path.includes("registrar")) return "Registrar Producción Lisa";
     if (path.includes("consumir")) return "Consumir Producción Lisa";
+    if (path.includes("historial")) return "Historial de Movimiento";
     if (path.includes("inventario")) return "Inventario de Producción Lisa";
   };
 
@@ -39,6 +40,12 @@ export const ProduccionLisa = () => {
             <div className={styles.actionIcon}>📤</div>
             <h3>Consumir Producción Lisa</h3>
             <p>Registra la salida de Producción Lisa del inventario</p>
+          </NavLink>
+
+          <NavLink to="historial" className={styles.actionCard}>
+            <div className={styles.actionIcon}>📋</div>
+            <h3>Historial de Movimiento</h3>
+            <p>Revisa el historial de movimiento de la Producción Lisa</p>
           </NavLink>
 
           <NavLink to="inventario" className={styles.actionCard}>

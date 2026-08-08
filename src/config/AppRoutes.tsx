@@ -20,6 +20,9 @@ import { InventarioProduccionLisa } from "../modules/ProduccionLisa/InventarioPr
 // Módulo - Gestión de Usuarios
 import { Usuarios } from "../modules/Usuarios";
 
+// Módulo - Iniciar Sesión
+import { SignIn } from "../modules/SignIn";
+
 export const AppRoutes = () => {
   return (
     <Routes>
@@ -44,6 +47,9 @@ export const AppRoutes = () => {
 
       {/* Módulo - Gestión de Usuarios */}
       <Route path="/gestion-usuarios" element={<Usuarios />}></Route>
+
+      {/* Módulo - Iniciar Sesión */}
+      <Route path="/sign-in" element={<SignIn></SignIn>}></Route>
     </Routes>
   );
 };

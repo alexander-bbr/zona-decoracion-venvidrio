@@ -107,7 +107,6 @@ def obtener_historial(db: Session, from_date: Optional[date] = None, to_date: Op
         query_salidas   = db.query(SalidaProduccionLisa)
 
         if from_date and to_date:
-            #con filtro trae todo el rango
             registros = query_registros.filter(
                 RegistroProduccionLisa.fecha_registro.between(from_date, to_date)
             ).all()
@@ -115,15 +114,9 @@ def obtener_historial(db: Session, from_date: Optional[date] = None, to_date: Op
                 SalidaProduccionLisa.fecha_salida.between(from_date, to_date)
             ).all()
         else:
-            #sin filtro trae los ultimos 10 entre ambas tablas
-            registros = query_registros.order_by(
-                RegistroProduccionLisa.id_registro.desc()
-            ).limit(10).all()
-            salidas = query_salidas.order_by(
-                SalidaProduccionLisa.id_salida.desc()
-            ).limit(10).all()
+            registros = query_registros.order_by(RegistroProduccionLisa.id_registro.desc()).limit(10).all()
+            salidas   = query_salidas.order_by(SalidaProduccionLisa.id_salida.desc()).limit(10).all()
 
-            #combinamos y dejamos los ultimos 10 globales por fecha
             combinados = (
                 [{"tipo": "registro", "fecha": r.fecha_registro, "obj": r} for r in registros] +
                 [{"tipo": "salida",   "fecha": s.fecha_salida,   "obj": s} for s in salidas]
@@ -136,7 +129,24 @@ def obtener_historial(db: Session, from_date: Optional[date] = None, to_date: Op
 
         return {
             "status": "success",
-            "data": {"registros": registros, "salidas": salidas}
+            "data": {
+                "registros": [
+                    {
+                        "id_registro":         r.id_registro,
+                        "fecha_registro":      r.fecha_registro,
+                        "modelo":              r.inventario.modelo,
+                        "cantidad_registrada": r.cantidad_registrada
+                    } for r in registros
+                ],
+                "salidas": [
+                    {
+                        "id_salida":       s.id_salida,
+                        "fecha_salida":    s.fecha_salida,
+                        "modelo":          s.inventario.modelo,
+                        "cantidad_sacada": s.cantidad_sacada
+                    } for s in salidas
+                ]
+            }
         }
     except Exception as e:
         return {"status": "error", "message": str(e)}

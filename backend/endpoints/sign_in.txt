@@ -1,0 +1,54 @@
+#AUTENTICACION
+
+Ruta 1: Login
+Endpoint: http://127.0.0.1:8000/api/auth/login
+Método: POST
+
+JSON (Envía el Frontend):
+{
+  "carnetUsuario": "String",
+  "contrasena": "String"
+}
+
+JSON (Respuesta en caso de éxito):
+{
+  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "token_type": "bearer",
+  "rol": "administrador" | "operador",
+  "nombres": "String",
+  "apellidos": "String"
+}
+
+JSON (Respuesta en caso de error):
+#caso 1
+{
+  "detail": "Carnet o contraseña incorrectos"
+}
+
+#caso 2
+{
+  "detail": "Usuario desactivado, contacte al administrador"
+}
+
+NOTA: El access_token recibido debe guardarse y enviarse en el header de
+todas las peticiones protegidas de la siguiente forma:
+Authorization: Bearer <access_token>
+
+el token que devuelve el login no es solo para guardarlo, es la "llave" que el frontend debe mandar en cada peticion a los endpoints protegidos.
+
+Ejemplo concreto: cuando el frontend quiera listar usuarios (`GET /api/usuarios`), no puede mandar solo la petición normal. Debe agregar en el *header* de esa petición:
+
+```
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+
+Sin ese header, el backend responde 401 (no autorizado) y no devuelve nada.
+
+En React, lo haría así al momento de hacer cualquier fetch/axios:
+```
+headers: {
+  "Authorization": `Bearer ${token}`
+}
+```
+
+Donde `token` es el `access_token` que guardó cuando el usuario hizo login.

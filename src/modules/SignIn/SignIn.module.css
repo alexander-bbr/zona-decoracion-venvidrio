@@ -1,0 +1,126 @@
+.signIn {
+  width: 35%;
+  min-width: 400px;
+  margin: auto;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 2rem;
+  background-color: #ffffff;
+}
+
+/* === HEADER === */
+.signInHeader {
+  width: 100%;
+  max-width: 480px;
+  background: var(--blanco);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border-bottom: 1px solid var(--secondary-color);
+}
+
+.signInHeaderLogo {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.headerInfoWrapper {
+  flex: 1;
+}
+
+.nameCompany {
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  line-height: 1.2;
+}
+
+.rifCompany {
+  font-size: 11px;
+  margin-top: 3px;
+  font-weight: 600;
+  letter-spacing: 0.6px;
+}
+
+/* === FORM === */
+.signInForm {
+  width: 100%;
+}
+
+.signInTitle {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-negro);
+  margin-bottom: 6px;
+}
+
+.signInInputWrapper {
+  margin-bottom: 18px;
+}
+
+.signInlabel {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.signInInput {
+  display: flex;
+  align-items: center;
+  margin: auto;
+}
+
+.signInInput input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  font-family: inherit;
+  color: var(--secundary-text-color);
+}
+
+.signInInput input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.signInInput input:hover {
+  border-color: var(--primary-color);
+}
+
+.signInButton {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  background-color: var(--primary-color);
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.signInButton:hover {
+  background-color: rgb(41, 91, 165);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+}
+
+/* === FOOTER === */
+.signInFooter {
+  width: 100%;
+  text-align: center;
+  margin-top: 24px;
+  border-top: 1px solid var(--secondary-color);
+  font-size: 0.7rem;
+}

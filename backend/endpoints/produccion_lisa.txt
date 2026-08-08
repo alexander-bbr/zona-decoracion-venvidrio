@@ -81,7 +81,7 @@ Estructura de los datos que recibirá:
       {
         "id_registro": "number",
         "fecha_registro": "date",
-        "id_inventariopl": "number",
+        "modelo": "string",
         "cantidad_registrada": "number"
       }
     ],
@@ -89,7 +89,7 @@ Estructura de los datos que recibirá:
       {
         "id_salida": "number",
         "fecha_salida": "date",
-        "id_inventariopl": "number",
+        "modelo": "string",
         "cantidad_sacada": "number"
       }
     ]

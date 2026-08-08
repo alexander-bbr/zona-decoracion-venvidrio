@@ -14,8 +14,6 @@ SET time_zone = "+00:00";
 --
 CREATE DATABASE IF NOT EXISTS `venvidrio_zona_decoracion` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE `venvidrio_zona_decoracion`;
-
-
 -- --------------------------------------------------------
 
 --
@@ -566,9 +564,9 @@ CREATE TABLE `permisos_usuarios` (
 --
 
 INSERT INTO `permisos_usuarios` (`id_permisou`, `id_usuario`, `id_permisom`) VALUES
-(19, 8, 16),
-(20, 8, 17),
-(21, 8, 18);
+(22, 9, 17),
+(23, 9, 18),
+(24, 9, 19);
 
 -- --------------------------------------------------------
 
@@ -632,6 +630,17 @@ CREATE TABLE `produccion_lisa_inventario` (
   `estado` tinyint(4) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `produccion_lisa_inventario`
+--
+
+INSERT INTO `produccion_lisa_inventario` (`id_inventariopl`, `modelo`, `cantidad_actual`, `estado`) VALUES
+(1, 'Valmy', 36, 1),
+(2, 'Polarcita', 50, 1),
+(3, 'Ronista', 0, 1),
+(4, 'ron', 100, 1),
+(5, 'cerveza', 50, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -645,6 +654,23 @@ CREATE TABLE `produccion_lisa_registro` (
   `cantidad_registrada` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `produccion_lisa_registro`
+--
+
+INSERT INTO `produccion_lisa_registro` (`id_registro`, `fecha_registro`, `id_inventariopl`, `cantidad_registrada`) VALUES
+(1, '2026-08-04', 1, 50),
+(2, '2026-08-04', 2, 50),
+(3, '2026-08-04', 4, 50),
+(4, '2026-08-04', 4, 50),
+(5, '2026-08-04', 5, 50),
+(6, '2026-08-05', 1, 1),
+(7, '2026-08-05', 1, 1),
+(8, '2026-08-05', 1, 1),
+(9, '2026-08-05', 1, 1),
+(10, '2026-08-05', 1, 1),
+(11, '2026-08-05', 1, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -657,6 +683,13 @@ CREATE TABLE `produccion_lisa_salida` (
   `id_inventariopl` int(11) NOT NULL,
   `cantidad_sacada` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `produccion_lisa_salida`
+--
+
+INSERT INTO `produccion_lisa_salida` (`id_salida`, `fecha_salida`, `id_inventariopl`, `cantidad_sacada`) VALUES
+(1, '2026-08-04', 1, 20);
 
 -- --------------------------------------------------------
 
@@ -683,7 +716,7 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id_usuario`, `cedula`, `carnet_usuario`, `contrasena`, `nombres`, `apellidos`, `telefono`, `correo`, `rol`, `activo_usuario`, `creado_en`) VALUES
-(8, 'string', 'string', '$argon2id$v=19$m=65536,t=3,p=4$Q4gxplQKAQCgdC4lJCQkxA$i8THi4yUj7njhrXniimd2lSs6GX9UC5xNysrllCGi0Y', 'string', 'string', 'string', 'string', '', 1, '2026-07-23 02:47:09');
+(9, 'string', 'prueba', '$argon2id$v=19$m=65536,t=3,p=4$Vco5Z+zd+7/XGqOUEmIsBQ$8pwT3d9ou00Y/B8Piii9Ux4OEbRWhPtyMMZUx3Qx8YE', 'string', 'string', 'string', 'string', '', 1, '2026-08-08 15:48:16');
 
 --
 -- Índices para tablas volcadas
@@ -1012,7 +1045,7 @@ ALTER TABLE `permisos_modulos`
 -- AUTO_INCREMENT de la tabla `permisos_usuarios`
 --
 ALTER TABLE `permisos_usuarios`
-  MODIFY `id_permisou` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id_permisou` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT de la tabla `pintura_inventario`
@@ -1030,25 +1063,25 @@ ALTER TABLE `pintura_registro`
 -- AUTO_INCREMENT de la tabla `produccion_lisa_inventario`
 --
 ALTER TABLE `produccion_lisa_inventario`
-  MODIFY `id_inventariopl` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_inventariopl` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `produccion_lisa_registro`
 --
 ALTER TABLE `produccion_lisa_registro`
-  MODIFY `id_registro` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_registro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de la tabla `produccion_lisa_salida`
 --
 ALTER TABLE `produccion_lisa_salida`
-  MODIFY `id_salida` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_salida` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- Restricciones para tablas volcadas

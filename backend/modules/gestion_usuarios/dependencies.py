@@ -1,5 +1,7 @@
-
 # backend/modules/gestion_usuarios/dependencies.py
+
+from dotenv import load_dotenv
+load_dotenv()
 
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
@@ -34,7 +36,7 @@ def obtener_usuario_actual(
     )
     
     try:
-        # Decodificamos el JWT utilizando las llaves configuradas en el sistema de autenticación[cite: 1]
+        # decodifica el JWT y extrae el id del usuario
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         id_usuario: int = payload.get("id_usuario")
         

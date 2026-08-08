@@ -24,7 +24,7 @@ def login_endpoint(
     # Puente: Convertimos los datos del formulario Swagger (username/password) 
     # al esquema LoginRequest que espera la capa de servicios
     datos = LoginRequest(
-        carnetUsuario=form_data.username,
+        carnet_usuario=form_data.username,
         contrasena=form_data.password
     )
     

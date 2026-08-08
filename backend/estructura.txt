@@ -2,26 +2,80 @@
 """
 .\venv\Scripts\activate 
 
-zona-decoracion-main/
-├── database/
-├── modules/
-│   ├──insumos/             # Carpeta contenedora (el "padre")
-│   ├── __init__.py         # (Indispensable para que Python lo vea como paquete)
-│   ├── generales/          # Insumos comunes (tornillos, cinta, etc.)
-│   │   ├── models.py
-│   │   └── router.py
-│   └── pintura/            # Insumo especializado
-│       ├── models.py
-│       ├── schemas.py
-│       ├── services.py
-│       └── router.py
+├── context/                    # Documentación y contexto del proyecto
+   ├── Dashboard.md
+   ├── GLOBAL.md
+   └── Layout.md
+├── db/                         # Respaldos y scripts SQL
+│   └── venvidrio_zona_decoracion.sql
+   
+│──backend/
 │
-│   ├── dashboard/   (puede no tener models si usa los de otros)
-│   │   ├── services.py
-│   │   └── router.py
-│   └── alertas/     (similar)
-├── main.py
-└── utils/                  #Es la lógica técnica (ejemplo: una función para formatear fechas, una función para subir archivos a la nube, o una función para encriptar contraseñas). Son cosas que puedes usar en cualquier parte del sistema y no pertenecen a un módulo específico.
+├── database/                   # Gestión y configuración de la base de datos
+│   └── conexion.py             # Archivo central de conexión a MySQL
+│
+│
+├── modules/                    # Módulos de negocio (cada uno independiente)
+│   ├── __init__.py
+│   │
+│   ├── dashboard/              # (No tiene models porque usa los de otros)
+│   │   ├── nuevos parametros.txt
+│   │   ├── router.py
+│   │   └── services.py
+|   |
+│   │── auth/       # Autenticación y control de accesos
+│   │   ├── __init__.py
+│   │   ├── router.py
+│   │   ├── schemas.py
+│   │   └── services.py
+
+│   ├── gestion_usuarios/       # Autenticación y control de accesos
+│   │   ├── __init__.py
+│   │   ├── dependencies.py
+│   │   ├── models.py
+│   │   ├── router.py
+│   │   ├── schemas.py
+│   │   └── services.py
+│   │
+│   ├── insumos/                # Carpeta contenedora (padre)
+│   │   ├── generales/          # Insumos comunes (tornillos, cinta, etc.)
+│   │   │   ├── models.py
+│   │   │   └── router.py
+│   │   └── pintura/            # Insumo especializado
+│   │       ├── __init__.py
+│   │       ├── funcion_id.txt
+│   │       ├── models.py
+│   │       ├── router.py
+│   │       ├── schemas.py
+│   │       └── services.py
+│   │
+│   ├── produccion/             # Carpeta contenedora de producción
+│   │   ├── envases_decorados/
+│   │   └── envases_defectuosos/
+│   │
+│   └── produccion_lisa/        # Módulo de producción lisa
+│       ├── cosas.txt
+│       ├── models.py
+│       ├── router.py
+│       ├── schemas.py
+│       └── services.py
+│
+├── utils/                      # Lógica técnica compartida (CRUD, seguridad, etc.)
+│   ├── notificacion/           # Subcarpeta para plantillas o lógica extra
+│   ├── __init__.py
+│   ├── db_funciones.py         # Funciones CRUD genéricas y compartidas
+│   ├── exportaciones.py
+│   ├── funciones.py
+│   ├── notificaciones.py
+│   └── seguridad.py            # Encriptación, validación de tokens, etc.
+│
+├── cosasinstaladas.txt         # Notas de dependencias/requerimientos
+├── endpoints.txt               # Documentación de rutas
+├── estructura.py               # (Tu archivo de notas de estructura)
+└── main.py                     # Cerebro ejecutable y punto de unión de todos los routers
+
+
+ #Es la lógica técnica (ejemplo: una función para formatear fechas, una función para subir archivos a la nube, o una función para encriptar contraseñas). Son cosas que puedes usar en cualquier parte del sistema y no pertenecen a un módulo específico.
 
 
 

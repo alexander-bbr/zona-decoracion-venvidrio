@@ -1,0 +1,18 @@
+
+Ruta 4: Endpoint para los datos del dashboard
+Endpoint: http://127.0.0.1:8000/api/dashboard/datos?fromDate=YYYY-MM-DD&toDate=YYYY-MM-DD
+NOTA: Recuerda agregar los parámetros a la consulta
+Método: GET
+
+json
+{
+  "status": "string",
+  "data": [
+    {
+      "date": "string",
+      "produceLisa": "number",
+      "envasesDecorados": "number",
+      "envasesDefectuosos": "number"
+    }
+  ]
+}

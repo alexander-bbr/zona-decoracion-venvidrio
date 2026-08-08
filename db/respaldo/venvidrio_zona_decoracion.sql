@@ -15,7 +15,6 @@ SET time_zone = "+00:00";
 CREATE DATABASE IF NOT EXISTS `venvidrio_zona_decoracion` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE `venvidrio_zona_decoracion`;
 
-
 -- --------------------------------------------------------
 
 --
@@ -628,9 +627,20 @@ INSERT INTO `pintura_registro` (`id`, `id_pintura_inventario`, `proveedor`, `fec
 CREATE TABLE `produccion_lisa_inventario` (
   `id_inventariopl` int(11) NOT NULL,
   `modelo` varchar(100) NOT NULL,
-  `cantidad` int(11) NOT NULL DEFAULT 0,
+  `cantidad_actual` int(11) NOT NULL DEFAULT 0,
   `estado` tinyint(4) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `produccion_lisa_inventario`
+--
+
+INSERT INTO `produccion_lisa_inventario` (`id_inventariopl`, `modelo`, `cantidad_actual`, `estado`) VALUES
+(1, 'Valmy', 36, 1),
+(2, 'Polarcita', 50, 1),
+(3, 'Ronista', 0, 1),
+(4, 'ron', 100, 1),
+(5, 'cerveza', 50, 1);
 
 -- --------------------------------------------------------
 
@@ -639,11 +649,28 @@ CREATE TABLE `produccion_lisa_inventario` (
 --
 
 CREATE TABLE `produccion_lisa_registro` (
-  `id_registro` varchar(10) NOT NULL,
+  `id_registro` int(11) NOT NULL,
   `fecha_registro` date NOT NULL,
   `id_inventariopl` int(11) NOT NULL,
-  `cantidad` int(11) NOT NULL
+  `cantidad_registrada` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `produccion_lisa_registro`
+--
+
+INSERT INTO `produccion_lisa_registro` (`id_registro`, `fecha_registro`, `id_inventariopl`, `cantidad_registrada`) VALUES
+(1, '2026-08-04', 1, 50),
+(2, '2026-08-04', 2, 50),
+(3, '2026-08-04', 4, 50),
+(4, '2026-08-04', 4, 50),
+(5, '2026-08-04', 5, 50),
+(6, '2026-08-05', 1, 1),
+(7, '2026-08-05', 1, 1),
+(8, '2026-08-05', 1, 1),
+(9, '2026-08-05', 1, 1),
+(10, '2026-08-05', 1, 1),
+(11, '2026-08-05', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -657,6 +684,13 @@ CREATE TABLE `produccion_lisa_salida` (
   `id_inventariopl` int(11) NOT NULL,
   `cantidad_sacada` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `produccion_lisa_salida`
+--
+
+INSERT INTO `produccion_lisa_salida` (`id_salida`, `fecha_salida`, `id_inventariopl`, `cantidad_sacada`) VALUES
+(1, '2026-08-04', 1, 20);
 
 -- --------------------------------------------------------
 
@@ -1030,13 +1064,19 @@ ALTER TABLE `pintura_registro`
 -- AUTO_INCREMENT de la tabla `produccion_lisa_inventario`
 --
 ALTER TABLE `produccion_lisa_inventario`
-  MODIFY `id_inventariopl` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_inventariopl` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT de la tabla `produccion_lisa_registro`
+--
+ALTER TABLE `produccion_lisa_registro`
+  MODIFY `id_registro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de la tabla `produccion_lisa_salida`
 --
 ALTER TABLE `produccion_lisa_salida`
-  MODIFY `id_salida` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_salida` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`

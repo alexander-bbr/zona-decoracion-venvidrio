@@ -17,6 +17,9 @@ export const Sidebar = () => {
         <li>
           <Link to="/gestion-usuarios">Gestión de Usuarios</Link>
         </li>
+        <li>
+          <Link to="/sign-in">Iniciar Sesión</Link>
+        </li>
       </ul>
     </nav>
   );

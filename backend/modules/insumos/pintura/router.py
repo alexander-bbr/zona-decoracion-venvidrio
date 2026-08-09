@@ -1,4 +1,5 @@
 # backend/modules/insumos/pintura/router.py
+from backend.modules.gestion_usuarios.dependencies import require_permiso
 
 from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks
 from sqlalchemy.orm import Session
@@ -26,7 +27,8 @@ router = APIRouter(
 @router.post("/registro", response_model=dict)
 def crear_registro(
     datos: RegistroCrear,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    #_=Depends(require_permiso("insumo_pintura", "crear_registro"))
 ):
 
     # --- AGREGA ESTA LÍNEA AQUÍ ---
@@ -52,7 +54,8 @@ def crear_registro(
 def crear_consumo(
     datos: ConsumoCrear,
     background_tasks: BackgroundTasks,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    #_=Depends(require_permiso("insumo_pintura", "crear_consumo"))
 ):
     """
     Recibe los datos de un consumo de pintura (salida),
@@ -73,7 +76,8 @@ def crear_consumo(
 # ENDPOINT: LISTAR REGISTROS (HISTORIAL DE ENTRADAS)
 @router.get("/registros")
 def listar_registros_endpoint(
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    ##_=Depends(require_permiso("insumo_pintura", "ver_historial_registro"))
 ):
     """
     Devuelve todos los registros de pintura con los datos del inventario anidados.
@@ -86,7 +90,8 @@ def listar_registros_endpoint(
 # ENDPOINT: LISTAR CONSUMOS (HISTORIAL DE SALIDAS)
 @router.get("/consumos")
 def listar_consumos_endpoint(
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    #_=Depends(require_permiso("insumo_pintura", "ver_historial_consumo"))
 ):
     """
     Devuelve todos los consumos de pintura con los datos del inventario anidados.
@@ -99,7 +104,8 @@ def listar_consumos_endpoint(
 # ENDPOINT: LISTAR INVENTARIO (STOCK ACTUAL)
 @router.get("/inventario")
 def listar_inventario_endpoint(
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    #_=Depends(require_permiso("insumo_pintura", "ver_inventario"))
 ):
     """
     Devuelve todos los registros de inventario de pintura.

@@ -1,7 +1,13 @@
+// Configuración
 import { Routes, Route } from "react-router-dom";
+import { PrivateRoute } from "../components/PrivateRoute";
+import { PublicRoute } from "../components/PublicRoute";
 
-// Módulo - Dashboard
-import { Dashboard } from "../modules/Dashboard";
+// Módulo - Home
+import { Home } from "../modules/Home";
+
+// Módulo - Rendimiento
+import { Rendimiento } from "../modules/Rendimiento";
 
 // Módulo - Consumo de Pintura
 import { ConsumoDePintura } from "../modules/CuartoDePantalla/ConsumoDePintura";
@@ -23,33 +29,179 @@ import { Usuarios } from "../modules/Usuarios";
 // Módulo - Iniciar Sesión
 import { SignIn } from "../modules/SignIn";
 
+// Módulo - No Autorizado
+import { Unauthorized } from "../modules/Unauthorized";
+
 export const AppRoutes = () => {
   return (
     <Routes>
-      {/* Módulo - Consumo de Pintura */}
-      <Route path="/consumo-pintura" element={<ConsumoDePintura />}>
-        <Route path="consumir" element={<ConsumirPintura />} />
-        <Route path="suministrar" element={<SuministrarPintura />} />
-        <Route path="historial-consumo" element={<HistorialConsumo />} />
-        <Route path="inventario" element={<InventarioPintura />} />
+      {/* Ruta pública - Login */}
+      <Route
+        path="/sign-in"
+        element={
+          <PublicRoute>
+            <SignIn />
+          </PublicRoute>
+        }
+      />
+
+      {/* Ruta pública - Home (accesible para todos) */}
+      <Route path="/" element={<Home />} />
+
+      {/* Ruta pública - No Autorizado */}
+      <Route path="/unauthorized" element={<Unauthorized />} />
+
+      {/* Módulo - Rendimiento - Requiere permiso dashboard.ver */}
+      <Route
+        path="/rendimiento"
+        element={
+          <PrivateRoute
+            requiredPermissions={[{ modulo: "dashboard", accion: "ver" }]}
+          >
+            <Rendimiento />
+          </PrivateRoute>
+        }
+      />
+
+      {/* Módulo - Consumo de Pintura - Requiere permisos específicos */}
+      <Route
+        path="/consumo-pintura"
+        element={
+          <PrivateRoute
+            requiredPermissions={[
+              { modulo: "insumo_pintura", accion: "ver_inventario" },
+            ]}
+          >
+            <ConsumoDePintura />
+          </PrivateRoute>
+        }
+      >
+        <Route
+          path="consumir"
+          element={
+            <PrivateRoute
+              requiredPermissions={[
+                { modulo: "insumo_pintura", accion: "crear_consumo" },
+              ]}
+            >
+              <ConsumirPintura />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="suministrar"
+          element={
+            <PrivateRoute
+              requiredPermissions={[
+                { modulo: "insumo_pintura", accion: "crear_registro" },
+              ]}
+            >
+              <SuministrarPintura />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="historial-consumo"
+          element={
+            <PrivateRoute
+              requiredPermissions={[
+                { modulo: "insumo_pintura", accion: "ver_historial_consumo" },
+              ]}
+            >
+              <HistorialConsumo />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="inventario"
+          element={
+            <PrivateRoute
+              requiredPermissions={[
+                { modulo: "insumo_pintura", accion: "ver_inventario" },
+              ]}
+            >
+              <InventarioPintura />
+            </PrivateRoute>
+          }
+        />
       </Route>
 
-      {/* Módulo - Dashboard */}
-      <Route path="/" element={<Dashboard />} />
-
-      {/* Módulo - Producción Lisa */}
-      <Route path="/produccion-lisa" element={<ProduccionLisa />}>
-        <Route path="registrar" element={<RegistrarProduccionLisa />} />
-        <Route path="consumir" element={<ConsumirProduccionLisa />} />
-        <Route path="historial" element={<HistorialProduccionLisa />} />
-        <Route path="inventario" element={<InventarioProduccionLisa />} />
+      {/* Módulo - Producción Lisa - Requiere permisos específicos */}
+      <Route
+        path="/produccion-lisa"
+        element={
+          <PrivateRoute
+            requiredPermissions={[
+              { modulo: "produccion_lisa", accion: "ver_inventario" },
+            ]}
+          >
+            <ProduccionLisa />
+          </PrivateRoute>
+        }
+      >
+        <Route
+          path="registrar"
+          element={
+            <PrivateRoute
+              requiredPermissions={[
+                { modulo: "produccion_lisa", accion: "crear_registro" },
+              ]}
+            >
+              <RegistrarProduccionLisa />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="consumir"
+          element={
+            <PrivateRoute
+              requiredPermissions={[
+                { modulo: "produccion_lisa", accion: "crear_salida" },
+              ]}
+            >
+              <ConsumirProduccionLisa />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="historial"
+          element={
+            <PrivateRoute
+              requiredPermissions={[
+                { modulo: "produccion_lisa", accion: "ver_historial" },
+              ]}
+            >
+              <HistorialProduccionLisa />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="inventario"
+          element={
+            <PrivateRoute
+              requiredPermissions={[
+                { modulo: "produccion_lisa", accion: "ver_inventario" },
+              ]}
+            >
+              <InventarioProduccionLisa />
+            </PrivateRoute>
+          }
+        />
       </Route>
 
-      {/* Módulo - Gestión de Usuarios */}
-      <Route path="/gestion-usuarios" element={<Usuarios />}></Route>
-
-      {/* Módulo - Iniciar Sesión */}
-      <Route path="/sign-in" element={<SignIn></SignIn>}></Route>
+      {/* Módulo - Gestión de Usuarios - Requiere permisos específicos */}
+      <Route
+        path="/gestion-usuarios"
+        element={
+          <PrivateRoute
+            requiredPermissions={[
+              { modulo: "gestion_usuarios", accion: "ver_usuarios" },
+            ]}
+          >
+            <Usuarios />
+          </PrivateRoute>
+        }
+      />
     </Routes>
   );
 };

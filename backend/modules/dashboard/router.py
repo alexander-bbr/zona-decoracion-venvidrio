@@ -1,5 +1,5 @@
 # backend/modules/dashboard/router.py
-
+from backend.modules.gestion_usuarios.dependencies import require_permiso
 from fastapi import APIRouter, HTTPException, Query, Depends
 from sqlalchemy.orm import Session
 
@@ -16,7 +16,9 @@ router = APIRouter(
 def consultar_datos_dashboard(
     fromDate: str = Query(..., description="Fecha de inicio en formato YYYY-MM-DD"),
     toDate: str = Query(..., description="Fecha de fin en formato YYYY-MM-DD"),
-    db: Session = Depends(get_db) # <--- Inyectamos la sesión para el ORM de producción lisa
+    db: Session = Depends(get_db), # <--- Inyectamos la sesión para el ORM de producción lisa
+    #_=Depends(require_permiso("dashboard", "ver"))
+
 ):
     """
     Endpoint único para el dashboard.

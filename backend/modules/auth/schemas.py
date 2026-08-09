@@ -1,5 +1,6 @@
 # backend/modules/auth/schemas.py
 from pydantic import BaseModel, Field
+from typing import List
 
 
 # SE USA EN: recibir carnet y contraseña cuando el usuario intenta ingresar
@@ -11,6 +12,12 @@ class LoginRequest(BaseModel):
         populate_by_name = True
 
 
+# SE USA EN: cada permiso individual dentro de la respuesta del login
+class PermisoLoginResponde(BaseModel):
+    modulo: str
+    accion: str
+
+
 # SE USA EN: respuesta al login exitoso, lo que recibe el frontend para guardar y usar en futuras peticiones
 class TokenResponse(BaseModel):
     access_token: str
@@ -18,3 +25,4 @@ class TokenResponse(BaseModel):
     rol: str
     nombres: str
     apellidos: str
+    permisos: List[PermisoLoginResponde]

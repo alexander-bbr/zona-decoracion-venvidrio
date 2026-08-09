@@ -1,7 +1,7 @@
 # backend/modules/auth/router.py
 
 from fastapi import APIRouter, Depends, HTTPException
-from fastapi.security import OAuth2PasswordRequestForm  # <-- NUEVA IMPORTACIÓN
+from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
 from backend.database.conexion import get_db
@@ -15,19 +15,17 @@ router = APIRouter(
 )
 
 
-# ENDPOINT: LOGIN
+#COMENTARIO: ENDPOINT LOGIN
 @router.post("/login", response_model=TokenResponse)
 def login_endpoint(
-    form_data: OAuth2PasswordRequestForm = Depends(),  # <-- CAMBIO CLAVE
+    form_data: OAuth2PasswordRequestForm = Depends(),
     db: Session = Depends(get_db)
 ):
-    # Puente: Convertimos los datos del formulario Swagger (username/password) 
-    # al esquema LoginRequest que espera la capa de servicios
     datos = LoginRequest(
         carnet_usuario=form_data.username,
         contrasena=form_data.password
     )
-    
+
     resultado = login_usuario(db, datos)
 
     if resultado.get("status") == "error":
@@ -38,5 +36,6 @@ def login_endpoint(
         "token_type": "bearer",
         "rol": resultado.get("rol"),
         "nombres": resultado.get("nombres"),
-        "apellidos": resultado.get("apellidos")
+        "apellidos": resultado.get("apellidos"),
+        "permisos": resultado.get("permisos")
     }

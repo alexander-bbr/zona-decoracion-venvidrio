@@ -14,7 +14,6 @@ SET time_zone = "+00:00";
 --
 CREATE DATABASE IF NOT EXISTS `venvidrio_zona_decoracion` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE `venvidrio_zona_decoracion`;
-
 -- --------------------------------------------------------
 
 --
@@ -565,9 +564,9 @@ CREATE TABLE `permisos_usuarios` (
 --
 
 INSERT INTO `permisos_usuarios` (`id_permisou`, `id_usuario`, `id_permisom`) VALUES
-(19, 8, 16),
-(20, 8, 17),
-(21, 8, 18);
+(22, 9, 17),
+(23, 9, 18),
+(24, 9, 19);
 
 -- --------------------------------------------------------
 
@@ -717,7 +716,7 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id_usuario`, `cedula`, `carnet_usuario`, `contrasena`, `nombres`, `apellidos`, `telefono`, `correo`, `rol`, `activo_usuario`, `creado_en`) VALUES
-(8, 'string', 'string', '$argon2id$v=19$m=65536,t=3,p=4$Q4gxplQKAQCgdC4lJCQkxA$i8THi4yUj7njhrXniimd2lSs6GX9UC5xNysrllCGi0Y', 'string', 'string', 'string', 'string', '', 1, '2026-07-23 02:47:09');
+(9, 'string', 'prueba', '$argon2id$v=19$m=65536,t=3,p=4$Vco5Z+zd+7/XGqOUEmIsBQ$8pwT3d9ou00Y/B8Piii9Ux4OEbRWhPtyMMZUx3Qx8YE', 'string', 'string', 'string', 'string', '', 1, '2026-08-08 15:48:16');
 
 --
 -- Índices para tablas volcadas
@@ -1046,7 +1045,7 @@ ALTER TABLE `permisos_modulos`
 -- AUTO_INCREMENT de la tabla `permisos_usuarios`
 --
 ALTER TABLE `permisos_usuarios`
-  MODIFY `id_permisou` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id_permisou` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT de la tabla `pintura_inventario`
@@ -1082,7 +1081,7 @@ ALTER TABLE `produccion_lisa_salida`
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- Restricciones para tablas volcadas

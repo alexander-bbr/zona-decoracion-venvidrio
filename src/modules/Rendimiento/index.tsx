@@ -3,7 +3,7 @@ import { Lineal } from "./Graficos/Lineal";
 import { Barras } from "./Graficos/Barras";
 import { Torta } from "./Graficos/Torta";
 import type { ChartType, DashboardDataItem, VisibleMetrics } from "../../types";
-import styles from "./Dashboard.module.css";
+import styles from "./Rendimiento.module.css";
 
 const chartOptions = [
   { value: "lineal" as const, label: "Lineal" },
@@ -17,7 +17,7 @@ const visibleMetricLabels: Record<keyof VisibleMetrics, string> = {
   envasesDefectuosos: "Envases con Defectos",
 };
 
-export const Dashboard = () => {
+export const Rendimiento = () => {
   const [fromDate, setFromDate] = useState("2026-01-01");
   const [toDate, setToDate] = useState("2026-07-05");
   const [chartType, setChartType] = useState<ChartType>("lineal");
@@ -87,7 +87,7 @@ export const Dashboard = () => {
     <div className={styles.container}>
       {/* Título del módulo*/}
       <header className={styles.moduleHeader}>
-        <h2 className={styles.moduleTitle}>Dashboard</h2>
+        <h2 className={styles.moduleTitle}>Rendimiento</h2>
         <p className={styles.moduleSubtitle}>
           Análisis estadísitico de la producción
         </p>

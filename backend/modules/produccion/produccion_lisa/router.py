@@ -1,3 +1,5 @@
+from backend.modules.gestion_usuarios.dependencies import require_permiso
+
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from fastapi.encoders import jsonable_encoder
@@ -15,7 +17,10 @@ router = APIRouter(
 
 #INVENTARIO
 @router.get("/inventario")
-def listar_inventario(db: Session = Depends(get_db)):
+def listar_inventario(
+    db: Session = Depends(get_db),
+    #_=Depends(require_permiso("produccion_lisa", "ver_inventario"))
+    ):
     resultado = services.obtener_inventario(db)
     if resultado["status"] == "error":
         raise HTTPException(status_code=400, detail=resultado["message"])
@@ -24,7 +29,11 @@ def listar_inventario(db: Session = Depends(get_db)):
 
 #REGISTRO
 @router.post("/registro")
-def crear_registro(datos: schemas.RegistroCrear, db: Session = Depends(get_db)):
+def crear_registro(
+    datos: schemas.RegistroCrear,
+    db: Session = Depends(get_db),
+    #_=Depends(require_permiso("produccion_lisa", "crear_registro"))
+    ):
     resultado = services.registrar_produccion(db, datos)
     if resultado["status"] == "error":
         raise HTTPException(status_code=400, detail=resultado["message"])
@@ -33,7 +42,11 @@ def crear_registro(datos: schemas.RegistroCrear, db: Session = Depends(get_db)):
 
 #SALIDA
 @router.post("/salida")
-def crear_salida(datos: schemas.SalidaCrear, db: Session = Depends(get_db)):
+def crear_salida(
+    datos: schemas.SalidaCrear,
+    db: Session = Depends(get_db),
+    #_=Depends(require_permiso("produccion_lisa", "crear_salida"))
+    ):
     resultado = services.registrar_salida(db, datos)
     if resultado["status"] == "error":
         raise HTTPException(status_code=400, detail=resultado["message"])
@@ -45,7 +58,8 @@ def crear_salida(datos: schemas.SalidaCrear, db: Session = Depends(get_db)):
 def listar_historial(
     from_date: Optional[date] = Query(None, description="Fecha desde (YYYY-MM-DD)"),
     to_date:   Optional[date] = Query(None, description="Fecha hasta (YYYY-MM-DD)"),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    #_=Depends(require_permiso("produccion_lisa", "ver_historial"))
 ):
     resultado = services.obtener_historial(db, from_date, to_date)
     if resultado["status"] == "error":

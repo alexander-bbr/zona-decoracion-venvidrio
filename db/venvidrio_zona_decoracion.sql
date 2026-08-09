@@ -14,6 +14,7 @@ SET time_zone = "+00:00";
 --
 CREATE DATABASE IF NOT EXISTS `venvidrio_zona_decoracion` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE `venvidrio_zona_decoracion`;
+
 -- --------------------------------------------------------
 
 --
@@ -541,7 +542,6 @@ INSERT INTO `permisos_modulos` (`id_permisom`, `modulo`, `accion`) VALUES
 (7, 'produccion_lisa', 'ver_historial'),
 (8, 'produccion_lisa', 'crear_registro'),
 (9, 'produccion_lisa', 'crear_salida'),
-(10, 'produccion_lisa', 'eliminar_registro'),
 (16, 'dashboard', 'ver'),
 (17, 'gestion_usuarios', 'ver_usuarios'),
 (18, 'gestion_usuarios', 'crear_editar'),
@@ -564,9 +564,17 @@ CREATE TABLE `permisos_usuarios` (
 --
 
 INSERT INTO `permisos_usuarios` (`id_permisou`, `id_usuario`, `id_permisom`) VALUES
-(22, 9, 17),
-(23, 9, 18),
-(24, 9, 19);
+(25, 10, 1),
+(26, 10, 4),
+(27, 10, 5),
+(28, 10, 6),
+(29, 10, 7),
+(30, 10, 8),
+(31, 10, 9),
+(33, 10, 16),
+(34, 10, 17),
+(35, 10, 18),
+(36, 10, 19);
 
 -- --------------------------------------------------------
 
@@ -716,7 +724,7 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id_usuario`, `cedula`, `carnet_usuario`, `contrasena`, `nombres`, `apellidos`, `telefono`, `correo`, `rol`, `activo_usuario`, `creado_en`) VALUES
-(9, 'string', 'prueba', '$argon2id$v=19$m=65536,t=3,p=4$Vco5Z+zd+7/XGqOUEmIsBQ$8pwT3d9ou00Y/B8Piii9Ux4OEbRWhPtyMMZUx3Qx8YE', 'string', 'string', 'string', 'string', '', 1, '2026-08-08 15:48:16');
+(10, 'string', 'prueba', '$argon2id$v=19$m=65536,t=3,p=4$CkFIaY1RivHeu9e6NyaEsA$rtdZu3HTE9nKFkeXi/QguC7E5wxIKoaruCOY7ojW17U', 'string', 'string', 'string', 'string', '', 1, '2026-08-09 14:46:05');
 
 --
 -- Índices para tablas volcadas
@@ -1045,7 +1053,7 @@ ALTER TABLE `permisos_modulos`
 -- AUTO_INCREMENT de la tabla `permisos_usuarios`
 --
 ALTER TABLE `permisos_usuarios`
-  MODIFY `id_permisou` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id_permisou` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT de la tabla `pintura_inventario`
@@ -1081,7 +1089,7 @@ ALTER TABLE `produccion_lisa_salida`
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- Restricciones para tablas volcadas

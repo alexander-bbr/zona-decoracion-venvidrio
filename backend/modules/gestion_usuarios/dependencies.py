@@ -64,9 +64,6 @@ def require_permiso(modulo_nombre: str, accion_nombre: str):
         db: Session = Depends(get_db)
     ) -> Usuario:
         
-        # Si el usuario es administrador, tiene acceso global por defecto
-        if usuario_actual.rol == "administrador":
-            return usuario_actual
 
         # Consulta en la tabla permisos_usuarios si posee el permiso requerido
         tiene_permiso = (

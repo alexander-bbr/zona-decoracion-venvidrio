@@ -1,17 +1,35 @@
 .sidebar {
   width: 250px;
   background-color: var(--third-text-color);
-  border-right: 1px solid rgba(211, 212, 212, 0.7);
+  border-right: 1px solid rgba(107, 158, 158, 0.7);
   box-shadow: 2px 0 24px rgba(44, 62, 80, 0.08);
-  padding: 32px 22px;
+  padding: 2.2rem 1rem;
 }
 
-nav {
-  padding-top: 24px;
+/* === INFORMACIÓN DEL USUARIO === */
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 1.3rem;
+  border-bottom: 2px solid var(--secondary-color);
+}
+.userInfo p:first-of-type {
+  margin: 0.8rem 0 0.3rem;
+  font-size: 1rem;
+  font-weight: 600;
+}
+.userInfo p:last-child {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--primary-color);
 }
 
+/* === LINKS === */
 ul {
   list-style: none;
+  margin: 2rem 0 1.8rem;
 }
 
 li a {
@@ -29,4 +47,25 @@ li a {
 li a:hover {
   background: rgba(53, 116, 211, 0.12);
   color: var(--primary-color);
+}
+
+/* Botón de Cierre de Sesión */
+.logoutButton {
+  display: block;
+  margin: auto;
+  width: 85%;
+  padding: 0.6rem 1.2rem;
+  background-color: #707070;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  transition: background 0.2s;
+}
+
+.logoutButton:hover {
+  background: #565656;
 }

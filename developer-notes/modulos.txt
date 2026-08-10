@@ -10,7 +10,7 @@
 
 2. Sign In
 
-- Hacer el Sign In para que los usuarios puedan entrar en la aplicación.
+- Pulir los detalles del formulario.
 
 
 

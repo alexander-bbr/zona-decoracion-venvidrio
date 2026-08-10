@@ -13,22 +13,36 @@ export const SignIn = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  // Comprobar credenciales
+  const handleSubmit = async () => {
+    // Validar que los campos no estén vacíos
+    if (!carnet.trim() || !contrasena.trim()) {
+      setError("Por favor complete todos los campos");
+      return;
+    }
+
     setError("");
     setLoading(true);
 
     try {
-      await login(carnet, contrasena);
-      navigate("/"); // Redirige a Home (público)
+      await login(carnet.trim(), contrasena);
+      navigate("/");
     } catch (err: any) {
       console.error("Error en el login:", err);
-      setError(err.message || "Error al iniciar sesión");
-    } finally {
+      setError(err.message || "Nro. Carnet o Contraseña incorrecta");
       setLoading(false);
     }
   };
 
+  // Manejar la tecla Enter
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && !loading) {
+      e.preventDefault();
+      handleSubmit();
+    }
+  };
+
+  /* === RENDERIZADO === */
   return (
     <section className={styles.signIn}>
       <header className={styles.signInHeader}>
@@ -38,67 +52,67 @@ export const SignIn = () => {
           alt="Logo de Venvidrio"
         />
         <div className={styles.headerInfoWrapper}>
-          <h2 className={styles.nameCompany}>Venezolana del Vidrio, C.A</h2>
-          <p className={styles.rifComany}>J-090345234</p>
+          <h2 className={styles.nameCompany}>Venezolana del Vidrio C.A</h2>
+          <p className={styles.rifCompany}>J-090345234</p>
         </div>
       </header>
 
       <h2 className={styles.signInTitle}>Iniciar Sesión</h2>
 
-      <form className={styles.signInForm} onSubmit={handleSubmit}>
+      {error && <div className={styles.errorMessage}>{error}</div>}
+
+      {/* === FORMULARIO == */}
+      <form className={styles.signInForm}>
         <div className={styles.signInInputWrapper}>
           <label className={styles.signInLabel} htmlFor="carnet">
             Nro. Carnet
           </label>
-          <div className={styles.signInInput}>
-            <input
-              type="text"
-              id="carnet"
-              name="carnet"
-              value={carnet}
-              onChange={(e) => setCarnet(e.target.value)}
-              required
-              disabled={loading}
-              placeholder="Ingrese su carnet"
-              autoComplete="username"
-            />
-          </div>
+          <input
+            type="text"
+            id="carnet"
+            name="carnet"
+            value={carnet}
+            onChange={(e) => setCarnet(e.target.value)}
+            onKeyPress={handleKeyPress}
+            required
+            disabled={loading}
+            autoComplete="username"
+            placeholder="Ingrese su carnet"
+          />
         </div>
 
         <div className={styles.signInInputWrapper}>
           <label className={styles.signInLabel} htmlFor="password">
             Contraseña
           </label>
-          <div className={styles.signInInput}>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={contrasena}
-              onChange={(e) => setContrasena(e.target.value)}
-              required
-              disabled={loading}
-              placeholder="Ingrese su contraseña"
-              autoComplete="current-password"
-            />
-          </div>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            value={contrasena}
+            onChange={(e) => setContrasena(e.target.value)}
+            onKeyPress={handleKeyPress}
+            required
+            disabled={loading}
+            autoComplete="current-password"
+            placeholder="Ingrese su contraseña"
+          />
         </div>
 
-        {error && <div className={styles.errorMessage}>{error}</div>}
-
         <button
-          type="submit"
+          type="button"
           className={styles.signInButton}
           disabled={loading}
+          onClick={handleSubmit}
         >
           {loading ? "Iniciando sesión..." : "Iniciar Sesión"}
         </button>
       </form>
 
       <footer className={styles.signInFooter}>
-        <p>Sistema de uso exclusivo para personal autorizado de</p>
+        <p>Aplicación de uso exclusivo para personal autorizado</p>
         <p>Venezolana del Vidrio C.A</p>
-        <p>© Todos los derechos reservados.</p>
+        <p>© Todos los derechos reservados</p>
       </footer>
     </section>
   );

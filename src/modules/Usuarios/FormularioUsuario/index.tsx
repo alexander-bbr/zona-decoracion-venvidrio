@@ -207,7 +207,7 @@ export const FormularioUsuario = ({
     return formData.permisosSeleccionados.includes(idPermiso);
   };
 
-  //* Manejo de cambios en inputs de texto y selects
+  // Manejo de cambios en inputs de texto y selects
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
@@ -218,7 +218,7 @@ export const FormularioUsuario = ({
     }));
   };
 
-  //* Enviar formulario
+  // Enviar formulario
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -261,7 +261,7 @@ export const FormularioUsuario = ({
     onGuardar(usuarioData);
   };
 
-  //* Renderizar grupos de permisos por módulo
+  // Renderizar grupos de permisos por módulo
   const renderPermisosPorModulo = () => {
     if (!Array.isArray(catalogoPermisos) || catalogoPermisos.length === 0) {
       return <p className={styles.sinPermisos}>No hay permisos disponibles</p>;
@@ -302,19 +302,20 @@ export const FormularioUsuario = ({
     ));
   };
 
+  // Renderizar loading
   if (cargandoUsuario) {
     return (
       <section className={styles.formularioContainer}>
         <div className={styles.loadingContainer}>
-          <div className={styles.spinner}></div>
           <p>Cargando datos del usuario...</p>
         </div>
       </section>
     );
   }
 
+  /* === RENDERIZADO === */
   return (
-    <section className={styles.formularioContainer}>
+    <section className={`${styles.formularioContainer} content`}>
       <div className={styles.formularioCard}>
         <h3 className={styles.formularioTitulo}>
           {esEdicion ? "Editar Usuario" : "Crear Nuevo Usuario"}

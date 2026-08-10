@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import styles from "./usuarios.module.css";
-import { FormularioUsuario } from "./components/FormularioUsuario";
+import { FormularioUsuario } from "./FormularioUsuario";
 
 // Tipos para la permisologia (genérico y flexible)
 export type PermisosUsuario = {
@@ -215,15 +215,16 @@ export const Usuarios = () => {
 
   // Renderizar contenido según el estado
   const renderContenido = () => {
+    // Cargando
     if (cargando) {
       return (
         <div className={styles.loadingContainer}>
-          <div className={styles.spinner}></div>
           <p>Cargando usuarios...</p>
         </div>
       );
     }
 
+    // Error
     if (error) {
       return (
         <div className={styles.errorContainer}>
@@ -251,6 +252,7 @@ export const Usuarios = () => {
       );
     }
 
+    // Éxito (Tabla de Usuarios)
     return (
       <section className={`${styles.gestion} content`}>
         <section className={styles.controls}>

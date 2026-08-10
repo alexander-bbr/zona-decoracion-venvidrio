@@ -6,7 +6,7 @@ export const Sidebar = () => {
   const { isAuthenticated, user, logout, hasPermission, hasAnyPermission } =
     useAuth();
 
-  // Si no está autenticado, solo mostramos el enlace de login
+  // Si no está autenticado, solo muestra el enlace del Sign In
   if (!isAuthenticated) {
     return (
       <nav className={styles.sidebar} id="sidebar">
@@ -21,17 +21,32 @@ export const Sidebar = () => {
 
   return (
     <nav className={styles.sidebar} id="sidebar">
+      {/* === INFORMACIÓN DEL USUARIO ===*/}
+      <section className={styles.userInfo}>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="38"
+          height="38"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="3"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="feather feather-user"
+        >
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+
+        <p>
+          {user?.nombres} {user?.apellidos}
+        </p>
+        <p>{user.rol}</p>
+      </section>
+
+      {/* === LINKS === */}
       <ul>
-        {/* Información del usuario */}
-        <li className={styles.userInfo}>
-          <strong>
-            {user?.nombres} {user?.apellidos}
-          </strong>
-          <span className={styles.userRole}>{user.rol}</span>
-        </li>
-
-        <li className={styles.divider}></li>
-
         {/* Inicio */}
         <li>
           <Link to="/">Inicio</Link>
@@ -77,16 +92,11 @@ export const Sidebar = () => {
             <Link to="/gestion-usuarios">Gestión de Usuarios</Link>
           </li>
         )}
-
-        <li className={styles.divider}></li>
-
-        {/* Cerrar sesión */}
-        <li>
-          <button onClick={logout} className={styles.logoutButton}>
-            Cerrar Sesión
-          </button>
-        </li>
       </ul>
+      {/* Cerrar sesión */}
+      <button onClick={logout} className={styles.logoutButton}>
+        Cerrar Sesión
+      </button>
     </nav>
   );
 };

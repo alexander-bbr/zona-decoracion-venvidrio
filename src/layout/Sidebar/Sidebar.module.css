@@ -40,8 +40,8 @@ li a {
   text-decoration: none;
   font-weight: 600;
   transition:
-    background 0.18s ease,
-    color 0.18s ease;
+    background 0.2s ease,
+    color 0.2s ease;
 }
 
 li a:hover {

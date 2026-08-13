@@ -96,5 +96,34 @@ def listar_usuarios(db: Session):
 
 
 # 5. Listar catálogo de permisos disponibles
+NOMBRES_MODULOS = {
+    "insumo_pintura": "Insumo de Pintura",
+    "produccion_lisa": "Producción Lisa",
+    "dashboard": "Dashboard",
+    "gestion_usuarios": "Gestión de Usuarios"
+}
+
+NOMBRES_ACCIONES = {
+    "ver_inventario": "Ver Inventario",
+    "crear_registro": "Crear Registro",
+    "crear_consumo": "Crear Consumo",
+    "ver_historial": "Ver Historial",
+    "crear_salida": "Crear Salida",
+    "eliminar_registro": "Eliminar Registro",
+    "ver": "Ver",
+    "ver_usuarios": "Ver Usuarios",
+    "crear_editar": "Crear / Editar",
+    "ver_historial_consumo": "Ver Historial de Consumo"
+}
+
+# 5. Listar catálogo de permisos disponibles
 def listar_permisos_modulos(db: Session):
-    return obtener_inventario_generico(db, PermisoModulo)
+    permisos = db.query(PermisoModulo).all()
+    resultado = []
+    for permiso in permisos:
+        resultado.append({
+            "id_permisom": permiso.id_permisom,
+            "modulo": NOMBRES_MODULOS.get(permiso.modulo, permiso.modulo),
+            "accion": NOMBRES_ACCIONES.get(permiso.accion, permiso.accion)
+        })
+    return {"status": "success", "data": resultado}

@@ -57,7 +57,7 @@ def listar_permisos_modulos_endpoint(
     #_=Depends(require_permiso("gestion_usuarios", "ver_usuarios"))
 ):
     resultado = listar_permisos_modulos(db)
-    return {"data": jsonable_encoder(resultado)}
+    return resultado
 
 
 # ENDPOINT: OBTENER USUARIO PARA EDITAR (Requiere permiso de ver usuarios)

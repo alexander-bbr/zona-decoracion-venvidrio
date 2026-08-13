@@ -1,25 +1,39 @@
 .header {
+  padding: 0.2rem 2rem 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   background: var(--primary-color);
-  color: #ffffff;
-  padding: 18px 24px;
-  box-shadow: 0 6px 20px rgba(16, 93, 255, 0.12);
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 16px;
 }
 
-.logo {
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid rgba(255, 255, 255, 0.32);
-  background: #ffffff;
-  padding: 4px;
+.softwareData {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.2rem;
 }
 
-.title {
-  font-size: 1.35rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
+.isotipo {
+  padding-top: 0.5rem;
+  width: 7.2rem;
+  height: 7.2rem;
+}
+
+.softwareNameWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.5rem;
+  align-self: center;
+}
+
+.softwareName {
+  font-size: 2rem;
+  color: var(--third-text-color);
+}
+
+.softwareDescription {
+  font-size: 0.9rem;
+  color: var(--fourth-text-color);
 }

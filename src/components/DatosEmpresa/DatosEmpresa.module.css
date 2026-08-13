@@ -1,0 +1,24 @@
+.companyNameData {
+  margin: 1rem 0 0;
+  color: var(--third-text-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.companyImagotype {
+  width: 6rem;
+}
+
+.companyName {
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.rif {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--fourth-text-color);
+}

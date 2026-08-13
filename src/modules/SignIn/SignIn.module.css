@@ -121,12 +121,7 @@
   width: 100%;
   text-align: center;
   margin-top: 24px;
-  padding-top: 0.5rem; /* Para que el borde superior no toque el texto */
+  padding: 1rem 0 0.5rem; /* Para que el borde superior no toque el texto */
   border-top: 1px solid var(--secondary-color);
   font-size: 0.7rem;
-}
-
-/* Separa un poco el primer texto del nombre y los derechos reservados */
-.signInFooter p:first-child {
-  margin-bottom: 0.3rem;
 }

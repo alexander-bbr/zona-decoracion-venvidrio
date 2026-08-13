@@ -20,15 +20,19 @@ JSON (Respuesta en caso de éxito):
   "permisos": [
     {
       "modulo": "insumo_pintura",
-      "accion": "ver_inventario"
-    },
-    {
-      "modulo": "insumo_pintura",
       "accion": "crear_registro"
     },
     {
       "modulo": "insumo_pintura",
       "accion": "crear_consumo"
+    },
+    {
+      "modulo": "insumo_pintura",
+      "accion": "ver_historial_consumo"
+    },
+    {
+      "modulo": "insumo_pintura",
+      "accion": "ver_inventario"
     },
     {
       "modulo": "produccion_lisa",
@@ -57,10 +61,6 @@ JSON (Respuesta en caso de éxito):
     {
       "modulo": "gestion_usuarios",
       "accion": "crear_editar"
-    },
-    {
-      "modulo": "insumo_pintura",
-      "accion": "ver_historial_consumo"
     }
   ]
 }
@@ -90,4 +90,3 @@ headers: {
 }
 
 Donde token es el access_token que se guardo cuando el usuario hizo login.
-

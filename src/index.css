@@ -9,12 +9,14 @@
   /* Colores del sistema */
   --primary-color: rgb(53, 116, 211);
   --secondary-color: rgba(133, 133, 133, 0.664);
+  --tertiary-color: #4e4e4e;
   --background-color: #e0eaf3;
 
   /* Colores de textos */
   --primary-text-color: rgb(33, 33, 34);
   --secondary-text-color: #545d66;
   --third-text-color: #ffffff;
+  --fourth-text-color: #ffffffd7;
 }
 
 body {

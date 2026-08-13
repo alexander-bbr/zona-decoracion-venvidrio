@@ -59,8 +59,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const login = async (carnetUsuario: string, contrasena: string) => {
     try {
-      console.log("Intentando login con:", { carnetUsuario, contrasena });
-
       // IMPORTANTE: Usar formato x-www-form-urlencoded
       const formData = new URLSearchParams();
       formData.append("username", carnetUsuario); // El backend espera "username"
@@ -73,7 +71,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         },
       });
 
-      console.log("Respuesta del servidor:", response.data);
+      console.log("Respuesta del servidor:", response.status);
 
       const { access_token, rol, nombres, apellidos, permisos } = response.data;
 

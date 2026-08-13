@@ -1,0 +1,83 @@
+.container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Encabezado */
+.moduleHeader {
+  margin-bottom: 32px;
+  padding-bottom: 16px;
+}
+.moduleTitle {
+  font-size: 28px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 4px 0;
+}
+.moduleSubtitle {
+  font-size: 16px;
+  color: #6b7280;
+  margin: 0;
+}
+
+.home {
+  margin: auto;
+  min-width: 500px;
+  width: 65%;
+  padding: 40px;
+  border-radius: 16px;
+  background: var(--third-text-color);
+  box-shadow: 0 20px 55px rgba(20, 30, 60, 0.08);
+}
+
+.home h3 {
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: var(--primary-text-color);
+}
+
+.home p.userRol {
+  margin-top: 0.5rem;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  color: var(--secondary-text-color);
+}
+
+/* Mensaje de Éxito */
+.home div.notificationWrapper {
+  padding: 1rem;
+  border-radius: 8px;
+  background-color: #daffcd;
+  border: 1px solid #28ff07;
+  margin: 2rem auto;
+  max-width: fit-content;
+}
+.home p.successMessage {
+  margin: 0;
+  text-align: center;
+  font-size: 0.8rem;
+  color: #138b0b;
+}
+
+.home .homeDescription {
+  margin-top: 2rem;
+  color: var(--secondary-text-color);
+  text-align: center;
+}
+
+.home a {
+  display: block;
+  font-weight: 600;
+  text-align: center;
+  margin-top: 2rem;
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+.home a:hover {
+  text-decoration: underline;
+}

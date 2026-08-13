@@ -1,3 +1,4 @@
+// src/layout/Sidebar/index.tsx
 import { Link } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import styles from "./sidebar.module.css";
@@ -6,11 +7,14 @@ export const Sidebar = () => {
   const { isAuthenticated, user, logout, hasPermission, hasAnyPermission } =
     useAuth();
 
-  // Si no está autenticado, solo muestra el enlace del Sign In
+  // Si NO está autenticado, muestra los siguientes links
   if (!isAuthenticated) {
     return (
       <nav className={styles.sidebar} id="sidebar">
         <ul>
+          <li>
+            <Link to="/">Inicio</Link>
+          </li>
           <li>
             <Link to="/sign-in">Iniciar Sesión</Link>
           </li>
@@ -19,6 +23,7 @@ export const Sidebar = () => {
     );
   }
 
+  // Si está autenticado, muestra los siguientes links
   return (
     <nav className={styles.sidebar} id="sidebar">
       {/* === INFORMACIÓN DEL USUARIO ===*/}
@@ -93,6 +98,7 @@ export const Sidebar = () => {
           </li>
         )}
       </ul>
+
       {/* Cerrar sesión */}
       <button onClick={logout} className={styles.logoutButton}>
         Cerrar Sesión

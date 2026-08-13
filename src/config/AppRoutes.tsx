@@ -1,4 +1,4 @@
-// Configuración
+// src/config/AppRoutes.tsx
 import { Routes, Route } from "react-router-dom";
 import { PrivateRoute } from "./PrivateRoute";
 import { PublicRoute } from "./PublicRoute";
@@ -63,14 +63,23 @@ export const AppRoutes = () => {
         }
       />
 
-      {/* Módulo - Consumo de Pintura - Requiere permisos específicos */}
+      {/* 
+        Módulo - Consumo de Pintura 
+        EL PADRE: Requiere AL MENOS UN permiso del módulo insumo_pintura
+        Los submódulos: Requieren permisos específicos
+      */}
       <Route
         path="/consumo-pintura"
         element={
           <PrivateRoute
             requiredPermissions={[
               { modulo: "insumo_pintura", accion: "ver_inventario" },
+              { modulo: "insumo_pintura", accion: "crear_registro" },
+              { modulo: "insumo_pintura", accion: "crear_consumo" },
+              { modulo: "insumo_pintura", accion: "ver_historial_consumo" },
             ]}
+            // Usamos requireAnyPermission para que permita si tiene AL MENOS UNO
+            requireAnyPermission={true}
           >
             <ConsumoDePintura />
           </PrivateRoute>
@@ -126,14 +135,21 @@ export const AppRoutes = () => {
         />
       </Route>
 
-      {/* Módulo - Producción Lisa - Requiere permisos específicos */}
+      {/* 
+        Módulo - Producción Lisa 
+        EL PADRE: Requiere AL MENOS UN permiso del módulo produccion_lisa
+      */}
       <Route
         path="/produccion-lisa"
         element={
           <PrivateRoute
             requiredPermissions={[
               { modulo: "produccion_lisa", accion: "ver_inventario" },
+              { modulo: "produccion_lisa", accion: "crear_registro" },
+              { modulo: "produccion_lisa", accion: "crear_salida" },
+              { modulo: "produccion_lisa", accion: "ver_historial" },
             ]}
+            requireAnyPermission={true}
           >
             <ProduccionLisa />
           </PrivateRoute>

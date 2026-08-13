@@ -44,7 +44,7 @@ export const SignIn = () => {
 
   /* === RENDERIZADO === */
   return (
-    <section className={styles.signIn}>
+    <section className={`${styles.signIn} content`}>
       <header className={styles.signInHeader}>
         <img
           className={styles.signInHeaderLogo}
@@ -53,7 +53,7 @@ export const SignIn = () => {
         />
         <div className={styles.headerInfoWrapper}>
           <h2 className={styles.nameCompany}>Venezolana del Vidrio C.A</h2>
-          <p className={styles.rifCompany}>J-090345234</p>
+          <p className={styles.rifCompany}>RIF: G-20009820-1</p>
         </div>
       </header>
 
@@ -111,8 +111,6 @@ export const SignIn = () => {
 
       <footer className={styles.signInFooter}>
         <p>Aplicación de uso exclusivo para personal autorizado</p>
-        <p>Venezolana del Vidrio C.A</p>
-        <p>© Todos los derechos reservados</p>
       </footer>
     </section>
   );

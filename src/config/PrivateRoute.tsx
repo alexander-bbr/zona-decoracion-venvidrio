@@ -1,3 +1,4 @@
+// src/components/PrivateRoute.tsx
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
@@ -8,12 +9,14 @@ interface PrivateRouteProps {
     modulo: string;
     accion: string;
   }[];
+  requireAnyPermission?: boolean; // Nueva prop
 }
 
 export const PrivateRoute = ({
   children,
   requiredRoles,
   requiredPermissions,
+  requireAnyPermission = false, // Por defecto false (requiere todos)
 }: PrivateRouteProps) => {
   const { isAuthenticated, hasRole, hasPermission, loading } = useAuth();
 
@@ -32,11 +35,22 @@ export const PrivateRoute = ({
 
   // Verificar permisos si se especifican
   if (requiredPermissions) {
-    const hasAllPermissions = requiredPermissions.every((p) =>
-      hasPermission(p.modulo, p.accion),
-    );
-    if (!hasAllPermissions) {
-      return <Navigate to="/unauthorized" replace />;
+    if (requireAnyPermission) {
+      // Requiere AL MENOS UNO de los permisos
+      const hasAnyPermission = requiredPermissions.some((p) =>
+        hasPermission(p.modulo, p.accion),
+      );
+      if (!hasAnyPermission) {
+        return <Navigate to="/unauthorized" replace />;
+      }
+    } else {
+      // Requiere TODOS los permisos (comportamiento por defecto)
+      const hasAllPermissions = requiredPermissions.every((p) =>
+        hasPermission(p.modulo, p.accion),
+      );
+      if (!hasAllPermissions) {
+        return <Navigate to="/unauthorized" replace />;
+      }
     }
   }
 

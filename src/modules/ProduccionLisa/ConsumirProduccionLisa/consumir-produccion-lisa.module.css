@@ -162,14 +162,14 @@
 }
 
 .saveButton {
-  background: #e74c3c;
+  background: #22bb6e;
   color: white;
 }
 
-.saveButton:hover:not(:disabled) {
-  background: #c0392b;
+.saveButton:hover {
+  background: #1ea863;
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(231, 76, 60, 0.3);
+  box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
 }
 
 .saveButton:disabled {

@@ -1,10 +1,12 @@
+// src/modules/Usuarios/index.tsx
 import { useState, useEffect } from "react";
+import { useAuth } from "../../contexts/AuthContext";
 import styles from "./usuarios.module.css";
 import { FormularioUsuario } from "./FormularioUsuario";
 
 // Tipos para la permisologia (genérico y flexible)
 export type PermisosUsuario = {
-  [key: string]: boolean; // Cualquier permiso es posible
+  [key: string]: boolean;
 };
 
 // Tipos para el usuario
@@ -44,12 +46,17 @@ type ApiResponse = {
 };
 
 export const Usuarios = () => {
+  const { hasPermission } = useAuth();
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const [usuarioEditando, setUsuarioEditando] = useState<string | null>(null);
   const [usuarios, setUsuarios] = useState<Usuario[]>([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [mensajeExito, setMensajeExito] = useState<string | null>(null);
+
+  // Verificar permisos
+  const puedeVerUsuarios = hasPermission("gestion_usuarios", "ver_usuarios");
+  const puedeCrearEditar = hasPermission("gestion_usuarios", "crear_editar");
 
   // Obtener datos de los usuarios
   const obtenerUsuarios = async () => {
@@ -66,7 +73,6 @@ export const Usuarios = () => {
       const responseData: ApiResponse = await response.json();
       const usuariosData = responseData.data.data;
 
-      // Mapear los datos de la API al formato de nuestra interfaz
       const usuariosMapeados: Usuario[] = usuariosData.map((usuarioAPI) => ({
         id: usuarioAPI.id_usuario.toString(),
         cedula: usuarioAPI.cedula,
@@ -77,7 +83,7 @@ export const Usuarios = () => {
         correo: usuarioAPI.correo,
         rol: usuarioAPI.rol,
         estado: usuarioAPI.activo_usuario ? "Activo" : "Inactivo",
-        permisos: {}, //* Los permisos no se muestran en la tabla
+        permisos: {},
       }));
 
       setUsuarios(usuariosMapeados);
@@ -93,11 +99,21 @@ export const Usuarios = () => {
 
   // Obtener los usuarios al montar el componente
   useEffect(() => {
-    obtenerUsuarios();
-  }, []);
+    // Solo obtener usuarios si tiene permiso para verlos
+    if (puedeVerUsuarios) {
+      obtenerUsuarios();
+    } else {
+      setCargando(false);
+    }
+  }, [puedeVerUsuarios]);
 
   // Abrir formulario para Crear un Usuario
   const handleCrearUsuario = () => {
+    // Verificar permiso para crear/editar
+    if (!puedeCrearEditar) {
+      alert("No tienes permiso para crear o editar usuarios");
+      return;
+    }
     setUsuarioEditando(null);
     setMensajeExito(null);
     setError(null);
@@ -106,6 +122,11 @@ export const Usuarios = () => {
 
   // Abrir formulario para Editar un Usuario
   const handleEditarUsuario = (usuario: Usuario) => {
+    // Verificar permiso para crear/editar
+    if (!puedeCrearEditar) {
+      alert("No tienes permiso para editar usuarios");
+      return;
+    }
     setUsuarioEditando(usuario.id);
     setMensajeExito(null);
     setError(null);
@@ -114,6 +135,12 @@ export const Usuarios = () => {
 
   // Guardar Usuario (Crear o Actualizar)
   const handleGuardarUsuario = async (usuarioData: any) => {
+    // Verificar permiso para crear/editar
+    if (!puedeCrearEditar) {
+      alert("No tienes permiso para crear o editar usuarios");
+      return;
+    }
+
     try {
       setCargando(true);
       setError(null);
@@ -183,10 +210,8 @@ export const Usuarios = () => {
         setMensajeExito(data.mensaje || "Usuario creado exitosamente");
       }
 
-      // Recargar la lista después de guardar
       await obtenerUsuarios();
 
-      // Cerrar el formulario después de un pequeño delay para mostrar el mensaje
       setTimeout(() => {
         setMostrarFormulario(false);
         setUsuarioEditando(null);
@@ -215,6 +240,31 @@ export const Usuarios = () => {
 
   // Renderizar contenido según el estado
   const renderContenido = () => {
+    // Si no tiene permiso para ver usuarios
+    if (!puedeVerUsuarios) {
+      return (
+        <div className={styles.errorContainer}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="48"
+            height="48"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+          <h3>Acceso Denegado</h3>
+          <p>No tienes permiso para ver la lista de usuarios</p>
+        </div>
+      );
+    }
+
     // Cargando
     if (cargando) {
       return (
@@ -252,7 +302,7 @@ export const Usuarios = () => {
       );
     }
 
-    // Éxito (Tabla de Usuarios)
+    // Tabla de Usuarios
     return (
       <section className={`${styles.gestion} content`}>
         <section className={styles.controls}>
@@ -261,25 +311,31 @@ export const Usuarios = () => {
           </h3>
 
           <div className={styles.buttons}>
-            <button onClick={handleCrearUsuario} className={styles.btnAgregar}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+            {/* Botón Agregar - Solo visible si tiene permiso de crear/editar */}
+            {puedeCrearEditar && (
+              <button
+                onClick={handleCrearUsuario}
+                className={styles.btnAgregar}
               >
-                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                <circle cx="8.5" cy="7" r="4"></circle>
-                <line x1="20" y1="8" x2="20" y2="14"></line>
-                <line x1="23" y1="11" x2="17" y2="11"></line>
-              </svg>
-              Agregar Usuario
-            </button>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="8.5" cy="7" r="4"></circle>
+                  <line x1="20" y1="8" x2="20" y2="14"></line>
+                  <line x1="23" y1="11" x2="17" y2="11"></line>
+                </svg>
+                Agregar Usuario
+              </button>
+            )}
           </div>
         </section>
 
@@ -307,8 +363,19 @@ export const Usuarios = () => {
                 {usuarios.map((usuario) => (
                   <tr
                     key={usuario.id}
-                    onClick={() => handleEditarUsuario(usuario)}
-                    className={styles.filaClickable}
+                    onClick={() =>
+                      // Solo permitir editar si tiene permiso de crear/editar
+                      puedeCrearEditar ? handleEditarUsuario(usuario) : null
+                    }
+                    className={`${styles.filaClickable} ${
+                      puedeCrearEditar
+                        ? styles.filaEditable
+                        : styles.filaSoloLectura
+                    }`}
+                    style={{
+                      cursor: puedeCrearEditar ? "pointer" : "default",
+                      opacity: puedeCrearEditar ? 1 : 0.8,
+                    }}
                   >
                     <td>{usuario.cedula}</td>
                     <td>{usuario.carnet}</td>

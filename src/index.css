@@ -52,6 +52,7 @@ body {
 /* Darle una animación al proceso en cuestión */
 .content {
   animation: fadeIn 0.3s ease-in-out;
+  margin-bottom: 10rem !important;
 }
 
 #footer {

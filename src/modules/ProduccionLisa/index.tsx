@@ -1,4 +1,3 @@
-// src/modules/ProduccionLisa/index.tsx
 import { Outlet, NavLink, useLocation } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import styles from "./produccion-lisa.module.css";
@@ -26,23 +25,6 @@ export const ProduccionLisa = () => {
     historial: hasPermission("produccion_lisa", "ver_historial"),
     inventario: hasPermission("produccion_lisa", "ver_inventario"),
   };
-
-  // Verificar si tiene al menos un permiso
-  const tieneAlgunPermiso = Object.values(permisos).some(Boolean);
-
-  // Si no tiene ningún permiso, mostrar mensaje
-  if (!tieneAlgunPermiso) {
-    return (
-      <div className={styles.container}>
-        <header className={styles.moduleHeader}>
-          <h2 className={styles.moduleTitle}>Producción Lisa</h2>
-          <p className={styles.moduleSubtitle}>
-            No tienes permisos para acceder a este módulo
-          </p>
-        </header>
-      </div>
-    );
-  }
 
   return (
     <div className={styles.container}>

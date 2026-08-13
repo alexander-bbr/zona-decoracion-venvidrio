@@ -1,0 +1,57 @@
+.container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.unauthorized {
+  margin: 2rem auto 0;
+  min-width: 500px;
+  width: 55%;
+  padding: 40px;
+  border-radius: 16px;
+  background: var(--third-text-color);
+  box-shadow: 0 20px 55px rgba(20, 30, 60, 0.08);
+}
+
+.unauthorized h3 {
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: var(--primary-text-color);
+}
+
+/* Mensaje de Error */
+.unauthorized div.notificationWrapper {
+  padding: 0.7rem 1rem;
+  border-radius: 8px;
+  background-color: #ffcdcd;
+  border: 1px solid #ff5107;
+  margin: 0 auto 2rem;
+  max-width: fit-content;
+}
+.unauthorized .errorMessage {
+  margin: 0;
+  text-align: center;
+  font-size: 1.3rem;
+  color: #8b340b;
+}
+
+.unauthorized .unauthorizedDescription {
+  margin-top: 2rem;
+  color: var(--secondary-text-color);
+  text-align: center;
+}
+
+.unauthorized a {
+  display: block;
+  font-weight: 600;
+  text-align: center;
+  margin-top: 2rem;
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+.home a:hover {
+  text-decoration: underline;
+}

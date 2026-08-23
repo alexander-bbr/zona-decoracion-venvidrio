@@ -4,11 +4,11 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.3rem;
 }
 
 .companyImagotype {
-  width: 6rem;
+  width: 7rem;
 }
 
 .companyName {

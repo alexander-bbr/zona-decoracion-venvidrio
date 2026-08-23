@@ -1,6 +1,6 @@
 import React, { useEffect, useState, type ChangeEvent } from "react";
 import styles from "./registrar-produccion-lisa.module.css";
-import headerLogo from "../../../assets/images/logo-segun-controles.png";
+import { HeaderForm } from "../../../components/HeaderForm";
 
 type camposFormulario = {
   fechaRegistro: string;
@@ -224,22 +224,7 @@ export const RegistrarProduccionLisa = () => {
       )}
 
       <form className={styles.form} onSubmit={handleSubmit}>
-        <header className={styles.headerForm}>
-          <div className={styles.logoWrapper}>
-            <img
-              src={headerLogo}
-              alt="Logo de Venvidrio"
-              className={styles.headerLogo}
-            />
-          </div>
-          <h2 className={styles.headerTitle}>
-            GERENCIA DE ZONA FRÍA Y PROCESOS FINALES INTENDENCIA DE PROCESOS
-            FINALES
-          </h2>
-          <div className={styles.codeWrapper}>
-            <p className={styles.headerCode}>Sin Código</p>
-          </div>
-        </header>
+        <HeaderForm />
 
         {/* === CAMPOS === */}
         <section className={styles.dataWrapper}>

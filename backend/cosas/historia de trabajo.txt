@@ -1,0 +1,83 @@
+#MÓDULO: Historia de Trabajo de Decoración
+
+#ENDPOINTS
+POST /crear/historia-trabajo
+GET /historial/historia-trabajo
+GET /obtener_registro/historia-trabajo/{id}
+PUT /editar/historia-trabajo/{id}
+GET /exportar/historia-trabajo/{id}
+
+#FUNCIONES
+
+crear_historia_trabajo
+- Recibe el JSON completo (cabecera + colores + estaciones + temperatura)
+- Inserta la cabecera y obtiene el id generado
+- Inserta las filas de colores, estaciones y temperatura apuntando a ese id
+- Devuelve el id del registro creado
+
+listar_historias_trabajo
+- Consulta todos los registros de la cabecera
+- Devuelve lista con los campos resumen (id, fecha, molde, maquina, tipo_decorado, revisado_por)
+
+obtener_historia_trabajo
+- Recibe el id_htd_cabecera
+- Consulta la cabecera y todas sus tablas hijas
+- Devuelve el registro completo (cabecera + colores + estaciones + temperatura)
+
+editar_historia_trabajo
+- Recibe el id_htd_cabecera y el JSON completo actualizado
+- Actualiza los campos de la cabecera
+- Borra y reinsserta las filas de colores, estaciones y temperatura
+- Devuelve el id del registro editado
+
+exportar_historia_trabajo
+- Recibe el id_htd_cabecera
+- Consulta el registro completo de la DB
+- Abre la plantilla Word guardada en backend/plantillas/
+- Llena el documento reemplazando por índice de celda con los datos del registro
+- Devuelve el archivo .docx como respuesta de descarga
+
+#MODELADO DE BASE DE DATOS
+
+f_historia_trabajo_decoracion_cabecera
+- id_htd_cabecera (PK)
+- fecha_elaboracion
+- molde
+- no_plano
+- identificador_maquina
+- tipo_decorado
+- no_archa
+- cant_ranuras
+- no_tazas
+- velocidad_bpm
+- tiempo_malla_seg
+- problemas
+- observaciones
+- revisado_por
+- fecha_registro
+
+f_historia_trabajo_decoracion_colores
+- id_htd_color (PK)
+- id_htd_cabecera (FK)
+- numero_color
+- consumo_pintura
+- codigo_pintura
+
+f_historia_trabajo_decoracion_estaciones
+- id_htd_estacion (PK)
+- id_htd_cabecera (FK)
+- numero_estacion
+- cuerpo_presion_squeegees
+- cuerpo_nro_marco
+- cuerpo_tipo_malla
+- cuello_presion_squeegees
+- cuello_nro_marco
+- cuello_tipo_malla
+
+f_historia_trabajo_decoracion_temperatura
+- id_htd_temperatura (PK)
+- id_htd_cabecera (FK)
+- numero_zona
+- set_point
+- lado_izq
+- lado_der

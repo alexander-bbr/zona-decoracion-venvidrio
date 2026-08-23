@@ -15,7 +15,8 @@
   border-bottom: 2px solid var(--secondary-color);
 }
 .userInfo p:first-of-type {
-  margin: 0.8rem 0 0.3rem;
+  margin: 0.8rem 0 0.8rem;
+  text-align: center;
   font-size: 1rem;
   font-weight: 600;
 }

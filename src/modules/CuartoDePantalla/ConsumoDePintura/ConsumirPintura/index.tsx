@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styles from "./consumir-pintura.module.css";
-import headerLogo from "../../../../assets/images/logo-segun-controles.png";
+import { HeaderForm } from "../../../../components/HeaderForm";
 
 // Tipado para los campos del formulario
 type consumirPinturaProps = {
@@ -183,22 +183,7 @@ export const ConsumirPintura = () => {
 
       {/* Formulario */}
       <form className={styles.form} onSubmit={handleSubmit}>
-        <header className={styles.headerForm}>
-          <div className={styles.logoWrapper}>
-            <img
-              src={headerLogo}
-              alt="Logo de Venvidrio"
-              className={styles.headerLogo}
-            />
-          </div>
-          <h2 className={styles.headerTitle}>
-            GERENCIA DE ZONA FRÍA Y PROCESOS FINALES INTENDENCIA DE PROCESOS
-            FINALES
-          </h2>
-          <div className={styles.codeWrapper}>
-            <p className={styles.headerCode}>F-F3170001</p>
-          </div>
-        </header>
+        <HeaderForm />
 
         <section className={styles.dataWrapper}>
           {/* Fecha de Inicio */}

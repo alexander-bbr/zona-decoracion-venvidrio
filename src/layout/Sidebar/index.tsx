@@ -88,6 +88,16 @@ export const Sidebar = () => {
           </li>
         )}
 
+        {/* Gestion Productiva - visible si tiene algún permiso del módulo */}
+        {hasAnyPermission("produccion_lisa", [
+          "ver_inventario",
+          "crear_registro",
+        ]) && (
+          <li>
+            <Link to="/gestion-productiva">Gestión Productiva</Link>
+          </li>
+        )}
+
         {/* Gestión de Usuarios - visible solo si tiene permisos */}
         {hasAnyPermission("gestion_usuarios", [
           "ver_usuarios",

@@ -1,4 +1,3 @@
-// src/config/AppRoutes.tsx
 import { Routes, Route } from "react-router-dom";
 import { PrivateRoute } from "./PrivateRoute";
 import { PublicRoute } from "./PublicRoute";
@@ -28,6 +27,11 @@ import { Usuarios } from "../modules/Usuarios";
 
 // Módulo - Iniciar Sesión
 import { SignIn } from "../modules/SignIn";
+
+// Módulo - Gestión Productiva
+import { GestionProductiva } from "../modules/GestionProductiva";
+import { Produccion } from "../modules/GestionProductiva/Produccion";
+import { Moldes } from "../modules/GestionProductiva/Moldes";
 
 // Módulo - No Autorizado
 import { Unauthorized } from "../modules/Unauthorized";
@@ -200,6 +204,50 @@ export const AppRoutes = () => {
               ]}
             >
               <InventarioProduccionLisa />
+            </PrivateRoute>
+          }
+        />
+      </Route>
+
+      {/* 
+        Módulo - Gestión Productiva 
+        EL PADRE: Requiere AL MENOS UN permiso del módulo gestion_productiva
+      */}
+      <Route
+        path="/gestion-productiva"
+        element={
+          <PrivateRoute
+            requiredPermissions={[
+              { modulo: "produccion_lisa", accion: "ver_inventario" },
+              { modulo: "produccion_lisa", accion: "crear_registro" },
+            ]}
+            requireAnyPermission={true}
+          >
+            <GestionProductiva />
+          </PrivateRoute>
+        }
+      >
+        <Route
+          path="produccion"
+          element={
+            <PrivateRoute
+              requiredPermissions={[
+                { modulo: "produccion_lisa", accion: "ver_inventario" },
+              ]}
+            >
+              <Produccion />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="moldes"
+          element={
+            <PrivateRoute
+              requiredPermissions={[
+                { modulo: "produccion_lisa", accion: "crear_registro" },
+              ]}
+            >
+              <Moldes />
             </PrivateRoute>
           }
         />

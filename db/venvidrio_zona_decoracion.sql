@@ -14,7 +14,6 @@ SET time_zone = "+00:00";
 --
 CREATE DATABASE IF NOT EXISTS `venvidrio_zona_decoracion` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE `venvidrio_zona_decoracion`;
-
 -- --------------------------------------------------------
 
 --
@@ -396,11 +395,11 @@ CREATE TABLE `formato_verificacion_diaria_respuestas` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `historia_trabajo_decoracion_cabecera`
+-- Estructura de tabla para la tabla `f_historia_trabajo_decoracion_cabecera`
 --
 
-CREATE TABLE `historia_trabajo_decoracion_cabecera` (
-  `id` int(11) NOT NULL,
+CREATE TABLE `f_historia_trabajo_decoracion_cabecera` (
+  `id_htd_cabecera` int(11) NOT NULL,
   `fecha_elaboracion` date NOT NULL,
   `molde` varchar(50) NOT NULL,
   `no_plano` varchar(50) DEFAULT NULL,
@@ -414,109 +413,127 @@ CREATE TABLE `historia_trabajo_decoracion_cabecera` (
   `problemas` text DEFAULT NULL,
   `observaciones` text DEFAULT NULL,
   `revisado_por` varchar(100) DEFAULT NULL,
-  `fecha_registro` timestamp NULL DEFAULT current_timestamp()
+  `fecha_registro` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `f_historia_trabajo_decoracion_cabecera`
+--
+
+INSERT INTO `f_historia_trabajo_decoracion_cabecera` (`id_htd_cabecera`, `fecha_elaboracion`, `molde`, `no_plano`, `identificador_maquina`, `tipo_decorado`, `no_archa`, `cant_ranuras`, `no_tazas`, `velocidad_bpm`, `tiempo_malla_seg`, `problemas`, `observaciones`, `revisado_por`, `fecha_registro`) VALUES
+(1, '2026-08-16', 'buenas', 'string', 'string', 'string', 'string', 0, 0, 0, 0, 'string', 'string', 'string', '2026-08-16 16:00:32'),
+(2, '2026-08-16', 'GX01944', '662', 'D-3', 'Polarcita', 'D2', 19, 30, 70, 300, 'Mal comportamiento de la malla del archa, ameritó ajustes.', 'Sin observaciones adicionales.', 'Octavio Aldana', '2026-08-16 17:11:05'),
+(3, '2026-08-16', 'prueba', '445', 'D-4', 'Floral', 'A3', 24, 20, 85, 250, 'hola HOLA HHHHHHHHHHHHHHHH BBBBBBBBBBBBB OOOOOOOOOOOOOO OOOOOOOOOOOOOO AAAAAAAAAAAAAAQQQQQQ QQQQQQQQQQQQQQQQ QQQQQQQQQQQQQQQ Q', 'Corrida sin inconvenientes. hola HOLA HHHHHHHHHHHHHHHH BBBBBBBBBBBBB OOOOOOOOOOOOOO OOOOOOOOOOOOOO AAAAAAAAAAAAAAQQQQQQ QQQQQQQQQQQQQQQQ QQQQQQQQQQQQQQQ', 'Luis Cardenas', '2026-08-16 19:11:35');
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `historia_trabajo_decoracion_preguntas`
+-- Estructura de tabla para la tabla `f_historia_trabajo_decoracion_colores`
 --
 
-CREATE TABLE `historia_trabajo_decoracion_preguntas` (
-  `id` int(11) NOT NULL,
-  `seccion` varchar(50) DEFAULT NULL,
-  `parametro` varchar(100) DEFAULT NULL,
-  `estado` tinyint(4) DEFAULT 1
+CREATE TABLE `f_historia_trabajo_decoracion_colores` (
+  `id_htd_color` int(11) NOT NULL,
+  `id_htd_cabecera` int(11) NOT NULL,
+  `numero_color` int(11) NOT NULL,
+  `consumo_pintura` varchar(50) DEFAULT NULL,
+  `codigo_pintura` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `historia_trabajo_decoracion_preguntas`
+-- Volcado de datos para la tabla `f_historia_trabajo_decoracion_colores`
 --
 
-INSERT INTO `historia_trabajo_decoracion_preguntas` (`id`, `seccion`, `parametro`, `estado`) VALUES
-(1, 'Color', '1er Color: Consumo de Pintura', 1),
-(2, 'Color', '1er Color: Código de Pintura', 1),
-(3, 'Color', '2do Color: Consumo de Pintura', 1),
-(4, 'Color', '2do Color: Código de Pintura', 1),
-(5, 'Color', '3er Color: Consumo de Pintura', 1),
-(6, 'Color', '3er Color: Código de Pintura', 1),
-(7, '1era Estacion', 'Cuerpo: Presión Squeegees', 1),
-(8, '1era Estacion', 'Cuerpo: Nro Marco', 1),
-(9, '1era Estacion', 'Cuerpo: Tipo Malla', 1),
-(10, '1era Estacion', 'Cuello: Presión Squeegees', 1),
-(11, '1era Estacion', 'Cuello: Nro Marco', 1),
-(12, '1era Estacion', 'Cuello: Tipo Malla', 1),
-(13, '2da Estacion', 'Cuerpo: Presión Squeegees', 1),
-(14, '2da Estacion', 'Cuerpo: Nro Marco', 1),
-(15, '2da Estacion', 'Cuerpo: Tipo Malla', 1),
-(16, '2da Estacion', 'Cuello: Presión Squeegees', 1),
-(17, '2da Estacion', 'Cuello: Nro Marco', 1),
-(18, '2da Estacion', 'Cuello: Tipo Malla', 1),
-(19, '3era Estacion', 'Cuerpo: Presión Squeegees', 1),
-(20, '3era Estacion', 'Cuerpo: Nro Marco', 1),
-(21, '3era Estacion', 'Cuerpo: Tipo Malla', 1),
-(22, '3era Estacion', 'Cuello: Presión Squeegees', 1),
-(23, '3era Estacion', 'Cuello: Nro Marco', 1),
-(24, '3era Estacion', 'Cuello: Tipo Malla', 1),
-(25, 'Temperatura', 'Zona 1: Set Point', 1),
-(26, 'Temperatura', 'Zona 1: Lado Izq', 1),
-(27, 'Temperatura', 'Zona 1: Lado Der', 1),
-(28, 'Temperatura', 'Zona 2: Set Point', 1),
-(29, 'Temperatura', 'Zona 2: Lado Izq', 1),
-(30, 'Temperatura', 'Zona 2: Lado Der', 1),
-(31, 'Temperatura', 'Zona 3: Set Point', 1),
-(32, 'Temperatura', 'Zona 3: Lado Izq', 1),
-(33, 'Temperatura', 'Zona 3: Lado Der', 1),
-(34, 'Temperatura', 'Zona 4: Set Point', 1),
-(35, 'Temperatura', 'Zona 4: Lado Izq', 1),
-(36, 'Temperatura', 'Zona 4: Lado Der', 1),
-(37, 'Temperatura', 'Zona 5: Set Point', 1),
-(38, 'Temperatura', 'Zona 5: Lado Izq', 1),
-(39, 'Temperatura', 'Zona 5: Lado Der', 1),
-(40, 'Temperatura', 'Zona 6: Set Point', 1),
-(41, 'Temperatura', 'Zona 6: Lado Izq', 1),
-(42, 'Temperatura', 'Zona 6: Lado Der', 1),
-(43, 'Temperatura', 'Zona 7: Set Point', 1),
-(44, 'Temperatura', 'Zona 7: Lado Izq', 1),
-(45, 'Temperatura', 'Zona 7: Lado Der', 1),
-(46, 'Temperatura', 'Zona 8: Set Point', 1),
-(47, 'Temperatura', 'Zona 8: Lado Izq', 1),
-(48, 'Temperatura', 'Zona 8: Lado Der', 1),
-(49, 'Temperatura', 'Zona 9: Set Point', 1),
-(50, 'Temperatura', 'Zona 9: Lado Izq', 1),
-(51, 'Temperatura', 'Zona 9: Lado Der', 1),
-(52, 'Temperatura', 'Zona 10: Set Point', 1),
-(53, 'Temperatura', 'Zona 10: Lado Izq', 1),
-(54, 'Temperatura', 'Zona 10: Lado Der', 1),
-(55, 'Temperatura', 'Zona 11: Set Point', 1),
-(56, 'Temperatura', 'Zona 11: Lado Izq', 1),
-(57, 'Temperatura', 'Zona 11: Lado Der', 1),
-(58, 'Temperatura', 'Zona 12: Set Point', 1),
-(59, 'Temperatura', 'Zona 12: Lado Izq', 1),
-(60, 'Temperatura', 'Zona 12: Lado Der', 1),
-(61, 'Temperatura', 'Zona 13: Set Point', 1),
-(62, 'Temperatura', 'Zona 13: Lado Izq', 1),
-(63, 'Temperatura', 'Zona 13: Lado Der', 1),
-(64, 'Temperatura', 'Zona 14: Set Point', 1),
-(65, 'Temperatura', 'Zona 14: Lado Izq', 1),
-(66, 'Temperatura', 'Zona 14: Lado Der', 1),
-(67, 'Temperatura', 'Zona 15: Set Point', 1),
-(68, 'Temperatura', 'Zona 15: Lado Izq', 1),
-(69, 'Temperatura', 'Zona 15: Lado Der', 1);
+INSERT INTO `f_historia_trabajo_decoracion_colores` (`id_htd_color`, `id_htd_cabecera`, `numero_color`, `consumo_pintura`, `codigo_pintura`) VALUES
+(3, 2, 1, '60', 'SM 00-0200VT38'),
+(4, 2, 2, '27', 'SM 00-0025 IN - VT'),
+(5, 2, 3, NULL, NULL),
+(9, 1, 0, 'string', 'string'),
+(19, 3, 1, '45', 'SM 00-0310VT12'),
+(20, 3, 2, NULL, NULL),
+(21, 3, 3, NULL, NULL);
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `historia_trabajo_decoracion_respuestas`
+-- Estructura de tabla para la tabla `f_historia_trabajo_decoracion_estaciones`
 --
 
-CREATE TABLE `historia_trabajo_decoracion_respuestas` (
-  `id` int(11) NOT NULL,
-  `id_cabecera` int(11) NOT NULL,
-  `id_pregunta` int(11) NOT NULL,
-  `valor` varchar(255) DEFAULT NULL
+CREATE TABLE `f_historia_trabajo_decoracion_estaciones` (
+  `id_htd_estacion` int(11) NOT NULL,
+  `id_htd_cabecera` int(11) NOT NULL,
+  `numero_estacion` int(11) NOT NULL,
+  `cuerpo_presion_squeegees` varchar(50) DEFAULT NULL,
+  `cuerpo_nro_marco` varchar(50) DEFAULT NULL,
+  `cuerpo_tipo_malla` varchar(50) DEFAULT NULL,
+  `cuello_presion_squeegees` varchar(50) DEFAULT NULL,
+  `cuello_nro_marco` varchar(50) DEFAULT NULL,
+  `cuello_tipo_malla` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `f_historia_trabajo_decoracion_estaciones`
+--
+
+INSERT INTO `f_historia_trabajo_decoracion_estaciones` (`id_htd_estacion`, `id_htd_cabecera`, `numero_estacion`, `cuerpo_presion_squeegees`, `cuerpo_nro_marco`, `cuerpo_tipo_malla`, `cuello_presion_squeegees`, `cuello_nro_marco`, `cuello_tipo_malla`) VALUES
+(3, 2, 1, '15', '130', '200', NULL, NULL, NULL),
+(4, 2, 2, '12', '100', '200', '9', '50', '180'),
+(5, 2, 3, NULL, NULL, NULL, NULL, NULL, NULL),
+(9, 1, 0, 'string', 'string', 'string', 'string', 'string', 'string'),
+(19, 3, 1, '18', '110', '180', '10', '60', '160'),
+(20, 3, 2, NULL, NULL, NULL, NULL, NULL, NULL),
+(21, 3, 3, NULL, NULL, NULL, NULL, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `f_historia_trabajo_decoracion_temperatura`
+--
+
+CREATE TABLE `f_historia_trabajo_decoracion_temperatura` (
+  `id_htd_temperatura` int(11) NOT NULL,
+  `id_htd_cabecera` int(11) NOT NULL,
+  `numero_zona` int(11) NOT NULL,
+  `set_point` varchar(50) DEFAULT NULL,
+  `lado_izq` varchar(50) DEFAULT NULL,
+  `lado_der` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `f_historia_trabajo_decoracion_temperatura`
+--
+
+INSERT INTO `f_historia_trabajo_decoracion_temperatura` (`id_htd_temperatura`, `id_htd_cabecera`, `numero_zona`, `set_point`, `lado_izq`, `lado_der`) VALUES
+(3, 2, 1, '250', '250', '250'),
+(4, 2, 2, '390', '390', '390'),
+(5, 2, 3, '800', '800', '800'),
+(6, 2, 4, '1100', '1100', '1100'),
+(7, 2, 5, '1160', '1160', '1160'),
+(8, 2, 6, '1160', '1160', '1160'),
+(9, 2, 7, '1160', '1160', '1160'),
+(10, 2, 8, '1020', '1020', '1020'),
+(11, 2, 9, '940', '940', '940'),
+(12, 2, 10, '710', '710', '710'),
+(13, 2, 11, NULL, NULL, NULL),
+(14, 2, 12, NULL, NULL, NULL),
+(15, 2, 13, NULL, NULL, NULL),
+(16, 2, 14, NULL, NULL, NULL),
+(17, 2, 15, NULL, NULL, NULL),
+(33, 1, 0, 'string', 'string', 'string'),
+(79, 3, 1, '230', '228', '231'),
+(80, 3, 2, '380', '375', '382'),
+(81, 3, 3, '750', '748', '753'),
+(82, 3, 4, '1050', '1048', '1052'),
+(83, 3, 5, '1150', '1148', '1151'),
+(84, 3, 6, '1150', '1149', '1152'),
+(85, 3, 7, '1150', '1147', '1150'),
+(86, 3, 8, '1000', '998', '1001'),
+(87, 3, 9, '920', '918', '922'),
+(88, 3, 10, '700', '698', '701'),
+(89, 3, 11, NULL, NULL, NULL),
+(90, 3, 12, NULL, NULL, NULL),
+(91, 3, 13, NULL, NULL, NULL),
+(92, 3, 14, NULL, NULL, NULL),
+(93, 3, 15, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -545,7 +562,10 @@ INSERT INTO `permisos_modulos` (`id_permisom`, `modulo`, `accion`) VALUES
 (16, 'dashboard', 'ver'),
 (17, 'gestion_usuarios', 'ver_usuarios'),
 (18, 'gestion_usuarios', 'crear_editar'),
-(19, 'insumo_pintura', 'ver_historial_consumo');
+(19, 'insumo_pintura', 'ver_historial_consumo'),
+(21, 'historia_trabajo_decoracion', 'ver_historial'),
+(22, 'historia_trabajo_decoracion', 'crear_historia'),
+(23, 'historia_trabajo_decoracion', 'editar_historia');
 
 -- --------------------------------------------------------
 
@@ -564,17 +584,20 @@ CREATE TABLE `permisos_usuarios` (
 --
 
 INSERT INTO `permisos_usuarios` (`id_permisou`, `id_usuario`, `id_permisom`) VALUES
-(25, 10, 1),
-(26, 10, 4),
-(27, 10, 5),
-(28, 10, 6),
-(29, 10, 7),
-(30, 10, 8),
-(31, 10, 9),
-(33, 10, 16),
-(34, 10, 17),
-(35, 10, 18),
-(36, 10, 19);
+(58, 10, 1),
+(59, 10, 4),
+(60, 10, 5),
+(61, 10, 6),
+(62, 10, 7),
+(63, 10, 8),
+(64, 10, 9),
+(65, 10, 17),
+(66, 10, 18),
+(67, 10, 19),
+(68, 10, 16),
+(69, 10, 21),
+(70, 10, 22),
+(71, 10, 23);
 
 -- --------------------------------------------------------
 
@@ -724,7 +747,7 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id_usuario`, `cedula`, `carnet_usuario`, `contrasena`, `nombres`, `apellidos`, `telefono`, `correo`, `rol`, `activo_usuario`, `creado_en`) VALUES
-(10, 'string', 'prueba', '$argon2id$v=19$m=65536,t=3,p=4$CkFIaY1RivHeu9e6NyaEsA$rtdZu3HTE9nKFkeXi/QguC7E5wxIKoaruCOY7ojW17U', 'string', 'string', 'string', 'string', '', 1, '2026-08-09 14:46:05');
+(10, 'string', 'prueba', '$argon2id$v=19$m=65536,t=3,p=4$CkFIaY1RivHeu9e6NyaEsA$rtdZu3HTE9nKFkeXi/QguC7E5wxIKoaruCOY7ojW17U', 'string', 'string', 'string', 'string@d', 'administrador', 1, '2026-08-09 14:46:05');
 
 --
 -- Índices para tablas volcadas
@@ -844,24 +867,31 @@ ALTER TABLE `formato_verificacion_diaria_respuestas`
   ADD KEY `id_pregunta` (`id_pregunta`);
 
 --
--- Indices de la tabla `historia_trabajo_decoracion_cabecera`
+-- Indices de la tabla `f_historia_trabajo_decoracion_cabecera`
 --
-ALTER TABLE `historia_trabajo_decoracion_cabecera`
-  ADD PRIMARY KEY (`id`);
+ALTER TABLE `f_historia_trabajo_decoracion_cabecera`
+  ADD PRIMARY KEY (`id_htd_cabecera`);
 
 --
--- Indices de la tabla `historia_trabajo_decoracion_preguntas`
+-- Indices de la tabla `f_historia_trabajo_decoracion_colores`
 --
-ALTER TABLE `historia_trabajo_decoracion_preguntas`
-  ADD PRIMARY KEY (`id`);
+ALTER TABLE `f_historia_trabajo_decoracion_colores`
+  ADD PRIMARY KEY (`id_htd_color`),
+  ADD KEY `id_htd_cabecera` (`id_htd_cabecera`);
 
 --
--- Indices de la tabla `historia_trabajo_decoracion_respuestas`
+-- Indices de la tabla `f_historia_trabajo_decoracion_estaciones`
 --
-ALTER TABLE `historia_trabajo_decoracion_respuestas`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `id_cabecera` (`id_cabecera`),
-  ADD KEY `id_pregunta` (`id_pregunta`);
+ALTER TABLE `f_historia_trabajo_decoracion_estaciones`
+  ADD PRIMARY KEY (`id_htd_estacion`),
+  ADD KEY `id_htd_cabecera` (`id_htd_cabecera`);
+
+--
+-- Indices de la tabla `f_historia_trabajo_decoracion_temperatura`
+--
+ALTER TABLE `f_historia_trabajo_decoracion_temperatura`
+  ADD PRIMARY KEY (`id_htd_temperatura`),
+  ADD KEY `id_htd_cabecera` (`id_htd_cabecera`);
 
 --
 -- Indices de la tabla `permisos_modulos`
@@ -1026,34 +1056,40 @@ ALTER TABLE `formato_verificacion_diaria_respuestas`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `historia_trabajo_decoracion_cabecera`
+-- AUTO_INCREMENT de la tabla `f_historia_trabajo_decoracion_cabecera`
 --
-ALTER TABLE `historia_trabajo_decoracion_cabecera`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `f_historia_trabajo_decoracion_cabecera`
+  MODIFY `id_htd_cabecera` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT de la tabla `historia_trabajo_decoracion_preguntas`
+-- AUTO_INCREMENT de la tabla `f_historia_trabajo_decoracion_colores`
 --
-ALTER TABLE `historia_trabajo_decoracion_preguntas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
+ALTER TABLE `f_historia_trabajo_decoracion_colores`
+  MODIFY `id_htd_color` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
--- AUTO_INCREMENT de la tabla `historia_trabajo_decoracion_respuestas`
+-- AUTO_INCREMENT de la tabla `f_historia_trabajo_decoracion_estaciones`
 --
-ALTER TABLE `historia_trabajo_decoracion_respuestas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `f_historia_trabajo_decoracion_estaciones`
+  MODIFY `id_htd_estacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+
+--
+-- AUTO_INCREMENT de la tabla `f_historia_trabajo_decoracion_temperatura`
+--
+ALTER TABLE `f_historia_trabajo_decoracion_temperatura`
+  MODIFY `id_htd_temperatura` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=94;
 
 --
 -- AUTO_INCREMENT de la tabla `permisos_modulos`
 --
 ALTER TABLE `permisos_modulos`
-  MODIFY `id_permisom` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id_permisom` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT de la tabla `permisos_usuarios`
 --
 ALTER TABLE `permisos_usuarios`
-  MODIFY `id_permisou` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `id_permisou` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
 
 --
 -- AUTO_INCREMENT de la tabla `pintura_inventario`
@@ -1137,20 +1173,29 @@ ALTER TABLE `formato_verificacion_diaria_respuestas`
   ADD CONSTRAINT `fk_verif_diaria_pregunta` FOREIGN KEY (`id_pregunta`) REFERENCES `formato_verificacion_diaria_preguntas` (`id`) ON DELETE CASCADE;
 
 --
--- Filtros para la tabla `historia_trabajo_decoracion_respuestas`
+-- Filtros para la tabla `f_historia_trabajo_decoracion_colores`
 --
-ALTER TABLE `historia_trabajo_decoracion_respuestas`
-  ADD CONSTRAINT `historia_trabajo_decoracion_respuestas_ibfk_1` FOREIGN KEY (`id_cabecera`) REFERENCES `historia_trabajo_decoracion_cabecera` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `historia_trabajo_decoracion_respuestas_ibfk_2` FOREIGN KEY (`id_pregunta`) REFERENCES `historia_trabajo_decoracion_preguntas` (`id`) ON DELETE CASCADE;
+ALTER TABLE `f_historia_trabajo_decoracion_colores`
+  ADD CONSTRAINT `f_historia_trabajo_decoracion_colores_ibfk_1` FOREIGN KEY (`id_htd_cabecera`) REFERENCES `f_historia_trabajo_decoracion_cabecera` (`id_htd_cabecera`);
+
+--
+-- Filtros para la tabla `f_historia_trabajo_decoracion_estaciones`
+--
+ALTER TABLE `f_historia_trabajo_decoracion_estaciones`
+  ADD CONSTRAINT `f_historia_trabajo_decoracion_estaciones_ibfk_1` FOREIGN KEY (`id_htd_cabecera`) REFERENCES `f_historia_trabajo_decoracion_cabecera` (`id_htd_cabecera`);
+
+--
+-- Filtros para la tabla `f_historia_trabajo_decoracion_temperatura`
+--
+ALTER TABLE `f_historia_trabajo_decoracion_temperatura`
+  ADD CONSTRAINT `f_historia_trabajo_decoracion_temperatura_ibfk_1` FOREIGN KEY (`id_htd_cabecera`) REFERENCES `f_historia_trabajo_decoracion_cabecera` (`id_htd_cabecera`);
 
 --
 -- Filtros para la tabla `permisos_usuarios`
 --
 ALTER TABLE `permisos_usuarios`
-  ADD CONSTRAINT `permisos_usu
-arios_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id_usuario`),
-  ADD CONSTRAINT `permisos_usu
-arios_ibfk_2` FOREIGN KEY (`id_permisom`) REFERENCES `permisos_modulos` (`id_permisom`);
+  ADD CONSTRAINT `permisos_usuarios_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id_usuario`),
+  ADD CONSTRAINT `permisos_usuarios_ibfk_2` FOREIGN KEY (`id_permisom`) REFERENCES `permisos_modulos` (`id_permisom`);
 
 --
 -- Filtros para la tabla `pintura_registro`

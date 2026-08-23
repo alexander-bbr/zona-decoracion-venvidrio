@@ -97,23 +97,29 @@ def listar_usuarios(db: Session):
 
 # 5. Listar catálogo de permisos disponibles
 NOMBRES_MODULOS = {
-    "insumo_pintura": "Insumo de Pintura",
-    "produccion_lisa": "Producción Lisa",
-    "dashboard": "Dashboard",
-    "gestion_usuarios": "Gestión de Usuarios"
+    "insumo_pintura":              "Insumo de Pintura",
+    "produccion_lisa":             "Producción Lisa",
+    "dashboard":                   "Rendimiento",
+    "gestion_usuarios":            "Gestión de Usuarios",
+    "historia_trabajo_decoracion": "Historia de Trabajo Decoración"
 }
 
 NOMBRES_ACCIONES = {
-    "ver_inventario": "Ver Inventario",
-    "crear_registro": "Crear Registro",
-    "crear_consumo": "Crear Consumo",
-    "ver_historial": "Ver Historial",
-    "crear_salida": "Crear Salida",
-    "eliminar_registro": "Eliminar Registro",
-    "ver": "Ver",
-    "ver_usuarios": "Ver Usuarios",
-    "crear_editar": "Crear / Editar",
-    "ver_historial_consumo": "Ver Historial de Consumo"
+    "ver_inventario":         "Ver Inventario",
+    "crear_registro":         "Crear Registro",
+    "crear_consumo":          "Crear Consumo",
+    "ver_historial":          "Ver Historial",
+    "crear_salida":           "Crear Salida",
+    "eliminar_registro":      "Eliminar Registro",
+    "ver":                    "Ver",
+    "ver_usuarios":           "Ver Usuarios",
+    "crear_editar":           "Crear / Editar",
+    "ver_historial_consumo":  "Ver Historial de Consumo",
+    "crear":                  "Crear",
+    "editar":                 "Editar",
+    "exportar":               "Exportar",
+    "crear_historia":         "Crear Historia de Trabajo",
+    "editar_historia":        "Editar Historia de Trabajo"
 }
 
 # 5. Listar catálogo de permisos disponibles

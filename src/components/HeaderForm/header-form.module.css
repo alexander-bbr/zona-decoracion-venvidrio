@@ -1,0 +1,35 @@
+/* Encabezado del Formulario */
+.headerForm {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.logoWrapper {
+  max-width: 5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.headerLogo {
+  width: 100%;
+  object-fit: contain;
+}
+
+.headerTitle {
+  text-align: center;
+  font-size: 1rem;
+}
+
+.codeWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.headerCode {
+  color: var(--secundary-text-color);
+  font-size: 0.7rem;
+  word-break: keep-all;
+}

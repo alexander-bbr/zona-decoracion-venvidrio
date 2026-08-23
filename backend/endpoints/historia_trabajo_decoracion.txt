@@ -1,0 +1,218 @@
+Ruta 1: Crear Historia de Trabajo (Registro)
+Endpoint: [http://127.0.0.1:8000/api/historia-trabajo/crear/historia-trabajo](https://www.google.com/search?q=http://127.0.0.1:8000/api/historia-trabajo/crear/historia-trabajo)
+Método: POST
+
+JSON (Envía el Frontend):
+{
+"fecha_elaboracion": "2026-08-16",
+"molde": "string",
+"no_plano": "string",
+"identificador_maquina": "string",
+"tipo_decorado": "string",
+"no_archa": "string",
+"cant_ranuras": 0,
+"no_tazas": 0,
+"velocidad_bpm": 0,
+"tiempo_malla_seg": 0,
+"problemas": "string",
+"observaciones": "string",
+"revisado_por": "string",
+"colores": [
+{
+"numero_color": 1,
+"consumo_pintura": "string",
+"codigo_pintura": "string"
+}
+],
+"estaciones": [
+{
+"numero_estacion": 1,
+"cuerpo_presion_squeegees": "string",
+"cuerpo_nro_marco": "string",
+"cuerpo_tipo_malla": "string",
+"cuello_presion_squeegees": "string",
+"cuello_nro_marco": "string",
+"cuello_tipo_malla": "string"
+}
+],
+"temperatura": [
+{
+"numero_zona": 1,
+"set_point": "string",
+"lado_izq": "string",
+"lado_der": "string"
+}
+]
+}
+
+JSON (Respuesta en caso de éxito):
+{
+"status": "Registro Creado con Exito",
+"id": 1
+}
+
+JSON (Respuesta en caso de error):
+{
+"detail": "Mensaje de error descriptivo"
+}
+
+---
+Ruta 2: Listar Historial de Historias de Trabajo
+Endpoint: http://127.0.0.1:8000/api/historia-trabajo/historial/historia-trabajo
+Método: GET
+
+Estructura de los datos que recibirá:
+{
+  "data": [
+    {
+      "id_htd_cabecera": 1,
+      "fecha_elaboracion": "2026-08-16",
+      "molde": "string",
+      "no_plano": "string",
+      "identificador_maquina": "string",
+      "tipo_decorado": "string",
+      "no_archa": "string",
+      "cant_ranuras": 0,
+      "no_tazas": 0,
+      "revisado_por": "string"
+    }
+  ]
+}
+
+JSON (Respuesta en caso de error):
+{
+  "detail": "Mensaje de error descriptivo"
+}
+---
+
+Ruta 3: Obtener Registro por ID
+Endpoint: [http://127.0.0.1:8000/api/historia-trabajo/obtener_registro/historia-trabajo/](https://www.google.com/search?q=http://127.0.0.1:8000/api/historia-trabajo/obtener_registro/historia-trabajo/){id_htd_cabecera}
+Método: GET
+
+Estructura de los datos que recibirá:
+{
+"data": {
+"id_htd_cabecera": 1,
+"fecha_elaboracion": "2026-08-16",
+"molde": "string",
+"no_plano": "string",
+"identificador_maquina": "string",
+"tipo_decorado": "string",
+"no_archa": "string",
+"cant_ranuras": 0,
+"no_tazas": 0,
+"velocidad_bpm": 0,
+"tiempo_malla_seg": 0,
+"problemas": "string",
+"observaciones": "string",
+"revisado_por": "string",
+"colores": [
+{
+"id_htd_color": 1,
+"numero_color": 1,
+"consumo_pintura": "string",
+"codigo_pintura": "string"
+}
+],
+"estaciones": [
+{
+"id_htd_estacion": 1,
+"numero_estacion": 1,
+"cuerpo_presion_squeegees": "string",
+"cuerpo_nro_marco": "string",
+"cuerpo_tipo_malla": "string",
+"cuello_presion_squeegees": "string",
+"cuello_nro_marco": "string",
+"cuello_tipo_malla": "string"
+}
+],
+"temperatura": [
+{
+"id_htd_temperatura": 1,
+"numero_zona": 1,
+"set_point": "string",
+"lado_izq": "string",
+"lado_der": "string"
+}
+]
+}
+}
+
+JSON (Respuesta en caso de error):
+{
+"detail": "Registro no encontrado"
+}
+
+---
+
+Ruta 4: Editar Historia de Trabajo
+Endpoint: [http://127.0.0.1:8000/api/historia-trabajo/editar/historia-trabajo/](https://www.google.com/search?q=http://127.0.0.1:8000/api/historia-trabajo/editar/historia-trabajo/){id_htd_cabecera}
+Método: PUT
+
+JSON (Envía el Frontend):
+{
+"fecha_elaboracion": "2026-08-16",
+"molde": "string",
+"no_plano": "string",
+"identificador_maquina": "string",
+"tipo_decorado": "string",
+"no_archa": "string",
+"cant_ranuras": 0,
+"no_tazas": 0,
+"velocidad_bpm": 0,
+"tiempo_malla_seg": 0,
+"problemas": "string",
+"observaciones": "string",
+"revisado_por": "string",
+"colores": [
+{
+"numero_color": 1,
+"consumo_pintura": "string",
+"codigo_pintura": "string"
+}
+],
+"estaciones": [
+{
+"numero_estacion": 1,
+"cuerpo_presion_squeegees": "string",
+"cuerpo_nro_marco": "string",
+"cuerpo_tipo_malla": "string",
+"cuello_presion_squeegees": "string",
+"cuello_nro_marco": "string",
+"cuello_tipo_malla": "string"
+}
+],
+"temperatura": [
+{
+"numero_zona": 1,
+"set_point": "string",
+"lado_izq": "string",
+"lado_der": "string"
+}
+]
+}
+
+JSON (Respuesta en caso de éxito):
+{
+"status": "Registro Actualizado con Exito",
+"id": 1
+}
+
+JSON (Respuesta en caso de error):
+{
+"detail": "Registro no encontrado"
+}
+
+---
+
+Ruta 5: Exportar Historia de Trabajo (Word)
+Endpoint: [http://127.0.0.1:8000/api/historia-trabajo/exportar/historia-trabajo/](https://www.google.com/search?q=http://127.0.0.1:8000/api/historia-trabajo/exportar/historia-trabajo/){id_htd_cabecera}
+Método: GET
+
+Estructura de la respuesta:
+Retorna un archivo binario descargable en formato Word (.docx) bajo el nombre de archivo `Formato_de_Historia_de_Trabajo_de_Decoracion_{fecha_elaboracion}.docx`.
+
+JSON (Respuesta en caso de error):
+{
+"detail": "Registro no encontrado"
+}

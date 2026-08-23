@@ -19,6 +19,9 @@ from backend.modules.gestion_usuarios.router import router as gestion_usuarios_r
 # Importamos el router del módulo de autenticación
 from backend.modules.auth.router import router as auth_router
 
+# Importamos el router del módulo de historia de trabajo decoración
+from backend.modules.historia_trabajo_decoracion.router import router as historia_trabajo_router
+
 
 # Inicializamos la aplicación FastAPI
 app = FastAPI(
@@ -51,6 +54,9 @@ app.include_router(gestion_usuarios_router)
 
 # Registramos las rutas del módulo de autenticación
 app.include_router(auth_router)
+
+# Registramos las rutas del módulo de historia de trabajo decoración
+app.include_router(historia_trabajo_router)
 
 # Ruta base de prueba
 @app.get("/")

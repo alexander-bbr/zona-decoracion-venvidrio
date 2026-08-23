@@ -1,114 +1,120 @@
-1. Consumo de Pintura
+1. Inventario
 
-- Sacarlo de la Sidebar y poner una landing intermedia, de Pintura, ya que hay otras cosas que se tomarán como inventario en el futuro.
-- Hacer la sección de Historial de Consumo
-- Al momento de enviarse el formulario de suministro y de consumo, deben resetearse los campos (hay un bug porque no lo hace)
+  - Pintura
+
+    - Sacarlo de la Sidebar y poner una landing intermedia, de Pintura, ya que hay otras cosas que se tomarán como inventario en el futuro.
+
+    - Hacer la sección de Historial de Consumo.
+
+    - Al momento de enviarse el formulario de suministro y de consumo, deben resetearse los campos (hay un bug porque no lo hace)
+
+  - Pantallas
+
+    - Hacer el CRUD de Pantallas
 
 
-
+---
 
 
 2. Sign In
 
-- Hacer funcionar la verificación en el backend
+  - Hacer funcionar la verificación en el backend
 
 
-
+---
 
 
 3. Gestión de Usuarios
 
 
-- Estilizar los mensajes de envío de los formularios (exito y error)
-- Tengo que implementar la validación de los estándares de seguridad de la contraseña
+  - Estilizar los mensajes de envío de los formularios (exito y error)
+  - Tengo que implementar la validación de los estándares de seguridad de la contraseña
 
 
-
-
+---
 
 
 4. Rendimiento
 
-- Cambiar el gráfico de torta por otro.
-- Hacer que el input de fecha hasta marque siempre por defecto la fecha del día de hoy.
-- Colocar un límite de fecha en el campo de fecha hasta, para que no se puedan colocar fechas futuras.
-- Agregar el módulo del profesor: Planificar de Consumo
+  - Cambiar el gráfico de torta por otro.
+  - Hacer que el input de fecha hasta marque siempre por defecto la fecha del día de hoy.
+  - Colocar un límite de fecha en el campo de fecha hasta, para que no se puedan colocar fechas futuras.
+  - Agregar el módulo del profesor: Planificar de Consumo.
+
+
+---
 
 
 
+5. Gestión Productiva
 
+  - Producción:
 
-5. Producción Lisa (No hay formato)
+    - Vista:
 
+      - Se van a ver enlistados los movimientos de Producción Decorada.
+      - Por ahora no hay ningún filtro, pero si un paginado de máximo 50 registros (obviamente mostrar los más recientes primero).
+      - Al seleccionar un registro, se carga el módulo de editar con esos datos
 
+    -  Sub módulo de Registrar / Editar:
 
+      - Turno (select: A, B, C).
+      - Fecha.
+      - Técnico (nombre).
 
+      - Cantidad (4 inputs de tipo número).
+      
+      - Total de Paletas.
 
+      - Modelo del Envase (un select, el cual se carga en base a los modelos registrados).
 
+        - Paletas Decoradas.
+          - Número de Paletas (no puede ecceder el Total de Paletas)
+          - Total de Camadas (se calcula automáticamente).
+          - Total de Envases (se calcula auotmáticamente).
+          - Total de Gruesas (se calcula auotmáticamente).
 
+        - Producción Lisa.
+          - Número de Paletas (no puede ecceder el Total de Paletas)
+          - Total de Camadas (se calcula automáticamente).
+          - Total de Envases (se calcula auotmáticamente).
+          - Total de Gruesas (se calcula auotmáticamente).
 
-6. Chequeo del Equipo Paletizador
-- Ver Historial de Chequeos
-- Registro del Chequeo (respetando el formato)
-- Edición del Chequeo (Aquí se puede continuar el chequeo. Aquí puede eliminar el chequeo)
+      - Botón de Añadir otro modelo
 
+      - Pérdidas (Se calcula de forma automática).
+        - Número de Paletas
+        - Total de Camadas (se calcula automáticamente).
+        - Total de Envases (se calcula auotmáticamente).
+        - Total de Gruesas (se calcula auotmáticamente).
+        
+      - Observaciones (Aquí describen el por qué de las Pérdidas de manera general).
+    
 
+  - Moldes:
 
+    - Vista:
 
+      - Se van a ver enlistados los movimientos de Producción Decorada.
+      - Por ahora no hay ningún filtro, pero si un paginado de máximo 50 registros (obviamente mostrar los más recientes primero).
+      - Al seleccionar un registro, se carga el módulo de editar con esos datos.
 
+    -  Sub módulo de Registrar / Editar:
 
-7. Recepción y Chequeo de Cajas de Cartón
-- Averiguar donde colocar ese módulo
-- Registrar Chequeo
-- Editar Chequeo
-- Ver Historial de Chequeo
-
-
-
-
-
-
-8. Monitoreo de Cambio de Pantalla y los Defectos del Decorado
-
-- Registrar Monitoreo (Respetando el formato)
-- Editar Monitoreo (Aquí se puede continuar el Monitoreo. Aquí se puede eliminar el Monitoreo)
-- Ver Monitoreos
-
-
-
-
-
-
-9. Historia de Trabajo
-
-- Registrar Historia (Respetando el formato)
-- Editar Historia (Aquí se puede continuar la Historia. Aquí se puede eliminar la historia)
-- Ver Historias
-
-
-
-
-
-10. Lista de Verificación Diaria
-- Registrar Lista (Respetando el Formato)
-- Editar Lista
-- Ver Listas
-
-
-
-
-
-11. Reporte por Turno de Cuarto de Pantalla
-
-- Registrar Reporte
-- Editar Reporte
-- Ver Reporte
+      - Nombre.
+      - Descripción.
+      - Número de Camadas.
+      - Número de Envases.
+      - Número de Gruesas (se calcula automáticamente: Número de Gruesas = Número de envases / 144).
 
 
 
 
 
 
-A. Generador de Formatos
+---
 
-Generar formatos PDF/EXEL de lo que corresponda
+
+6. Generador de Formatos
+
+  - Generar formatos .pdf, .docx, .exel de lo que corresponda

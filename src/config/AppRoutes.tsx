@@ -15,13 +15,6 @@ import { SuministrarPintura } from "../modules/CuartoDePantalla/ConsumoDePintura
 import { InventarioPintura } from "../modules/CuartoDePantalla/ConsumoDePintura/InventarioPintura";
 import { HistorialConsumo } from "../modules/CuartoDePantalla/ConsumoDePintura/HistorialConsumo";
 
-// Módulo - Producción Lisa
-import { ProduccionLisa } from "../modules/ProduccionLisa";
-import { RegistrarProduccionLisa } from "../modules/ProduccionLisa/RegistrarProduccionLisa";
-import { ConsumirProduccionLisa } from "../modules/ProduccionLisa/ConsumirProduccionLisa";
-import { HistorialProduccionLisa } from "../modules/ProduccionLisa/HistorialProduccionLisa";
-import { InventarioProduccionLisa } from "../modules/ProduccionLisa/InventarioProduccionLisa";
-
 // Módulo - Gestión de Usuarios
 import { Usuarios } from "../modules/Usuarios";
 
@@ -30,8 +23,8 @@ import { SignIn } from "../modules/SignIn";
 
 // Módulo - Gestión Productiva
 import { GestionProductiva } from "../modules/GestionProductiva";
-import { Produccion } from "../modules/GestionProductiva/Produccion";
-import { Moldes } from "../modules/GestionProductiva/Moldes";
+import { RegistrarProduccion } from "../modules/GestionProductiva/RegistrarProduccion";
+import { EditarProduccion } from "../modules/GestionProductiva/EditarProduccion";
 
 // Módulo - No Autorizado
 import { Unauthorized } from "../modules/Unauthorized";
@@ -100,7 +93,7 @@ export const AppRoutes = () => {
               <ConsumirPintura />
             </PrivateRoute>
           }
-        />
+        ></Route>
         <Route
           path="suministrar"
           element={
@@ -140,76 +133,6 @@ export const AppRoutes = () => {
       </Route>
 
       {/* 
-        Módulo - Producción Lisa 
-        EL PADRE: Requiere AL MENOS UN permiso del módulo produccion_lisa
-      */}
-      <Route
-        path="/produccion-lisa"
-        element={
-          <PrivateRoute
-            requiredPermissions={[
-              { modulo: "produccion_lisa", accion: "ver_inventario" },
-              { modulo: "produccion_lisa", accion: "crear_registro" },
-              { modulo: "produccion_lisa", accion: "crear_salida" },
-              { modulo: "produccion_lisa", accion: "ver_historial" },
-            ]}
-            requireAnyPermission={true}
-          >
-            <ProduccionLisa />
-          </PrivateRoute>
-        }
-      >
-        <Route
-          path="registrar"
-          element={
-            <PrivateRoute
-              requiredPermissions={[
-                { modulo: "produccion_lisa", accion: "crear_registro" },
-              ]}
-            >
-              <RegistrarProduccionLisa />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="consumir"
-          element={
-            <PrivateRoute
-              requiredPermissions={[
-                { modulo: "produccion_lisa", accion: "crear_salida" },
-              ]}
-            >
-              <ConsumirProduccionLisa />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="historial"
-          element={
-            <PrivateRoute
-              requiredPermissions={[
-                { modulo: "produccion_lisa", accion: "ver_historial" },
-              ]}
-            >
-              <HistorialProduccionLisa />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="inventario"
-          element={
-            <PrivateRoute
-              requiredPermissions={[
-                { modulo: "produccion_lisa", accion: "ver_inventario" },
-              ]}
-            >
-              <InventarioProduccionLisa />
-            </PrivateRoute>
-          }
-        />
-      </Route>
-
-      {/* 
         Módulo - Gestión Productiva 
         EL PADRE: Requiere AL MENOS UN permiso del módulo gestion_productiva
       */}
@@ -219,7 +142,6 @@ export const AppRoutes = () => {
           <PrivateRoute
             requiredPermissions={[
               { modulo: "produccion_lisa", accion: "ver_inventario" },
-              { modulo: "produccion_lisa", accion: "crear_registro" },
             ]}
             requireAnyPermission={true}
           >
@@ -228,26 +150,26 @@ export const AppRoutes = () => {
         }
       >
         <Route
-          path="produccion"
-          element={
-            <PrivateRoute
-              requiredPermissions={[
-                { modulo: "produccion_lisa", accion: "ver_inventario" },
-              ]}
-            >
-              <Produccion />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="moldes"
+          path="registrar-produccion"
           element={
             <PrivateRoute
               requiredPermissions={[
                 { modulo: "produccion_lisa", accion: "crear_registro" },
               ]}
             >
-              <Moldes />
+              <RegistrarProduccion />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="editar-produccion/:id_registro"
+          element={
+            <PrivateRoute
+              requiredPermissions={[
+                { modulo: "produccion_lisa", accion: "ver_inventario" },
+              ]}
+            >
+              <EditarProduccion />
             </PrivateRoute>
           }
         />

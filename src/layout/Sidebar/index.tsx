@@ -1,4 +1,3 @@
-// src/layout/Sidebar/index.tsx
 import { Link } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import styles from "./sidebar.module.css";
@@ -76,22 +75,11 @@ export const Sidebar = () => {
           </li>
         )}
 
-        {/* Producción Lisa - visible si tiene algún permiso del módulo */}
-        {hasAnyPermission("produccion_lisa", [
-          "ver_inventario",
-          "crear_registro",
-          "crear_salida",
-          "ver_historial",
-        ]) && (
-          <li>
-            <Link to="/produccion-lisa">Producción Lisa</Link>
-          </li>
-        )}
-
         {/* Gestion Productiva - visible si tiene algún permiso del módulo */}
         {hasAnyPermission("produccion_lisa", [
           "ver_inventario",
           "crear_registro",
+          "editar_registro",
         ]) && (
           <li>
             <Link to="/gestion-productiva">Gestión Productiva</Link>

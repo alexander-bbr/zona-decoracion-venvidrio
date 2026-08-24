@@ -392,10 +392,11 @@ export const Usuarios = () => {
               : "Crear usuario"
             : "Trabajadores registrados en el sistema"}
         </p>
-        {mensajeExito && (
-          <div className={styles.mensajeExito}>{mensajeExito}</div>
-        )}
       </header>
+
+      {mensajeExito && (
+        <div className={styles.mensajeExito}>{mensajeExito}</div>
+      )}
 
       {mostrarFormulario ? (
         <FormularioUsuario

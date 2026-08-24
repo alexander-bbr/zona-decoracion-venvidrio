@@ -1,82 +1,140 @@
-import { Outlet, NavLink, useLocation } from "react-router-dom";
-import { useAuth } from "../../contexts/AuthContext";
+import { useState } from "react";
+import { useNavigate, NavLink, useLocation, Outlet } from "react-router-dom";
 import styles from "./gestion-productiva.module.css";
 
+import { registrosProduccion } from "../../mocks/registrosproduccion";
+
 export const GestionProductiva = () => {
+  const navigate = useNavigate();
+  const [pagina, setPagina] = useState(1);
+  const registrosPorPagina = 50;
+  const inicio = (pagina - 1) * registrosPorPagina;
+  const registros = registrosProduccion.slice(
+    inicio,
+    inicio + registrosPorPagina,
+  );
+  const totalPaginas = Math.max(
+    1,
+    Math.ceil(registrosProduccion.length / registrosPorPagina),
+  );
+
   const location = useLocation();
-  const { hasPermission } = useAuth();
   const isRoot = location.pathname === "/gestion-productiva";
 
   /* Obtener el título para cada acción */
   const getTitle = () => {
     const path = location.pathname;
 
-    if (path.includes("produccion")) return "Producción";
-    if (path.includes("moldes")) return "Moldes";
+    if (path.includes("registrar-produccion")) return "Registrar Producción";
+    if (path.includes("editar-produccion")) return "Editar Producción";
     return "";
   };
 
-  // Definir los permisos para cada submódulo
-  const permisos = {
-    produccion: hasPermission("produccion_lisa", "ver_inventario"),
-    moldes: hasPermission("produccion_lisa", "crear_registro"),
-  };
-
   return (
-    <div className={styles.container}>
+    <section className={styles.container}>
       {/* Título del módulo (siempre visible) */}
       <header className={styles.moduleHeader}>
         <h2 className={styles.moduleTitle}>Gestión Productiva</h2>
         <p className={styles.moduleSubtitle}>
           {isRoot
-            ? "Selecciona una opción para continuar"
-            : "Gestión Productiva"}
+            ? "Gestión del historial de producción"
+            : "Gestión de Producción"}
         </p>
       </header>
 
-      {/* Si estamos en la raíz del módulo, mostramos SOLO las tarjetas con permisos */}
+      {!isRoot ? (
+        <nav className={`${styles.subNav} content`} id="subNav">
+          <NavLink
+            to="/gestion-productiva"
+            className={({ isActive }) =>
+              isActive
+                ? `${styles.subNavLink} ${styles.active}`
+                : styles.subNavLink
+            }
+          >
+            ← Volver
+          </NavLink>
+          <span className={styles.subNavTitle}>{getTitle()}</span>
+        </nav>
+      ) : null}
+
       {isRoot ? (
-        <div className={`${styles.actions} content`}>
-          {/* Mostrar solo si tiene permiso de ver la produccion */}
-          {permisos.produccion && (
-            <NavLink to="produccion" className={styles.actionCard}>
-              <div className={styles.actionIcon}>📤</div>
-              <h3>Produccion</h3>
-              <p>Gestiona la Producción de Zona Fría</p>
-            </NavLink>
-          )}
-
-          {/* Mostrar solo si tiene permiso de registrar moldes */}
-          {permisos.moldes && (
-            <NavLink to="moldes" className={styles.actionCard}>
-              <div className={styles.actionIcon}>📥</div>
-              <h3>Moldes</h3>
-              <p>Gestiona los Moldes utilizados en la Producción</p>
-            </NavLink>
-          )}
-        </div>
-      ) : (
-        // Si estamos en un submódulo, mostramos navegación secundaria + contenido
-        <>
-          <nav className={styles.subNav}>
-            <NavLink
-              to="/gestion-productiva"
-              className={({ isActive }) =>
-                isActive
-                  ? `${styles.subNavLink} ${styles.active}`
-                  : styles.subNavLink
-              }
+        <section className={`${styles.gestionProductiva} content`}>
+          <section className={styles.controlPanel}>
+            <h2 className={styles.title}>Registros de Producción</h2>
+            <button
+              className={styles.registerButton}
+              onClick={() => navigate("registrar-produccion")}
             >
-              ← Volver
-            </NavLink>
-            <span className={styles.subNavTitle}>{getTitle()}</span>
-          </nav>
+              + Registrar Producción
+            </button>
+          </section>
 
-          <div className="content">
-            <Outlet />
+          <div className={styles.tableContainer}>
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Fecha</th>
+                  <th>Turno</th>
+                  <th>Técnico</th>
+                  <th>Paletas</th>
+                  <th>Modelos</th>
+                  <th>Pérdidas</th>
+                </tr>
+              </thead>
+              <tbody>
+                {registros.map((registro) => (
+                  <tr
+                    key={registro.id_registro}
+                    onClick={() =>
+                      navigate(`editar-produccion/${registro.id_registro}`)
+                    }
+                  >
+                    <td>#{registro.id_registro}</td>
+                    <td>{registro.fecha}</td>
+                    <td>{registro.turno}</td>
+                    <td>{registro.tecnico}</td>
+                    <td>{registro.totalPaletas}</td>
+                    <td>
+                      {registro.modelos
+                        .map((modelo) => modelo.modelo)
+                        .join(", ")}
+                    </td>
+                    <td>{registro.perdidas}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-        </>
+
+          <footer className={styles.pagination}>
+            <span>
+              {registros.length
+                ? `${inicio + 1}-${inicio + registros.length}`
+                : "0-0"}{" "}
+              de {registrosProduccion.length}
+            </span>
+            <button
+              disabled={pagina === 1}
+              onClick={() => setPagina((actual) => actual - 1)}
+            >
+              Anterior
+            </button>
+            <span>
+              Página {pagina} de {totalPaginas}
+            </span>
+            <button
+              disabled={pagina === totalPaginas}
+              onClick={() => setPagina((actual) => actual + 1)}
+            >
+              Siguiente
+            </button>
+          </footer>
+        </section>
+      ) : (
+        <Outlet />
       )}
-    </div>
+    </section>
   );
 };

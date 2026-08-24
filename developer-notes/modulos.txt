@@ -66,7 +66,7 @@
       
       - Total de Paletas.
 
-      - Modelo del Envase (un select, el cual se carga en base a los modelos registrados).
+      - Modelo del Envase (un select, con 3 options: Polarcita, Valmy, Pepsi).
 
         - Paletas Decoradas.
           - Número de Paletas (no puede ecceder el Total de Paletas)

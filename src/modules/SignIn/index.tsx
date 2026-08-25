@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import styles from "./SignIn.module.css";
-import logo from "../../assets/images/logo-segun-controles.png";
+import imagotipo from "../../assets/images/imagotipo.png";
 
 export const SignIn = () => {
   const [carnet, setCarnet] = useState("");
@@ -48,7 +48,7 @@ export const SignIn = () => {
       <header className={styles.signInHeader}>
         <img
           className={styles.signInHeaderLogo}
-          src={logo}
+          src={imagotipo}
           alt="Logo de Venvidrio"
         />
         <div className={styles.headerInfoWrapper}>

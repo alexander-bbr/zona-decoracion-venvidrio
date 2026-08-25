@@ -56,14 +56,14 @@ export const Sidebar = () => {
           <Link to="/">Inicio</Link>
         </li>
 
-        {/* Dashboard - visible si tiene permiso */}
+        {/* Dashboard - visible si tiene permiso ver (dashboard) */}
         {hasPermission("dashboard", "ver") && (
           <li>
             <Link to="/rendimiento">Rendimiento</Link>
           </li>
         )}
 
-        {/* Consumo de Pintura - visible si tiene algún permiso del módulo */}
+        {/* Consumo de Pintura - visible si tiene algún permiso de insumo_pintura */}
         {hasAnyPermission("insumo_pintura", [
           "ver_inventario",
           "crear_registro",
@@ -75,22 +75,22 @@ export const Sidebar = () => {
           </li>
         )}
 
-        {/* Gestion Productiva - visible si tiene algún permiso del módulo */}
-        {hasAnyPermission("produccion_lisa", [
-          "ver_inventario",
-          "crear_registro",
-          "editar_registro",
-        ]) && (
+        {/* Gestion Productiva - visible si tiene el permiso de (ver_produccion) */}
+        {hasAnyPermission("gestion_productiva", ["ver_produccion"]) && (
           <li>
             <Link to="/gestion-productiva">Gestión Productiva</Link>
           </li>
         )}
 
-        {/* Gestión de Usuarios - visible solo si tiene permisos */}
-        {hasAnyPermission("gestion_usuarios", [
-          "ver_usuarios",
-          "crear_editar",
-        ]) && (
+        {/* Gestion de Moldes - visible si tiene el permiso de gestion_moldes (gestion_productiva) */}
+        {hasAnyPermission("gestion_productiva", ["gestion_moldes"]) && (
+          <li>
+            <Link to="/gestion-moldes">Gestión de Moldes</Link>
+          </li>
+        )}
+
+        {/* Gestión de Usuarios - visible si tiene el permiso de ver_usuarios (gestion_usuarios)*/}
+        {hasAnyPermission("gestion_usuarios", ["ver_usuarios"]) && (
           <li>
             <Link to="/gestion-usuarios">Gestión de Usuarios</Link>
           </li>

@@ -539,6 +539,83 @@ INSERT INTO `f_historia_trabajo_decoracion_temperatura` (`id_htd_temperatura`, `
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `gestion_productiva_entrada`
+--
+
+CREATE TABLE `gestion_productiva_entrada` (
+  `id_produccion` int(11) NOT NULL,
+  `fecha` date NOT NULL,
+  `turno` varchar(10) NOT NULL,
+  `tecnico` varchar(150) NOT NULL,
+  `cant_envases_d1` decimal(10,2) DEFAULT 0.00,
+  `cant_envases_d2` decimal(10,2) DEFAULT 0.00,
+  `cant_envases_d3` decimal(10,2) DEFAULT 0.00,
+  `cant_envases_d4` decimal(10,2) DEFAULT 0.00,
+  `total_envases` decimal(12,2) DEFAULT 0.00,
+  `total_gruesas` decimal(12,2) DEFAULT 0.00
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `gestion_productiva_resultado`
+--
+
+CREATE TABLE `gestion_productiva_resultado` (
+  `id_produccion` int(11) NOT NULL,
+  `total_gruesas_lisas` decimal(12,2) DEFAULT 0.00,
+  `total_gruesas_decoradas` decimal(12,2) DEFAULT 0.00,
+  `eficiencia_productiva` decimal(5,2) DEFAULT 0.00,
+  `deficiencia_productiva` decimal(5,2) DEFAULT 0.00
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `gestion_productiva_salida`
+--
+
+CREATE TABLE `gestion_productiva_salida` (
+  `id_eficiencia` int(11) NOT NULL,
+  `modelo_molde` int(11) NOT NULL,
+  `id_produccion` int(11) NOT NULL,
+  `total_paletas` decimal(10,2) DEFAULT 0.00,
+  `cant_paletas_lisas` decimal(10,2) DEFAULT 0.00,
+  `cant_camadas_lisas` decimal(10,2) DEFAULT 0.00,
+  `cant_envases_lisas` decimal(10,2) DEFAULT 0.00,
+  `cant_gruesas_lisas` decimal(10,2) DEFAULT 0.00,
+  `cant_paletas_decoradas` decimal(10,2) DEFAULT 0.00,
+  `cant_camadas_decoradas` decimal(10,2) DEFAULT 0.00,
+  `cant_envases_decoradas` decimal(10,2) DEFAULT 0.00,
+  `cant_gruesas_decoradas` decimal(10,2) DEFAULT 0.00
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `moldes`
+--
+
+CREATE TABLE `moldes` (
+  `id_molde` int(11) NOT NULL,
+  `nombre` varchar(150) NOT NULL,
+  `descripcion` varchar(255) DEFAULT NULL,
+  `numero_camadas` int(11) NOT NULL,
+  `numero_envases` int(11) NOT NULL,
+  `numero_gruesas` decimal(10,2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `moldes`
+--
+
+INSERT INTO `moldes` (`id_molde`, `nombre`, `descripcion`, `numero_camadas`, `numero_envases`, `numero_gruesas`) VALUES
+(1, 'GX01944', 'Polarcita', 10, 5750, 39.93),
+(2, 'gv-2000', 'Pepsi', 10, 5750, 39.93);
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `permisos_modulos`
 --
 
@@ -563,7 +640,10 @@ INSERT INTO `permisos_modulos` (`id_permisom`, `modulo`, `accion`) VALUES
 (16, 'dashboard', 'ver'),
 (17, 'gestion_usuarios', 'ver_usuarios'),
 (18, 'gestion_usuarios', 'crear_editar'),
-(19, 'insumo_pintura', 'ver_historial_consumo');
+(19, 'insumo_pintura', 'ver_historial_consumo'),
+(21, 'historia_trabajo_decoracion', 'ver_historial'),
+(22, 'historia_trabajo_decoracion', 'crear_historia'),
+(23, 'historia_trabajo_decoracion', 'editar_historia');
 
 -- --------------------------------------------------------
 
@@ -582,17 +662,20 @@ CREATE TABLE `permisos_usuarios` (
 --
 
 INSERT INTO `permisos_usuarios` (`id_permisou`, `id_usuario`, `id_permisom`) VALUES
-(47, 10, 1),
-(48, 10, 4),
-(49, 10, 5),
-(50, 10, 6),
-(51, 10, 7),
-(52, 10, 8),
-(53, 10, 9),
-(54, 10, 17),
-(55, 10, 18),
-(56, 10, 19),
-(57, 10, 16);
+(58, 10, 1),
+(59, 10, 4),
+(60, 10, 5),
+(61, 10, 6),
+(62, 10, 7),
+(63, 10, 8),
+(64, 10, 9),
+(65, 10, 17),
+(66, 10, 18),
+(67, 10, 19),
+(68, 10, 16),
+(69, 10, 21),
+(70, 10, 22),
+(71, 10, 23);
 
 -- --------------------------------------------------------
 
@@ -889,6 +972,32 @@ ALTER TABLE `f_historia_trabajo_decoracion_temperatura`
   ADD KEY `id_htd_cabecera` (`id_htd_cabecera`);
 
 --
+-- Indices de la tabla `gestion_productiva_entrada`
+--
+ALTER TABLE `gestion_productiva_entrada`
+  ADD PRIMARY KEY (`id_produccion`);
+
+--
+-- Indices de la tabla `gestion_productiva_resultado`
+--
+ALTER TABLE `gestion_productiva_resultado`
+  ADD PRIMARY KEY (`id_produccion`);
+
+--
+-- Indices de la tabla `gestion_productiva_salida`
+--
+ALTER TABLE `gestion_productiva_salida`
+  ADD PRIMARY KEY (`id_eficiencia`),
+  ADD KEY `fk_salida_molde` (`modelo_molde`),
+  ADD KEY `fk_salida_produccion` (`id_produccion`);
+
+--
+-- Indices de la tabla `moldes`
+--
+ALTER TABLE `moldes`
+  ADD PRIMARY KEY (`id_molde`);
+
+--
 -- Indices de la tabla `permisos_modulos`
 --
 ALTER TABLE `permisos_modulos`
@@ -1075,16 +1184,34 @@ ALTER TABLE `f_historia_trabajo_decoracion_temperatura`
   MODIFY `id_htd_temperatura` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=94;
 
 --
+-- AUTO_INCREMENT de la tabla `gestion_productiva_entrada`
+--
+ALTER TABLE `gestion_productiva_entrada`
+  MODIFY `id_produccion` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `gestion_productiva_salida`
+--
+ALTER TABLE `gestion_productiva_salida`
+  MODIFY `id_eficiencia` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `moldes`
+--
+ALTER TABLE `moldes`
+  MODIFY `id_molde` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT de la tabla `permisos_modulos`
 --
 ALTER TABLE `permisos_modulos`
-  MODIFY `id_permisom` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id_permisom` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT de la tabla `permisos_usuarios`
 --
 ALTER TABLE `permisos_usuarios`
-  MODIFY `id_permisou` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
+  MODIFY `id_permisou` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
 
 --
 -- AUTO_INCREMENT de la tabla `pintura_inventario`
@@ -1184,6 +1311,19 @@ ALTER TABLE `f_historia_trabajo_decoracion_estaciones`
 --
 ALTER TABLE `f_historia_trabajo_decoracion_temperatura`
   ADD CONSTRAINT `f_historia_trabajo_decoracion_temperatura_ibfk_1` FOREIGN KEY (`id_htd_cabecera`) REFERENCES `f_historia_trabajo_decoracion_cabecera` (`id_htd_cabecera`);
+
+--
+-- Filtros para la tabla `gestion_productiva_resultado`
+--
+ALTER TABLE `gestion_productiva_resultado`
+  ADD CONSTRAINT `fk_resultado_produccion` FOREIGN KEY (`id_produccion`) REFERENCES `gestion_productiva_entrada` (`id_produccion`) ON DELETE CASCADE;
+
+--
+-- Filtros para la tabla `gestion_productiva_salida`
+--
+ALTER TABLE `gestion_productiva_salida`
+  ADD CONSTRAINT `fk_salida_molde` FOREIGN KEY (`modelo_molde`) REFERENCES `moldes` (`id_molde`),
+  ADD CONSTRAINT `fk_salida_produccion` FOREIGN KEY (`id_produccion`) REFERENCES `gestion_productiva_entrada` (`id_produccion`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `permisos_usuarios`

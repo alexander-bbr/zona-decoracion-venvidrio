@@ -98,10 +98,9 @@ def listar_usuarios(db: Session):
 # 5. Listar catálogo de permisos disponibles
 NOMBRES_MODULOS = {
     "insumo_pintura":              "Insumo de Pintura",
-    "produccion_lisa":             "Producción Lisa",
     "dashboard":                   "Rendimiento",
     "gestion_usuarios":            "Gestión de Usuarios",
-    "historia_trabajo_decoracion": "Historia de Trabajo Decoración"
+    "gestion_productiva":          "Gestión Productiva"
 }
 
 NOMBRES_ACCIONES = {
@@ -118,8 +117,9 @@ NOMBRES_ACCIONES = {
     "crear":                  "Crear",
     "editar":                 "Editar",
     "exportar":               "Exportar",
-    "crear_historia":         "Crear Historia de Trabajo",
-    "editar_historia":        "Editar Historia de Trabajo"
+    "registrar_produccion":   "Registrar Producción",
+    "ver_produccion":         "Ver Producción",
+    "gestion_moldes":         "Gestión de Moldes"
 }
 
 # 5. Listar catálogo de permisos disponibles

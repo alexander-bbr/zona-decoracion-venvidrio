@@ -1,0 +1,147 @@
+Control de la Producción
+
+  - Producción:
+
+    - Vista:
+
+      - Se van a ver enlistados los movimientos de Producción Decorada.
+      - Por ahora no hay ningún filtro, pero si un paginado de máximo 50 registros (obviamente mostrar los más recientes primero).
+      - Al seleccionar un registro, se carga el módulo de editar con esos datos
+
+    -  Sub módulo de Registrar / Editar:
+
+      - Turno (son A, B, C).
+      - Fecha.
+      - Técnico (nombre).
+
+      - Cantidad (4 inputs de tipo número).
+      
+      - Total de Paletas.
+
+      - Modelo del Envase (un select, el cual se carga en base a los modelos registrados).
+
+        - Paletas Decoradas.
+          - Número de Paletas
+          - Total de Camadas (se calcula automáticamente).
+          - Total de Envases (se calcula auotmáticamente).
+          - Total de Gruesas (se calcula auotmáticamente).
+
+        - Producción Lisa.
+          - Número de Paletas
+          - Total de Camadas (se calcula automáticamente).
+          - Total de Envases (se calcula auotmáticamente).
+          - Total de Gruesas (se calcula auotmáticamente).
+
+      - Botón de Añadir otro modelo
+
+      - Pérdidas (Se calcula de forma automática).
+
+        - Total de Envases (se calcula auotmáticamente).
+        - Total de Gruesas (se calcula auotmáticamente).
+
+        
+      - Observaciones (Aquí describen el por qué de las Pérdidas de manera general).
+    
+
+  - Moldes:
+
+    - Vista:
+
+      - Se van a ver enlistados los movimientos de Producción Decorada.
+      - Por ahora no hay ningún filtro, pero si un paginado de máximo 50 registros (obviamente mostrar los más recientes primero).
+      - Al seleccionar un registro, se carga el módulo de editar con esos datos.
+
+    -  Sub módulo de Registrar / Editar:
+
+      - Nombre.
+      - Descripción.
+      - Número de Camadas.
+      - Número de Envases.
+      - Número de Gruesas (se calcula automáticamente: Número de Gruesas = Número de envases / 144).
+
+
+
+
+
+#MOLDES
+- id_molde pk
+- Nombre.
+- Descripción.
+- Número de Camadas.
+- Número de Envases.
+- Número de Gruesas
+
+
+
+#GESTION PRODUCTIVA ENTRADA
+- id_produccion pk
+- Fecha
+- Turno
+- tecnico
+
+- cant_envases_d1
+- cant_envases_d2
+- cant_envases_d3
+- cant_envases_d4
+
+- total_envases
+- total_gruesas
+
+
+
+
+#GESTION PRODUCTIVA SALIDA
+- id_eficiencia pk
+- modelo_molde fk
+- id_produccion fk
+- total_paletas
+
+- cant_paletas_lisas
+- cant_camadas_lisas
+- cant_envases_lisas
+- cant_gruesas_lisas
+
+- cant_paletas_decoradas
+- cant_camadas_decoradas
+- cant_envases_decoradas
+- cant_gruesas_decoradas
+
+
+
+#GESTION PRODUCTIVA RESULTADO
+- id_resultado pk
+- id_produccion fk
+
+- total_gruesas_lisas
+- total_gruesas_decoradas
+
+- eficiencia_productiva
+- deficiencia_productiva
+
+#ENPOINTS
+- INVENTARIO DE MOLDES
+- REGISTROS DE PRODUCCION
+- EDITAR REGISTRO
+- VER
+
+funciones
+def obtener_registros_produccion: 50 en 50, en el front lo mostrara mediante paginado 
+- id_produccion pk
+- Fecha
+- Turno
+- tecnico
+- total_gruesas
+
+- total_gruesas_lisas
+- total_gruesas_decoradas
+- eficiencia_productiva
+- deficiencia_productiva
+
+
+
+
+endpoints para Moldes
+ver
+Registrar
+obtener_registro_id (para editar)
+editar_registro

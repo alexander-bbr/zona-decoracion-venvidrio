@@ -1,4 +1,4 @@
-#AUTENTICACION
+# AUTENTICACION
 
 Ruta 1: Login
 Endpoint: http://127.0.0.1:8000/api/auth/login
@@ -6,8 +6,8 @@ Método: POST
 
 JSON (Envía el Frontend):
 {
-  "carnetUsuario": "String",
-  "contrasena": "String"
+  "carnetUsuario": "string",
+  "contrasena": "string"
 }
 
 JSON (Respuesta en caso de éxito):
@@ -20,10 +20,6 @@ JSON (Respuesta en caso de éxito):
   "permisos": [
     {
       "modulo": "insumo_pintura",
-      "accion": "ver_inventario"
-    },
-    {
-      "modulo": "insumo_pintura",
       "accion": "crear_registro"
     },
     {
@@ -31,20 +27,28 @@ JSON (Respuesta en caso de éxito):
       "accion": "crear_consumo"
     },
     {
-      "modulo": "produccion_lisa",
+      "modulo": "insumo_pintura",
+      "accion": "ver_historial_consumo"
+    },
+    {
+      "modulo": "insumo_pintura",
       "accion": "ver_inventario"
     },
     {
-      "modulo": "produccion_lisa",
-      "accion": "ver_historial"
+      "modulo": "gestion_productiva",
+      "accion": "ver_produccion"
     },
     {
-      "modulo": "produccion_lisa",
-      "accion": "crear_registro"
+      "modulo": "gestion_productiva",
+      "accion": "registrar_produccion"
     },
     {
-      "modulo": "produccion_lisa",
-      "accion": "crear_salida"
+      "modulo": "gestion_productiva",
+      "accion": "editar"
+    },
+    {
+      "modulo": "gestion_productiva",
+      "accion": "gestion_moldes"
     },
     {
       "modulo": "dashboard",
@@ -57,10 +61,6 @@ JSON (Respuesta en caso de éxito):
     {
       "modulo": "gestion_usuarios",
       "accion": "crear_editar"
-    },
-    {
-      "modulo": "insumo_pintura",
-      "accion": "ver_historial_consumo"
     }
   ]
 }

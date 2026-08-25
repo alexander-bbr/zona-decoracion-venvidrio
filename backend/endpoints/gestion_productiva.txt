@@ -1,0 +1,202 @@
+Ruta 1: Registro de Producción
+Endpoint: [http://127.0.0.1:8000/api/produccion](https://www.google.com/search?q=http://127.0.0.1:8000/api/produccion)
+Método: POST
+
+JSON (Envía el Frontend):
+{
+"fecha": "2026-08-23",
+"turno": "A",
+"tecnico": "Daniel Pérez",
+"cantEnvasesD1": 10,
+"cantEnvasesD2": 5,
+"cantEnvasesD3": 0,
+"cantEnvasesD4": 0,
+"totalEnvases": 15,
+"totalGruesas": 0.10,
+"salidas": [
+{
+"modeloMolde": 1,
+"totalPaletas": 4,
+"cantPaletasLisas": 2,
+"cantCamadasLisas": 4,
+"cantEnvasesLisas": 80,
+"cantGruesasLisas": 0.55,
+"cantPaletasDecoradas": 2,
+"cantCamadasDecoradas": 4,
+"cantEnvasesDecoradas": 80,
+"cantGruesasDecoradas": 0.55
+}
+],
+"resultado": {
+"totalGruesasLisas": 0.55,
+"totalGruesasDecoradas": 0.55,
+"eficienciaProductiva": 95.00,
+"deficienciaProductiva": 5.00
+"observaciones": "causa"
+}
+}
+
+JSON (Respuesta en caso de éxito):
+{
+"status": "Registro insertado con éxito",
+"id": 1
+}
+
+JSON (Respuesta en caso de error):
+{
+"detail": "Error en la validación de los datos enviados"
+}
+
+---
+
+Ruta 2: Editar Registro de Producción
+Endpoint: [http://127.0.0.1:8000/api/produccion/](https://www.google.com/search?q=http://127.0.0.1:8000/api/produccion/){id_produccion}
+Método: PUT
+
+JSON (Envía el Frontend):
+{
+"fecha": "2026-08-23",
+"turno": "B",
+"tecnico": "Daniel Pérez",
+"cantEnvasesD1": 12,
+"cantEnvasesD2": 0,
+"cantEnvasesD3": 0,
+"cantEnvasesD4": 0,
+"totalEnvases": 12,
+"totalGruesas": 0.08,
+"salidas": [],
+"resultado": {
+"totalGruesasLisas": 0,
+"totalGruesasDecoradas": 0,
+"eficienciaProductiva": 0,
+"deficienciaProductiva": 0
+"observaciones": "causa"
+}
+}
+
+JSON (Respuesta en caso de éxito):
+{
+"status": "Registro actualizado con éxito",
+"id": 1
+}
+
+JSON (Respuesta en caso de error):
+{
+"detail": "No se pudo actualizar porque el registro no fue encontrado"
+}
+
+---
+
+Ruta 3: Listado de Producción (Vista Principal)
+Endpoint: [http://127.0.0.1:8000/api/produccion?skip=0&limit=50](https://www.google.com/search?q=http://127.0.0.1:8000/api/produccion%3Fskip%3D0%26limit%3D50)
+Método: GET
+
+Estructura de los datos que recibirá:
+{
+"data": [
+{
+"idProduccion": 1,
+"fecha": "2026-08-23",
+"turno": "A",
+"tecnico": "string",
+"totalGruesas": 0,
+"totalGruesasLisas": 0,
+"totalGruesasDecoradas": 0,
+"eficienciaProductiva": 0,
+"deficienciaProductiva": 0
+}
+]
+}
+
+
+
+NOTA TÉCNICA DE PAGINACIÓN (GET /api/produccion/):
+Este endpoint es de tipo GET. Por lo tanto, los valores de paginación NO se envían 
+en el cuerpo de la petición (como un POST o un JSON), sino directamente en la 
+URL como PARÁMETROS DE CONSULTA (Query Parameters).
+
+- ¿Cómo los recibe el backend?
+  El backend los captura automáticamente de la URL mediante los argumentos 
+  'skip' y 'limit' configurados en la función de Python.
+
+- Comportamiento y Valores por Defecto:
+  1. Si el frontend hace la petición limpia sin enviar nada (ej. GET /api/produccion/), 
+     el backend asume por defecto 'skip=0' y 'limit=50', devolviendo automáticamente 
+     los primeros 50 registros.
+  2. Cuando el usuario navega a otra página, el frontend debe agregarlos a la URL 
+     especificando cuántos registros se salta ('skip') y el tope ('limit').
+
+- Ejemplos de uso desde el Frontend (Cliente):
+  * Página 1 (Primeros 50 registros):  GET /api/produccion?skip=0&limit=50
+  * Página 2 (Siguientes 50 registros): GET /api/produccion?skip=50&limit=50
+  * Página 3 (Siguientes 50 registros): GET /api/produccion?skip=100&limit=50
+
+- Fórmula general para calcular el skip en el frontend según el número de página:
+  skip = (numero_de_pagina - 1) * 50
+
+
+---
+
+Ruta 4: Ver Registro de Producción (Detalle por ID)
+Endpoint: [http://127.0.0.1:8000/api/produccion/](https://www.google.com/search?q=http://127.0.0.1:8000/api/produccion/){id_produccion}
+Método: GET
+
+Estructura de los datos que recibirá:
+{
+"idProduccion": 1,
+"fecha": "2026-08-23",
+"turno": "A",
+"tecnico": "string",
+"cantEnvasesD1": 0,
+"cantEnvasesD2": 0,
+"cantEnvasesD3": 0,
+"cantEnvasesD4": 0,
+"totalEnvases": 0,
+"totalGruesas": 0,
+"salidas": [
+{
+"modeloMolde": 1,
+"totalPaletas": 0,
+"cantPaletasLisas": 0,
+"cantCamadasLisas": 0,
+"cantEnvasesLisas": 0,
+"cantGruesasLisas": 0,
+"cantPaletasDecoradas": 0,
+"cantCamadasDecoradas": 0,
+"cantEnvasesDecoradas": 0,
+"cantGruesasDecoradas": 0,
+"idEficiencia": 1,
+"idProduccion": 1
+}
+],
+"resultado": {
+"totalGruesasLisas": 0,
+"totalGruesasDecoradas": 0,
+"eficienciaProductiva": 0,
+"deficienciaProductiva": 0,
+"observaciones": "causa"
+"idProduccion": 1
+}
+}
+
+JSON (Respuesta en caso de error):
+{
+"detail": "El registro de producción especificado no existe."
+}
+
+---
+
+Ruta 5: Inventario de Moldes (Para el Select)
+Endpoint: [http://127.0.0.1:8000/api/produccion/moldes](https://www.google.com/search?q=http://127.0.0.1:8000/api/produccion/moldes)
+Método: GET
+
+Estructura de los datos que recibirá:
+{
+"data": [
+{
+"idMolde": 1,
+"nombre": "string",
+"descripcion": "string"
+}
+]
+}

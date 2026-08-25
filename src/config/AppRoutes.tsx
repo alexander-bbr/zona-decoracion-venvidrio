@@ -141,7 +141,7 @@ export const AppRoutes = () => {
         element={
           <PrivateRoute
             requiredPermissions={[
-              { modulo: "produccion_lisa", accion: "ver_inventario" },
+              { modulo: "gestion_productiva", accion: "ver_produccion" },
             ]}
             requireAnyPermission={true}
           >
@@ -154,7 +154,10 @@ export const AppRoutes = () => {
           element={
             <PrivateRoute
               requiredPermissions={[
-                { modulo: "produccion_lisa", accion: "crear_registro" },
+                {
+                  modulo: "gestion_productiva",
+                  accion: "registrar_produccion",
+                },
               ]}
             >
               <RegistrarProduccion />
@@ -166,7 +169,7 @@ export const AppRoutes = () => {
           element={
             <PrivateRoute
               requiredPermissions={[
-                { modulo: "produccion_lisa", accion: "ver_inventario" },
+                { modulo: "gestion_productiva", accion: "editar" },
               ]}
             >
               <EditarProduccion />

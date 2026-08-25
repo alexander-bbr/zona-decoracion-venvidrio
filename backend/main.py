@@ -1,4 +1,4 @@
-#El main.py es el cerebro ejecutable de todo el sistema
+# El main.py es el cerebro ejecutable de todo el sistema
 
 
 from fastapi import FastAPI
@@ -10,9 +10,6 @@ from backend.modules.insumos.pintura.router import router as pintura_router
 # Importamos el router desde tu módulo de dashboard
 from backend.modules.dashboard.router import router as dashboard_router
 
-#  Importamos el router frl módulo de producción lisa
-from backend.modules.produccion.produccion_lisa.router import router as produccion_lisa_router
-
 # Importamos el router del módulo de gestión de usuarios
 from backend.modules.gestion_usuarios.router import router as gestion_usuarios_router
 
@@ -22,6 +19,12 @@ from backend.modules.auth.router import router as auth_router
 # Importamos el router del módulo de historia de trabajo decoración
 from backend.modules.historia_trabajo_decoracion.router import router as historia_trabajo_router
 
+# Importamos el router del nuevo módulo de gestión productiva
+from backend.modules.gestion_productiva.produccion.router import router as gestion_productiva_router
+
+# Importamos el router del módulo de moldes
+from backend.modules.gestion_productiva.gestion_moldes.router import router as moldes_router
+
 
 # Inicializamos la aplicación FastAPI
 app = FastAPI(
@@ -30,7 +33,7 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# Configuración de CORS: Vital para que el frontend (React) 
+# Configuración de CORS: Vital para que el frontend (React)
 # pueda hacer peticiones sin que el navegador lo bloquee.
 app.add_middleware(
     CORSMiddleware,
@@ -46,9 +49,6 @@ app.include_router(pintura_router)
 # Registramos las rutas del módulo del dashboard
 app.include_router(dashboard_router)
 
-# Registramos las rutas del módulo de produccion lisa
-app.include_router(produccion_lisa_router)
-
 # Registramos las rutas del módulo de gestión de usuarios
 app.include_router(gestion_usuarios_router)
 
@@ -57,6 +57,12 @@ app.include_router(auth_router)
 
 # Registramos las rutas del módulo de historia de trabajo decoración
 app.include_router(historia_trabajo_router)
+
+# Registramos las rutas del módulo de gestión productiva
+app.include_router(gestion_productiva_router)
+
+# Registramos las rutas del módulo de moldes
+app.include_router(moldes_router)
 
 # Ruta base de prueba
 @app.get("/")

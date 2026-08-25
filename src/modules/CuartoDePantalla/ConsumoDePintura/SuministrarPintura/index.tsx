@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import styles from "./suministrar-pintura.module.css";
-import headerLogo from "../../../../assets/images/logo-segun-controles.png";
 import { HeaderForm } from "../../../../components/HeaderForm";
 
 type registroDePinturaProps = {

@@ -109,8 +109,20 @@ textarea {
 
 /* Modelo del Envase */
 .modelHeader {
-  max-width: 280px;
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) minmax(180px, 1fr);
+  align-items: end;
+  gap: 1rem;
   margin-bottom: 1rem;
+}
+.descriptionInput {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 1rem;
+  color: #333;
+  background-color: #f8fafc;
 }
 .productionGrid {
   display: grid;

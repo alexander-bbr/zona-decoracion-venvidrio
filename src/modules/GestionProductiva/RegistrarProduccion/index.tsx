@@ -1,14 +1,21 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { HeaderForm } from "../../../components/HeaderForm";
-import { ENVASES_POR_GRUESA, modelos } from "../../../mocks/modelos";
+import { ENVASES_POR_GRUESA } from "../../../mocks/modelos";
 import type { ProduccionModelo } from "../../../mocks/registrosproduccion";
 import styles from "./registrar-produccion.module.css";
 
-type ModeloForm = ProduccionModelo;
+type ModeloForm = Omit<ProduccionModelo, "modelo"> & { modelo: string };
+type Molde = {
+  idMolde: number;
+  nombre: string;
+  descripcion: string;
+  numeroCamadas: number;
+  numeroEnvases: number;
+};
 
-const modeloInicial = (): ModeloForm => ({
-  modelo: "Pepsi",
+const modeloInicial = (nombre = ""): ModeloForm => ({
+  modelo: nombre,
   paletasDecoradas: 0,
   produccionLisa: 0,
 });
@@ -18,6 +25,8 @@ const formatNumber = (value: number) =>
 
 export const RegistrarProduccion = () => {
   const navigate = useNavigate();
+  const [moldes, setMoldes] = useState<Molde[]>([]);
+  const [cargandoMoldes, setCargandoMoldes] = useState(true);
   const [turno, setTurno] = useState<"A" | "B" | "C">("A");
   const [fecha, setFecha] = useState("");
   const [tecnico, setTecnico] = useState("");
@@ -28,6 +37,28 @@ export const RegistrarProduccion = () => {
   ]);
   const [observaciones, setObservaciones] = useState("");
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    const cargarMoldes = async () => {
+      try {
+        const response = await fetch("http://127.0.0.1:8000/produccion/moldes");
+        if (!response.ok) {
+          throw new Error(`Error al cargar moldes: ${response.status}`);
+        }
+        setMoldes((await response.json()) as Molde[]);
+      } catch (loadError) {
+        setError(
+          loadError instanceof Error
+            ? loadError.message
+            : "Error al cargar los moldes.",
+        );
+      } finally {
+        setCargandoMoldes(false);
+      }
+    };
+
+    void cargarMoldes();
+  }, []);
 
   const limitarModelos = (actuales: ModeloForm[], limite: number) => {
     let restantes = limite;
@@ -107,11 +138,14 @@ export const RegistrarProduccion = () => {
 
   const resumenProduccion = modelosForm.reduce(
     (resumen, modelo) => {
-      const definicion =
-        modelos.find((item) => item.descripcion === modelo.modelo) ??
-        modelos[0];
-      resumen.envasesDecorados += modelo.paletasDecoradas * definicion.envases;
-      resumen.envasesLisa += modelo.produccionLisa * definicion.envases;
+      const molde = moldes.find(
+        (item) => item.nombre === (modelo.modelo || moldes[0]?.nombre),
+      );
+      if (molde) {
+        resumen.envasesDecorados +=
+          modelo.paletasDecoradas * molde.numeroEnvases;
+        resumen.envasesLisa += modelo.produccionLisa * molde.numeroEnvases;
+      }
       return resumen;
     },
     { envasesDecorados: 0, envasesLisa: 0 },
@@ -272,6 +306,8 @@ export const RegistrarProduccion = () => {
             key={index}
             modelo={modelo}
             index={index}
+            moldes={moldes}
+            cargandoMoldes={cargandoMoldes}
             maximoDecoradas={obtenerMaximoPaletas(index, "paletasDecoradas")}
             maximoLisa={obtenerMaximoPaletas(index, "produccionLisa")}
             actualizarModelo={actualizarModelo}
@@ -289,7 +325,10 @@ export const RegistrarProduccion = () => {
           type="button"
           className={styles.addButton}
           onClick={() =>
-            setModelosForm((actuales) => [...actuales, modeloInicial()])
+            setModelosForm((actuales) => [
+              ...actuales,
+              modeloInicial(moldes[0]?.nombre),
+            ])
           }
         >
           + Añadir Otro Modelo
@@ -442,6 +481,8 @@ export const RegistrarProduccion = () => {
 type ModeloProduccionProps = {
   modelo: ModeloForm;
   index: number;
+  moldes: Molde[];
+  cargandoMoldes: boolean;
   maximoDecoradas: number;
   maximoLisa: number;
   actualizarModelo: (index: number, changes: Partial<ModeloForm>) => void;
@@ -456,18 +497,21 @@ type ModeloProduccionProps = {
 const ModeloProduccion = ({
   modelo,
   index,
+  moldes,
+  cargandoMoldes,
   maximoDecoradas,
   maximoLisa,
   actualizarModelo,
   cambiarPaletas,
   onEliminar,
 }: ModeloProduccionProps) => {
-  const definicion =
-    modelos.find((item) => item.descripcion === modelo.modelo) ?? modelos[0];
+  const definicion = moldes.find(
+    (item) => item.nombre === (modelo.modelo || moldes[0]?.nombre),
+  );
   const resumen = (paletas: number) => ({
-    camadas: paletas * definicion.camadas,
-    envases: paletas * definicion.envases,
-    gruesas: (paletas * definicion.envases) / ENVASES_POR_GRUESA,
+    camadas: paletas * (definicion?.numeroCamadas ?? 0),
+    envases: paletas * (definicion?.numeroEnvases ?? 0),
+    gruesas: (paletas * (definicion?.numeroEnvases ?? 0)) / ENVASES_POR_GRUESA,
   });
   return (
     <fieldset>
@@ -488,20 +532,30 @@ const ModeloProduccion = ({
         <div className={styles.inputWrapper}>
           <label>Modelo de Envase</label>
           <select
-            value={modelo.modelo}
+            value={modelo.modelo || moldes[0]?.nombre || ""}
+            disabled={cargandoMoldes || moldes.length === 0}
             onChange={(event) =>
               actualizarModelo(index, {
-                modelo: event.target.value as ModeloForm["modelo"],
+                modelo: event.target.value,
               })
             }
           >
-            {[...new Set(modelos.map((item) => item.descripcion))].map(
-              (nombre) => (
-                <option key={nombre}>{nombre}</option>
-              ),
-            )}
+            {moldes.map((molde) => (
+              <option key={molde.idMolde} value={molde.nombre}>
+                {molde.nombre}
+              </option>
+            ))}
           </select>
         </div>
+        <input
+          className={styles.descriptionInput}
+          type="text"
+          readOnly
+          value={definicion?.descripcion ?? ""}
+          placeholder={
+            cargandoMoldes ? "Cargando descripción..." : "Descripción"
+          }
+        />
       </div>
       <div className={styles.productionGrid}>
         <GrupoProduccion

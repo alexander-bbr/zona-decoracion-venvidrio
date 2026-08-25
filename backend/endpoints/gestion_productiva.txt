@@ -1,5 +1,5 @@
 Ruta 1: Registro de Producción
-Endpoint: [http://127.0.0.1:8000/api/produccion](https://www.google.com/search?q=http://127.0.0.1:8000/api/produccion)
+Endpoint: http://127.0.0.1:8000/produccion
 Método: POST
 
 JSON (Envía el Frontend):
@@ -50,7 +50,7 @@ JSON (Respuesta en caso de error):
 ---
 
 Ruta 2: Editar Registro de Producción
-Endpoint: [http://127.0.0.1:8000/api/produccion/](https://www.google.com/search?q=http://127.0.0.1:8000/api/produccion/){id_produccion}
+Endpoint: http://127.0.0.1:8000/produccion/{id_produccion}
 Método: PUT
 
 JSON (Envía el Frontend):
@@ -88,7 +88,7 @@ JSON (Respuesta en caso de error):
 ---
 
 Ruta 3: Listado de Producción (Vista Principal)
-Endpoint: [http://127.0.0.1:8000/api/produccion?skip=0&limit=50](https://www.google.com/search?q=http://127.0.0.1:8000/api/produccion%3Fskip%3D0%26limit%3D50)
+Endpoint: http://127.0.0.1:8000/produccion?skip=0&limit=50
 Método: GET
 
 Estructura de los datos que recibirá:
@@ -138,7 +138,7 @@ URL como PARÁMETROS DE CONSULTA (Query Parameters).
 ---
 
 Ruta 4: Ver Registro de Producción (Detalle por ID)
-Endpoint: [http://127.0.0.1:8000/api/produccion/](https://www.google.com/search?q=http://127.0.0.1:8000/api/produccion/){id_produccion}
+Endpoint: http://127.0.0.1:8000/produccion/{id_produccion}
 Método: GET
 
 Estructura de los datos que recibirá:
@@ -187,7 +187,7 @@ JSON (Respuesta en caso de error):
 ---
 
 Ruta 5: Inventario de Moldes (Para el Select)
-Endpoint: http://127.0.0.1:8000/api/produccion/moldes
+Endpoint: http://127.0.0.1:8000/produccion/moldes
 Método: GET
 
 Estructura de los datos que recibirá:

@@ -1,7 +1,7 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent, type ReactNode } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { HeaderForm } from "../../../components/HeaderForm";
-import { ENVASES_POR_GRUESA, modelos } from "../../../mocks/modelos";
+import { ENVASES_POR_GRUESA } from "../../../mocks/modelos";
 import { registrosProduccion } from "../../../mocks/registrosproduccion";
 import type {
   ProduccionModelo,
@@ -9,7 +9,15 @@ import type {
 } from "../../../mocks/registrosproduccion";
 import styles from "./editar-produccion.module.css";
 
-type ModeloForm = ProduccionModelo;
+type Molde = {
+  idMolde: number;
+  nombre: string;
+  descripcion: string;
+  numeroCamadas: number;
+  numeroEnvases: number;
+};
+type ModeloForm = Omit<ProduccionModelo, "modelo"> & { modelo: string };
+type Resumen = { camadas: number; envases: number; gruesas: number };
 const formatNumber = (value: number) =>
   value.toLocaleString("es-VE", { maximumFractionDigits: 2 });
 
@@ -27,6 +35,8 @@ export const EditarProduccion = () => {
 
 const FormularioEdicion = ({ registro }: { registro: RegistroProduccion }) => {
   const navigate = useNavigate();
+  const [moldes, setMoldes] = useState<Molde[]>([]);
+  const [cargandoMoldes, setCargandoMoldes] = useState(true);
   const [turno, setTurno] = useState(registro.turno);
   const [fecha, setFecha] = useState(registro.fecha);
   const [tecnico, setTecnico] = useState(registro.tecnico);
@@ -39,6 +49,37 @@ const FormularioEdicion = ({ registro }: { registro: RegistroProduccion }) => {
   ]);
   const [observaciones, setObservaciones] = useState(registro.observaciones);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    const cargarMoldes = async () => {
+      try {
+        const response = await fetch("http://127.0.0.1:8000/produccion/moldes");
+        if (!response.ok)
+          throw new Error(`Error al cargar moldes: ${response.status}`);
+        const moldesCargados = (await response.json()) as Molde[];
+        setMoldes(moldesCargados);
+        setModelosForm((actuales) =>
+          actuales.map((modelo) => {
+            const molde = moldesCargados.find(
+              (item) =>
+                item.nombre === modelo.modelo ||
+                item.descripcion === modelo.modelo,
+            );
+            return molde ? { ...modelo, modelo: molde.nombre } : modelo;
+          }),
+        );
+      } catch (loadError) {
+        setError(
+          loadError instanceof Error
+            ? loadError.message
+            : "Error al cargar los moldes.",
+        );
+      } finally {
+        setCargandoMoldes(false);
+      }
+    };
+    void cargarMoldes();
+  }, []);
 
   const limitarModelos = (actuales: ModeloForm[], limite: number) => {
     let restantes = limite;
@@ -87,9 +128,9 @@ const FormularioEdicion = ({ registro }: { registro: RegistroProduccion }) => {
     value: string,
   ) =>
     actualizarModelo(index, {
-      [campo]: Math.max(
-        0,
-        Math.min(Number(value) || 0, obtenerMaximoPaletas(index, campo)),
+      [campo]: Math.min(
+        Math.max(0, Number(value) || 0),
+        obtenerMaximoPaletas(index, campo),
       ),
     });
   const handleReset = () => {
@@ -112,11 +153,12 @@ const FormularioEdicion = ({ registro }: { registro: RegistroProduccion }) => {
   };
   const resumenProduccion = modelosForm.reduce(
     (resumen, modelo) => {
-      const definicion =
-        modelos.find((item) => item.descripcion === modelo.modelo) ??
-        modelos[0];
-      resumen.envasesDecorados += modelo.paletasDecoradas * definicion.envases;
-      resumen.envasesLisa += modelo.produccionLisa * definicion.envases;
+      const molde = moldes.find((item) => item.nombre === modelo.modelo);
+      if (molde) {
+        resumen.envasesDecorados +=
+          modelo.paletasDecoradas * molde.numeroEnvases;
+        resumen.envasesLisa += modelo.produccionLisa * molde.numeroEnvases;
+      }
       return resumen;
     },
     { envasesDecorados: 0, envasesLisa: 0 },
@@ -131,6 +173,10 @@ const FormularioEdicion = ({ registro }: { registro: RegistroProduccion }) => {
       resumenProduccion.envasesDecorados -
       resumenProduccion.envasesLisa,
   );
+  const gruesasMaquinas = totalEnvasesMaquinas / ENVASES_POR_GRUESA;
+  const deficienciaProductiva = gruesasMaquinas
+    ? (totalEnvasesPerdidos / ENVASES_POR_GRUESA / gruesasMaquinas) * 100
+    : 0;
 
   return (
     <form className={`${styles.form} content`} onSubmit={handleSubmit}>
@@ -139,27 +185,20 @@ const FormularioEdicion = ({ registro }: { registro: RegistroProduccion }) => {
       <section className={styles.formData}>
         <fieldset className={styles.identifyWrapper}>
           <legend>Datos de Identificación</legend>
-          <div className={styles.inputWrapper}>
-            <label htmlFor="turno">
-              Turno <span className={styles.requireSymbol}>*</span>
-            </label>
+          <Campo label="Turno" id="turno">
             <select
               id="turno"
               value={turno}
               onChange={(event) =>
                 setTurno(event.target.value as "A" | "B" | "C")
               }
-              required
             >
               <option>A</option>
               <option>B</option>
               <option>C</option>
             </select>
-          </div>
-          <div className={styles.inputWrapper}>
-            <label htmlFor="fecha">
-              Fecha <span className={styles.requireSymbol}>*</span>
-            </label>
+          </Campo>
+          <Campo label="Fecha" id="fecha">
             <input
               id="fecha"
               type="date"
@@ -167,29 +206,25 @@ const FormularioEdicion = ({ registro }: { registro: RegistroProduccion }) => {
               onChange={(event) => setFecha(event.target.value)}
               required
             />
-          </div>
-          <div className={styles.inputWrapper}>
-            <label htmlFor="tecnico">
-              Técnico <span className={styles.requireSymbol}>*</span>
-            </label>
+          </Campo>
+          <Campo label="Técnico" id="tecnico">
             <input
               id="tecnico"
-              type="text"
               value={tecnico}
               onChange={(event) => setTecnico(event.target.value)}
               required
             />
-          </div>
+          </Campo>
         </fieldset>
         <fieldset>
           <legend>Máquinas de Decorado</legend>
           <div className={styles.fields}>
             {cantidades.map((cantidad, index) => (
-              <div className={styles.inputWrapper} key={index}>
-                <label htmlFor={`cantidadMaquina${index}`}>
-                  Nro. de Envases{" "}
-                  <span className={styles.machine}>(Máquina {index + 1})</span>
-                </label>
+              <Campo
+                key={index}
+                label={`Nro. de Envases (Máquina ${index + 1})`}
+                id={`cantidadMaquina${index}`}
+              >
                 <input
                   id={`cantidadMaquina${index}`}
                   type="number"
@@ -205,39 +240,31 @@ const FormularioEdicion = ({ registro }: { registro: RegistroProduccion }) => {
                     )
                   }
                 />
-              </div>
+              </Campo>
             ))}
           </div>
           <div className={styles.machineSummary}>
-            <div className={styles.inputWrapper}>
-              <label htmlFor="totalEnvasesMaquinas">Total de Envases</label>
+            <Campo label="Total de Envases" id="totalEnvasesMaquinas">
               <input
                 id="totalEnvasesMaquinas"
                 type="text"
                 readOnly
                 value={formatNumber(totalEnvasesMaquinas)}
               />
-            </div>
-            <div className={styles.inputWrapper}>
-              <label htmlFor="cantidadGruesasMaquinas">
-                Cantidad en Gruesas
-              </label>
+            </Campo>
+            <Campo label="Cantidad en Gruesas" id="cantidadGruesasMaquinas">
               <input
                 id="cantidadGruesasMaquinas"
                 type="text"
                 readOnly
-                value={formatNumber(totalEnvasesMaquinas / ENVASES_POR_GRUESA)}
+                value={formatNumber(gruesasMaquinas)}
               />
-            </div>
+            </Campo>
           </div>
         </fieldset>
         <fieldset>
           <legend>Total de Paletas</legend>
-          <div className={styles.inputWrapper}>
-            <label htmlFor="totalPaletas">
-              Número Total de Paletas{" "}
-              <span className={styles.requireSymbol}>*</span>
-            </label>
+          <Campo label="Número Total de Paletas" id="totalPaletas">
             <input
               id="totalPaletas"
               type="number"
@@ -246,13 +273,15 @@ const FormularioEdicion = ({ registro }: { registro: RegistroProduccion }) => {
               onChange={(event) => actualizarTotalPaletas(event.target.value)}
               required
             />
-          </div>
+          </Campo>
         </fieldset>
         {modelosForm.map((modelo, index) => (
           <ModeloProduccion
             key={index}
             modelo={modelo}
             index={index}
+            moldes={moldes}
+            cargandoMoldes={cargandoMoldes}
             maximoDecoradas={obtenerMaximoPaletas(index, "paletasDecoradas")}
             maximoLisa={obtenerMaximoPaletas(index, "produccionLisa")}
             actualizarModelo={actualizarModelo}
@@ -270,7 +299,11 @@ const FormularioEdicion = ({ registro }: { registro: RegistroProduccion }) => {
           onClick={() =>
             setModelosForm((actuales) => [
               ...actuales,
-              { modelo: "Pepsi", paletasDecoradas: 0, produccionLisa: 0 },
+              {
+                modelo: moldes[0]?.nombre ?? "",
+                paletasDecoradas: 0,
+                produccionLisa: 0,
+              },
             ])
           }
         >
@@ -280,37 +313,54 @@ const FormularioEdicion = ({ registro }: { registro: RegistroProduccion }) => {
           <legend>Resumen</legend>
           <div className={styles.summaryGrid}>
             <ResumenColumn
-              totalId="totalEnvasesDecorados"
-              totalLabel="Total de Envases Decorados"
+              label="Total de Envases Decorados"
               total={resumenProduccion.envasesDecorados}
-              gruesasId="cantidadGruesasDecoradas"
               gruesas={resumenProduccion.envasesDecorados / ENVASES_POR_GRUESA}
             />
             <ResumenColumn
-              totalId="totalEnvasesLisa"
-              totalLabel="Total de Envases en Producción Lisa"
+              label="Total de Envases en Producción Lisa"
               total={resumenProduccion.envasesLisa}
-              gruesasId="cantidadGruesasLisa"
               gruesas={resumenProduccion.envasesLisa / ENVASES_POR_GRUESA}
             />
             <ResumenColumn
-              totalId="totalEnvasesPerdidos"
-              totalLabel="Total de Envases Perdidos"
+              label="Total de Envases Perdidos"
               total={totalEnvasesPerdidos}
-              gruesasId="cantidadGruesasPerdidas"
               gruesas={totalEnvasesPerdidos / ENVASES_POR_GRUESA}
             />
           </div>
+          <div className={styles.productivitySummary}>
+            <Campo label="Deficiencia Productiva" id="deficienciaProductiva">
+              <div className={styles.percentageInput}>
+                <input
+                  id="deficienciaProductiva"
+                  type="number"
+                  readOnly
+                  value={Number(deficienciaProductiva.toFixed(2))}
+                />
+                <span>%</span>
+              </div>
+            </Campo>
+            <Campo label="Eficiencia Productiva" id="eficienciaProductiva">
+              <div className={styles.percentageInput}>
+                <input
+                  id="eficienciaProductiva"
+                  type="number"
+                  readOnly
+                  value={Number((100 - deficienciaProductiva).toFixed(2))}
+                />
+                <span>%</span>
+              </div>
+            </Campo>
+          </div>
         </fieldset>
-        <div className={styles.inputWrapper}>
-          <label htmlFor="observaciones">Observaciones</label>
+        <Campo label="Observaciones" id="observaciones">
           <textarea
             id="observaciones"
             value={observaciones}
             onChange={(event) => setObservaciones(event.target.value)}
             rows={8}
           />
-        </div>
+        </Campo>
       </section>
       {error && <p className={styles.error}>{error}</p>}
       <div className={styles.buttonWrapper}>
@@ -329,9 +379,25 @@ const FormularioEdicion = ({ registro }: { registro: RegistroProduccion }) => {
   );
 };
 
-type ModeloProduccionProps = {
+const Campo = ({
+  label,
+  id,
+  children,
+}: {
+  label: string;
+  id: string;
+  children: ReactNode;
+}) => (
+  <div className={styles.inputWrapper}>
+    <label htmlFor={id}>{label}</label>
+    {children}
+  </div>
+);
+type ModeloProps = {
   modelo: ModeloForm;
   index: number;
+  moldes: Molde[];
+  cargandoMoldes: boolean;
   maximoDecoradas: number;
   maximoLisa: number;
   actualizarModelo: (index: number, changes: Partial<ModeloForm>) => void;
@@ -345,18 +411,19 @@ type ModeloProduccionProps = {
 const ModeloProduccion = ({
   modelo,
   index,
+  moldes,
+  cargandoMoldes,
   maximoDecoradas,
   maximoLisa,
   actualizarModelo,
   cambiarPaletas,
   onEliminar,
-}: ModeloProduccionProps) => {
-  const definicion =
-    modelos.find((item) => item.descripcion === modelo.modelo) ?? modelos[0];
-  const resumen = (paletas: number) => ({
-    camadas: paletas * definicion.camadas,
-    envases: paletas * definicion.envases,
-    gruesas: (paletas * definicion.envases) / ENVASES_POR_GRUESA,
+}: ModeloProps) => {
+  const molde = moldes.find((item) => item.nombre === modelo.modelo);
+  const resumen = (paletas: number): Resumen => ({
+    camadas: paletas * (molde?.numeroCamadas ?? 0),
+    envases: paletas * (molde?.numeroEnvases ?? 0),
+    gruesas: (paletas * (molde?.numeroEnvases ?? 0)) / ENVASES_POR_GRUESA,
   });
   return (
     <fieldset>
@@ -375,22 +442,31 @@ const ModeloProduccion = ({
       )}
       <div className={styles.modelHeader}>
         <div className={styles.inputWrapper}>
-          <label>Modelo de Envase</label>
+          <label htmlFor={`modelo${index}`}>Modelo de Envase</label>
           <select
+            id={`modelo${index}`}
             value={modelo.modelo}
+            disabled={cargandoMoldes || moldes.length === 0}
             onChange={(event) =>
-              actualizarModelo(index, {
-                modelo: event.target.value as ModeloForm["modelo"],
-              })
+              actualizarModelo(index, { modelo: event.target.value })
             }
           >
-            {[...new Set(modelos.map((item) => item.descripcion))].map(
-              (nombre) => (
-                <option key={nombre}>{nombre}</option>
-              ),
-            )}
+            {moldes.map((item) => (
+              <option key={item.idMolde} value={item.nombre}>
+                {item.nombre}
+              </option>
+            ))}
           </select>
         </div>
+        <input
+          className={styles.descriptionInput}
+          type="text"
+          readOnly
+          value={molde?.descripcion ?? ""}
+          placeholder={
+            cargandoMoldes ? "Cargando descripción..." : "Descripción"
+          }
+        />
       </div>
       <div className={styles.productionGrid}>
         <GrupoProduccion
@@ -408,15 +484,21 @@ const ModeloProduccion = ({
           resumen={resumen(modelo.produccionLisa)}
         />
       </div>
+      <div className={styles.modelTotal}>
+        <Campo
+          label="Total de Paletas por Modelo"
+          id={`totalPaletasModelo${index}`}
+        >
+          <input
+            id={`totalPaletasModelo${index}`}
+            type="number"
+            readOnly
+            value={modelo.paletasDecoradas + modelo.produccionLisa}
+          />
+        </Campo>
+      </div>
     </fieldset>
   );
-};
-type GrupoProduccionProps = {
-  title: string;
-  value: number;
-  max: number;
-  onChange: (value: string) => void;
-  resumen: { camadas: number; envases: number; gruesas: number };
 };
 const GrupoProduccion = ({
   title,
@@ -424,60 +506,64 @@ const GrupoProduccion = ({
   max,
   onChange,
   resumen,
-}: GrupoProduccionProps) => (
+}: {
+  title: string;
+  value: number;
+  max: number;
+  onChange: (value: string) => void;
+  resumen: Resumen;
+}) => (
   <div className={styles.productionGroup}>
     <h4>{title}</h4>
-    <div className={styles.inputWrapper}>
-      <label>Número de Paletas</label>
+    <Campo label="Número de Paletas" id={`${title}-paletas`}>
       <input
+        id={`${title}-paletas`}
         type="number"
         min="0"
         max={Math.max(0, max)}
         value={value || ""}
         onChange={(event) => onChange(event.target.value)}
       />
-    </div>
-    <div className={styles.inputWrapper}>
-      <label>Total de Camadas</label>
-      <input readOnly value={formatNumber(resumen.camadas)} />
-    </div>
-    <div className={styles.inputWrapper}>
-      <label>Total de Envases</label>
-      <input readOnly value={formatNumber(resumen.envases)} />
-    </div>
-    <div className={styles.inputWrapper}>
-      <label>Total de Gruesas</label>
-      <input type="text" readOnly value={formatNumber(resumen.gruesas)} />
-    </div>
-  </div>
-);
-type ResumenColumnProps = {
-  totalId: string;
-  totalLabel: string;
-  total: number;
-  gruesasId: string;
-  gruesas: number;
-};
-const ResumenColumn = ({
-  totalId,
-  totalLabel,
-  total,
-  gruesasId,
-  gruesas,
-}: ResumenColumnProps) => (
-  <div className={styles.summaryColumn}>
-    <div className={styles.inputWrapper}>
-      <label htmlFor={totalId}>{totalLabel}</label>
-      <input id={totalId} type="text" readOnly value={formatNumber(total)} />
-    </div>
-    <div className={styles.inputWrapper}>
-      <label htmlFor={gruesasId}>Cantidad en Gruesas</label>
+    </Campo>
+    <Campo label="Total de Camadas" id={`${title}-camadas`}>
       <input
-        id={gruesasId}
+        id={`${title}-camadas`}
+        readOnly
+        value={formatNumber(resumen.camadas)}
+      />
+    </Campo>
+    <Campo label="Total de Envases" id={`${title}-envases`}>
+      <input
+        id={`${title}-envases`}
+        readOnly
+        value={formatNumber(resumen.envases)}
+      />
+    </Campo>
+    <Campo label="Total de Gruesas" id={`${title}-gruesas`}>
+      <input
+        id={`${title}-gruesas`}
         type="text"
         readOnly
-        value={formatNumber(gruesas)}
+        value={formatNumber(resumen.gruesas)}
       />
-    </div>
+    </Campo>
+  </div>
+);
+const ResumenColumn = ({
+  label,
+  total,
+  gruesas,
+}: {
+  label: string;
+  total: number;
+  gruesas: number;
+}) => (
+  <div className={styles.summaryColumn}>
+    <Campo label={label} id={label.replace(/\s/g, "-")}>
+      <input type="text" readOnly value={formatNumber(total)} />
+    </Campo>
+    <Campo label="Cantidad en Gruesas" id={`${label}-gruesas`}>
+      <input type="text" readOnly value={formatNumber(gruesas)} />
+    </Campo>
   </div>
 );

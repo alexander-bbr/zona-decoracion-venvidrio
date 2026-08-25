@@ -21,6 +21,7 @@ def obtener_lista_moldes(db: Session):
     return resultado
 
 
+
 def obtener_molde_por_id(db: Session, id_molde: int):
     return db.query(Molde).filter(Molde.id_molde == id_molde).first()
 

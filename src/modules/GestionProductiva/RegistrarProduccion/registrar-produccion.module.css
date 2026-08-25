@@ -130,6 +130,10 @@ textarea {
   text-align: center;
   color: #3563a3;
 }
+.modelTotal {
+  max-width: 280px;
+  margin-top: 1.5rem;
+}
 
 /* Resumen */
 .summaryGrid {
@@ -141,6 +145,25 @@ textarea {
   display: flex;
   flex-direction: column;
   gap: 2rem;
+}
+.productivitySummary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+}
+.percentageInput {
+  display: flex;
+  align-items: center;
+}
+.percentageInput input {
+  min-width: 0;
+  flex: 1;
+}
+.percentageInput span {
+  margin-left: 0.5rem;
+  color: #333;
+  font-weight: 600;
 }
 .machineSummary {
   display: grid;
@@ -227,7 +250,8 @@ textarea {
   .fields,
   .productionGrid,
   .summaryGrid,
-  .machineSummary {
+  .machineSummary,
+  .productivitySummary {
     grid-template-columns: 1fr 1fr;
   }
   .formHeader {
@@ -240,7 +264,8 @@ textarea {
   .productionGrid,
   .productionGroup,
   .summaryGrid,
-  .machineSummary {
+  .machineSummary,
+  .productivitySummary {
     grid-template-columns: 1fr;
   }
   .productionGroup h4 {

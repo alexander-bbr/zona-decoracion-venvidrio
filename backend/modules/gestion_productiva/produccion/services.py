@@ -11,24 +11,19 @@ from .models import (
 
 
 def obtener_lista_moldes(db: Session):
-    """
-    Obtiene un listado resumido de los moldes registrados (ID, nombre y descripción)
-    para poblar el selector en el frontend.
-    """
-    moldes = db.query(
-        Molde.id_molde,
-        Molde.nombre,
-        Molde.descripcion
-    ).all()
+    moldes = db.query(Molde).order_by(Molde.id_molde.desc()).all()
 
     resultado = []
     for molde in moldes:
         resultado.append({
             "id_molde": molde.id_molde,
             "nombre": molde.nombre,
-            "descripcion": molde.descripcion
+            "descripcion": molde.descripcion,
+            "numero_camadas": molde.numero_camadas,
+            "numero_envases": molde.numero_envases,
+            "numero_gruesas": molde.numero_gruesas
         })
-    
+
     return resultado
 
 

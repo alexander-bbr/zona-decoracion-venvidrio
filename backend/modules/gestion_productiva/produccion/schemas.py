@@ -6,16 +6,18 @@ from datetime import date
 from decimal import Decimal
 
 
-# ESQUEMA PARA MOLDES (Vista resumida para el select)
+# ESQUEMA PARA MOLDES (Vista completa para el select)
 class MoldeResponde(BaseModel):
     id_molde: int = Field(alias="idMolde")
     nombre: str = Field(alias="nombre")
     descripcion: Optional[str] = Field(default=None, alias="descripcion")
+    numero_camadas: int = Field(alias="numeroCamadas")
+    numero_envases: int = Field(alias="numeroEnvases")
+    numero_gruesas: Decimal = Field(alias="numeroGruesas")
 
     class Config:
         populate_by_name = True
         from_attributes = True
-
 
 # ESQUEMAS PARA EFICIENCIA PRODUCTIVA SALIDA (Detalle de modelos)
 class SalidaBase(BaseModel):

@@ -187,16 +187,17 @@ JSON (Respuesta en caso de error):
 ---
 
 Ruta 5: Inventario de Moldes (Para el Select)
-Endpoint: [http://127.0.0.1:8000/api/produccion/moldes](https://www.google.com/search?q=http://127.0.0.1:8000/api/produccion/moldes)
+Endpoint: http://127.0.0.1:8000/api/produccion/moldes
 Método: GET
 
 Estructura de los datos que recibirá:
-{
-"data": [
-{
-"idMolde": 1,
-"nombre": "string",
-"descripcion": "string"
-}
+[
+    {
+        "idMolde": 1,
+        "nombre": "string",
+        "descripcion": "string",
+        "numeroCamadas": 0,
+        "numeroEnvases": 0,
+        "numeroGruesas": 0.00
+    }
 ]
-}

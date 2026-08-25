@@ -126,6 +126,12 @@ export const RegistrarProduccion = () => {
       resumenProduccion.envasesDecorados -
       resumenProduccion.envasesLisa,
   );
+  const gruesasMaquinas = totalEnvasesMaquinas / ENVASES_POR_GRUESA;
+  const gruesasPerdidas = totalEnvasesPerdidos / ENVASES_POR_GRUESA;
+  const deficienciaProductiva = gruesasMaquinas
+    ? (gruesasPerdidas / gruesasMaquinas) * 100
+    : 0;
+  const eficienciaProductiva = 100 - deficienciaProductiva;
 
   return (
     <form className={`${styles.form} content`} onSubmit={handleSubmit}>
@@ -366,6 +372,38 @@ export const RegistrarProduccion = () => {
               </div>
             </div>
           </div>
+          <div className={styles.productivitySummary}>
+            <div className={styles.inputWrapper}>
+              <label htmlFor="deficienciaProductiva">
+                Deficiencia Productiva
+              </label>
+              <div className={styles.percentageInput}>
+                <input
+                  id="deficienciaProductiva"
+                  type="number"
+                  step="0.01"
+                  readOnly
+                  value={Number(deficienciaProductiva.toFixed(2))}
+                />
+                <span>%</span>
+              </div>
+            </div>
+            <div className={styles.inputWrapper}>
+              <label htmlFor="eficienciaProductiva">
+                Eficiencia Productiva
+              </label>
+              <div className={styles.percentageInput}>
+                <input
+                  id="eficienciaProductiva"
+                  type="number"
+                  step="0.01"
+                  readOnly
+                  value={Number(eficienciaProductiva.toFixed(2))}
+                />
+                <span>%</span>
+              </div>
+            </div>
+          </div>
         </fieldset>
 
         {/* === OBSERVACIONES === */}
@@ -480,6 +518,19 @@ const ModeloProduccion = ({
           onChange={(value) => cambiarPaletas(index, "produccionLisa", value)}
           resumen={resumen(modelo.produccionLisa)}
         />
+      </div>
+      <div className={styles.modelTotal}>
+        <div className={styles.inputWrapper}>
+          <label htmlFor={`totalPaletasModelo${index}`}>
+            Total de Paletas por Modelo
+          </label>
+          <input
+            id={`totalPaletasModelo${index}`}
+            type="number"
+            readOnly
+            value={modelo.paletasDecoradas + modelo.produccionLisa}
+          />
+        </div>
       </div>
     </fieldset>
   );

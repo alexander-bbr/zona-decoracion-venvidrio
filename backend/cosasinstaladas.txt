@@ -1,7 +1,7 @@
-# ==================================================
-GUIA DE COMANDOS - PROYECTO ZONA DECORACION
+# GUIA DE COMANDOS - PROYECTO ZONA DECORACION
 
 1. GESTION DEL ENTORNO VIRTUAL (PYTHON)
+
 Crear el entorno virtual (se hace una sola vez al iniciar el proyecto):
 python -m venv venv
 
@@ -11,6 +11,10 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned ;
 
 
 2. INSTALACION DE LIBRERIAS DEL BACKEND (PYTHON)
+
+Instalr todas las dependencias utilizando el archivo requirements.txt:
+pip install -r requirements.txt
+
 Instalar herramientas de Base de Datos y lectura de archivo .env:
 pip install sqlalchemy pymysql python-dotenv
 
@@ -28,6 +32,7 @@ Exportar la lista de librerías instaladas a un archivo de texto (opcional para 
 pip freeze > requirements.txt
 
 3. COMANDOS DE VERIFICACION Y EJECUCION DEL BACKEND
+
 Encender el servidor backend de FastAPI con auto-recarga automática:
 uvicorn backend.main:app --reload
 o
@@ -36,7 +41,8 @@ python -m uvicorn backend.main:app --reload
 (Para apagar el servidor en la terminal, presiona la combinación de teclas CTRL + C).
 
 4. COMANDOS DEL FRONTEND (NODE.JS / VITE / REACT)
-Instalar los módulos de JavaScript (se hace una sola vez para generar la carpeta node_modules):
+
+Instalar las dependencias de JavaScript:
 npm install
 
 COMANDO PARA USAR UNA VERSION NPM COMPATIBLE
@@ -46,8 +52,11 @@ Encender el servidor de desarrollo del Frontend (Vite):
 npm run dev
 
 ---
+
 ## RESUMEN DE USO DIARIO:
+
 Terminal 1 (Backend): Activar entorno virtual -> uvicorn backend.main:app --reload
+
 Terminal 2 (Frontend): npm run dev
 
 Verificar la conexión limpia a MySQL (XAMPP):

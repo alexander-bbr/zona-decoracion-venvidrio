@@ -9,7 +9,7 @@ from . import services, schemas
 
 router = APIRouter(
     prefix="/produccion",
-    tags=["Gestión Productiva"]
+    tags=["Gestión Productiva - Producción"]
 )
 
 
@@ -23,7 +23,7 @@ def listar_moldes_para_select(db: Session = Depends(get_db)):
 
 
 # 2. LISTAR REGISTROS DE PRODUCCIÓN (Vista principal con paginación de 50 en 50)
-@router.get("/", response_model=schemas.ProduccionListaPaginadaResponde)
+@router.get("/", response_model=List[schemas.ProduccionListaResponde])
 def listar_produccion(skip: int = 0, limit: int = 50, db: Session = Depends(get_db)):
     """
     Retorna la lista de movimientos recientes de producción paginados.

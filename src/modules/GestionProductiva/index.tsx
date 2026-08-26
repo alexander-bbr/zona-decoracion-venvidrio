@@ -21,38 +21,55 @@ export const GestionProductiva = () => {
   const [pagina, setPagina] = useState(1);
   const [registros, setRegistros] = useState<RegistroProduccionLista[]>([]);
   const [totalRegistros, setTotalRegistros] = useState(0);
-  const [hayMasRegistros, setHayMasRegistros] = useState(false);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState("");
   const registrosPorPagina = 50;
   const inicio = (pagina - 1) * registrosPorPagina;
+  const registrosPagina = registros.slice(inicio, inicio + registrosPorPagina);
+  const hayMasRegistros = inicio + registrosPagina.length < totalRegistros;
 
   useEffect(() => {
     const cargarRegistros = async () => {
       setCargando(true);
       setError("");
       try {
-        const response = await fetch(
-          `${API_PRODUCCION}/?skip=${inicio}&limit=${registrosPorPagina}`,
-        );
-        if (!response.ok)
-          throw new Error(`Error al cargar registros: ${response.status}`);
-        const data = await response.json();
-        const registrosApi = data.data ?? [];
-        const registrosNormalizados = registrosApi.map(
-          (registro: RegistroProduccionLista) => ({
-            ...registro,
-            idProduccion: Number(registro.idProduccion),
-            totalGruesas: Number(registro.totalGruesas),
-            totalGruesasLisas: Number(registro.totalGruesasLisas),
-            totalGruesasDecoradas: Number(registro.totalGruesasDecoradas),
-            eficienciaProductiva: Number(registro.eficienciaProductiva),
-            deficienciaProductiva: Number(registro.deficienciaProductiva),
-          }),
-        );
-        setRegistros(registrosNormalizados);
-        setTotalRegistros(Number(data.total) || 0);
-        setHayMasRegistros(inicio + registrosNormalizados.length < data.total);
+        const registrosCargados: RegistroProduccionLista[] = [];
+        let skip = 0;
+
+        while (true) {
+          const response = await fetch(
+            `${API_PRODUCCION}/?skip=${skip}&limit=${registrosPorPagina}`,
+          );
+          if (!response.ok)
+            throw new Error(`Error al cargar registros: ${response.status}`);
+
+          const data = await response.json();
+          const registrosApi = Array.isArray(data) ? data : (data.data ?? []);
+          const registrosNormalizados = registrosApi.map(
+            (registro: RegistroProduccionLista) => ({
+              ...registro,
+              idProduccion: Number(registro.idProduccion),
+              totalGruesas: Number(registro.totalGruesas),
+              totalGruesasLisas: Number(registro.totalGruesasLisas),
+              totalGruesasDecoradas: Number(registro.totalGruesasDecoradas),
+              eficienciaProductiva: Number(registro.eficienciaProductiva),
+              deficienciaProductiva: Number(registro.deficienciaProductiva),
+            }),
+          );
+
+          registrosCargados.push(...registrosNormalizados);
+          const totalApi = Number(data.total);
+          if (
+            registrosNormalizados.length < registrosPorPagina ||
+            (totalApi > 0 && registrosCargados.length >= totalApi)
+          ) {
+            break;
+          }
+          skip += registrosNormalizados.length;
+        }
+
+        setRegistros(registrosCargados);
+        setTotalRegistros(registrosCargados.length);
       } catch (loadError) {
         setError(
           loadError instanceof Error
@@ -64,7 +81,7 @@ export const GestionProductiva = () => {
       }
     };
     void cargarRegistros();
-  }, [inicio, pagina]);
+  }, []);
 
   const location = useLocation();
   const isRoot = location.pathname === "/gestion-productiva";
@@ -135,7 +152,7 @@ export const GestionProductiva = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {registros.map((registro) => (
+                  {registrosPagina.map((registro) => (
                     <tr
                       key={registro.idProduccion}
                       onClick={() =>
@@ -158,8 +175,8 @@ export const GestionProductiva = () => {
 
           <footer className={styles.pagination}>
             <span>
-              {registros.length
-                ? `${inicio + 1}-${inicio + registros.length}`
+              {registrosPagina.length
+                ? `${inicio + 1}-${inicio + registrosPagina.length}`
                 : "0-0"}{" "}
               de {totalRegistros}
             </span>

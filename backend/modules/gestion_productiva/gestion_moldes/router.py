@@ -8,7 +8,7 @@ from backend.database.conexion import get_db
 from . import services, schemas
 
 router = APIRouter(
-    prefix="/moldes",
+    prefix="/api/gestion-moldes",
     tags=["Gestión Productiva - Moldes"]
 )
 
@@ -20,9 +20,10 @@ def listar_moldes(db: Session = Depends(get_db)):
 
 
 # 2. REGISTRAR MOLDE
-@router.post("/", response_model=schemas.MoldeResponde, status_code=status.HTTP_201_CREATED)
+@router.post("/", status_code=status.HTTP_201_CREATED)
 def registrar_molde(datos: schemas.MoldeCrear, db: Session = Depends(get_db)):
-    return services.registrar_molde(db, datos)
+    molde = services.registrar_molde(db, datos)
+    return {"status": "Registro insertado con éxito", "id": molde.id_molde}
 
 
 # 3. OBTENER MOLDE POR ID (Para editar)
@@ -38,7 +39,7 @@ def obtener_molde(id_molde: int, db: Session = Depends(get_db)):
 
 
 # 4. EDITAR MOLDE
-@router.put("/{id_molde}", response_model=schemas.MoldeResponde)
+@router.put("/{id_molde}")
 def editar_molde(id_molde: int, datos: schemas.MoldeCrear, db: Session = Depends(get_db)):
     molde_actualizado = services.editar_molde(db, id_molde, datos)
     if not molde_actualizado:
@@ -46,4 +47,4 @@ def editar_molde(id_molde: int, datos: schemas.MoldeCrear, db: Session = Depends
             status_code=status.HTTP_404_NOT_FOUND,
             detail="No se pudo actualizar porque el molde no fue encontrado."
         )
-    return molde_actualizado
+    return {"status": "Registro actualizado con éxito", "id": molde_actualizado.id_molde}

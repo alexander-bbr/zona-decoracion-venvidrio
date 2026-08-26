@@ -1,22 +1,70 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, NavLink, useLocation, Outlet } from "react-router-dom";
 import styles from "./gestion-productiva.module.css";
 
-import { registrosProduccion } from "../../mocks/registrosproduccion";
+type RegistroProduccionLista = {
+  idProduccion: number;
+  fecha: string;
+  turno: string;
+  tecnico: string;
+  totalGruesas: number;
+  totalGruesasLisas: number;
+  totalGruesasDecoradas: number;
+  eficienciaProductiva: number;
+  deficienciaProductiva: number;
+};
+
+const API_PRODUCCION = "http://127.0.0.1:8000/produccion";
 
 export const GestionProductiva = () => {
   const navigate = useNavigate();
   const [pagina, setPagina] = useState(1);
+  const [registros, setRegistros] = useState<RegistroProduccionLista[]>([]);
+  const [totalRegistros, setTotalRegistros] = useState(0);
+  const [hayMasRegistros, setHayMasRegistros] = useState(false);
+  const [cargando, setCargando] = useState(true);
+  const [error, setError] = useState("");
   const registrosPorPagina = 50;
   const inicio = (pagina - 1) * registrosPorPagina;
-  const registros = registrosProduccion.slice(
-    inicio,
-    inicio + registrosPorPagina,
-  );
-  const totalPaginas = Math.max(
-    1,
-    Math.ceil(registrosProduccion.length / registrosPorPagina),
-  );
+
+  useEffect(() => {
+    const cargarRegistros = async () => {
+      setCargando(true);
+      setError("");
+      try {
+        const response = await fetch(
+          `${API_PRODUCCION}/?skip=${inicio}&limit=${registrosPorPagina}`,
+        );
+        if (!response.ok)
+          throw new Error(`Error al cargar registros: ${response.status}`);
+        const data = await response.json();
+        const registrosApi = data.data ?? [];
+        const registrosNormalizados = registrosApi.map(
+          (registro: RegistroProduccionLista) => ({
+            ...registro,
+            idProduccion: Number(registro.idProduccion),
+            totalGruesas: Number(registro.totalGruesas),
+            totalGruesasLisas: Number(registro.totalGruesasLisas),
+            totalGruesasDecoradas: Number(registro.totalGruesasDecoradas),
+            eficienciaProductiva: Number(registro.eficienciaProductiva),
+            deficienciaProductiva: Number(registro.deficienciaProductiva),
+          }),
+        );
+        setRegistros(registrosNormalizados);
+        setTotalRegistros(Number(data.total) || 0);
+        setHayMasRegistros(inicio + registrosNormalizados.length < data.total);
+      } catch (loadError) {
+        setError(
+          loadError instanceof Error
+            ? loadError.message
+            : "Error al cargar producción.",
+        );
+      } finally {
+        setCargando(false);
+      }
+    };
+    void cargarRegistros();
+  }, [inicio, pagina]);
 
   const location = useLocation();
   const isRoot = location.pathname === "/gestion-productiva";
@@ -70,66 +118,69 @@ export const GestionProductiva = () => {
             </button>
           </section>
 
-          <div className={styles.tableContainer}>
-            <table className={styles.table}>
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Fecha</th>
-                  <th>Turno</th>
-                  <th>Técnico</th>
-                  <th>Paletas</th>
-                  <th>Modelos</th>
-                  <th>Pérdidas</th>
-                </tr>
-              </thead>
-              <tbody>
-                {registros.map((registro) => (
-                  <tr
-                    key={registro.id_registro}
-                    onClick={() =>
-                      navigate(`editar-produccion/${registro.id_registro}`)
-                    }
-                  >
-                    <td>#{registro.id_registro}</td>
-                    <td>{registro.fecha}</td>
-                    <td>{registro.turno}</td>
-                    <td>{registro.tecnico}</td>
-                    <td>{registro.totalPaletas}</td>
-                    <td>
-                      {registro.modelos
-                        .map((modelo) => modelo.modelo)
-                        .join(", ")}
-                    </td>
-                    <td>{registro.perdidas}</td>
+          {cargando && <p>Cargando registros de producción...</p>}
+          {error && <p>{error}</p>}
+          {!cargando && !error && (
+            <div className={styles.tableContainer}>
+              <table className={styles.table}>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Fecha</th>
+                    <th>Turno</th>
+                    <th>Técnico</th>
+                    <th>Gruesas</th>
+                    <th>Gruesas Decoradas</th>
+                    <th>Eficiencia</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {registros.map((registro) => (
+                    <tr
+                      key={registro.idProduccion}
+                      onClick={() =>
+                        navigate(`editar-produccion/${registro.idProduccion}`)
+                      }
+                    >
+                      <td>#{registro.idProduccion}</td>
+                      <td>{registro.fecha}</td>
+                      <td>{registro.turno}</td>
+                      <td>{registro.tecnico}</td>
+                      <td>{registro.totalGruesas}</td>
+                      <td>{registro.totalGruesasDecoradas}</td>
+                      <td>{registro.eficienciaProductiva}%</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
 
           <footer className={styles.pagination}>
             <span>
               {registros.length
                 ? `${inicio + 1}-${inicio + registros.length}`
                 : "0-0"}{" "}
-              de {registrosProduccion.length}
+              de {totalRegistros}
             </span>
-            <button
-              disabled={pagina === 1}
-              onClick={() => setPagina((actual) => actual - 1)}
-            >
-              Anterior
-            </button>
-            <span>
-              Página {pagina} de {totalPaginas}
-            </span>
-            <button
-              disabled={pagina === totalPaginas}
-              onClick={() => setPagina((actual) => actual + 1)}
-            >
-              Siguiente
-            </button>
+
+            <div className={styles.pageButtons}>
+              <button
+                className={styles.pageButton}
+                disabled={pagina === 1}
+                onClick={() => setPagina((actual) => actual - 1)}
+              >
+                &lt;
+              </button>
+
+              <button
+                className={styles.pageButton}
+                disabled={!hayMasRegistros}
+                onClick={() => setPagina((actual) => actual + 1)}
+              >
+                &gt;
+              </button>
+            </div>
           </footer>
         </section>
       ) : (

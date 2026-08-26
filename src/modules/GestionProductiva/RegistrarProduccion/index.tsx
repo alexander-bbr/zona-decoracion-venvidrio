@@ -1,11 +1,14 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { HeaderForm } from "../../../components/HeaderForm";
-import { ENVASES_POR_GRUESA } from "../../../mocks/modelos";
-import type { ProduccionModelo } from "../../../mocks/registrosproduccion";
+import { ENVASES_POR_GRUESA } from "../../../../constants";
 import styles from "./registrar-produccion.module.css";
 
-type ModeloForm = Omit<ProduccionModelo, "modelo"> & { modelo: string };
+type ModeloForm = {
+  modelo: string;
+  paletasDecoradas: number;
+  produccionLisa: number;
+};
 type Molde = {
   idMolde: number;
   nombre: string;
@@ -45,7 +48,14 @@ export const RegistrarProduccion = () => {
         if (!response.ok) {
           throw new Error(`Error al cargar moldes: ${response.status}`);
         }
-        setMoldes((await response.json()) as Molde[]);
+        const moldesCargados = ((await response.json()) as Molde[]).map(
+          (molde) => ({
+            ...molde,
+            numeroCamadas: Number(molde.numeroCamadas),
+            numeroEnvases: Number(molde.numeroEnvases),
+          }),
+        );
+        setMoldes(moldesCargados);
       } catch (loadError) {
         setError(
           loadError instanceof Error
@@ -127,13 +137,74 @@ export const RegistrarProduccion = () => {
     setError("");
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!fecha || !tecnico || totalPaletas <= 0) {
       setError("Completa la fecha, el técnico y el total de paletas.");
       return;
     }
-    navigate("/gestion-productiva");
+    const salidas = modelosForm.flatMap((modelo) => {
+      const molde = moldes.find((item) => item.nombre === modelo.modelo);
+      if (!molde) return [];
+      const camadasDecoradas = modelo.paletasDecoradas * molde.numeroCamadas;
+      const envasesDecoradas = modelo.paletasDecoradas * molde.numeroEnvases;
+      const camadasLisas = modelo.produccionLisa * molde.numeroCamadas;
+      const envasesLisas = modelo.produccionLisa * molde.numeroEnvases;
+      return [
+        {
+          modeloMolde: molde.idMolde,
+          totalPaletas: modelo.paletasDecoradas + modelo.produccionLisa,
+          cantPaletasLisas: modelo.produccionLisa,
+          cantCamadasLisas: camadasLisas,
+          cantEnvasesLisas: envasesLisas,
+          cantGruesasLisas: envasesLisas / ENVASES_POR_GRUESA,
+          cantPaletasDecoradas: modelo.paletasDecoradas,
+          cantCamadasDecoradas: camadasDecoradas,
+          cantEnvasesDecoradas: envasesDecoradas,
+          cantGruesasDecoradas: envasesDecoradas / ENVASES_POR_GRUESA,
+        },
+      ];
+    });
+    try {
+      const response = await fetch("http://127.0.0.1:8000/produccion/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fecha,
+          turno,
+          tecnico,
+          cantEnvasesD1: cantidades[0],
+          cantEnvasesD2: cantidades[1],
+          cantEnvasesD3: cantidades[2],
+          cantEnvasesD4: cantidades[3],
+          totalEnvases: totalEnvasesMaquinas,
+          totalGruesas: gruesasMaquinas,
+          salidas,
+          resultado: {
+            totalGruesasLisas:
+              resumenProduccion.envasesLisa / ENVASES_POR_GRUESA,
+            totalGruesasDecoradas:
+              resumenProduccion.envasesDecorados / ENVASES_POR_GRUESA,
+            eficienciaProductiva,
+            deficienciaProductiva,
+            observaciones,
+          },
+        }),
+      });
+      if (!response.ok) {
+        const data = await response.json().catch(() => null);
+        throw new Error(
+          data?.detail ?? `Error al registrar producción: ${response.status}`,
+        );
+      }
+      navigate("/gestion-productiva");
+    } catch (submitError) {
+      setError(
+        submitError instanceof Error
+          ? submitError.message
+          : "Error al registrar producción.",
+      );
+    }
   };
 
   const resumenProduccion = modelosForm.reduce(

@@ -33,6 +33,8 @@ def obtener_registros_produccion(db: Session, skip: int = 0, limit: int = 50):
     extrayendo solo los campos específicos de Entrada y Resultado 
     necesarios para la vista principal del frontend.
     """
+    total = db.query(GestionProductivaEntrada).count()
+
     registros = db.query(
         GestionProductivaEntrada.id_produccion,
         GestionProductivaEntrada.fecha,
@@ -66,7 +68,10 @@ def obtener_registros_produccion(db: Session, skip: int = 0, limit: int = 50):
             "deficiencia_productiva": reg.deficiencia_productiva
         })
     
-    return resultado
+    return {
+        "data": resultado,
+        "total": total
+    }
 
 
 def obtener_produccion_por_id(db: Session, id_produccion: int):

@@ -1,12 +1,7 @@
 import { useEffect, useState, type FormEvent, type ReactNode } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { HeaderForm } from "../../../components/HeaderForm";
-import { ENVASES_POR_GRUESA } from "../../../mocks/modelos";
-import { registrosProduccion } from "../../../mocks/registrosproduccion";
-import type {
-  ProduccionModelo,
-  RegistroProduccion,
-} from "../../../mocks/registrosproduccion";
+import { ENVASES_POR_GRUESA } from "../../../../constants";
 import styles from "./editar-produccion.module.css";
 
 type Molde = {
@@ -16,24 +11,80 @@ type Molde = {
   numeroCamadas: number;
   numeroEnvases: number;
 };
-type ModeloForm = Omit<ProduccionModelo, "modelo"> & { modelo: string };
+type SalidaApi = {
+  modeloMolde: number;
+  cantPaletasLisas: number;
+  cantCamadasLisas: number;
+  cantEnvasesLisas: number;
+  cantPaletasDecoradas: number;
+  cantCamadasDecoradas: number;
+  cantEnvasesDecoradas: number;
+};
+type RegistroDetalleApi = {
+  idProduccion: number;
+  fecha: string;
+  turno: string;
+  tecnico: string;
+  cantEnvasesD1: number;
+  cantEnvasesD2: number;
+  cantEnvasesD3: number;
+  cantEnvasesD4: number;
+  totalEnvases: number;
+  salidas: SalidaApi[];
+  resultado?: { observaciones?: string };
+};
+type ModeloForm = {
+  modelo: string;
+  paletasDecoradas: number;
+  produccionLisa: number;
+};
 type Resumen = { camadas: number; envases: number; gruesas: number };
 const formatNumber = (value: number) =>
   value.toLocaleString("es-VE", { maximumFractionDigits: 2 });
 
 export const EditarProduccion = () => {
   const { id_registro: idRegistro } = useParams<{ id_registro: string }>();
-  const registro = registrosProduccion.find(
-    (item) => item.id_registro === Number(idRegistro),
-  );
-  return registro ? (
-    <FormularioEdicion registro={registro} />
+  return idRegistro ? (
+    <CargarProduccion idRegistro={idRegistro} />
   ) : (
-    <p>El registro de producción no existe.</p>
+    <p>Registro inválido.</p>
   );
 };
 
-const FormularioEdicion = ({ registro }: { registro: RegistroProduccion }) => {
+const CargarProduccion = ({ idRegistro }: { idRegistro: string }) => {
+  const [registro, setRegistro] = useState<RegistroDetalleApi | null>(null);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const cargarRegistro = async () => {
+      try {
+        const response = await fetch(
+          `http://127.0.0.1:8000/produccion/${idRegistro}`,
+        );
+        if (!response.ok)
+          throw new Error(
+            response.status === 404
+              ? "El registro no existe."
+              : `Error al cargar registro: ${response.status}`,
+          );
+        setRegistro((await response.json()) as RegistroDetalleApi);
+      } catch (loadError) {
+        setError(
+          loadError instanceof Error
+            ? loadError.message
+            : "Error al cargar registro.",
+        );
+      }
+    };
+    void cargarRegistro();
+  }, [idRegistro]);
+
+  if (error) return <p>{error}</p>;
+  if (!registro) return <p>Cargando registro de producción...</p>;
+  return <FormularioEdicion registro={registro} />;
+};
+
+const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
   const navigate = useNavigate();
   const [moldes, setMoldes] = useState<Molde[]>([]);
   const [cargandoMoldes, setCargandoMoldes] = useState(true);
@@ -41,13 +92,30 @@ const FormularioEdicion = ({ registro }: { registro: RegistroProduccion }) => {
   const [fecha, setFecha] = useState(registro.fecha);
   const [tecnico, setTecnico] = useState(registro.tecnico);
   const [cantidades, setCantidades] = useState<number[]>([
-    ...registro.cantidades,
+    Number(registro.cantEnvasesD1),
+    Number(registro.cantEnvasesD2),
+    Number(registro.cantEnvasesD3),
+    Number(registro.cantEnvasesD4),
   ]);
-  const [totalPaletas, setTotalPaletas] = useState(registro.totalPaletas);
+  const [totalPaletas, setTotalPaletas] = useState(
+    registro.salidas.reduce(
+      (total, salida) =>
+        total +
+        Number(salida.cantPaletasDecoradas) +
+        Number(salida.cantPaletasLisas),
+      0,
+    ),
+  );
   const [modelosForm, setModelosForm] = useState<ModeloForm[]>([
-    ...registro.modelos,
+    ...registro.salidas.map((salida) => ({
+      modelo: String(salida.modeloMolde),
+      paletasDecoradas: Number(salida.cantPaletasDecoradas),
+      produccionLisa: Number(salida.cantPaletasLisas),
+    })),
   ]);
-  const [observaciones, setObservaciones] = useState(registro.observaciones);
+  const [observaciones, setObservaciones] = useState(
+    registro.resultado?.observaciones ?? "",
+  );
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -56,12 +124,19 @@ const FormularioEdicion = ({ registro }: { registro: RegistroProduccion }) => {
         const response = await fetch("http://127.0.0.1:8000/produccion/moldes");
         if (!response.ok)
           throw new Error(`Error al cargar moldes: ${response.status}`);
-        const moldesCargados = (await response.json()) as Molde[];
+        const moldesCargados = ((await response.json()) as Molde[]).map(
+          (molde) => ({
+            ...molde,
+            numeroCamadas: Number(molde.numeroCamadas),
+            numeroEnvases: Number(molde.numeroEnvases),
+          }),
+        );
         setMoldes(moldesCargados);
         setModelosForm((actuales) =>
           actuales.map((modelo) => {
             const molde = moldesCargados.find(
               (item) =>
+                String(item.idMolde) === modelo.modelo ||
                 item.nombre === modelo.modelo ||
                 item.descripcion === modelo.modelo,
             );
@@ -137,19 +212,100 @@ const FormularioEdicion = ({ registro }: { registro: RegistroProduccion }) => {
     setTurno(registro.turno);
     setFecha(registro.fecha);
     setTecnico(registro.tecnico);
-    setCantidades([...registro.cantidades]);
-    setTotalPaletas(registro.totalPaletas);
-    setModelosForm([...registro.modelos]);
-    setObservaciones(registro.observaciones);
+    setCantidades([
+      Number(registro.cantEnvasesD1),
+      Number(registro.cantEnvasesD2),
+      Number(registro.cantEnvasesD3),
+      Number(registro.cantEnvasesD4),
+    ]);
+    setTotalPaletas(
+      registro.salidas.reduce(
+        (total, salida) =>
+          total +
+          Number(salida.cantPaletasDecoradas) +
+          Number(salida.cantPaletasLisas),
+        0,
+      ),
+    );
+    setModelosForm(
+      registro.salidas.map((salida) => ({
+        modelo: String(salida.modeloMolde),
+        paletasDecoradas: Number(salida.cantPaletasDecoradas),
+        produccionLisa: Number(salida.cantPaletasLisas),
+      })),
+    );
+    setObservaciones(registro.resultado?.observaciones ?? "");
     setError("");
   };
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!fecha || !tecnico || totalPaletas <= 0) {
       setError("Completa la fecha, el técnico y el total de paletas.");
       return;
     }
-    navigate("/gestion-productiva");
+    const salidas = modelosForm.flatMap((modelo) => {
+      const molde = moldes.find((item) => item.nombre === modelo.modelo);
+      if (!molde) return [];
+      const envasesDecoradas = modelo.paletasDecoradas * molde.numeroEnvases;
+      const envasesLisas = modelo.produccionLisa * molde.numeroEnvases;
+      return [
+        {
+          modeloMolde: molde.idMolde,
+          totalPaletas: modelo.paletasDecoradas + modelo.produccionLisa,
+          cantPaletasLisas: modelo.produccionLisa,
+          cantCamadasLisas: modelo.produccionLisa * molde.numeroCamadas,
+          cantEnvasesLisas: envasesLisas,
+          cantGruesasLisas: envasesLisas / ENVASES_POR_GRUESA,
+          cantPaletasDecoradas: modelo.paletasDecoradas,
+          cantCamadasDecoradas: modelo.paletasDecoradas * molde.numeroCamadas,
+          cantEnvasesDecoradas: envasesDecoradas,
+          cantGruesasDecoradas: envasesDecoradas / ENVASES_POR_GRUESA,
+        },
+      ];
+    });
+    try {
+      const response = await fetch(
+        `http://127.0.0.1:8000/produccion/${registro.idProduccion}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            fecha,
+            turno,
+            tecnico,
+            cantEnvasesD1: cantidades[0],
+            cantEnvasesD2: cantidades[1],
+            cantEnvasesD3: cantidades[2],
+            cantEnvasesD4: cantidades[3],
+            totalEnvases: totalEnvasesMaquinas,
+            totalGruesas: gruesasMaquinas,
+            salidas,
+            resultado: {
+              totalGruesasLisas:
+                resumenProduccion.envasesLisa / ENVASES_POR_GRUESA,
+              totalGruesasDecoradas:
+                resumenProduccion.envasesDecorados / ENVASES_POR_GRUESA,
+              eficienciaProductiva: 100 - deficienciaProductiva,
+              deficienciaProductiva,
+              observaciones,
+            },
+          }),
+        },
+      );
+      if (!response.ok) {
+        const data = await response.json().catch(() => null);
+        throw new Error(
+          data?.detail ?? `Error al actualizar producción: ${response.status}`,
+        );
+      }
+      navigate("/gestion-productiva");
+    } catch (submitError) {
+      setError(
+        submitError instanceof Error
+          ? submitError.message
+          : "Error al actualizar producción.",
+      );
+    }
   };
   const resumenProduccion = modelosForm.reduce(
     (resumen, modelo) => {
@@ -181,7 +337,7 @@ const FormularioEdicion = ({ registro }: { registro: RegistroProduccion }) => {
   return (
     <form className={`${styles.form} content`} onSubmit={handleSubmit}>
       <HeaderForm />
-      <h3 className={styles.title}>Editar Registro #{registro.id_registro}</h3>
+      <h3 className={styles.title}>Editar Registro #{registro.idProduccion}</h3>
       <section className={styles.formData}>
         <fieldset className={styles.identifyWrapper}>
           <legend>Datos de Identificación</legend>

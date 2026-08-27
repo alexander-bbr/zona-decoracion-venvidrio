@@ -325,9 +325,7 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
   );
   const totalEnvasesPerdidos = Math.max(
     0,
-    totalEnvasesMaquinas -
-      resumenProduccion.envasesDecorados -
-      resumenProduccion.envasesLisa,
+    totalEnvasesMaquinas - resumenProduccion.envasesDecorados,
   );
   const gruesasMaquinas = totalEnvasesMaquinas / ENVASES_POR_GRUESA;
   const deficienciaProductiva = gruesasMaquinas
@@ -473,29 +471,20 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
               total={resumenProduccion.envasesDecorados}
               gruesas={resumenProduccion.envasesDecorados / ENVASES_POR_GRUESA}
             />
-            <ResumenColumn
-              label="Total de Envases en Producción Lisa"
-              total={resumenProduccion.envasesLisa}
-              gruesas={resumenProduccion.envasesLisa / ENVASES_POR_GRUESA}
-            />
+
             <ResumenColumn
               label="Total de Envases Perdidos"
               total={totalEnvasesPerdidos}
               gruesas={totalEnvasesPerdidos / ENVASES_POR_GRUESA}
             />
+
+            <ResumenColumn
+              label="Total de Envases en Producción Lisa"
+              total={resumenProduccion.envasesLisa}
+              gruesas={resumenProduccion.envasesLisa / ENVASES_POR_GRUESA}
+            />
           </div>
           <div className={styles.productivitySummary}>
-            <Campo label="Deficiencia Productiva" id="deficienciaProductiva">
-              <div className={styles.percentageInput}>
-                <input
-                  id="deficienciaProductiva"
-                  type="number"
-                  readOnly
-                  value={Number(deficienciaProductiva.toFixed(2))}
-                />
-                <span>%</span>
-              </div>
-            </Campo>
             <Campo label="Eficiencia Productiva" id="eficienciaProductiva">
               <div className={styles.percentageInput}>
                 <input
@@ -503,6 +492,18 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
                   type="number"
                   readOnly
                   value={Number((100 - deficienciaProductiva).toFixed(2))}
+                />
+                <span>%</span>
+              </div>
+            </Campo>
+
+            <Campo label="Deficiencia Productiva" id="deficienciaProductiva">
+              <div className={styles.percentageInput}>
+                <input
+                  id="deficienciaProductiva"
+                  type="number"
+                  readOnly
+                  value={Number(deficienciaProductiva.toFixed(2))}
                 />
                 <span>%</span>
               </div>

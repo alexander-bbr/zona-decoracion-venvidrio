@@ -227,9 +227,7 @@ export const RegistrarProduccion = () => {
   );
   const totalEnvasesPerdidos = Math.max(
     0,
-    totalEnvasesMaquinas -
-      resumenProduccion.envasesDecorados -
-      resumenProduccion.envasesLisa,
+    totalEnvasesMaquinas - resumenProduccion.envasesDecorados,
   );
   const gruesasMaquinas = totalEnvasesMaquinas / ENVASES_POR_GRUESA;
   const gruesasPerdidas = totalEnvasesPerdidos / ENVASES_POR_GRUESA;
@@ -433,28 +431,7 @@ export const RegistrarProduccion = () => {
                 />
               </div>
             </div>
-            <div className={styles.summaryColumn}>
-              <div className={styles.inputWrapper}>
-                <label htmlFor="totalEnvasesLisa">
-                  Total de Envases en Producción Lisa
-                </label>
-                <input
-                  id="totalEnvasesLisa"
-                  readOnly
-                  value={formatNumber(resumenProduccion.envasesLisa)}
-                />
-              </div>
-              <div className={styles.inputWrapper}>
-                <label htmlFor="cantidadGruesasLisa">Cantidad en Gruesas</label>
-                <input
-                  id="cantidadGruesasLisa"
-                  readOnly
-                  value={formatNumber(
-                    resumenProduccion.envasesLisa / ENVASES_POR_GRUESA,
-                  )}
-                />
-              </div>
-            </div>
+
             <div className={styles.summaryColumn}>
               <div className={styles.inputWrapper}>
                 <label htmlFor="totalEnvasesPerdidos">
@@ -481,23 +458,31 @@ export const RegistrarProduccion = () => {
                 />
               </div>
             </div>
-          </div>
-          <div className={styles.productivitySummary}>
-            <div className={styles.inputWrapper}>
-              <label htmlFor="deficienciaProductiva">
-                Deficiencia Productiva
-              </label>
-              <div className={styles.percentageInput}>
+
+            <div className={styles.summaryColumn}>
+              <div className={styles.inputWrapper}>
+                <label htmlFor="totalEnvasesLisa">
+                  Total de Envases en Producción Lisa
+                </label>
                 <input
-                  id="deficienciaProductiva"
-                  type="number"
-                  step="0.01"
+                  id="totalEnvasesLisa"
                   readOnly
-                  value={Number(deficienciaProductiva.toFixed(2))}
+                  value={formatNumber(resumenProduccion.envasesLisa)}
                 />
-                <span>%</span>
+              </div>
+              <div className={styles.inputWrapper}>
+                <label htmlFor="cantidadGruesasLisa">Cantidad en Gruesas</label>
+                <input
+                  id="cantidadGruesasLisa"
+                  readOnly
+                  value={formatNumber(
+                    resumenProduccion.envasesLisa / ENVASES_POR_GRUESA,
+                  )}
+                />
               </div>
             </div>
+          </div>
+          <div className={styles.productivitySummary}>
             <div className={styles.inputWrapper}>
               <label htmlFor="eficienciaProductiva">
                 Eficiencia Productiva
@@ -509,6 +494,22 @@ export const RegistrarProduccion = () => {
                   step="0.01"
                   readOnly
                   value={Number(eficienciaProductiva.toFixed(2))}
+                />
+                <span>%</span>
+              </div>
+            </div>
+
+            <div className={styles.inputWrapper}>
+              <label htmlFor="deficienciaProductiva">
+                Deficiencia Productiva
+              </label>
+              <div className={styles.percentageInput}>
+                <input
+                  id="deficienciaProductiva"
+                  type="number"
+                  step="0.01"
+                  readOnly
+                  value={Number(deficienciaProductiva.toFixed(2))}
                 />
                 <span>%</span>
               </div>

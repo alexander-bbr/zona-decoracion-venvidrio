@@ -7,10 +7,42 @@ JSON (Envía el Frontend):
   "fecha": "2026-08-23",
   "turno": "A",
   "tecnico": "Daniel Pérez",
-  "cantEnvasesD1": 10,
-  "cantEnvasesD2": 5,
-  "cantEnvasesD3": 0,
-  "cantEnvasesD4": 0,
+  "maquina1": [
+    {
+      cantEnvase: 100,
+      tipoMolde: GX01345
+    },
+    {
+      cantEnvase: 2000,
+      tipoMolde: GX0440
+    }
+  ],
+  "maquina2": [
+    {
+      cantEnvase: 100,
+      tipoMolde: GX01345
+    }
+  ],
+  "maquina3": [
+    {
+      cantEnvase: 100,
+      tipoMolde: GX01345
+    }
+  ],
+  "maquina4": [
+    {
+      cantEnvase: 100,
+      tipoMolde: GX01345
+    },
+    {
+      cantEnvase: 100,
+      tipoMolde: GX01345
+    },
+  ],
+  "cantEnvasesD1": 2100,
+  "cantEnvasesD2": 100,
+  "cantEnvasesD3": 100,
+  "cantEnvasesD4": 200,
   "totalEnvases": 15,
   "totalGruesas": 0.10,
   "salidas": [
@@ -33,6 +65,9 @@ JSON (Envía el Frontend):
     "eficienciaProductiva": 95.00,
     "deficienciaProductiva": 5.00
     "observaciones": "causa"
+    "Justificantes": [
+      1, 2, 4
+    ]
   }
 }
 
@@ -200,5 +235,21 @@ Estructura de los datos que recibirá:
         "numeroCamadas": 0,
         "numeroEnvases": 0,
         "numeroGruesas": 0.00
+    }
+]
+
+
+---
+
+Ruta 6: Inventario de Justificantes (Para el Select)
+Endpoint: http://127.0.0.1:8000/produccion/justificantes
+Método: GET
+
+Estructura de los datos que recibirá:
+[
+    {
+        "idJustificante": 1,
+        "etiqueta": "Desperfecto en el decorado",
+        "descripcion": "Desperfecto en los envases producto de un mal decorado de la máquina",
     }
 ]

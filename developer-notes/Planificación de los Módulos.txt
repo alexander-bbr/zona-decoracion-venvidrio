@@ -1,4 +1,4 @@
-5. Gestión Productiva
+## Gestión Productiva
 
   - Producción:
 
@@ -43,7 +43,10 @@
       - Observaciones (Aquí describen el por qué de las Pérdidas de manera general).
     
 
-  - Moldes:
+---
+
+
+## Gestión de Moldes:
 
     - Vista:
 
@@ -58,3 +61,11 @@
       - Número de Camadas.
       - Número de Envases.
       - Número de Gruesas (se calcula automáticamente: Número de Gruesas = Número de envases / 144).
+
+
+---
+
+
+## Gestión de Justificantes
+
+

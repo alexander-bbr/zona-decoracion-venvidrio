@@ -1,5 +1,13 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Servidor: 127.0.0.1
+-- Tiempo de generación: 30-08-2026 a las 15:26:49
+-- Versión del servidor: 10.4.32-MariaDB
+-- Versión de PHP: 8.2.12
+
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -14,6 +22,7 @@ SET time_zone = "+00:00";
 --
 CREATE DATABASE IF NOT EXISTS `venvidrio_zona_decoracion` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE `venvidrio_zona_decoracion`;
+
 -- --------------------------------------------------------
 
 --
@@ -559,9 +568,9 @@ CREATE TABLE `gestion_productiva_entrada` (
 --
 
 INSERT INTO `gestion_productiva_entrada` (`id_produccion`, `fecha`, `turno`, `tecnico`, `cant_envases_d1`, `cant_envases_d2`, `cant_envases_d3`, `cant_envases_d4`, `total_envases`, `total_gruesas`) VALUES
-(257, '2026-08-26', 'string', 'string', 0, 0, 0, 0, 0, 0.00),
+(257, '2026-08-26', 'string', 'Javier Gonzalez', 2000, 2000, 2000, 2000, 8000, 55.56),
 (258, '2026-08-13', 'A', 'Maria Lopez', 0, 0, 0, 0, 0, 0.00),
-(259, '2026-08-07', 'A', 'Maria Lopez', 11111, 111111, 11111, 1111, 134444, 933.64);
+(259, '2026-08-07', 'A', 'Maria Lopez', 3100, 1000, 1000, 1000, 6100, 42.36);
 
 -- --------------------------------------------------------
 
@@ -584,9 +593,9 @@ CREATE TABLE `gestion_productiva_resultado` (
 --
 
 INSERT INTO `gestion_productiva_resultado` (`id_resultado`, `id_produccion`, `total_gruesas_lisas`, `total_gruesas_decoradas`, `eficiencia_productiva`, `deficiencia_productiva`, `observaciones`) VALUES
-(257, 257, 0.00, 0.00, 0.00, 0.00, 'string'),
+(257, 257, 0.00, 42.36, 76.25, 23.75, ''),
 (258, 258, 0.00, 39.93, 100.00, 0.00, ''),
-(259, 259, 79.86, 79.86, 17.11, 82.89, '');
+(259, 259, 0.00, 42.36, 100.00, 0.00, '');
 
 -- --------------------------------------------------------
 
@@ -609,6 +618,14 @@ CREATE TABLE `gestion_productiva_salida` (
   `cant_gruesas_decoradas` decimal(10,2) DEFAULT 0.00
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `gestion_productiva_salida`
+--
+
+INSERT INTO `gestion_productiva_salida` (`id_eficiencia`, `modelo_molde`, `id_produccion`, `total_paletas`, `cant_paletas_lisas`, `cant_camadas_lisas`, `cant_envases_lisas`, `cant_gruesas_lisas`, `cant_paletas_decoradas`, `cant_camadas_decoradas`, `cant_envases_decoradas`, `cant_gruesas_decoradas`) VALUES
+(514, 2, 259, 2, 0, 0, 0, 0.00, 2, 14, 6100, 42.36),
+(515, 2, 257, 2, 0, 0, 0, 0.00, 2, 14, 6100, 42.36);
+
 -- --------------------------------------------------------
 
 --
@@ -629,8 +646,11 @@ CREATE TABLE `moldes` (
 --
 
 INSERT INTO `moldes` (`id_molde`, `Nombre`, `Descripcion`, `numero_camadas`, `numero_envases`, `numero_gruesas`) VALUES
-(1, 'GV-2000', 'Pepsi', 10, 5750, 39.93),
-(2, 'GV-2000', 'Pepsi', 10, 5750, 39.93);
+(1, 'GX01944', 'POLAR LIGHT', 10, 5750, 39.93),
+(2, 'GX01944', 'POLARCITA 222 ML', 10, 5750, 39.93),
+(4, 'GV02156', 'GOLDEN 350 ML', 8, 3784, 26.28),
+(5, 'GV02156', 'PEPSI 350 ML', 8, 3784, 26.28),
+(6, 'GX01335', 'CERVEZA 330,0 RET.', 8, 3520, 24.44);
 
 -- --------------------------------------------------------
 
@@ -678,17 +698,39 @@ CREATE TABLE `permisos_usuarios` (
 --
 
 INSERT INTO `permisos_usuarios` (`id_permisou`, `id_usuario`, `id_permisom`) VALUES
-(115, 10, 5),
-(116, 10, 6),
-(117, 10, 11),
-(118, 10, 12),
-(119, 10, 13),
-(120, 10, 14),
-(121, 10, 1),
-(122, 10, 2),
-(123, 10, 3),
-(124, 10, 7),
-(125, 10, 4);
+(126, 11, 1),
+(127, 11, 2),
+(128, 11, 3),
+(129, 11, 7),
+(130, 11, 4),
+(131, 11, 5),
+(132, 11, 6),
+(133, 11, 11),
+(134, 11, 12),
+(135, 11, 13),
+(136, 11, 14),
+(137, 10, 5),
+(138, 10, 6),
+(139, 10, 11),
+(140, 10, 12),
+(141, 10, 13),
+(142, 10, 14),
+(143, 10, 1),
+(144, 10, 2),
+(145, 10, 3),
+(146, 10, 7),
+(147, 10, 4),
+(148, 12, 1),
+(149, 12, 2),
+(150, 12, 3),
+(151, 12, 7),
+(152, 12, 4),
+(153, 12, 5),
+(154, 12, 6),
+(155, 12, 11),
+(156, 12, 12),
+(157, 12, 13),
+(158, 12, 14);
 
 -- --------------------------------------------------------
 
@@ -838,7 +880,9 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id_usuario`, `cedula`, `carnet_usuario`, `contrasena`, `nombres`, `apellidos`, `telefono`, `correo`, `rol`, `activo_usuario`, `creado_en`) VALUES
-(10, '30670857', '111', '$argon2id$v=19$m=65536,t=3,p=4$CkFIaY1RivHeu9e6NyaEsA$rtdZu3HTE9nKFkeXi/QguC7E5wxIKoaruCOY7ojW17U', 'Daniel Alexander', 'Perez Moreno', '04167383181', 'd30670857@gmail.com', 'administrador', 1, '2026-08-09 14:46:05');
+(10, '30670857', '111', '$argon2id$v=19$m=65536,t=3,p=4$CkFIaY1RivHeu9e6NyaEsA$rtdZu3HTE9nKFkeXi/QguC7E5wxIKoaruCOY7ojW17U', 'Daniel Alexander', 'Perez Moreno', '0416-7383181', 'd30670857@gmail.com', 'administrador', 1, '2026-08-09 14:46:05'),
+(11, '30717851', '000', '$argon2id$v=19$m=65536,t=3,p=4$iNGa877XmlOqdU5JiRHC2A$K1niqF75/hqWw+7nz6zUnPxkI2rRrju9nDGHqJ8hoBI', 'Miguel Alexander', 'Bethancourt Briceño', '0412-1986816', 'mbethancourt2005@gmail.com', 'administrador', 1, '2026-08-27 01:12:11'),
+(12, '30670913', '222', '$argon2id$v=19$m=65536,t=3,p=4$plQq5bw3BmCsNQYgpHTO+Q$obEOZpk7qGRmCP0lfmOYk7ZvAmxLqiDCvNjNRw0wzsw', 'Fabio', 'Romero Vera', '0416-3660482', 'fabioromero7809@gmail.com', 'administrador', 1, '2026-08-27 01:15:12');
 
 --
 -- Índices para tablas volcadas
@@ -1213,13 +1257,13 @@ ALTER TABLE `gestion_productiva_resultado`
 -- AUTO_INCREMENT de la tabla `gestion_productiva_salida`
 --
 ALTER TABLE `gestion_productiva_salida`
-  MODIFY `id_eficiencia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=514;
+  MODIFY `id_eficiencia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=516;
 
 --
 -- AUTO_INCREMENT de la tabla `moldes`
 --
 ALTER TABLE `moldes`
-  MODIFY `id_molde` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_molde` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `permisos_modulos`
@@ -1231,7 +1275,7 @@ ALTER TABLE `permisos_modulos`
 -- AUTO_INCREMENT de la tabla `permisos_usuarios`
 --
 ALTER TABLE `permisos_usuarios`
-  MODIFY `id_permisou` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=126;
+  MODIFY `id_permisou` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=159;
 
 --
 -- AUTO_INCREMENT de la tabla `pintura_inventario`
@@ -1267,7 +1311,7 @@ ALTER TABLE `produccion_lisa_salida`
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- Restricciones para tablas volcadas

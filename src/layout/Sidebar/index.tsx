@@ -89,6 +89,13 @@ export const Sidebar = () => {
           </li>
         )}
 
+        {/* Gestion de Justificantes - visible si tiene el permiso de gestion_justificantes (gestion_productiva) */}
+        {hasAnyPermission("gestion_productiva", ["gestion_moldes"]) && (
+          <li>
+            <Link to="/gestion-justificantes">Gestión de Justificantes</Link>
+          </li>
+        )}
+
         {/* Gestión de Usuarios - visible si tiene el permiso de ver_usuarios (gestion_usuarios)*/}
         {hasAnyPermission("gestion_usuarios", ["ver_usuarios"]) && (
           <li>

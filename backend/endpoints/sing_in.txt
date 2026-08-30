@@ -51,6 +51,10 @@ JSON (Respuesta en caso de éxito):
       "accion": "gestion_moldes"
     },
     {
+      "modulo": "gestion_productiva",
+      "accion": "gestion_justificantes"
+    },
+    {
       "modulo": "dashboard",
       "accion": "ver"
     },

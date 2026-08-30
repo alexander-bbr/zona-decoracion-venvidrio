@@ -1,0 +1,162 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 40px;
+  max-width: 700px;
+  width: 100%;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  margin: auto;
+}
+
+.formData {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.title {
+  color: var(--primary-text-color);
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-align: center;
+  margin: 0rem 0 1rem;
+}
+
+.fieldset {
+  border-radius: 10px;
+  padding: 1.5rem;
+  border: 1px solid #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.legend {
+  color: #333;
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 0 0.95rem;
+}
+
+.inputWrapper {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.inputWrapper label {
+  color: #333;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.requireSymbol {
+  color: #e74c3c;
+}
+
+.inputWrapper input,
+.inputWrapper textarea {
+  padding: 12px 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  font-family: inherit;
+  color: #333;
+  background-color: white;
+}
+
+.inputWrapper input:focus,
+.inputWrapper textarea:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.inputWrapper input:hover,
+.inputWrapper textarea:hover {
+  border-color: #3498db;
+}
+
+.inputWrapper textarea {
+  resize: none;
+}
+
+.loading {
+  text-align: center;
+  color: #6b7280;
+  padding: 2rem;
+}
+
+/* Botones del formulario */
+.buttonWrapper {
+  display: flex;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.saveButton,
+.resetButton {
+  flex: 1;
+  padding: 14px;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.saveButton {
+  background: #22bb6e;
+  color: white;
+}
+
+.saveButton:hover:not(:disabled) {
+  background: #1ea863;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(34, 187, 110, 0.3);
+}
+
+.saveButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.resetButton {
+  background: #888c8f;
+  color: white;
+}
+
+.resetButton:hover:not(:disabled) {
+  background: #6b6c6e;
+  transform: translateY(-2px);
+}
+
+.resetButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.error {
+  color: #b42318;
+  font-weight: 600;
+  text-align: center;
+  padding: 0.5rem;
+}
+
+@media (max-width: 760px) {
+  .form {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .form {
+    padding: 0.5rem;
+  }
+}

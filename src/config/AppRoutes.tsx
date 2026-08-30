@@ -33,6 +33,9 @@ import { EditarMolde } from "../modules/GestionMoldes/EditarMolde";
 
 // Módulo - No Autorizado
 import { Unauthorized } from "../modules/Unauthorized";
+import { GestionJustificantes } from "../modules/GestionJustificantes";
+import { RegistrarJustificante } from "../modules/GestionJustificantes/RegistrarJustificante";
+import { EditarJustificante } from "../modules/GestionJustificantes/EditarJustificante";
 
 export const AppRoutes = () => {
   return (
@@ -205,10 +208,7 @@ export const AppRoutes = () => {
           element={
             <PrivateRoute
               requiredPermissions={[
-                {
-                  modulo: "gestion_productiva",
-                  accion: "gestion_moldes",
-                },
+                { modulo: "gestion_productiva", accion: "gestion_moldes" },
               ]}
             >
               <RegistrarMolde />
@@ -224,6 +224,49 @@ export const AppRoutes = () => {
               ]}
             >
               <EditarMolde />
+            </PrivateRoute>
+          }
+        />
+      </Route>
+
+      {/* 
+        Módulo - Gestión de Justificantes
+        EL PADRE: Requiere el permiso gestion_justificantes del módulo gestion_productiva
+      */}
+      <Route
+        path="/gestion-justificantes"
+        element={
+          <PrivateRoute
+            requiredPermissions={[
+              { modulo: "gestion_productiva", accion: "gestion_moldes" },
+            ]}
+            requireAnyPermission={true}
+          >
+            <GestionJustificantes />
+          </PrivateRoute>
+        }
+      >
+        <Route
+          path="registrar-justificante"
+          element={
+            <PrivateRoute
+              requiredPermissions={[
+                { modulo: "gestion_productiva", accion: "gestion_moldes" },
+              ]}
+            >
+              <RegistrarJustificante />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="editar-justificante/:id"
+          element={
+            <PrivateRoute
+              requiredPermissions={[
+                { modulo: "gestion_productiva", accion: "gestion_moldes" },
+              ]}
+            >
+              <EditarJustificante />
             </PrivateRoute>
           }
         />

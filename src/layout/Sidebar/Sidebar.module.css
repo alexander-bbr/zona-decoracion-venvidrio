@@ -2,7 +2,7 @@
   width: 250px;
   background-color: var(--third-text-color);
   box-shadow: 2px 0 24px rgba(44, 62, 80, 0.08);
-  padding: 2.2rem 1rem;
+  padding: 2.2rem 0.5rem;
 }
 
 /* === INFORMACIÓN DEL USUARIO === */

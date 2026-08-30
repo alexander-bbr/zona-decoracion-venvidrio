@@ -97,13 +97,10 @@ export const GestionProductiva = () => {
 
   return (
     <section className={styles.container}>
-      {/* Título del módulo (siempre visible) */}
       <header className={styles.moduleHeader}>
         <h2 className={styles.moduleTitle}>Gestión Productiva</h2>
         <p className={styles.moduleSubtitle}>
-          {isRoot
-            ? "Gestión del historial de producción"
-            : "Gestión de Producción"}
+          Historial de producción en la Zona de Decoración
         </p>
       </header>
 

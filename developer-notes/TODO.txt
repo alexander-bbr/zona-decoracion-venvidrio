@@ -64,3 +64,12 @@
 
   - Estilizar los mensajes de envío de los formularios (exito y error)
   - Tengo que implementar la validación de los estándares de seguridad de la contraseña.
+
+
+---
+
+
+## General
+
+  - Verificar que en todos los campos numéricos, hayan como máximo 2 decimales.
+  - Hacer Responsive la Aplicación.

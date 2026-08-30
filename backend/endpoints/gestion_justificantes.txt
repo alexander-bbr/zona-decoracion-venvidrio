@@ -1,0 +1,91 @@
+MÓDULO: GESTIÓN JUSTIFICANTES
+=========================
+
+
+Ruta 1: Registrar Justificantes
+Endpoint:  http://127.0.0.1:8000/api/gestion-justificantes
+Método: POST
+
+JSON (Envía el Frontend):
+{
+    "etiqueta": "Desperfecto en el Decorado",
+    "descripcion": "Desperfecto en los envases producto de un mal decorado de la máquina",
+}
+
+JSON (Respuesta en caso de éxito):
+{
+    "status": "Registro insertado con éxito",
+    "id": 1
+}
+
+JSON (Respuesta en caso de error):
+{
+    "detail": "Error en la validación de los datos enviados"
+}
+
+
+---
+
+
+Ruta 2: Editar Justificantes
+Endpoint: http://127.0.0.1:8000/api/gestion-justificantes/{id_justificante}
+Método: PUT
+
+JSON (Envía el Frontend):
+{
+    "etiqueta": "Desperfecto en el Decorado",
+    "descripcion": "Desperfecto en los envases producto de un mal decorado de la máquina",
+}
+
+JSON (Respuesta en caso de éxito):
+{
+    "status": "Registro actualizado con éxito",
+    "id": 1
+}
+
+JSON (Respuesta en caso de error):
+{
+    "detail": "No se pudo actualizar porque el Justificante no fue encontrado."
+}
+
+
+---
+
+
+Ruta 3: Listado de Justificante (Vista Principal)
+Endpoint: http://127.0.0.1:8000/api/gestion-justificante
+Método: GET
+
+Estructura de los datos que recibirá:
+[
+    {
+        "idJustificante": 1,
+        "etiqueta": "Desperfecto en el Decorado",
+        "descripcion": "Desperfecto en los envases producto de un mal decorado de la máquina",
+    },
+    {
+        "idJustificante": 2,
+        "nombre": "Rotura por malcocido del envase",
+        "descripcion": null,
+    }
+]
+
+
+---
+
+
+Ruta 4: Ver Molde por ID (Para Editar)
+Endpoint: http://127.0.0.1:8000/api/gestion-justificante/{id_justificante}
+Método: GET
+
+Estructura de los datos que recibirá:
+{
+    "idJustificante": 1,
+    "nombre": "Desperfecto en el Decorado",
+    "descripcion": "Desperfecto en los envases producto de un mal decorado de la máquina",
+}
+
+JSON (Respuesta en caso de error):
+{
+    "detail": "El Justificante especificado no existe."
+}

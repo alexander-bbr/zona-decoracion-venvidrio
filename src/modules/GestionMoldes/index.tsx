@@ -69,7 +69,7 @@ export const GestionMoldes = () => {
       <header className={styles.moduleHeader}>
         <h2 className={styles.moduleTitle}>Gestión de Moldes</h2>
         <p className={styles.moduleSubtitle}>
-          {isRoot ? "Gestión del catálogo de moldes" : "Gestión de Moldes"}
+          Catálogo de los moldes disponibles en la aplicación
         </p>
       </header>
 

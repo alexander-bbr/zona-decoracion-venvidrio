@@ -1,0 +1,284 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 40px;
+  max-width: 900px;
+  width: 100%;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  margin: auto;
+}
+
+.formData {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.title {
+  color: var(--primary-text-color);
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-align: center;
+  margin: 0rem 0 1rem;
+}
+
+/* Campos */
+.fieldset {
+  border-radius: 10px;
+  padding: 1.5rem;
+  border: 1px solid #e0e0e0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.legend {
+  color: #333;
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 0 0.95rem;
+}
+
+.inputWrapper {
+  flex: 1 1 200px;
+  max-width: calc(33.333% - 10px);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.inputWrapper label {
+  color: #333;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.requireSymbol {
+  color: #e74c3c;
+}
+
+.inputWrapper input,
+.inputWrapper select,
+.inputWrapper textarea {
+  padding: 12px 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  font-family: inherit;
+  color: #333;
+  background-color: white;
+}
+
+.inputWrapper input:focus,
+.inputWrapper select:focus,
+.inputWrapper textarea:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.inputWrapper input:hover,
+.inputWrapper select:hover,
+.inputWrapper textarea:hover {
+  border-color: #3498db;
+}
+
+.inputWrapper textarea {
+  resize: none;
+}
+
+/* Checkbox Estado */
+.checkboxWrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding-top: 6px;
+}
+
+.checkboxEstado {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: #4a6cf7;
+}
+
+.estadoLabel {
+  font-weight: 500 !important;
+  color: #333 !important;
+  cursor: pointer;
+}
+
+.loading {
+  text-align: center;
+  color: #6b7280;
+  padding: 2rem;
+}
+
+/* Permisología */
+.permisosDescripcion {
+  color: var(--secundary-color);
+  font-size: 0.95rem;
+  width: 100%;
+}
+
+.modulosContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3rem;
+  margin: 1.5rem 0 0.5rem;
+  justify-content: space-around;
+  width: 100%;
+}
+
+.modulo {
+  flex: 1 1 200px;
+  min-width: 150px;
+}
+
+.moduloTitulo {
+  text-align: center;
+  font-size: 1rem;
+  color: #495057;
+  border-bottom: 2px solid #e9ecef;
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.8rem;
+  text-transform: capitalize;
+}
+
+.permisos {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.checkboxGrupo {
+  display: flex;
+  align-items: center;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: #495057;
+  user-select: none;
+}
+
+.checkboxLabel:hover {
+  color: #1a1a2e;
+}
+
+.checkboxInput {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: #4a6cf7;
+}
+
+.checkboxInput:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.checkboxInput:disabled + .checkboxTexto {
+  opacity: 0.6;
+}
+
+.checkboxTexto {
+  font-size: 0.9rem;
+  text-transform: capitalize;
+}
+
+.sinPermisos {
+  color: #6c757d;
+  font-style: italic;
+  width: 100%;
+  text-align: center;
+}
+
+.loadingPermisos {
+  color: #6c757d;
+  text-align: center;
+  padding: 1rem;
+  width: 100%;
+}
+
+/* Botones del formulario */
+.buttonWrapper {
+  display: flex;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.saveButton,
+.resetButton {
+  flex: 1;
+  padding: 14px;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.saveButton {
+  background: #22bb6e;
+  color: white;
+}
+
+.saveButton:hover:not(:disabled) {
+  background: #1ea863;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(34, 187, 110, 0.3);
+}
+
+.saveButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.resetButton {
+  background: #888c8f;
+  color: white;
+}
+
+.resetButton:hover:not(:disabled) {
+  background: #6b6c6e;
+  transform: translateY(-2px);
+}
+
+.resetButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.error {
+  color: #b42318;
+  font-weight: 600;
+  text-align: center;
+  padding: 0.5rem;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .form {
+    padding: 1.5rem;
+  }
+  .inputWrapper {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .form {
+    padding: 1rem;
+  }
+}

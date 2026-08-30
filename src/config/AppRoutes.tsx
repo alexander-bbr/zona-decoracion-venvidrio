@@ -32,6 +32,8 @@ import { EditarJustificante } from "../modules/GestionJustificantes/EditarJustif
 
 // Módulo - Gestión de Usuarios
 import { GestionUsuarios } from "../modules/GestionUsuarios";
+import { RegistrarUsuario } from "../modules/GestionUsuarios/RegistrarUsuario";
+import { EditarUsuario } from "../modules/GestionUsuarios/EditarUsuario";
 
 // Módulo - Iniciar Sesión
 import { SignIn } from "../modules/SignIn";
@@ -286,7 +288,10 @@ export const AppRoutes = () => {
         />
       </Route>
 
-      {/* Módulo - Gestión de Usuarios - Requiere permisos específicos */}
+      {/* 
+        Módulo - Gestión de Usuarios
+        EL PADRE: Requiere el permiso ver_usuarios del módulo gestion_usuarios
+      */}
       <Route
         path="/gestion-usuarios"
         element={
@@ -294,11 +299,37 @@ export const AppRoutes = () => {
             requiredPermissions={[
               { modulo: "gestion_usuarios", accion: "ver_usuarios" },
             ]}
+            requireAnyPermission={true}
           >
             <GestionUsuarios />
           </PrivateRoute>
         }
-      />
+      >
+        <Route
+          path="registrar-usuario"
+          element={
+            <PrivateRoute
+              requiredPermissions={[
+                { modulo: "gestion_usuarios", accion: "crear_editar" },
+              ]}
+            >
+              <RegistrarUsuario />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="editar-usuario/:id"
+          element={
+            <PrivateRoute
+              requiredPermissions={[
+                { modulo: "gestion_usuarios", accion: "crear_editar" },
+              ]}
+            >
+              <EditarUsuario />
+            </PrivateRoute>
+          }
+        />
+      </Route>
     </Routes>
   );
 };

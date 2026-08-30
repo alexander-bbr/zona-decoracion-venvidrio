@@ -5,117 +5,148 @@
 }
 
 .moduleHeader {
-  margin-bottom: 2rem;
+  margin-bottom: 32px;
+  padding-bottom: 16px;
 }
 
 .moduleTitle {
-  font-size: 1.8rem;
+  font-size: 28px;
   font-weight: 600;
-  color: #1a1a2e;
-  margin-bottom: 0.5rem;
+  color: #1f2937;
+  margin: 0 0 4px 0;
 }
 
 .moduleSubtitle {
-  color: #6c757d;
-  font-size: 1rem;
+  font-size: 16px;
+  color: #6b7280;
   margin: 0;
 }
 
-.gestion {
-  margin: auto;
+/* Sub navegación (cuando estás en un submódulo) */
+.subNav {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 4rem;
+  padding: 12px 16px;
+  background: #f9fafb;
+  border-radius: 8px;
+}
+
+:global(#subNav) {
+  margin-bottom: 4rem !important;
+}
+
+.subNavLink {
+  color: #6b7280;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.subNavLink:hover {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.subNavTitle {
+  font-weight: 600;
+  color: #1f2937;
+  font-size: 16px;
+}
+
+.gestionUsuarios {
+  padding: 20px;
   width: 90%;
-  background: white;
+  margin: 0 auto;
+  background-color: #fff;
   border-radius: 16px;
-  padding: 1.5rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
-.controls {
+/* CONTROLS PANEL */
+.controlPanel {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 0.4rem 0 2.3rem;
-  flex-wrap: wrap;
   gap: 1rem;
+  padding: 1.25rem;
+  margin: 0rem 0 1.5rem;
 }
 
-.subtitle {
-  font-size: 1.4rem;
-  font-weight: bold;
-  color: var(--primary-text-color);
-  margin-left: 1rem;
+.title {
+  color: #1f2937;
+  font-size: 1.5rem;
 }
 
-.buttons {
-  display: flex;
-  gap: 0.75rem;
-}
-
-.btnAgregar {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.6rem 1.2rem;
+.registerButton {
+  border: 0;
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
   background: var(--primary-color);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-weight: 500;
+  color: #fff;
   cursor: pointer;
-  transition: background 0.2s;
   font-weight: 600;
+  transition: background 0.3s ease;
 }
 
-.btnAgregar:hover {
-  background: rgb(41, 91, 165);
-}
-
-.btnAgregar svg {
-  width: 20px;
-  height: 20px;
+.registerButton:hover {
+  background: #2563eb;
 }
 
 .tableContainer {
   overflow-x: auto;
 }
 
-.usersTable {
+.table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.95rem;
+  min-width: 900px;
 }
 
-.usersTable thead {
+.table th {
+  padding: 0.8rem 1rem;
   background: #5181b1;
-  color: var(--third-text-color);
-}
-
-.usersTable th {
+  color: #fff;
   text-align: center;
-  padding: 0.75rem 1rem;
-  font-weight: 600;
-  border-bottom: 2px solid #dee2e6;
   white-space: nowrap;
 }
 
-.usersTable td {
-  padding: 0.75rem 1rem;
-  border-bottom: 1px solid #e9ecef;
-  font-size: 0.85rem;
+.table td {
+  padding: 0.8rem 1rem;
+  border-bottom: 1px solid #e5e7eb;
+  color: #374151;
   text-align: center;
 }
 
-.usersTable tr:nth-child(2) {
-  background-color: #ececec;
+.clickableRow {
+  transition: background 0.2s;
 }
 
-.filaClickable {
+.rowEditable {
   cursor: pointer;
-  transition: background 0.3s;
 }
 
-.filaClickable:hover {
-  background: #d4d8da;
+.rowEditable:hover {
+  background: #eef5fc;
+}
+
+.rowReadOnly {
+  cursor: default;
+  opacity: 0.8;
+}
+
+.rolBadge {
+  display: inline-block;
+  padding: 0.2rem 0.8rem;
+  background: #e3f2fd;
+  color: #1565c0;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-transform: capitalize;
 }
 
 .estadoActivo {
@@ -136,4 +167,34 @@
   border-radius: 20px;
   font-size: 0.85rem;
   font-weight: 500;
+}
+
+.loading {
+  text-align: center;
+  color: #6b7280;
+  padding: 2rem;
+}
+
+.error {
+  color: #b42318;
+  font-weight: 600;
+  text-align: center;
+  padding: 1rem;
+}
+
+.emptyMessage {
+  text-align: center;
+  color: #6b7280;
+  padding: 3rem;
+  font-size: 1.1rem;
+}
+
+@media (max-width: 768px) {
+  .controlPanel {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .registerButton {
+    width: 100%;
+  }
 }

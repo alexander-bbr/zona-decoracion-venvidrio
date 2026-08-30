@@ -337,8 +337,8 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
       <HeaderForm />
       <h3 className={styles.title}>Editar Registro #{registro.idProduccion}</h3>
       <section className={styles.formData}>
-        <fieldset className={styles.identifyWrapper}>
-          <legend>Datos de Identificación</legend>
+        <fieldset className={`${styles.fieldset} ${styles.identifyWrapper}`}>
+          <legend className={styles.legend}>Datos de Identificación</legend>
           <Campo label="Turno" id="turno">
             <select
               id="turno"
@@ -370,13 +370,20 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
             />
           </Campo>
         </fieldset>
-        <fieldset>
-          <legend>Máquinas de Decorado</legend>
+        <fieldset className={styles.fieldset}>
+          <legend className={styles.legend}>Máquinas de Decorado</legend>
           <div className={styles.fields}>
             {cantidades.map((cantidad, index) => (
               <Campo
                 key={index}
-                label={`Nro. de Envases (Máquina ${index + 1})`}
+                label={
+                  <>
+                    Nro. de Envases{" "}
+                    <span className={styles.machine}>
+                      (Máquina {index + 1})
+                    </span>
+                  </>
+                }
                 id={`cantidadMaquina${index}`}
               >
                 <input
@@ -416,8 +423,8 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
             </Campo>
           </div>
         </fieldset>
-        <fieldset>
-          <legend>Total de Paletas</legend>
+        <fieldset className={styles.fieldset}>
+          <legend className={styles.legend}>Total de Paletas</legend>
           <Campo label="Número Total de Paletas" id="totalPaletas">
             <input
               id="totalPaletas"
@@ -463,8 +470,8 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
         >
           + Añadir Otro Modelo
         </button>
-        <fieldset>
-          <legend>Resumen</legend>
+        <fieldset className={styles.fieldset}>
+          <legend className={styles.legend}>Resumen</legend>
           <div className={styles.summaryGrid}>
             <ResumenColumn
               label="Total de Envases Decorados"
@@ -541,7 +548,7 @@ const Campo = ({
   id,
   children,
 }: {
-  label: string;
+  label: ReactNode;
   id: string;
   children: ReactNode;
 }) => (
@@ -583,8 +590,8 @@ const ModeloProduccion = ({
     gruesas: (paletas * (molde?.numeroEnvases ?? 0)) / ENVASES_POR_GRUESA,
   });
   return (
-    <fieldset>
-      <legend>
+    <fieldset className={styles.fieldset}>
+      <legend className={styles.legend}>
         Modelo de envase{" "}
         <span className={styles.numberModel}>( {index + 1} )</span>
       </legend>

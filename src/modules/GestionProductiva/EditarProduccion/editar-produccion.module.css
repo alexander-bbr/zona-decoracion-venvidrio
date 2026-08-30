@@ -32,7 +32,7 @@
   gap: 1rem;
 }
 
-fieldset {
+.fieldset {
   border-radius: 10px;
   padding: 1rem;
   border: 1px solid var(secondary-text-color);
@@ -44,7 +44,7 @@ fieldset {
   align-items: center;
   gap: 2rem;
 }
-legend {
+.legend {
   color: #333;
   font-weight: 600;
   font-size: 0.9rem;

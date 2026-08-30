@@ -244,8 +244,8 @@ export const RegistrarProduccion = () => {
 
       <section className={styles.formData}>
         {/* === IDENTIFICACIÓN DEL REGISTRO === */}
-        <fieldset className={styles.identifyWrapper}>
-          <legend>Datos de Identificación</legend>
+        <fieldset className={`${styles.fieldset} ${styles.identifyWrapper}`}>
+          <legend className={styles.legend}>Datos de Identificación</legend>
           {/* Turno */}
           <div className={styles.inputWrapper}>
             <label htmlFor="turno">
@@ -294,8 +294,8 @@ export const RegistrarProduccion = () => {
           </div>
         </fieldset>
 
-        <fieldset>
-          <legend>Máquinas de Decorado</legend>
+        <fieldset className={styles.fieldset}>
+          <legend className={styles.legend}>Máquinas de Decorado</legend>
 
           <div className={styles.fields}>
             {cantidades.map((cantidad, index) => (
@@ -350,8 +350,8 @@ export const RegistrarProduccion = () => {
         </fieldset>
 
         {/* === TOTAL DE PALETAS === */}
-        <fieldset>
-          <legend>Total de Paletas</legend>
+        <fieldset className={styles.fieldset}>
+          <legend className={styles.legend}>Total de Paletas</legend>
           {/* Total de Paletas */}
           <div className={styles.inputWrapper}>
             <label htmlFor="totalPaletas">
@@ -404,8 +404,8 @@ export const RegistrarProduccion = () => {
         </button>
 
         {/* === RESUMEN === */}
-        <fieldset>
-          <legend>Resumen</legend>
+        <fieldset className={styles.fieldset}>
+          <legend className={styles.legend}>Resumen</legend>
           <div className={styles.summaryGrid}>
             <div className={styles.summaryColumn}>
               <div className={styles.inputWrapper}>
@@ -586,8 +586,8 @@ const ModeloProduccion = ({
     gruesas: (paletas * (definicion?.numeroEnvases ?? 0)) / ENVASES_POR_GRUESA,
   });
   return (
-    <fieldset>
-      <legend>
+    <fieldset className={styles.fieldset}>
+      <legend className={styles.legend}>
         Modelo de envase{" "}
         <span className={styles.numberModel}>( {index + 1} )</span>
       </legend>

@@ -116,6 +116,8 @@ export const SuministrarPintura: React.FC = () => {
       <form className={styles.form} onSubmit={handleSubmit}>
         <HeaderForm />
 
+        <h3 className={styles.title}>Suministrar Pintura</h3>
+
         <section className={styles.dataWrapper}>
           {/* Fecha de Registro */}
           <div className={styles.inputWrapper}>

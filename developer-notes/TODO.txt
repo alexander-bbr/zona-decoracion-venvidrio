@@ -1,7 +1,66 @@
 # TODO
 
-- Agregar el resto de campos de Gestión Productiva (la tabla de vista).
 
-- En la columna de Total de Envases en Producción Lisa debe colocarse un mensaje que diga que no se toma en consideración para el cálculo de la Eficiencia y Deficiencia Productiva.
+## Consumo de Pintura
 
-- Darle un color de fondo a las 3 columnas del fieldset de Resumen.
+  - Hay un bug en el botón de reset, no se están reseteando los formularios
+
+
+---
+
+
+## Gestión Productiva
+
+  - Agregar el resto de campos de Gestión Productiva (la tabla de vista).
+
+  - Quitarle el campo de ID en Gestión Productiva (ya que el usuario no necesita verlo).
+
+  - Cambiar el orden en el que se muestran los registros por ...
+
+  - En la columna de Total de Envases en Producción Lisa debe colocarse un mensaje que diga que no se toma en consideración para el cálculo de la Eficiencia y Deficiencia Productiva.
+
+  - Darle un color de fondo a las 3 columnas del fieldset de Resumen.
+
+  - Agregar en Registrar Producción y Editar Producción la etiqueta de Justificantes.
+
+
+---
+
+
+## Gestión de Moldes
+
+
+
+---
+
+
+## Justificantes
+
+  - Hacer el módulo de Justificantes
+
+
+---
+
+
+## Sign In
+
+  - Hacer funcionar la verificación en el backend
+
+
+---
+
+
+## Rendimiento
+
+  - Hacer que el input de fecha hasta marque siempre por defecto la fecha del día de hoy.
+  - Colocar un límite de fecha en el campo de fecha hasta, para que no se puedan colocar fechas futuras.
+  - Colocar no solo los envases fabricados, sino también que modelos de envases se fabricaron.
+
+
+---
+
+
+## Gestión de Usuarios
+
+  - Estilizar los mensajes de envío de los formularios (exito y error)
+  - Tengo que implementar la validación de los estándares de seguridad de la contraseña.

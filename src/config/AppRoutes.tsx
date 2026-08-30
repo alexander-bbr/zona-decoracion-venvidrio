@@ -26,6 +26,11 @@ import { GestionProductiva } from "../modules/GestionProductiva";
 import { RegistrarProduccion } from "../modules/GestionProductiva/RegistrarProduccion";
 import { EditarProduccion } from "../modules/GestionProductiva/EditarProduccion";
 
+// Módulo - Gestión de Moldes
+import { GestionMoldes } from "../modules/GestionMoldes";
+import { RegistrarMolde } from "../modules/GestionMoldes/RegistrarMolde";
+import { EditarMolde } from "../modules/GestionMoldes/EditarMolde";
+
 // Módulo - No Autorizado
 import { Unauthorized } from "../modules/Unauthorized";
 
@@ -173,6 +178,52 @@ export const AppRoutes = () => {
               ]}
             >
               <EditarProduccion />
+            </PrivateRoute>
+          }
+        />
+      </Route>
+
+      {/* 
+        Módulo - Gestión de Moldes
+        EL PADRE: Requiere el permiso gestion_moldes del módulo gestion_productiva
+      */}
+      <Route
+        path="/gestion-moldes"
+        element={
+          <PrivateRoute
+            requiredPermissions={[
+              { modulo: "gestion_productiva", accion: "gestion_moldes" },
+            ]}
+            requireAnyPermission={true}
+          >
+            <GestionMoldes />
+          </PrivateRoute>
+        }
+      >
+        <Route
+          path="registrar-molde"
+          element={
+            <PrivateRoute
+              requiredPermissions={[
+                {
+                  modulo: "gestion_productiva",
+                  accion: "gestion_moldes",
+                },
+              ]}
+            >
+              <RegistrarMolde />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="editar-molde/:id"
+          element={
+            <PrivateRoute
+              requiredPermissions={[
+                { modulo: "gestion_productiva", accion: "gestion_moldes" },
+              ]}
+            >
+              <EditarMolde />
             </PrivateRoute>
           }
         />

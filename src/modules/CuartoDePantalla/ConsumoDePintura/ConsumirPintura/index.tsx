@@ -185,6 +185,8 @@ export const ConsumirPintura = () => {
       <form className={styles.form} onSubmit={handleSubmit}>
         <HeaderForm />
 
+        <h3 className={styles.title}>Consumir Pintura</h3>
+
         <section className={styles.dataWrapper}>
           {/* Fecha de Inicio */}
           <div className={styles.inputWrapper}>

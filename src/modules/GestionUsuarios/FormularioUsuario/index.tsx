@@ -1,7 +1,7 @@
 //* Formulario tanto para Crear como Editar los usuarios
 
 import { useState, useEffect, useCallback } from "react";
-import styles from "./FormularioUsuario.module.css";
+import styles from "./formulario-usuario.module.css";
 
 // Tipos genéricos
 type Usuario = {

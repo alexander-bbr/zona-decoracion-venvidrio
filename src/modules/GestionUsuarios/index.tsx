@@ -1,7 +1,6 @@
-// src/modules/Usuarios/index.tsx
 import { useState, useEffect } from "react";
 import { useAuth } from "../../contexts/AuthContext";
-import styles from "./usuarios.module.css";
+import styles from "./gestion-usuarios.module.css";
 import { FormularioUsuario } from "./FormularioUsuario";
 
 // Tipos para la permisologia (genérico y flexible)
@@ -45,7 +44,7 @@ type ApiResponse = {
   };
 };
 
-export const Usuarios = () => {
+export const GestionUsuarios = () => {
   const { hasPermission } = useAuth();
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const [usuarioEditando, setUsuarioEditando] = useState<string | null>(null);
@@ -386,11 +385,7 @@ export const Usuarios = () => {
       <header className={styles.moduleHeader}>
         <h2 className={styles.moduleTitle}>Gestión de Usuarios</h2>
         <p className={styles.moduleSubtitle}>
-          {mostrarFormulario
-            ? usuarioEditando
-              ? "Editar usuario"
-              : "Crear usuario"
-            : "Trabajadores registrados en el sistema"}
+          Trabajadores registrados en el sistema
         </p>
       </header>
 

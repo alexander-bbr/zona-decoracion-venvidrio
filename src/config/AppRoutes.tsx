@@ -15,12 +15,6 @@ import { SuministrarPintura } from "../modules/CuartoDePantalla/ConsumoDePintura
 import { InventarioPintura } from "../modules/CuartoDePantalla/ConsumoDePintura/InventarioPintura";
 import { HistorialConsumo } from "../modules/CuartoDePantalla/ConsumoDePintura/HistorialConsumo";
 
-// Módulo - Gestión de Usuarios
-import { Usuarios } from "../modules/Usuarios";
-
-// Módulo - Iniciar Sesión
-import { SignIn } from "../modules/SignIn";
-
 // Módulo - Gestión Productiva
 import { GestionProductiva } from "../modules/GestionProductiva";
 import { RegistrarProduccion } from "../modules/GestionProductiva/RegistrarProduccion";
@@ -31,16 +25,30 @@ import { GestionMoldes } from "../modules/GestionMoldes";
 import { RegistrarMolde } from "../modules/GestionMoldes/RegistrarMolde";
 import { EditarMolde } from "../modules/GestionMoldes/EditarMolde";
 
-// Módulo - No Autorizado
-import { Unauthorized } from "../modules/Unauthorized";
+// Módulo - Gestión de Justificantes
 import { GestionJustificantes } from "../modules/GestionJustificantes";
 import { RegistrarJustificante } from "../modules/GestionJustificantes/RegistrarJustificante";
 import { EditarJustificante } from "../modules/GestionJustificantes/EditarJustificante";
 
+// Módulo - Gestión de Usuarios
+import { GestionUsuarios } from "../modules/GestionUsuarios";
+
+// Módulo - Iniciar Sesión
+import { SignIn } from "../modules/SignIn";
+
+// Página de No Autorizado
+import { Unauthorized } from "../modules/Unauthorized";
+
 export const AppRoutes = () => {
   return (
     <Routes>
-      {/* Ruta pública - Login */}
+      {/*
+      
+          === RUTAS PÚBLICAS ===
+      
+      */}
+
+      {/* Módulo - Sign In */}
       <Route
         path="/sign-in"
         element={
@@ -50,11 +58,17 @@ export const AppRoutes = () => {
         }
       />
 
-      {/* Ruta pública - Home (accesible para todos) */}
+      {/* Módulo - Inicio */}
       <Route path="/" element={<Home />} />
 
-      {/* Ruta pública - No Autorizado */}
+      {/* Página de No Autorizado */}
       <Route path="/unauthorized" element={<Unauthorized />} />
+
+      {/*
+      
+          === RUTAS PRIVADAS ===
+      
+      */}
 
       {/* Módulo - Rendimiento - Requiere permiso dashboard.ver */}
       <Route
@@ -281,7 +295,7 @@ export const AppRoutes = () => {
               { modulo: "gestion_usuarios", accion: "ver_usuarios" },
             ]}
           >
-            <Usuarios />
+            <GestionUsuarios />
           </PrivateRoute>
         }
       />

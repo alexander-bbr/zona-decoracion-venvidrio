@@ -1,0 +1,61 @@
+{
+  "fecha": "2026-08-31",
+  "turno": "A",
+  "tecnico": "Miguel Bethancourt",
+  "maquina1": [
+    {
+      "idMolde": 6,
+      "cantEnvases": 2500
+    },
+    {
+      "idMolde": 6,
+      "cantEnvases": 2500
+    }
+  ],
+  "maquina2": [
+    {
+      "idMolde": 6,
+      "cantEnvases": 5000
+    }
+  ],
+  "maquina3": [
+    {
+      "idMolde": 6,
+      "cantEnvases": 5000
+    }
+  ],
+  "maquina4": [
+    {
+      "idMolde": 6,
+      "cantEnvases": 5000
+    }
+  ],
+  "cantEnvasesD1": 5000,
+  "cantEnvasesD2": 5000,
+  "cantEnvasesD3": 5000,
+  "cantEnvasesD4": 5000,
+  "totalEnvases": 20000,
+  "totalGruesas": 138.89,
+  "salidas": [
+    {
+      "modeloMolde": 6,
+      "totalPaletas": 5,
+      "cantPaletasLisas": 0,
+      "cantCamadasLisas": 0,
+      "cantEnvasesLisas": 0,
+      "cantGruesasLisas": 0,
+      "cantPaletasDecoradas": 5,
+      "cantCamadasDecoradas": 40,
+      "cantEnvasesDecoradas": 17600,
+      "cantGruesasDecoradas": 122.22
+    }
+  ],
+  "resultado": {
+    "totalGruesasLisas": 0,
+    "totalGruesasDecoradas": 122.22,
+    "eficienciaProductiva": 88,
+    "deficienciaProductiva": 12,
+    "observaciones": "Por ahora ninguna"
+  },
+  "justificantes": [1]
+}

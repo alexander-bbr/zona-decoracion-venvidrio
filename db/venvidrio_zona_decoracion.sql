@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 31-08-2026 a las 01:25:57
+-- Tiempo de generación: 31-08-2026 a las 06:05:18
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -568,9 +568,11 @@ CREATE TABLE `gestion_productiva_cabecera` (
 --
 
 INSERT INTO `gestion_productiva_cabecera` (`id_cabecera`, `fecha`, `turno`, `tecnico`, `cant_envases_d1`, `cant_envases_d2`, `cant_envases_d3`, `cant_envases_d4`, `total_envases`, `total_gruesas`) VALUES
-(261, '2026-08-30', 'A', 'Daniel Pérez', 3000, 1500, 800, 800, 6100, 42.36),
-(262, '2026-08-30', 'A', 'holaaaaa Pérez', 3000, 1500, 800, 800, 6100, 42.36),
-(263, '2026-08-30', 'A', 'Daniel Pérez', 70, 40, 0, 0, 110, 0.76);
+(261, '2026-08-30', 'B', 'José Farias', 3000, 1500, 800, 8000, 13300, 92.36),
+(262, '2026-08-30', 'A', 'Daniel Pérez', 3000, 1500, 800, 4000, 9300, 64.58),
+(263, '2026-08-30', 'B', 'Daniel Pérez', 7500, 4000, 0, 0, 11500, 79.86),
+(267, '2026-08-31', 'A', 'Miguel Bethancourt', 5000, 5000, 5000, 5000, 20000, 138.89),
+(268, '2026-01-01', 'C', 'Fabio Romero', 5000, 5000, 0, 0, 10000, 69.44);
 
 -- --------------------------------------------------------
 
@@ -591,21 +593,28 @@ CREATE TABLE `gestion_productiva_entrada` (
 --
 
 INSERT INTO `gestion_productiva_entrada` (`id_entrada`, `id_cabecera`, `maquina`, `id_molde`, `cant_envases`) VALUES
-(13, 261, 1, 1, 2000),
-(14, 261, 1, 2, 1000),
-(15, 261, 2, 1, 1500),
-(16, 261, 3, 2, 800),
-(17, 261, 4, 1, 500),
-(18, 261, 4, 2, 300),
-(25, 262, 1, 1, 2000),
-(26, 262, 1, 2, 1000),
-(27, 262, 2, 1, 1500),
-(28, 262, 3, 2, 800),
-(29, 262, 4, 1, 500),
-(30, 262, 4, 2, 300),
-(34, 263, 1, 1, 40),
-(35, 263, 1, 2, 30),
-(36, 263, 2, 1, 40);
+(74, 267, 1, 6, 2500),
+(75, 267, 1, 6, 2500),
+(76, 267, 2, 6, 5000),
+(77, 267, 3, 6, 5000),
+(78, 267, 4, 6, 5000),
+(79, 268, 1, 6, 5000),
+(80, 268, 2, 5, 5000),
+(87, 262, 1, 2, 2000),
+(88, 262, 1, 2, 1000),
+(89, 262, 2, 2, 1500),
+(90, 262, 3, 2, 800),
+(91, 262, 4, 2, 1000),
+(92, 262, 4, 2, 3000),
+(93, 261, 1, 1, 2000),
+(94, 261, 1, 2, 1000),
+(95, 261, 2, 1, 1500),
+(96, 261, 3, 2, 800),
+(97, 261, 4, 1, 5000),
+(98, 261, 4, 2, 3000),
+(99, 263, 1, 1, 4000),
+(100, 263, 1, 2, 3500),
+(101, 263, 2, 1, 4000);
 
 -- --------------------------------------------------------
 
@@ -628,9 +637,11 @@ CREATE TABLE `gestion_productiva_resultado` (
 --
 
 INSERT INTO `gestion_productiva_resultado` (`id_resultado`, `id_cabecera`, `total_gruesas_lisas`, `total_gruesas_decoradas`, `eficiencia_productiva`, `deficiencia_productiva`, `observaciones`) VALUES
-(261, 261, 0.00, 42.36, 95.00, 5.00, 'Prueba de registro'),
-(262, 262, 0.00, 42.36, 95.00, 5.00, 'Prueba de registro'),
-(263, 263, 0.55, 0.55, 95.00, 5.00, 'Prueba de registro completo');
+(261, 261, 0.00, 79.86, 86.47, 13.53, 'Prueba de registro'),
+(262, 262, 39.93, 39.93, 61.83, 38.17, 'Prueba de registro'),
+(263, 263, 79.86, 79.86, 100.00, 0.00, 'No hubo ninguna pérdida, por tanto, la eficiencia fue del 100%.'),
+(267, 267, 0.00, 122.22, 88.00, 12.00, 'Este es un registro de prueba'),
+(268, 268, 24.44, 24.44, 35.20, 64.80, 'Estoy probando la posibilidad de no asociar ninguna Justificante');
 
 -- --------------------------------------------------------
 
@@ -658,9 +669,11 @@ CREATE TABLE `gestion_productiva_salida` (
 --
 
 INSERT INTO `gestion_productiva_salida` (`id_eficiencia`, `modelo_molde`, `id_cabecera`, `total_paletas`, `cant_paletas_lisas`, `cant_camadas_lisas`, `cant_envases_lisas`, `cant_gruesas_lisas`, `cant_paletas_decoradas`, `cant_camadas_decoradas`, `cant_envases_decoradas`, `cant_gruesas_decoradas`) VALUES
-(518, 1, 261, 2, 0, 0, 0, 0.00, 2, 14, 6100, 42.36),
-(520, 1, 262, 2, 0, 0, 0, 0.00, 2, 14, 6100, 42.36),
-(522, 1, 263, 4, 2, 4, 80, 0.55, 2, 4, 80, 0.55);
+(534, 6, 267, 5, 0, 0, 0, 0.00, 5, 40, 17600, 122.22),
+(535, 6, 268, 2, 1, 8, 3520, 24.44, 1, 8, 3520, 24.44),
+(537, 2, 262, 2, 1, 10, 5750, 39.93, 1, 10, 5750, 39.93),
+(538, 2, 261, 2, 0, 0, 0, 0.00, 2, 20, 11500, 79.86),
+(539, 2, 263, 4, 2, 20, 11500, 79.86, 2, 20, 11500, 79.86);
 
 -- --------------------------------------------------------
 
@@ -683,8 +696,7 @@ INSERT INTO `justificantes` (`id_justificante`, `etiqueta`, `descripcion`) VALUE
 (2, 'Rotura por malcocido', 'Envases quebrados debido a una cocción deficiente en el proceso de fabricación'),
 (3, 'Falla mecánica de la máquina', 'Parada de producción ocasionada por avería o mal funcionamiento del equipo'),
 (4, 'Material defectuoso', 'Pérdida originada por lote de materia prima en mal estado o fuera de especificación'),
-(5, 'Error de operario', 'Pérdida atribuida a manipulación incorrecta del equipo o del proceso por parte del personal'),
-(6, 'string', 'dd');
+(5, 'Error de operario', 'Pérdida atribuida a manipulación incorrecta del equipo o del proceso por parte del personal');
 
 -- --------------------------------------------------------
 
@@ -759,17 +771,6 @@ CREATE TABLE `permisos_usuarios` (
 --
 
 INSERT INTO `permisos_usuarios` (`id_permisou`, `id_usuario`, `id_permisom`) VALUES
-(126, 11, 1),
-(127, 11, 2),
-(128, 11, 3),
-(129, 11, 7),
-(130, 11, 4),
-(131, 11, 5),
-(132, 11, 6),
-(133, 11, 11),
-(134, 11, 12),
-(135, 11, 13),
-(136, 11, 14),
 (137, 10, 5),
 (138, 10, 6),
 (139, 10, 11),
@@ -791,7 +792,19 @@ INSERT INTO `permisos_usuarios` (`id_permisou`, `id_usuario`, `id_permisom`) VAL
 (155, 12, 11),
 (156, 12, 12),
 (157, 12, 13),
-(158, 12, 14);
+(158, 12, 14),
+(159, 11, 1),
+(160, 11, 2),
+(161, 11, 3),
+(162, 11, 7),
+(163, 11, 4),
+(164, 11, 5),
+(165, 11, 6),
+(166, 11, 11),
+(167, 11, 12),
+(168, 11, 13),
+(169, 11, 14),
+(170, 11, 28);
 
 -- --------------------------------------------------------
 
@@ -852,14 +865,6 @@ CREATE TABLE `produccion_justificantes` (
   `id_cabecera` int(11) NOT NULL,
   `id_justificante` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `produccion_justificantes`
---
-
-INSERT INTO `produccion_justificantes` (`id_cabecera`, `id_justificante`) VALUES
-(263, 1),
-(263, 3);
 
 -- --------------------------------------------------------
 
@@ -1346,31 +1351,31 @@ ALTER TABLE `f_historia_trabajo_decoracion_temperatura`
 -- AUTO_INCREMENT de la tabla `gestion_productiva_cabecera`
 --
 ALTER TABLE `gestion_productiva_cabecera`
-  MODIFY `id_cabecera` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=264;
+  MODIFY `id_cabecera` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=269;
 
 --
 -- AUTO_INCREMENT de la tabla `gestion_productiva_entrada`
 --
 ALTER TABLE `gestion_productiva_entrada`
-  MODIFY `id_entrada` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `id_entrada` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=102;
 
 --
 -- AUTO_INCREMENT de la tabla `gestion_productiva_resultado`
 --
 ALTER TABLE `gestion_productiva_resultado`
-  MODIFY `id_resultado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=264;
+  MODIFY `id_resultado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=269;
 
 --
 -- AUTO_INCREMENT de la tabla `gestion_productiva_salida`
 --
 ALTER TABLE `gestion_productiva_salida`
-  MODIFY `id_eficiencia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=523;
+  MODIFY `id_eficiencia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=540;
 
 --
 -- AUTO_INCREMENT de la tabla `justificantes`
 --
 ALTER TABLE `justificantes`
-  MODIFY `id_justificante` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_justificante` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `moldes`
@@ -1388,7 +1393,7 @@ ALTER TABLE `permisos_modulos`
 -- AUTO_INCREMENT de la tabla `permisos_usuarios`
 --
 ALTER TABLE `permisos_usuarios`
-  MODIFY `id_permisou` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=159;
+  MODIFY `id_permisou` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=171;
 
 --
 -- AUTO_INCREMENT de la tabla `pintura_inventario`

@@ -21,8 +21,6 @@
 
   - Darle un color de fondo a las 3 columnas del fieldset de Resumen.
 
-  - Agregar en Registrar Producción y Editar Producción la etiqueta de Justificantes.
-
 
 ---
 
@@ -35,8 +33,6 @@
 
 
 ## Justificantes
-
-  - Hacer el módulo de Justificantes
 
 
 ---
@@ -73,3 +69,4 @@
 
   - Verificar que en todos los campos numéricos, hayan como máximo 2 decimales.
   - Hacer Responsive la Aplicación.
+  - Hacer la sidebar como un botón hamburguesa que se sobreponga (es decir, que no ocupe espacio en el layout).

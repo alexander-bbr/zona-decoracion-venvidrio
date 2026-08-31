@@ -128,7 +128,7 @@ export const GestionProductiva = () => {
       {isRoot ? (
         <section className={`${styles.gestionProductiva} content`}>
           <section className={styles.controlPanel}>
-            <h2 className={styles.title}>Registros de Producción</h2>
+            <h2 className={styles.title}>Historial de Producción</h2>
             <button
               className={styles.registerButton}
               onClick={() => navigate("registrar-produccion")}

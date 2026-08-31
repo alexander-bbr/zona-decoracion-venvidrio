@@ -82,6 +82,14 @@ export const RegistrarProduccion = () => {
           }),
         );
         setMoldes(moldesCargados);
+        // Actualizar el primer modelo con el primer molde disponible
+        setModelosForm((actuales) =>
+          actuales.map((modelo, index) =>
+            index === 0 && !modelo.modelo && moldesCargados.length > 0
+              ? { ...modelo, modelo: moldesCargados[0].nombre }
+              : modelo,
+          ),
+        );
       } catch (loadError) {
         setError(
           loadError instanceof Error
@@ -286,7 +294,10 @@ export const RegistrarProduccion = () => {
     // Construir salidas
     const salidas = modelosForm.flatMap((modelo) => {
       const molde = moldes.find((item) => item.nombre === modelo.modelo);
-      if (!molde) return [];
+      if (!molde) {
+        console.warn("No se encontró molde para el modelo:", modelo.modelo);
+        return [];
+      }
       const camadasDecoradas = modelo.paletasDecoradas * molde.numeroCamadas;
       const envasesDecoradas = modelo.paletasDecoradas * molde.numeroEnvases;
       const camadasLisas = modelo.produccionLisa * molde.numeroCamadas;
@@ -310,6 +321,13 @@ export const RegistrarProduccion = () => {
         },
       ];
     });
+
+    if (salidas.length === 0) {
+      setError(
+        "No se encontraron moldes válidos para los modelos seleccionados. Verifica que hayas seleccionado un molde.",
+      );
+      return;
+    }
 
     const justificantesValidos = justificantesSeleccionados.filter(
       (id) => id > 0,
@@ -549,7 +567,7 @@ export const RegistrarProduccion = () => {
                 className={styles.addEntradaButton}
                 onClick={() => agregarEntradaMaquina(maquinaIndex)}
               >
-                + Agregar Nro. de Envases (Máquina {maquinaIndex + 1})
+                + Agregar Otro Molde para la Máquina {maquinaIndex + 1}
               </button>
 
               <div className={styles.maquinaTotal}>

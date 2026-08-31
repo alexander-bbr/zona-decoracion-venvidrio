@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 31-08-2026 a las 01:12:45
+-- Tiempo de generación: 31-08-2026 a las 01:25:57
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -739,7 +739,8 @@ INSERT INTO `permisos_modulos` (`id_permisom`, `modulo`, `accion`) VALUES
 (11, 'gestion_productiva', 'registrar_produccion'),
 (12, 'gestion_productiva', 'ver_produccion'),
 (13, 'gestion_productiva', 'editar'),
-(14, 'gestion_productiva', 'gestion_moldes');
+(14, 'gestion_productiva', 'gestion_moldes'),
+(28, 'gestion_productiva', 'gestion_justificantes');
 
 -- --------------------------------------------------------
 
@@ -1381,7 +1382,7 @@ ALTER TABLE `moldes`
 -- AUTO_INCREMENT de la tabla `permisos_modulos`
 --
 ALTER TABLE `permisos_modulos`
-  MODIFY `id_permisom` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id_permisom` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT de la tabla `permisos_usuarios`

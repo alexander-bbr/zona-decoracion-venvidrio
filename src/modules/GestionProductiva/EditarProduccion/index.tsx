@@ -29,12 +29,15 @@ type MaquinaProduccion = {
 
 type SalidaApi = {
   modeloMolde: number;
+  totalPaletas: number;
   cantPaletasLisas: number;
   cantCamadasLisas: number;
   cantEnvasesLisas: number;
+  cantGruesasLisas: number;
   cantPaletasDecoradas: number;
   cantCamadasDecoradas: number;
   cantEnvasesDecoradas: number;
+  cantGruesasDecoradas: number;
 };
 
 type RegistroDetalleApi = {
@@ -58,6 +61,7 @@ type RegistroDetalleApi = {
 
 type ModeloForm = {
   modelo: string;
+  idMolde?: number; // Agregar campo opcional para guardar el ID
   paletasDecoradas: number;
   produccionLisa: number;
 };
@@ -153,13 +157,17 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
       0,
     ),
   );
+
+  // CORRECCIÓN: Inicializar con el ID del molde
   const [modelosForm, setModelosForm] = useState<ModeloForm[]>([
     ...registro.salidas.map((salida) => ({
-      modelo: String(salida.modeloMolde),
+      modelo: "", // Se llenará con el nombre después de cargar moldes
+      idMolde: Number(salida.modeloMolde), // Guardar el ID del molde
       paletasDecoradas: Number(salida.cantPaletasDecoradas),
       produccionLisa: Number(salida.cantPaletasLisas),
     })),
   ]);
+
   const [observaciones, setObservaciones] = useState(
     registro.resultado?.observaciones ?? "",
   );
@@ -182,15 +190,24 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
           }),
         );
         setMoldes(moldesCargados);
+
+        // CORRECCIÓN: Buscar por ID y asignar el nombre
         setModelosForm((actuales) =>
           actuales.map((modelo) => {
-            const molde = moldesCargados.find(
+            // Buscar por ID (usando idMolde si existe, o buscando por string)
+            const moldeEncontrado = moldesCargados.find(
               (item) =>
-                String(item.idMolde) === modelo.modelo ||
-                item.nombre === modelo.modelo ||
-                item.descripcion === modelo.modelo,
+                item.idMolde === modelo.idMolde || // Buscar por ID numérico
+                String(item.idMolde) === modelo.modelo || // Buscar por ID como string
+                item.nombre === modelo.modelo, // Buscar por nombre
             );
-            return molde ? { ...modelo, modelo: molde.nombre } : modelo;
+            return moldeEncontrado
+              ? {
+                  ...modelo,
+                  modelo: moldeEncontrado.nombre,
+                  idMolde: moldeEncontrado.idMolde,
+                }
+              : modelo;
           }),
         );
       } catch (loadError) {
@@ -396,7 +413,8 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
     );
     setModelosForm(
       registro.salidas.map((salida) => ({
-        modelo: String(salida.modeloMolde),
+        modelo: "",
+        idMolde: Number(salida.modeloMolde),
         paletasDecoradas: Number(salida.cantPaletasDecoradas),
         produccionLisa: Number(salida.cantPaletasLisas),
       })),
@@ -427,7 +445,10 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
 
     const salidas = modelosForm.flatMap((modelo) => {
       const molde = moldes.find((item) => item.nombre === modelo.modelo);
-      if (!molde) return [];
+      if (!molde) {
+        console.warn("No se encontró molde para el modelo:", modelo.modelo);
+        return [];
+      }
 
       if (modelo.paletasDecoradas === 0 && modelo.produccionLisa === 0)
         return [];
@@ -449,6 +470,13 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
         },
       ];
     });
+
+    if (salidas.length === 0) {
+      setError(
+        "No se encontraron moldes válidos para los modelos seleccionados.",
+      );
+      return;
+    }
 
     const justificantesValidos = justificantesSeleccionados.filter(
       (id) => id > 0,
@@ -669,7 +697,7 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
                 className={styles.addEntradaButton}
                 onClick={() => agregarEntradaMaquina(maquinaIndex)}
               >
-                + Agregar Nro. de Envases (Máquina {maquinaIndex + 1})
+                + Agregar Otro Molde para la Máquina {maquinaIndex + 1}
               </button>
 
               <div className={styles.maquinaTotal}>
@@ -750,6 +778,7 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
               ...actuales,
               {
                 modelo: moldes[0]?.nombre ?? "",
+                idMolde: moldes[0]?.idMolde ?? 0,
                 paletasDecoradas: 0,
                 produccionLisa: 0,
               },
@@ -933,12 +962,17 @@ const ModeloProduccion = ({
   cambiarPaletas,
   onEliminar,
 }: ModeloProps) => {
-  const molde = moldes.find((item) => item.nombre === modelo.modelo);
+  // Buscar el molde por nombre o por ID
+  const molde = moldes.find(
+    (item) => item.nombre === modelo.modelo || item.idMolde === modelo.idMolde,
+  );
+
   const resumen = (paletas: number): Resumen => ({
     camadas: paletas * (molde?.numeroCamadas ?? 0),
     envases: paletas * (molde?.numeroEnvases ?? 0),
     gruesas: (paletas * (molde?.numeroEnvases ?? 0)) / ENVASES_POR_GRUESA,
   });
+
   return (
     <fieldset className={styles.fieldset}>
       <legend className={styles.legend}>
@@ -959,11 +993,17 @@ const ModeloProduccion = ({
           <label htmlFor={`modelo${index}`}>Modelo de Envase</label>
           <select
             id={`modelo${index}`}
-            value={modelo.modelo}
+            value={molde?.nombre ?? modelo.modelo}
             disabled={cargandoMoldes || moldes.length === 0}
-            onChange={(event) =>
-              actualizarModelo(index, { modelo: event.target.value })
-            }
+            onChange={(event) => {
+              const moldeSeleccionado = moldes.find(
+                (item) => item.nombre === event.target.value,
+              );
+              actualizarModelo(index, {
+                modelo: event.target.value,
+                idMolde: moldeSeleccionado?.idMolde ?? 0,
+              });
+            }}
           >
             {moldes.map((item) => (
               <option key={item.idMolde} value={item.nombre}>

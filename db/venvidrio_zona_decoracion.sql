@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 30-08-2026 a las 15:26:49
+-- Tiempo de generación: 31-08-2026 a las 01:25:57
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -547,11 +547,11 @@ INSERT INTO `f_historia_trabajo_decoracion_temperatura` (`id_htd_temperatura`, `
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `gestion_productiva_entrada`
+-- Estructura de tabla para la tabla `gestion_productiva_cabecera`
 --
 
-CREATE TABLE `gestion_productiva_entrada` (
-  `id_produccion` int(11) NOT NULL,
+CREATE TABLE `gestion_productiva_cabecera` (
+  `id_cabecera` int(11) NOT NULL,
   `fecha` date NOT NULL,
   `turno` varchar(10) NOT NULL,
   `tecnico` varchar(150) NOT NULL,
@@ -564,13 +564,48 @@ CREATE TABLE `gestion_productiva_entrada` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
+-- Volcado de datos para la tabla `gestion_productiva_cabecera`
+--
+
+INSERT INTO `gestion_productiva_cabecera` (`id_cabecera`, `fecha`, `turno`, `tecnico`, `cant_envases_d1`, `cant_envases_d2`, `cant_envases_d3`, `cant_envases_d4`, `total_envases`, `total_gruesas`) VALUES
+(261, '2026-08-30', 'A', 'Daniel Pérez', 3000, 1500, 800, 800, 6100, 42.36),
+(262, '2026-08-30', 'A', 'holaaaaa Pérez', 3000, 1500, 800, 800, 6100, 42.36),
+(263, '2026-08-30', 'A', 'Daniel Pérez', 70, 40, 0, 0, 110, 0.76);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `gestion_productiva_entrada`
+--
+
+CREATE TABLE `gestion_productiva_entrada` (
+  `id_entrada` int(11) NOT NULL,
+  `id_cabecera` int(11) NOT NULL,
+  `maquina` int(11) NOT NULL,
+  `id_molde` int(11) NOT NULL,
+  `cant_envases` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
 -- Volcado de datos para la tabla `gestion_productiva_entrada`
 --
 
-INSERT INTO `gestion_productiva_entrada` (`id_produccion`, `fecha`, `turno`, `tecnico`, `cant_envases_d1`, `cant_envases_d2`, `cant_envases_d3`, `cant_envases_d4`, `total_envases`, `total_gruesas`) VALUES
-(257, '2026-08-26', 'string', 'Javier Gonzalez', 2000, 2000, 2000, 2000, 8000, 55.56),
-(258, '2026-08-13', 'A', 'Maria Lopez', 0, 0, 0, 0, 0, 0.00),
-(259, '2026-08-07', 'A', 'Maria Lopez', 3100, 1000, 1000, 1000, 6100, 42.36);
+INSERT INTO `gestion_productiva_entrada` (`id_entrada`, `id_cabecera`, `maquina`, `id_molde`, `cant_envases`) VALUES
+(13, 261, 1, 1, 2000),
+(14, 261, 1, 2, 1000),
+(15, 261, 2, 1, 1500),
+(16, 261, 3, 2, 800),
+(17, 261, 4, 1, 500),
+(18, 261, 4, 2, 300),
+(25, 262, 1, 1, 2000),
+(26, 262, 1, 2, 1000),
+(27, 262, 2, 1, 1500),
+(28, 262, 3, 2, 800),
+(29, 262, 4, 1, 500),
+(30, 262, 4, 2, 300),
+(34, 263, 1, 1, 40),
+(35, 263, 1, 2, 30),
+(36, 263, 2, 1, 40);
 
 -- --------------------------------------------------------
 
@@ -580,7 +615,7 @@ INSERT INTO `gestion_productiva_entrada` (`id_produccion`, `fecha`, `turno`, `te
 
 CREATE TABLE `gestion_productiva_resultado` (
   `id_resultado` int(11) NOT NULL,
-  `id_produccion` int(11) NOT NULL,
+  `id_cabecera` int(11) NOT NULL,
   `total_gruesas_lisas` decimal(12,2) DEFAULT 0.00,
   `total_gruesas_decoradas` decimal(12,2) DEFAULT 0.00,
   `eficiencia_productiva` decimal(5,2) DEFAULT 0.00,
@@ -592,10 +627,10 @@ CREATE TABLE `gestion_productiva_resultado` (
 -- Volcado de datos para la tabla `gestion_productiva_resultado`
 --
 
-INSERT INTO `gestion_productiva_resultado` (`id_resultado`, `id_produccion`, `total_gruesas_lisas`, `total_gruesas_decoradas`, `eficiencia_productiva`, `deficiencia_productiva`, `observaciones`) VALUES
-(257, 257, 0.00, 42.36, 76.25, 23.75, ''),
-(258, 258, 0.00, 39.93, 100.00, 0.00, ''),
-(259, 259, 0.00, 42.36, 100.00, 0.00, '');
+INSERT INTO `gestion_productiva_resultado` (`id_resultado`, `id_cabecera`, `total_gruesas_lisas`, `total_gruesas_decoradas`, `eficiencia_productiva`, `deficiencia_productiva`, `observaciones`) VALUES
+(261, 261, 0.00, 42.36, 95.00, 5.00, 'Prueba de registro'),
+(262, 262, 0.00, 42.36, 95.00, 5.00, 'Prueba de registro'),
+(263, 263, 0.55, 0.55, 95.00, 5.00, 'Prueba de registro completo');
 
 -- --------------------------------------------------------
 
@@ -606,7 +641,7 @@ INSERT INTO `gestion_productiva_resultado` (`id_resultado`, `id_produccion`, `to
 CREATE TABLE `gestion_productiva_salida` (
   `id_eficiencia` int(11) NOT NULL,
   `modelo_molde` int(11) NOT NULL,
-  `id_produccion` int(11) NOT NULL,
+  `id_cabecera` int(11) NOT NULL,
   `total_paletas` int(11) DEFAULT NULL,
   `cant_paletas_lisas` int(11) DEFAULT NULL,
   `cant_camadas_lisas` int(11) DEFAULT NULL,
@@ -622,9 +657,34 @@ CREATE TABLE `gestion_productiva_salida` (
 -- Volcado de datos para la tabla `gestion_productiva_salida`
 --
 
-INSERT INTO `gestion_productiva_salida` (`id_eficiencia`, `modelo_molde`, `id_produccion`, `total_paletas`, `cant_paletas_lisas`, `cant_camadas_lisas`, `cant_envases_lisas`, `cant_gruesas_lisas`, `cant_paletas_decoradas`, `cant_camadas_decoradas`, `cant_envases_decoradas`, `cant_gruesas_decoradas`) VALUES
-(514, 2, 259, 2, 0, 0, 0, 0.00, 2, 14, 6100, 42.36),
-(515, 2, 257, 2, 0, 0, 0, 0.00, 2, 14, 6100, 42.36);
+INSERT INTO `gestion_productiva_salida` (`id_eficiencia`, `modelo_molde`, `id_cabecera`, `total_paletas`, `cant_paletas_lisas`, `cant_camadas_lisas`, `cant_envases_lisas`, `cant_gruesas_lisas`, `cant_paletas_decoradas`, `cant_camadas_decoradas`, `cant_envases_decoradas`, `cant_gruesas_decoradas`) VALUES
+(518, 1, 261, 2, 0, 0, 0, 0.00, 2, 14, 6100, 42.36),
+(520, 1, 262, 2, 0, 0, 0, 0.00, 2, 14, 6100, 42.36),
+(522, 1, 263, 4, 2, 4, 80, 0.55, 2, 4, 80, 0.55);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `justificantes`
+--
+
+CREATE TABLE `justificantes` (
+  `id_justificante` int(11) NOT NULL,
+  `etiqueta` varchar(150) NOT NULL,
+  `descripcion` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `justificantes`
+--
+
+INSERT INTO `justificantes` (`id_justificante`, `etiqueta`, `descripcion`) VALUES
+(1, 'Desperfecto en el decorado', 'Pérdida por mal decorado de la máquina, envases con imperfecciones visuales'),
+(2, 'Rotura por malcocido', 'Envases quebrados debido a una cocción deficiente en el proceso de fabricación'),
+(3, 'Falla mecánica de la máquina', 'Parada de producción ocasionada por avería o mal funcionamiento del equipo'),
+(4, 'Material defectuoso', 'Pérdida originada por lote de materia prima en mal estado o fuera de especificación'),
+(5, 'Error de operario', 'Pérdida atribuida a manipulación incorrecta del equipo o del proceso por parte del personal'),
+(6, 'string', 'dd');
 
 -- --------------------------------------------------------
 
@@ -679,7 +739,8 @@ INSERT INTO `permisos_modulos` (`id_permisom`, `modulo`, `accion`) VALUES
 (11, 'gestion_productiva', 'registrar_produccion'),
 (12, 'gestion_productiva', 'ver_produccion'),
 (13, 'gestion_productiva', 'editar'),
-(14, 'gestion_productiva', 'gestion_moldes');
+(14, 'gestion_productiva', 'gestion_moldes'),
+(28, 'gestion_productiva', 'gestion_justificantes');
 
 -- --------------------------------------------------------
 
@@ -780,6 +841,25 @@ CREATE TABLE `pintura_registro` (
 INSERT INTO `pintura_registro` (`id`, `id_pintura_inventario`, `proveedor`, `fecha_registro`, `unidad_medida`, `cantidad_registrada`, `registrado_por`, `observaciones`) VALUES
 (17, 1, 'string', '2026-07-23', 'string', 20.00, 'string', 'string'),
 (18, 1, 'string', '2026-07-23', 'string', 1.00, 'string', 'string');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `produccion_justificantes`
+--
+
+CREATE TABLE `produccion_justificantes` (
+  `id_cabecera` int(11) NOT NULL,
+  `id_justificante` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `produccion_justificantes`
+--
+
+INSERT INTO `produccion_justificantes` (`id_cabecera`, `id_justificante`) VALUES
+(263, 1),
+(263, 3);
 
 -- --------------------------------------------------------
 
@@ -1029,17 +1109,25 @@ ALTER TABLE `f_historia_trabajo_decoracion_temperatura`
   ADD KEY `id_htd_cabecera` (`id_htd_cabecera`);
 
 --
+-- Indices de la tabla `gestion_productiva_cabecera`
+--
+ALTER TABLE `gestion_productiva_cabecera`
+  ADD PRIMARY KEY (`id_cabecera`);
+
+--
 -- Indices de la tabla `gestion_productiva_entrada`
 --
 ALTER TABLE `gestion_productiva_entrada`
-  ADD PRIMARY KEY (`id_produccion`);
+  ADD PRIMARY KEY (`id_entrada`),
+  ADD KEY `id_produccion` (`id_cabecera`),
+  ADD KEY `id_molde` (`id_molde`);
 
 --
 -- Indices de la tabla `gestion_productiva_resultado`
 --
 ALTER TABLE `gestion_productiva_resultado`
   ADD PRIMARY KEY (`id_resultado`),
-  ADD KEY `fk_resultado_produccion` (`id_produccion`);
+  ADD KEY `fk_resultado_produccion` (`id_cabecera`);
 
 --
 -- Indices de la tabla `gestion_productiva_salida`
@@ -1047,7 +1135,13 @@ ALTER TABLE `gestion_productiva_resultado`
 ALTER TABLE `gestion_productiva_salida`
   ADD PRIMARY KEY (`id_eficiencia`),
   ADD KEY `fk_salida_molde` (`modelo_molde`),
-  ADD KEY `fk_salida_produccion` (`id_produccion`);
+  ADD KEY `fk_salida_produccion` (`id_cabecera`);
+
+--
+-- Indices de la tabla `justificantes`
+--
+ALTER TABLE `justificantes`
+  ADD PRIMARY KEY (`id_justificante`);
 
 --
 -- Indices de la tabla `moldes`
@@ -1081,6 +1175,13 @@ ALTER TABLE `pintura_inventario`
 ALTER TABLE `pintura_registro`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id_pintura_inventario` (`id_pintura_inventario`);
+
+--
+-- Indices de la tabla `produccion_justificantes`
+--
+ALTER TABLE `produccion_justificantes`
+  ADD PRIMARY KEY (`id_cabecera`,`id_justificante`),
+  ADD KEY `id_justificante` (`id_justificante`);
 
 --
 -- Indices de la tabla `produccion_lisa_inventario`
@@ -1242,22 +1343,34 @@ ALTER TABLE `f_historia_trabajo_decoracion_temperatura`
   MODIFY `id_htd_temperatura` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=94;
 
 --
+-- AUTO_INCREMENT de la tabla `gestion_productiva_cabecera`
+--
+ALTER TABLE `gestion_productiva_cabecera`
+  MODIFY `id_cabecera` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=264;
+
+--
 -- AUTO_INCREMENT de la tabla `gestion_productiva_entrada`
 --
 ALTER TABLE `gestion_productiva_entrada`
-  MODIFY `id_produccion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=260;
+  MODIFY `id_entrada` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT de la tabla `gestion_productiva_resultado`
 --
 ALTER TABLE `gestion_productiva_resultado`
-  MODIFY `id_resultado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=260;
+  MODIFY `id_resultado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=264;
 
 --
 -- AUTO_INCREMENT de la tabla `gestion_productiva_salida`
 --
 ALTER TABLE `gestion_productiva_salida`
-  MODIFY `id_eficiencia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=516;
+  MODIFY `id_eficiencia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=523;
+
+--
+-- AUTO_INCREMENT de la tabla `justificantes`
+--
+ALTER TABLE `justificantes`
+  MODIFY `id_justificante` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `moldes`
@@ -1269,7 +1382,7 @@ ALTER TABLE `moldes`
 -- AUTO_INCREMENT de la tabla `permisos_modulos`
 --
 ALTER TABLE `permisos_modulos`
-  MODIFY `id_permisom` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id_permisom` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT de la tabla `permisos_usuarios`
@@ -1377,17 +1490,24 @@ ALTER TABLE `f_historia_trabajo_decoracion_temperatura`
   ADD CONSTRAINT `f_historia_trabajo_decoracion_temperatura_ibfk_1` FOREIGN KEY (`id_htd_cabecera`) REFERENCES `f_historia_trabajo_decoracion_cabecera` (`id_htd_cabecera`);
 
 --
+-- Filtros para la tabla `gestion_productiva_entrada`
+--
+ALTER TABLE `gestion_productiva_entrada`
+  ADD CONSTRAINT `gestion_productiva_entrada_ibfk_1` FOREIGN KEY (`id_cabecera`) REFERENCES `gestion_productiva_cabecera` (`id_cabecera`) ON DELETE CASCADE,
+  ADD CONSTRAINT `gestion_productiva_entrada_ibfk_2` FOREIGN KEY (`id_molde`) REFERENCES `moldes` (`id_molde`);
+
+--
 -- Filtros para la tabla `gestion_productiva_resultado`
 --
 ALTER TABLE `gestion_productiva_resultado`
-  ADD CONSTRAINT `fk_resultado_produccion` FOREIGN KEY (`id_produccion`) REFERENCES `gestion_productiva_entrada` (`id_produccion`) ON DELETE CASCADE;
+  ADD CONSTRAINT `fk_resultado_produccion` FOREIGN KEY (`id_cabecera`) REFERENCES `gestion_productiva_cabecera` (`id_cabecera`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `gestion_productiva_salida`
 --
 ALTER TABLE `gestion_productiva_salida`
   ADD CONSTRAINT `fk_salida_molde` FOREIGN KEY (`modelo_molde`) REFERENCES `moldes` (`id_molde`) ON DELETE CASCADE,
-  ADD CONSTRAINT `fk_salida_produccion` FOREIGN KEY (`id_produccion`) REFERENCES `gestion_productiva_entrada` (`id_produccion`) ON DELETE CASCADE;
+  ADD CONSTRAINT `fk_salida_produccion` FOREIGN KEY (`id_cabecera`) REFERENCES `gestion_productiva_cabecera` (`id_cabecera`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `permisos_usuarios`
@@ -1403,6 +1523,13 @@ arios_ibfk_2` FOREIGN KEY (`id_permisom`) REFERENCES `permisos_modulos` (`id_per
 --
 ALTER TABLE `pintura_registro`
   ADD CONSTRAINT `pintura_registro_ibfk_1` FOREIGN KEY (`id_pintura_inventario`) REFERENCES `pintura_inventario` (`id`) ON DELETE CASCADE;
+
+--
+-- Filtros para la tabla `produccion_justificantes`
+--
+ALTER TABLE `produccion_justificantes`
+  ADD CONSTRAINT `produccion_justificantes_ibfk_1` FOREIGN KEY (`id_cabecera`) REFERENCES `gestion_productiva_cabecera` (`id_cabecera`) ON DELETE CASCADE,
+  ADD CONSTRAINT `produccion_justificantes_ibfk_2` FOREIGN KEY (`id_justificante`) REFERENCES `justificantes` (`id_justificante`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `produccion_lisa_registro`

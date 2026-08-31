@@ -22,7 +22,16 @@ def listar_moldes_para_select(db: Session = Depends(get_db)):
     return services.obtener_lista_moldes(db)
 
 
-# 2. LISTAR REGISTROS DE PRODUCCIÓN (Vista principal con paginación de 50 en 50)
+# 2. LISTAR JUSTIFICANTES (Para llenar el select en el frontend)
+@router.get("/justificantes", response_model=List[schemas.JustificanteResponde])
+def listar_justificantes_para_select(db: Session = Depends(get_db)):
+    """
+    Obtiene el catálogo de justificantes disponibles.
+    """
+    return services.obtener_lista_justificantes(db)
+
+
+# 3. LISTAR REGISTROS DE PRODUCCIÓN (Vista principal con paginación de 50 en 50)
 @router.get("/", response_model=List[schemas.ProduccionListaResponde])
 def listar_produccion(skip: int = 0, limit: int = 50, db: Session = Depends(get_db)):
     """
@@ -31,7 +40,7 @@ def listar_produccion(skip: int = 0, limit: int = 50, db: Session = Depends(get_
     return services.obtener_registros_produccion(db, skip=skip, limit=limit)
 
 
-# 3. CREAR NUEVO REGISTRO DE PRODUCCIÓN
+# 4. CREAR NUEVO REGISTRO DE PRODUCCIÓN
 @router.post("/", response_model=schemas.ProduccionResponde, status_code=status.HTTP_201_CREATED)
 def crear_produccion(datos: schemas.ProduccionCrear, db: Session = Depends(get_db)):
     """
@@ -41,14 +50,14 @@ def crear_produccion(datos: schemas.ProduccionCrear, db: Session = Depends(get_d
     return services.crear_registro_produccion(db, datos)
 
 
-# 4. OBTENER UN REGISTRO POR ID (Para los módulos de VER y EDITAR)
-@router.get("/{id_produccion}", response_model=schemas.ProduccionResponde)
-def obtener_produccion(id_produccion: int, db: Session = Depends(get_db)):
+# 5. OBTENER UN REGISTRO POR ID (Para los módulos de VER y EDITAR)
+@router.get("/{id_cabecera}", response_model=schemas.ProduccionResponde)
+def obtener_produccion(id_cabecera: int, db: Session = Depends(get_db)):
     """
     Busca un turno específico por su ID y devuelve toda su estructura anidada 
     para rellenar el formulario.
     """
-    registro = services.obtener_produccion_por_id(db, id_produccion)
+    registro = services.obtener_produccion_por_id(db, id_cabecera)
     if not registro:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -57,17 +66,17 @@ def obtener_produccion(id_produccion: int, db: Session = Depends(get_db)):
     return registro
 
 
-# 5. ACTUALIZAR REGISTRO DE PRODUCCIÓN
-@router.put("/{id_produccion}", response_model=schemas.ProduccionResponde)
+# 6. ACTUALIZAR REGISTRO DE PRODUCCIÓN
+@router.put("/{id_cabecera}", response_model=schemas.ProduccionResponde)
 def actualizar_produccion(
-    id_produccion: int, 
-    datos: schemas.ProduccionCrear, 
+    id_cabecera: int,
+    datos: schemas.ProduccionCrear,
     db: Session = Depends(get_db)
 ):
     """
     Actualiza la cabecera, los resultados y sincroniza la lista de modelos de salida.
     """
-    registro_actualizado = services.actualizar_registro_produccion(db, id_produccion, datos)
+    registro_actualizado = services.actualizar_registro_produccion(db, id_cabecera, datos)
     if not registro_actualizado:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

@@ -254,7 +254,7 @@ export const AppRoutes = () => {
         element={
           <PrivateRoute
             requiredPermissions={[
-              { modulo: "gestion_productiva", accion: "gestion_moldes" },
+              { modulo: "gestion_productiva", accion: "gestion_justificantes" },
             ]}
             requireAnyPermission={true}
           >
@@ -267,7 +267,10 @@ export const AppRoutes = () => {
           element={
             <PrivateRoute
               requiredPermissions={[
-                { modulo: "gestion_productiva", accion: "gestion_moldes" },
+                {
+                  modulo: "gestion_productiva",
+                  accion: "gestion_justificantes",
+                },
               ]}
             >
               <RegistrarJustificante />
@@ -279,7 +282,10 @@ export const AppRoutes = () => {
           element={
             <PrivateRoute
               requiredPermissions={[
-                { modulo: "gestion_productiva", accion: "gestion_moldes" },
+                {
+                  modulo: "gestion_productiva",
+                  accion: "gestion_justificantes",
+                },
               ]}
             >
               <EditarJustificante />

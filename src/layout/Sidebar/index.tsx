@@ -46,7 +46,7 @@ export const Sidebar = () => {
         <p>
           {user?.nombres} {user?.apellidos}
         </p>
-        <p>{user.rol}</p>
+        <p>{user?.rol}</p>
       </section>
 
       {/* === LINKS === */}
@@ -90,7 +90,7 @@ export const Sidebar = () => {
         )}
 
         {/* Gestion de Justificantes - visible si tiene el permiso de gestion_justificantes (gestion_productiva) */}
-        {hasAnyPermission("gestion_productiva", ["gestion_moldes"]) && (
+        {hasAnyPermission("gestion_productiva", ["gestion_justificantes"]) && (
           <li>
             <Link to="/gestion-justificantes">Gestión de Justificantes</Link>
           </li>

@@ -2,12 +2,14 @@
 
 from sqlalchemy.orm import Session
 from .models import (
+    GestionProductivaCabecera,
     GestionProductivaEntrada,
     GestionProductivaSalida,
     GestionProductivaResultado,
+    ProduccionJustificante,
     Molde
 )
-# from .schemas import ProduccionCreate, ProduccionUpdate (asumiendo que tendrás tus schemas)
+from backend.modules.gestion_productiva.gestion_justificantes.models import Justificante
 
 
 def obtener_lista_moldes(db: Session):
@@ -27,35 +29,43 @@ def obtener_lista_moldes(db: Session):
     return resultado
 
 
+def obtener_lista_justificantes(db: Session):
+    justificantes = db.query(Justificante).order_by(Justificante.id_justificante.asc()).all()
+
+    resultado = []
+    for justificante in justificantes:
+        resultado.append({
+            "id_justificante": justificante.id_justificante,
+            "etiqueta": justificante.etiqueta,
+            "descripcion": justificante.descripcion
+        })
+
+    return resultado
+
+
 def obtener_registros_produccion(db: Session, skip: int = 0, limit: int = 50):
-    """
-    Obtiene el listado de movimientos de producción paginado (50 en 50),
-    extrayendo solo los campos específicos de Entrada y Resultado 
-    necesarios para la vista principal del frontend.
-    """
     registros = db.query(
-        GestionProductivaEntrada.id_produccion,
-        GestionProductivaEntrada.fecha,
-        GestionProductivaEntrada.turno,
-        GestionProductivaEntrada.tecnico,
-        GestionProductivaEntrada.total_gruesas,
+        GestionProductivaCabecera.id_cabecera,
+        GestionProductivaCabecera.fecha,
+        GestionProductivaCabecera.turno,
+        GestionProductivaCabecera.tecnico,
+        GestionProductivaCabecera.total_gruesas,
         GestionProductivaResultado.total_gruesas_lisas,
         GestionProductivaResultado.total_gruesas_decoradas,
         GestionProductivaResultado.eficiencia_productiva,
         GestionProductivaResultado.deficiencia_productiva
     ).join(
-        GestionProductivaResultado, 
-        GestionProductivaEntrada.id_produccion == GestionProductivaResultado.id_produccion,
-        isouter=True  # LEFT JOIN por seguridad, asegura que traiga la entrada aunque falte el resultado
+        GestionProductivaResultado,
+        GestionProductivaCabecera.id_cabecera == GestionProductivaResultado.id_cabecera,
+        isouter=True
     ).order_by(
-        GestionProductivaEntrada.id_produccion.desc()
+        GestionProductivaCabecera.id_cabecera.desc()
     ).offset(skip).limit(limit).all()
 
-    # Formatear la salida como una lista de diccionarios para facilitar su envío como JSON
     resultado = []
     for reg in registros:
         resultado.append({
-            "id_produccion": reg.id_produccion,
+            "id_cabecera": reg.id_cabecera,
             "fecha": reg.fecha,
             "turno": reg.turno,
             "tecnico": reg.tecnico,
@@ -65,28 +75,33 @@ def obtener_registros_produccion(db: Session, skip: int = 0, limit: int = 50):
             "eficiencia_productiva": reg.eficiencia_productiva,
             "deficiencia_productiva": reg.deficiencia_productiva
         })
-    
+
     return resultado
 
 
-def obtener_produccion_por_id(db: Session, id_produccion: int):
-    """
-    Consulta un movimiento específico por su ID.
-    Al estar configuradas las relaciones en models.py, esto también
-    te dará acceso a 'entrada.salidas' y 'entrada.resultado'.
-    """
-    return db.query(GestionProductivaEntrada)\
-             .filter(GestionProductivaEntrada.id_produccion == id_produccion)\
-             .first()
+def obtener_produccion_por_id(db: Session, id_cabecera: int):
+    cabecera = db.query(GestionProductivaCabecera)\
+                 .filter(GestionProductivaCabecera.id_cabecera == id_cabecera)\
+                 .first()
+
+    if not cabecera:
+        return None
+
+    # Agrupar entradas por máquina
+    cabecera.maquina1 = [e for e in cabecera.entradas if e.maquina == 1]
+    cabecera.maquina2 = [e for e in cabecera.entradas if e.maquina == 2]
+    cabecera.maquina3 = [e for e in cabecera.entradas if e.maquina == 3]
+    cabecera.maquina4 = [e for e in cabecera.entradas if e.maquina == 4]
+
+    # Extraer lista de IDs de justificantes
+    cabecera.justificantes = [pj.id_justificante for pj in cabecera.produccion_justificantes]
+
+    return cabecera
 
 
 def crear_registro_produccion(db: Session, datos):
-    """
-    Registra la cabecera (Entrada), los múltiples modelos (Salida) 
-    y las métricas (Resultado) en una sola transacción.
-    """
-    # 1. Crear la cabecera del turno (Entrada)
-    nueva_entrada = GestionProductivaEntrada(
+    # 1. Crear la cabecera del turno
+    nueva_cabecera = GestionProductivaCabecera(
         fecha=datos.fecha,
         turno=datos.turno,
         tecnico=datos.tecnico,
@@ -97,13 +112,30 @@ def crear_registro_produccion(db: Session, datos):
         total_envases=datos.total_envases,
         total_gruesas=datos.total_gruesas
     )
-    db.add(nueva_entrada)
-    db.flush() # Sincroniza temporalmente para generar el id_produccion
+    db.add(nueva_cabecera)
+    db.flush()
 
-    # 2. Iterar sobre la lista de modelos para crear los detalles (Salida)
+    # 2. Insertar detalles de entrada por máquina
+    maquinas = {
+        1: datos.maquina1,
+        2: datos.maquina2,
+        3: datos.maquina3,
+        4: datos.maquina4
+    }
+    for numero_maquina, detalles in maquinas.items():
+        for detalle in detalles:
+            nueva_entrada = GestionProductivaEntrada(
+                id_cabecera=nueva_cabecera.id_cabecera,
+                maquina=numero_maquina,
+                id_molde=detalle.id_molde,
+                cant_envases=detalle.cant_envases
+            )
+            db.add(nueva_entrada)
+
+    # 3. Insertar salidas por molde
     for salida_data in datos.salidas:
         nueva_salida = GestionProductivaSalida(
-            id_produccion=nueva_entrada.id_produccion,
+            id_cabecera=nueva_cabecera.id_cabecera,
             modelo_molde=salida_data.modelo_molde,
             total_paletas=salida_data.total_paletas,
             cant_paletas_lisas=salida_data.cant_paletas_lisas,
@@ -117,9 +149,9 @@ def crear_registro_produccion(db: Session, datos):
         )
         db.add(nueva_salida)
 
-    # 3. Crear el consolidado final (Resultado)
+    # 4. Crear el consolidado final
     nuevo_resultado = GestionProductivaResultado(
-        id_produccion=nueva_entrada.id_produccion,
+        id_cabecera=nueva_cabecera.id_cabecera,
         total_gruesas_lisas=datos.resultado.total_gruesas_lisas,
         total_gruesas_decoradas=datos.resultado.total_gruesas_decoradas,
         eficiencia_productiva=datos.resultado.eficiencia_productiva,
@@ -128,48 +160,67 @@ def crear_registro_produccion(db: Session, datos):
     )
     db.add(nuevo_resultado)
 
-    # Confirmar todos los cambios juntos
+    # 5. Insertar justificantes
+    for id_justificante in datos.justificantes:
+        nuevo_justificante = ProduccionJustificante(
+            id_cabecera=nueva_cabecera.id_cabecera,
+            id_justificante=id_justificante
+        )
+        db.add(nuevo_justificante)
+
     db.commit()
-    db.refresh(nueva_entrada)
-    return nueva_entrada
+    db.refresh(nueva_cabecera)
+    return obtener_produccion_por_id(db, nueva_cabecera.id_cabecera)
 
 
-def actualizar_registro_produccion(db: Session, id_produccion: int, datos):
-    """
-    Actualiza el registro. Modifica la cabecera, actualiza los totales de 
-    resultado y reemplaza la lista de modelos.
-    """
-    # Buscar el registro principal
-    entrada_actual = db.query(GestionProductivaEntrada).filter(GestionProductivaEntrada.id_produccion == id_produccion).first()
-    
-    if not entrada_actual:
+def actualizar_registro_produccion(db: Session, id_cabecera: int, datos):
+    cabecera_actual = db.query(GestionProductivaCabecera)\
+                        .filter(GestionProductivaCabecera.id_cabecera == id_cabecera)\
+                        .first()
+
+    if not cabecera_actual:
         return None
 
-    # 1. Actualizar campos de la Entrada
-    entrada_actual.fecha = datos.fecha
-    entrada_actual.turno = datos.turno
-    entrada_actual.tecnico = datos.tecnico
-    entrada_actual.cant_envases_d1 = datos.cant_envases_d1
-    entrada_actual.cant_envases_d2 = datos.cant_envases_d2
-    entrada_actual.cant_envases_d3 = datos.cant_envases_d3
-    entrada_actual.cant_envases_d4 = datos.cant_envases_d4
-    entrada_actual.total_envases = datos.total_envases
-    entrada_actual.total_gruesas = datos.total_gruesas
+    # 1. Actualizar cabecera
+    cabecera_actual.fecha = datos.fecha
+    cabecera_actual.turno = datos.turno
+    cabecera_actual.tecnico = datos.tecnico
+    cabecera_actual.cant_envases_d1 = datos.cant_envases_d1
+    cabecera_actual.cant_envases_d2 = datos.cant_envases_d2
+    cabecera_actual.cant_envases_d3 = datos.cant_envases_d3
+    cabecera_actual.cant_envases_d4 = datos.cant_envases_d4
+    cabecera_actual.total_envases = datos.total_envases
+    cabecera_actual.total_gruesas = datos.total_gruesas
 
-    # 2. Actualizar el Resultado (1 a 1)
-    if entrada_actual.resultado:
-        entrada_actual.resultado.total_gruesas_lisas = datos.resultado.total_gruesas_lisas
-        entrada_actual.resultado.total_gruesas_decoradas = datos.resultado.total_gruesas_decoradas
-        entrada_actual.resultado.eficiencia_productiva = datos.resultado.eficiencia_productiva
-        entrada_actual.resultado.deficiencia_productiva = datos.resultado.deficiencia_productiva
-        entrada_actual.resultado.observaciones = datos.resultado.observaciones
+    # 2. Reemplazar entradas
+    db.query(GestionProductivaEntrada)\
+      .filter(GestionProductivaEntrada.id_cabecera == id_cabecera)\
+      .delete()
 
-    # 3. Sincronizar las Salidas (Modelos)
-    db.query(GestionProductivaSalida).filter(GestionProductivaSalida.id_produccion == id_produccion).delete()
-    
+    maquinas = {
+        1: datos.maquina1,
+        2: datos.maquina2,
+        3: datos.maquina3,
+        4: datos.maquina4
+    }
+    for numero_maquina, detalles in maquinas.items():
+        for detalle in detalles:
+            nueva_entrada = GestionProductivaEntrada(
+                id_cabecera=id_cabecera,
+                maquina=numero_maquina,
+                id_molde=detalle.id_molde,
+                cant_envases=detalle.cant_envases
+            )
+            db.add(nueva_entrada)
+
+    # 3. Sincronizar salidas
+    db.query(GestionProductivaSalida)\
+      .filter(GestionProductivaSalida.id_cabecera == id_cabecera)\
+      .delete()
+
     for salida_data in datos.salidas:
         nueva_salida = GestionProductivaSalida(
-            id_produccion=id_produccion,
+            id_cabecera=id_cabecera,
             modelo_molde=salida_data.modelo_molde,
             total_paletas=salida_data.total_paletas,
             cant_paletas_lisas=salida_data.cant_paletas_lisas,
@@ -183,6 +234,25 @@ def actualizar_registro_produccion(db: Session, id_produccion: int, datos):
         )
         db.add(nueva_salida)
 
+    # 4. Actualizar resultado
+    if cabecera_actual.resultado:
+        cabecera_actual.resultado.total_gruesas_lisas = datos.resultado.total_gruesas_lisas
+        cabecera_actual.resultado.total_gruesas_decoradas = datos.resultado.total_gruesas_decoradas
+        cabecera_actual.resultado.eficiencia_productiva = datos.resultado.eficiencia_productiva
+        cabecera_actual.resultado.deficiencia_productiva = datos.resultado.deficiencia_productiva
+        cabecera_actual.resultado.observaciones = datos.resultado.observaciones
+
+    # 5. Sincronizar justificantes
+    db.query(ProduccionJustificante)\
+      .filter(ProduccionJustificante.id_cabecera == id_cabecera)\
+      .delete()
+
+    for id_justificante in datos.justificantes:
+        nuevo_justificante = ProduccionJustificante(
+            id_cabecera=id_cabecera,
+            id_justificante=id_justificante
+        )
+        db.add(nuevo_justificante)
+
     db.commit()
-    db.refresh(entrada_actual)
-    return entrada_actual
+    return obtener_produccion_por_id(db, id_cabecera)

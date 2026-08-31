@@ -2,14 +2,14 @@ MÓDULO: GESTIÓN JUSTIFICANTES
 =========================
 
 
-Ruta 1: Registrar Justificantes
-Endpoint:  http://127.0.0.1:8000/api/gestion-justificantes
+Ruta 1: Registrar Justificante
+Endpoint: http://127.0.0.1:8000/api/gestion-justificantes
 Método: POST
 
 JSON (Envía el Frontend):
 {
     "etiqueta": "Desperfecto en el Decorado",
-    "descripcion": "Desperfecto en los envases producto de un mal decorado de la máquina",
+    "descripcion": "Desperfecto en los envases producto de un mal decorado de la máquina"
 }
 
 JSON (Respuesta en caso de éxito):
@@ -27,14 +27,14 @@ JSON (Respuesta en caso de error):
 ---
 
 
-Ruta 2: Editar Justificantes
+Ruta 2: Editar Justificante
 Endpoint: http://127.0.0.1:8000/api/gestion-justificantes/{id_justificante}
 Método: PUT
 
 JSON (Envía el Frontend):
 {
     "etiqueta": "Desperfecto en el Decorado",
-    "descripcion": "Desperfecto en los envases producto de un mal decorado de la máquina",
+    "descripcion": "Desperfecto en los envases producto de un mal decorado de la máquina"
 }
 
 JSON (Respuesta en caso de éxito):
@@ -52,8 +52,8 @@ JSON (Respuesta en caso de error):
 ---
 
 
-Ruta 3: Listado de Justificante (Vista Principal)
-Endpoint: http://127.0.0.1:8000/api/gestion-justificante
+Ruta 3: Listado de Justificantes (Vista Principal)
+Endpoint: http://127.0.0.1:8000/api/gestion-justificantes
 Método: GET
 
 Estructura de los datos que recibirá:
@@ -61,12 +61,12 @@ Estructura de los datos que recibirá:
     {
         "idJustificante": 1,
         "etiqueta": "Desperfecto en el Decorado",
-        "descripcion": "Desperfecto en los envases producto de un mal decorado de la máquina",
+        "descripcion": "Desperfecto en los envases producto de un mal decorado de la máquina"
     },
     {
         "idJustificante": 2,
-        "nombre": "Rotura por malcocido del envase",
-        "descripcion": null,
+        "etiqueta": "Rotura por malcocido del envase",
+        "descripcion": null
     }
 ]
 
@@ -74,15 +74,15 @@ Estructura de los datos que recibirá:
 ---
 
 
-Ruta 4: Ver Molde por ID (Para Editar)
-Endpoint: http://127.0.0.1:8000/api/gestion-justificante/{id_justificante}
+Ruta 4: Ver Justificante por ID (Para Editar)
+Endpoint: http://127.0.0.1:8000/api/gestion-justificantes/{id_justificante}
 Método: GET
 
 Estructura de los datos que recibirá:
 {
     "idJustificante": 1,
-    "nombre": "Desperfecto en el Decorado",
-    "descripcion": "Desperfecto en los envases producto de un mal decorado de la máquina",
+    "etiqueta": "Desperfecto en el Decorado",
+    "descripcion": "Desperfecto en los envases producto de un mal decorado de la máquina"
 }
 
 JSON (Respuesta en caso de error):

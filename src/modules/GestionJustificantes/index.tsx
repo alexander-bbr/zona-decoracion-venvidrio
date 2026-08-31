@@ -1,7 +1,14 @@
 import { useEffect, useState } from "react";
 import { useNavigate, NavLink, useLocation, Outlet } from "react-router-dom";
-import { getJustificantes, type Justificante } from "../../mocks/justificantes";
 import styles from "./gestion-justificantes.module.css";
+
+type Justificante = {
+  idJustificante: number;
+  etiqueta: string;
+  descripcion: string | null;
+};
+
+const API_JUSTIFICANTES = "http://127.0.0.1:8000/api/gestion-justificantes";
 
 export const GestionJustificantes = () => {
   const navigate = useNavigate();
@@ -14,9 +21,19 @@ export const GestionJustificantes = () => {
       setCargando(true);
       setError("");
       try {
-        const data = await getJustificantes();
-        // Ordenar por ID de forma ascendente
-        const justificantesOrdenados = [...data].sort(
+        const response = await fetch(API_JUSTIFICANTES);
+        if (!response.ok) {
+          throw new Error(`Error al cargar justificantes: ${response.status}`);
+        }
+        const data = await response.json();
+        const justificantesNormalizados = data.map(
+          (justificante: Justificante) => ({
+            ...justificante,
+            idJustificante: Number(justificante.idJustificante),
+          }),
+        );
+        // Ordenar los justificantes por ID de forma ascendente
+        const justificantesOrdenados = justificantesNormalizados.sort(
           (a, b) => a.idJustificante - b.idJustificante,
         );
         setJustificantes(justificantesOrdenados);
@@ -49,7 +66,9 @@ export const GestionJustificantes = () => {
       <header className={styles.moduleHeader}>
         <h2 className={styles.moduleTitle}>Gestión de Justificantes</h2>
         <p className={styles.moduleSubtitle}>
-          Catálogo de los justificantes disponibles en la aplicación
+          {isRoot
+            ? "Gestión del catálogo de justificantes"
+            : "Gestión de Justificantes"}
         </p>
       </header>
 
@@ -95,7 +114,6 @@ export const GestionJustificantes = () => {
                 <table className={styles.table}>
                   <thead>
                     <tr>
-                      <th>ID</th>
                       <th>Etiqueta</th>
                       <th>Descripción</th>
                     </tr>
@@ -111,7 +129,6 @@ export const GestionJustificantes = () => {
                         }
                         className={styles.clickableRow}
                       >
-                        <td>{justificante.idJustificante}</td>
                         <td>{justificante.etiqueta}</td>
                         <td>{justificante.descripcion || "—"}</td>
                       </tr>

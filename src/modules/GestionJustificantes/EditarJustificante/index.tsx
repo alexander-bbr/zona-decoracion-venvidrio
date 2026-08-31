@@ -1,16 +1,20 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { HeaderForm } from "../../../components/HeaderForm";
-import {
-  getJustificanteById,
-  updateJustificante,
-} from "../../../mocks/justificantes";
 import styles from "./editar-justificante.module.css";
+
+type Justificante = {
+  idJustificante: number;
+  etiqueta: string;
+  descripcion: string | null;
+};
 
 type FormData = {
   etiqueta: string;
   descripcion: string;
 };
+
+const API_JUSTIFICANTES = "http://127.0.0.1:8000/api/gestion-justificantes";
 
 export const EditarJustificante = () => {
   const { id } = useParams<{ id: string }>();
@@ -37,7 +41,17 @@ const CargarJustificante = ({ idJustificante }: { idJustificante: string }) => {
       setCargando(true);
       setError("");
       try {
-        const justificante = await getJustificanteById(Number(idJustificante));
+        const response = await fetch(`${API_JUSTIFICANTES}/${idJustificante}`);
+        if (!response.ok) {
+          const data = await response.json().catch(() => null);
+          throw new Error(
+            data?.detail ??
+              (response.status === 404
+                ? "El Justificante especificado no existe."
+                : `Error al cargar justificante: ${response.status}`),
+          );
+        }
+        const justificante = (await response.json()) as Justificante;
         setFormData({
           etiqueta: justificante.etiqueta,
           descripcion: justificante.descripcion || "",
@@ -78,10 +92,19 @@ const CargarJustificante = ({ idJustificante }: { idJustificante: string }) => {
     }
 
     try {
-      await updateJustificante(Number(idJustificante), {
-        etiqueta: formData.etiqueta,
-        descripcion: formData.descripcion || null,
+      const response = await fetch(`${API_JUSTIFICANTES}/${idJustificante}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
       });
+
+      if (!response.ok) {
+        const data = await response.json().catch(() => null);
+        throw new Error(
+          data?.detail ??
+            `Error al actualizar justificante: ${response.status}`,
+        );
+      }
 
       navigate("/gestion-justificantes");
     } catch (submitError) {
@@ -97,15 +120,18 @@ const CargarJustificante = ({ idJustificante }: { idJustificante: string }) => {
 
   const handleReset = async () => {
     try {
-      const justificante = await getJustificanteById(Number(idJustificante));
-      setFormData({
-        etiqueta: justificante.etiqueta,
-        descripcion: justificante.descripcion || "",
-      });
-      setError("");
+      const response = await fetch(`${API_JUSTIFICANTES}/${idJustificante}`);
+      if (response.ok) {
+        const justificante = (await response.json()) as Justificante;
+        setFormData({
+          etiqueta: justificante.etiqueta,
+          descripcion: justificante.descripcion || "",
+        });
+      }
     } catch {
       // Ignorar errores en reset
     }
+    setError("");
   };
 
   if (cargando) {

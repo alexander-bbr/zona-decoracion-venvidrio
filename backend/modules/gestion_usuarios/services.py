@@ -119,7 +119,8 @@ NOMBRES_ACCIONES = {
     "exportar":               "Exportar",
     "registrar_produccion":   "Registrar Producción",
     "ver_produccion":         "Ver Producción",
-    "gestion_moldes":         "Gestión de Moldes"
+    "gestion_moldes":         "Gestión de Moldes",
+    "gestion_justificantes":  "Gestión de Justificantes"
 }
 
 # 5. Listar catálogo de permisos disponibles

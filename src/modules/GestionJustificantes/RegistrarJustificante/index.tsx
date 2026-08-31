@@ -1,13 +1,14 @@
 import { useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { HeaderForm } from "../../../components/HeaderForm";
-import { createJustificante } from "../../../mocks/justificantes";
 import styles from "./registrar-justificante.module.css";
 
 type FormData = {
   etiqueta: string;
   descripcion: string;
 };
+
+const API_JUSTIFICANTES = "http://127.0.0.1:8000/api/gestion-justificantes";
 
 export const RegistrarJustificante = () => {
   const navigate = useNavigate();
@@ -41,10 +42,18 @@ export const RegistrarJustificante = () => {
     }
 
     try {
-      await createJustificante({
-        etiqueta: formData.etiqueta,
-        descripcion: formData.descripcion || null,
+      const response = await fetch(API_JUSTIFICANTES, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
       });
+
+      if (!response.ok) {
+        const data = await response.json().catch(() => null);
+        throw new Error(
+          data?.detail ?? `Error al registrar justificante: ${response.status}`,
+        );
+      }
 
       navigate("/gestion-justificantes");
     } catch (submitError) {

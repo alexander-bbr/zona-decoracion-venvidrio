@@ -9,40 +9,40 @@ JSON (Envía el Frontend):
   "tecnico": "Daniel Pérez",
   "maquina1": [
     {
-      cantEnvase: 100,
-      tipoMolde: GX01345
+      "idMolde": 1,
+      "cantEnvases": 100
     },
     {
-      cantEnvase: 2000,
-      tipoMolde: GX0440
+      "idMolde": 2,
+      "cantEnvases": 2000
     }
   ],
   "maquina2": [
     {
-      cantEnvase: 100,
-      tipoMolde: GX01345
+      "idMolde": 1,
+      "cantEnvases": 100
     }
   ],
   "maquina3": [
     {
-      cantEnvase: 100,
-      tipoMolde: GX01345
+      "idMolde": 1,
+      "cantEnvases": 100
     }
   ],
   "maquina4": [
     {
-      cantEnvase: 100,
-      tipoMolde: GX01345
+      "idMolde": 1,
+      "cantEnvases": 100
     },
     {
-      cantEnvase: 100,
-      tipoMolde: GX01345
-    },
+      "idMolde": 2,
+      "cantEnvases": 100
+    }
   ],
   "cantEnvasesD1": 2100,
-  "cantEnvasesD2": 100,
-  "cantEnvasesD3": 100,
-  "cantEnvasesD4": 200,
+  "cantEnvasesD2": 5,
+  "cantEnvasesD3": 0,
+  "cantEnvasesD4": 0,
   "totalEnvases": 15,
   "totalGruesas": 0.10,
   "salidas": [
@@ -63,12 +63,10 @@ JSON (Envía el Frontend):
     "totalGruesasLisas": 0.55,
     "totalGruesasDecoradas": 0.55,
     "eficienciaProductiva": 95.00,
-    "deficienciaProductiva": 5.00
+    "deficienciaProductiva": 5.00,
     "observaciones": "causa"
-    "Justificantes": [
-      1, 2, 4
-    ]
-  }
+  },
+  "justificantes": [1, 2, 4]
 }
 
 JSON (Respuesta en caso de éxito):
@@ -82,31 +80,87 @@ JSON (Respuesta en caso de error):
   "detail": "Error en la validación de los datos enviados"
 }
 
+
+
+
+
 ---
 
 Ruta 2: Editar Registro de Producción
-Endpoint: http://127.0.0.1:8000/produccion/{id_produccion}
+Endpoint: http://127.0.0.1:8000/produccion/{id_cabecera}
 Método: PUT
 
 JSON (Envía el Frontend):
 {
-  "fecha": "2026-08-23",
-  "turno": "B",
-  "tecnico": "Daniel Pérez",
-  "cantEnvasesD1": 12,
-  "cantEnvasesD2": 0,
-  "cantEnvasesD3": 0,
-  "cantEnvasesD4": 0,
-  "totalEnvases": 12,
-  "totalGruesas": 0.08,
-  "salidas": [],
+  "idCabecera": 262,
+  "fecha": "2026-08-30",
+  "turno": "A",
+  "tecnico": "holaaaaa Pérez",
+  "maquina1": [
+    {
+      "idMolde": 1,
+      "cantEnvases": 2000
+    },
+    {
+      "idMolde": 2,
+      "cantEnvases": 1000
+    }
+  ],
+  "maquina2": [
+    {
+      "idMolde": 1,
+      "cantEnvases": 1500
+    }
+  ],
+  "maquina3": [
+    {
+      "idMolde": 2,
+      "cantEnvases": 800
+    }
+  ],
+  "maquina4": [
+    {
+      "idMolde": 1,
+      "cantEnvases": 500
+    },
+    {
+      "idMolde": 2,
+      "cantEnvases": 300
+    }
+  ],
+  "cantEnvasesD1": 3000,
+  "cantEnvasesD2": 1500,
+  "cantEnvasesD3": 800,
+  "cantEnvasesD4": 800,
+  "totalEnvases": 6100,
+  "totalGruesas": "42.36",
+  "salidas": [
+    {
+      "modeloMolde": 1,
+      "totalPaletas": 2,
+      "cantPaletasLisas": 0,
+      "cantCamadasLisas": 0,
+      "cantEnvasesLisas": 0,
+      "cantGruesasLisas": "0.00",
+      "cantPaletasDecoradas": 2,
+      "cantCamadasDecoradas": 14,
+      "cantEnvasesDecoradas": 6100,
+      "cantGruesasDecoradas": "42.36",
+      "idEficiencia": 519,
+      "idCabecera": 262
+    }
+  ],
   "resultado": {
-    "totalGruesasLisas": 0,
-    "totalGruesasDecoradas": 0,
-    "eficienciaProductiva": 0,
-    "deficienciaProductiva": 0
-    "observaciones": "causa"
-  }
+    "totalGruesasLisas": "0.00",
+    "totalGruesasDecoradas": "42.36",
+    "eficienciaProductiva": "95.00",
+    "deficienciaProductiva": "5.00",
+    "observaciones": "Prueba de registro",
+    "idCabecera": 262
+  },
+  "justificantes": [
+      1, 2, 4
+    ]
 }
 
 JSON (Respuesta en caso de éxito):
@@ -120,6 +174,10 @@ JSON (Respuesta en caso de error):
   "detail": "No se pudo actualizar porque el registro no fue encontrado"
 }
 
+
+
+
+
 ---
 
 Ruta 3: Listado de Producción (Vista Principal)
@@ -127,26 +185,33 @@ Endpoint: http://127.0.0.1:8000/produccion?skip=0&limit=50
 Método: GET
 
 Estructura de los datos que recibirá:
-{
-  "total": 160,
-  "data": [
-    {
-      "idProduccion": 1,
-      "fecha": "2026-08-23",
-      "turno": "A",
-      "tecnico": "string",
-      "totalGruesas": 0,
-      "totalGruesasLisas": 0,
-      "totalGruesasDecoradas": 0,
-      "eficienciaProductiva": 0,
-      "deficienciaProductiva": 0
-    }
-  ]
-}
+[
+  {
+    "idCabecera": 262,
+    "fecha": "2026-08-30",
+    "turno": "A",
+    "tecnico": "holaaaaa Pérez",
+    "totalGruesas": "42.36",
+    "totalGruesasLisas": "0.00",
+    "totalGruesasDecoradas": "42.36",
+    "eficienciaProductiva": "95.00",
+    "deficienciaProductiva": "5.00"
+  },
+  {
+    "idCabecera": 261,
+    "fecha": "2026-08-30",
+    "turno": "A",
+    "tecnico": "Daniel Pérez",
+    "totalGruesas": "42.36",
+    "totalGruesasLisas": "0.00",
+    "totalGruesasDecoradas": "42.36",
+    "eficienciaProductiva": "95.00",
+    "deficienciaProductiva": "5.00"
+  }
+]
 
 
-
-NOTA TÉCNICA DE PAGINACIÓN (GET /api/produccion/):
+NOTA TÉCNICA DE PAGINACIÓN (GET /produccion/):
 Este endpoint es de tipo GET. Por lo tanto, los valores de paginación NO se envían 
 en el cuerpo de la petición (como un POST o un JSON), sino directamente en la 
 URL como PARÁMETROS DE CONSULTA (Query Parameters).
@@ -156,69 +221,110 @@ URL como PARÁMETROS DE CONSULTA (Query Parameters).
   'skip' y 'limit' configurados en la función de Python.
 
 - Comportamiento y Valores por Defecto:
-  1. Si el frontend hace la petición limpia sin enviar nada (ej. GET /api/produccion/), 
+  1. Si el frontend hace la petición limpia sin enviar nada (ej. GET /produccion/), 
      el backend asume por defecto 'skip=0' y 'limit=50', devolviendo automáticamente 
      los primeros 50 registros.
   2. Cuando el usuario navega a otra página, el frontend debe agregarlos a la URL 
      especificando cuántos registros se salta ('skip') y el tope ('limit').
 
 - Ejemplos de uso desde el Frontend (Cliente):
-  * Página 1 (Primeros 50 registros):  GET /api/produccion?skip=0&limit=50
-  * Página 2 (Siguientes 50 registros): GET /api/produccion?skip=50&limit=50
-  * Página 3 (Siguientes 50 registros): GET /api/produccion?skip=100&limit=50
+  * Página 1 (Primeros 50 registros):  GET /produccion?skip=0&limit=50
+  * Página 2 (Siguientes 50 registros): GET /produccion?skip=50&limit=50
+  * Página 3 (Siguientes 50 registros): GET /produccion?skip=100&limit=50
 
 - Fórmula general para calcular el skip en el frontend según el número de página:
   skip = (numero_de_pagina - 1) * 50
 
 
+
+
+
 ---
 
 Ruta 4: Ver Registro de Producción (Detalle por ID)
-Endpoint: http://127.0.0.1:8000/produccion/{id_produccion}
+Endpoint: http://127.0.0.1:8000/produccion/{id_cabecera}
 Método: GET
 
 Estructura de los datos que recibirá:
 {
-"idProduccion": 1,
-"fecha": "2026-08-23",
-"turno": "A",
-"tecnico": "string",
-"cantEnvasesD1": 0,
-"cantEnvasesD2": 0,
-"cantEnvasesD3": 0,
-"cantEnvasesD4": 0,
-"totalEnvases": 0,
-"totalGruesas": 0,
-"salidas": [
-{
-"modeloMolde": 1,
-"totalPaletas": 0,
-"cantPaletasLisas": 0,
-"cantCamadasLisas": 0,
-"cantEnvasesLisas": 0,
-"cantGruesasLisas": 0,
-"cantPaletasDecoradas": 0,
-"cantCamadasDecoradas": 0,
-"cantEnvasesDecoradas": 0,
-"cantGruesasDecoradas": 0,
-"idEficiencia": 1,
-"idProduccion": 1
-}
-],
-"resultado": {
-"totalGruesasLisas": 0,
-"totalGruesasDecoradas": 0,
-"eficienciaProductiva": 0,
-"deficienciaProductiva": 0,
-"observaciones": "causa"
-"idProduccion": 1
-}
+  "idCabecera": 262,
+  "fecha": "2026-08-30",
+  "turno": "A",
+  "tecnico": "Daniel Pérez",
+  "maquina1": [
+    {
+      "idMolde": 1,
+      "cantEnvases": 2000
+    },
+    {
+      "idMolde": 2,
+      "cantEnvases": 1000
+    }
+  ],
+  "maquina2": [
+    {
+      "idMolde": 1,
+      "cantEnvases": 1500
+    }
+  ],
+  "maquina3": [
+    {
+      "idMolde": 2,
+      "cantEnvases": 800
+    }
+  ],
+  "maquina4": [
+    {
+      "idMolde": 1,
+      "cantEnvases": 500
+    },
+    {
+      "idMolde": 2,
+      "cantEnvases": 300
+    }
+  ],
+  "cantEnvasesD1": 3000,
+  "cantEnvasesD2": 1500,
+  "cantEnvasesD3": 800,
+  "cantEnvasesD4": 800,
+  "totalEnvases": 6100,
+  "totalGruesas": "42.36",
+  "salidas": [
+    {
+      "modeloMolde": 1,
+      "totalPaletas": 2,
+      "cantPaletasLisas": 0,
+      "cantCamadasLisas": 0,
+      "cantEnvasesLisas": 0,
+      "cantGruesasLisas": "0.00",
+      "cantPaletasDecoradas": 2,
+      "cantCamadasDecoradas": 14,
+      "cantEnvasesDecoradas": 6100,
+      "cantGruesasDecoradas": "42.36",
+      "idEficiencia": 519,
+      "idCabecera": 262
+    }
+  ],
+  "resultado": {
+    "totalGruesasLisas": "0.00",
+    "totalGruesasDecoradas": "42.36",
+    "eficienciaProductiva": "95.00",
+    "deficienciaProductiva": "5.00",
+    "observaciones": "Prueba de registro",
+    "idCabecera": 262
+  },
+  "justificantes": [
+      1, 2, 4
+    ]
 }
 
 JSON (Respuesta en caso de error):
 {
 "detail": "El registro de producción especificado no existe."
 }
+
+
+
 
 ---
 
@@ -241,7 +347,7 @@ Estructura de los datos que recibirá:
 
 ---
 
-Ruta 6: Inventario de Justificantes (Para el Select)
+Ruta 6: Inventario de justificantes (Para el Select)
 Endpoint: http://127.0.0.1:8000/produccion/justificantes
 Método: GET
 

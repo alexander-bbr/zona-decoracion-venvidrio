@@ -71,9 +71,17 @@ Control de la Producción
 - Número de Envases.
 - Número de Gruesas
 
+#gestion_productiva_entrada
+
+- id_detalle — PK, autoincrement
+- id_produccion — FK → gestion_productiva_entrada.id_produccion (CASCADE)
+- maquina — int (1, 2, 3 o 4)
+- id_molde — FK → moldes.id_molde
+- cant_envases — int
 
 
-#GESTION PRODUCTIVA ENTRADA
+
+#GESTION PRODUCTIVA CABECERA
 - id_produccion pk
 - Fecha
 - Turno
@@ -145,3 +153,6 @@ ver
 Registrar
 obtener_registro_id (para editar)
 editar_registro
+
+
+actualmente yo recibo el total de envaces por maquina, pero hubo un cambio, actualmente se seleccionara el molde y la cantidad de envaces (por maquina), osea abraa un selec donde se seleccione el molde con el que trabajo esa maquina y la cantidad de envases que entraron por dicho molde, serian dos campos uno para la clave foranea del molde (creo), y otro para la cantidad asignada a dicho molde (esto se puede haer para uno o mas moldes por maquina), los valores que ponen el total cant_envases_d1234, seguiran existiendo, estos contaran la suma total en caso de que hayan varios moldes y asi. primero creo que hay que modelar la base de datos, ayudame, solo nombre de tabla y sus variables

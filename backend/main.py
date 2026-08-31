@@ -25,6 +25,9 @@ from backend.modules.gestion_productiva.produccion.router import router as gesti
 # Importamos el router del módulo de moldes
 from backend.modules.gestion_productiva.gestion_moldes.router import router as moldes_router
 
+# Importamos el router del módulo de justificantes
+from backend.modules.gestion_productiva.gestion_justificantes.router import router as justificantes_router
+
 
 # Inicializamos la aplicación FastAPI
 app = FastAPI(
@@ -63,6 +66,9 @@ app.include_router(gestion_productiva_router)
 
 # Registramos las rutas del módulo de moldes
 app.include_router(moldes_router)
+
+# Registramos las rutas del módulo de justificantes
+app.include_router(justificantes_router)
 
 # Ruta base de prueba
 @app.get("/")

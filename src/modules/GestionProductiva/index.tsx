@@ -3,7 +3,7 @@ import { useNavigate, NavLink, useLocation, Outlet } from "react-router-dom";
 import styles from "./gestion-productiva.module.css";
 
 type RegistroProduccionLista = {
-  idProduccion: number;
+  idCabecera: number;
   fecha: string;
   turno: string;
   tecnico: string;
@@ -38,17 +38,18 @@ export const GestionProductiva = () => {
 
         while (true) {
           const response = await fetch(
-            `${API_PRODUCCION}/?skip=${skip}&limit=${registrosPorPagina}`,
+            `${API_PRODUCCION}?skip=${skip}&limit=${registrosPorPagina}`,
           );
           if (!response.ok)
             throw new Error(`Error al cargar registros: ${response.status}`);
 
           const data = await response.json();
+          // El nuevo endpoint devuelve directamente un array
           const registrosApi = Array.isArray(data) ? data : (data.data ?? []);
           const registrosNormalizados = registrosApi.map(
             (registro: RegistroProduccionLista) => ({
               ...registro,
-              idProduccion: Number(registro.idProduccion),
+              idCabecera: Number(registro.idCabecera),
               totalGruesas: Number(registro.totalGruesas),
               totalGruesasLisas: Number(registro.totalGruesasLisas),
               totalGruesasDecoradas: Number(registro.totalGruesasDecoradas),
@@ -58,14 +59,18 @@ export const GestionProductiva = () => {
           );
 
           registrosCargados.push(...registrosNormalizados);
-          const totalApi = Number(data.total);
+
+          // Si la respuesta no tiene total, usamos la longitud del array
+          const totalApi = data.total
+            ? Number(data.total)
+            : registrosApi.length;
           if (
             registrosNormalizados.length < registrosPorPagina ||
             (totalApi > 0 && registrosCargados.length >= totalApi)
           ) {
             break;
           }
-          skip += registrosNormalizados.length;
+          skip += registrosPorPagina;
         }
 
         setRegistros(registrosCargados);
@@ -151,12 +156,12 @@ export const GestionProductiva = () => {
                 <tbody>
                   {registrosPagina.map((registro) => (
                     <tr
-                      key={registro.idProduccion}
+                      key={registro.idCabecera}
                       onClick={() =>
-                        navigate(`editar-produccion/${registro.idProduccion}`)
+                        navigate(`editar-produccion/${registro.idCabecera}`)
                       }
                     >
-                      <td>#{registro.idProduccion}</td>
+                      <td>#{registro.idCabecera}</td>
                       <td>{registro.fecha}</td>
                       <td>{registro.turno}</td>
                       <td>{registro.tecnico}</td>

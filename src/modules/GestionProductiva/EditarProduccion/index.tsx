@@ -11,6 +11,22 @@ type Molde = {
   numeroCamadas: number;
   numeroEnvases: number;
 };
+
+type Justificante = {
+  idJustificante: number;
+  etiqueta: string;
+  descripcion: string;
+};
+
+type EntradaMaquina = {
+  idMolde: number;
+  cantEnvases: number;
+};
+
+type MaquinaProduccion = {
+  entradas: EntradaMaquina[];
+};
+
 type SalidaApi = {
   modeloMolde: number;
   cantPaletasLisas: number;
@@ -20,11 +36,16 @@ type SalidaApi = {
   cantCamadasDecoradas: number;
   cantEnvasesDecoradas: number;
 };
+
 type RegistroDetalleApi = {
-  idProduccion: number;
+  idCabecera: number;
   fecha: string;
   turno: string;
   tecnico: string;
+  maquina1: EntradaMaquina[];
+  maquina2: EntradaMaquina[];
+  maquina3: EntradaMaquina[];
+  maquina4: EntradaMaquina[];
   cantEnvasesD1: number;
   cantEnvasesD2: number;
   cantEnvasesD3: number;
@@ -32,13 +53,17 @@ type RegistroDetalleApi = {
   totalEnvases: number;
   salidas: SalidaApi[];
   resultado?: { observaciones?: string };
+  justificantes?: number[];
 };
+
 type ModeloForm = {
   modelo: string;
   paletasDecoradas: number;
   produccionLisa: number;
 };
+
 type Resumen = { camadas: number; envases: number; gruesas: number };
+
 const formatNumber = (value: number) =>
   value.toLocaleString("es-VE", { maximumFractionDigits: 2 });
 
@@ -67,7 +92,8 @@ const CargarProduccion = ({ idRegistro }: { idRegistro: string }) => {
               ? "El registro no existe."
               : `Error al cargar registro: ${response.status}`,
           );
-        setRegistro((await response.json()) as RegistroDetalleApi);
+        const data = await response.json();
+        setRegistro(data);
       } catch (loadError) {
         setError(
           loadError instanceof Error
@@ -88,15 +114,36 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
   const navigate = useNavigate();
   const [moldes, setMoldes] = useState<Molde[]>([]);
   const [cargandoMoldes, setCargandoMoldes] = useState(true);
+  const [justificantes, setJustificantes] = useState<Justificante[]>([]);
+  const [cargandoJustificantes, setCargandoJustificantes] = useState(true);
   const [turno, setTurno] = useState(registro.turno);
   const [fecha, setFecha] = useState(registro.fecha);
   const [tecnico, setTecnico] = useState(registro.tecnico);
-  const [cantidades, setCantidades] = useState<number[]>([
-    Number(registro.cantEnvasesD1),
-    Number(registro.cantEnvasesD2),
-    Number(registro.cantEnvasesD3),
-    Number(registro.cantEnvasesD4),
+
+  // Inicializar máquinas con los datos del registro
+  const [maquinas, setMaquinas] = useState<MaquinaProduccion[]>([
+    {
+      entradas: registro.maquina1?.length
+        ? registro.maquina1
+        : [{ idMolde: 0, cantEnvases: 0 }],
+    },
+    {
+      entradas: registro.maquina2?.length
+        ? registro.maquina2
+        : [{ idMolde: 0, cantEnvases: 0 }],
+    },
+    {
+      entradas: registro.maquina3?.length
+        ? registro.maquina3
+        : [{ idMolde: 0, cantEnvases: 0 }],
+    },
+    {
+      entradas: registro.maquina4?.length
+        ? registro.maquina4
+        : [{ idMolde: 0, cantEnvases: 0 }],
+    },
   ]);
+
   const [totalPaletas, setTotalPaletas] = useState(
     registro.salidas.reduce(
       (total, salida) =>
@@ -116,6 +163,9 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
   const [observaciones, setObservaciones] = useState(
     registro.resultado?.observaciones ?? "",
   );
+  const [justificantesSeleccionados, setJustificantesSeleccionados] = useState<
+    number[]
+  >(registro.justificantes || []);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -153,8 +203,80 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
         setCargandoMoldes(false);
       }
     };
+
+    const cargarJustificantes = async () => {
+      try {
+        const response = await fetch(
+          "http://127.0.0.1:8000/produccion/justificantes",
+        );
+        if (!response.ok) {
+          throw new Error(`Error al cargar justificantes: ${response.status}`);
+        }
+        const justificantesCargados = (await response.json()) as Justificante[];
+        setJustificantes(justificantesCargados);
+      } catch (loadError) {
+        setError(
+          loadError instanceof Error
+            ? loadError.message
+            : "Error al cargar los justificantes.",
+        );
+      } finally {
+        setCargandoJustificantes(false);
+      }
+    };
+
     void cargarMoldes();
+    void cargarJustificantes();
   }, []);
+
+  const agregarEntradaMaquina = (maquinaIndex: number) => {
+    setMaquinas((actuales) =>
+      actuales.map((maquina, index) =>
+        index === maquinaIndex
+          ? {
+              ...maquina,
+              entradas: [...maquina.entradas, { idMolde: 0, cantEnvases: 0 }],
+            }
+          : maquina,
+      ),
+    );
+  };
+
+  const eliminarEntradaMaquina = (
+    maquinaIndex: number,
+    entradaIndex: number,
+  ) => {
+    setMaquinas((actuales) =>
+      actuales.map((maquina, index) =>
+        index === maquinaIndex
+          ? {
+              ...maquina,
+              entradas: maquina.entradas.filter((_, i) => i !== entradaIndex),
+            }
+          : maquina,
+      ),
+    );
+  };
+
+  const actualizarEntradaMaquina = (
+    maquinaIndex: number,
+    entradaIndex: number,
+    campo: keyof EntradaMaquina,
+    valor: number,
+  ) => {
+    setMaquinas((actuales) =>
+      actuales.map((maquina, index) =>
+        index === maquinaIndex
+          ? {
+              ...maquina,
+              entradas: maquina.entradas.map((entrada, i) =>
+                i === entradaIndex ? { ...entrada, [campo]: valor } : entrada,
+              ),
+            }
+          : maquina,
+      ),
+    );
+  };
 
   const limitarModelos = (actuales: ModeloForm[], limite: number) => {
     let restantes = limite;
@@ -166,17 +288,20 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
       return { ...modelo, paletasDecoradas, produccionLisa };
     });
   };
+
   const actualizarTotalPaletas = (value: string) => {
     const limite = Math.max(0, Number(value) || 0);
     setTotalPaletas(limite);
     setModelosForm((actuales) => limitarModelos(actuales, limite));
   };
+
   const actualizarModelo = (index: number, changes: Partial<ModeloForm>) =>
     setModelosForm((actuales) =>
       actuales.map((modelo, modeloIndex) =>
         modeloIndex === index ? { ...modelo, ...changes } : modelo,
       ),
     );
+
   const obtenerMaximoPaletas = (
     index: number,
     campo: "paletasDecoradas" | "produccionLisa",
@@ -197,6 +322,7 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
           0,
         ),
     );
+
   const cambiarPaletas = (
     index: number,
     campo: "paletasDecoradas" | "produccionLisa",
@@ -208,15 +334,56 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
         obtenerMaximoPaletas(index, campo),
       ),
     });
+
+  const agregarJustificante = () => {
+    setJustificantesSeleccionados((actuales) => [...actuales, 0]);
+  };
+
+  const eliminarJustificante = (index: number) => {
+    setJustificantesSeleccionados((actuales) =>
+      actuales.filter((_, i) => i !== index),
+    );
+  };
+
+  const actualizarJustificante = (index: number, idJustificante: number) => {
+    setJustificantesSeleccionados((actuales) =>
+      actuales.map((actual, i) => (i === index ? idJustificante : actual)),
+    );
+  };
+
+  // Calcular total de envases de todas las máquinas
+  const totalEnvasesMaquinas = maquinas.reduce(
+    (total, maquina) =>
+      total +
+      maquina.entradas.reduce((sum, entrada) => sum + entrada.cantEnvases, 0),
+    0,
+  );
+
   const handleReset = () => {
     setTurno(registro.turno);
     setFecha(registro.fecha);
     setTecnico(registro.tecnico);
-    setCantidades([
-      Number(registro.cantEnvasesD1),
-      Number(registro.cantEnvasesD2),
-      Number(registro.cantEnvasesD3),
-      Number(registro.cantEnvasesD4),
+    setMaquinas([
+      {
+        entradas: registro.maquina1?.length
+          ? registro.maquina1
+          : [{ idMolde: 0, cantEnvases: 0 }],
+      },
+      {
+        entradas: registro.maquina2?.length
+          ? registro.maquina2
+          : [{ idMolde: 0, cantEnvases: 0 }],
+      },
+      {
+        entradas: registro.maquina3?.length
+          ? registro.maquina3
+          : [{ idMolde: 0, cantEnvases: 0 }],
+      },
+      {
+        entradas: registro.maquina4?.length
+          ? registro.maquina4
+          : [{ idMolde: 0, cantEnvases: 0 }],
+      },
     ]);
     setTotalPaletas(
       registro.salidas.reduce(
@@ -235,17 +402,36 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
       })),
     );
     setObservaciones(registro.resultado?.observaciones ?? "");
+    setJustificantesSeleccionados(registro.justificantes || []);
     setError("");
   };
+
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!fecha || !tecnico || totalPaletas <= 0) {
       setError("Completa la fecha, el técnico y el total de paletas.");
       return;
     }
+
+    // Construir maquina1, maquina2, maquina3, maquina4
+    const maquinasParaEnviar = maquinas.map((maquina) =>
+      maquina.entradas
+        .filter((entrada) => entrada.idMolde > 0 && entrada.cantEnvases > 0)
+        .map((entrada) => ({
+          idMolde: entrada.idMolde,
+          cantEnvases: entrada.cantEnvases,
+        })),
+    );
+
+    const [maquina1, maquina2, maquina3, maquina4] = maquinasParaEnviar;
+
     const salidas = modelosForm.flatMap((modelo) => {
       const molde = moldes.find((item) => item.nombre === modelo.modelo);
       if (!molde) return [];
+
+      if (modelo.paletasDecoradas === 0 && modelo.produccionLisa === 0)
+        return [];
+
       const envasesDecoradas = modelo.paletasDecoradas * molde.numeroEnvases;
       const envasesLisas = modelo.produccionLisa * molde.numeroEnvases;
       return [
@@ -263,20 +449,53 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
         },
       ];
     });
+
+    const justificantesValidos = justificantesSeleccionados.filter(
+      (id) => id > 0,
+    );
+    const gruesasMaquinas = totalEnvasesMaquinas / ENVASES_POR_GRUESA;
+
+    const resumenProduccion = modelosForm.reduce(
+      (resumen, modelo) => {
+        const molde = moldes.find((item) => item.nombre === modelo.modelo);
+        if (molde) {
+          resumen.envasesDecorados +=
+            modelo.paletasDecoradas * molde.numeroEnvases;
+          resumen.envasesLisa += modelo.produccionLisa * molde.numeroEnvases;
+        }
+        return resumen;
+      },
+      { envasesDecorados: 0, envasesLisa: 0 },
+    );
+
+    const totalEnvasesPerdidos = Math.max(
+      0,
+      totalEnvasesMaquinas - resumenProduccion.envasesDecorados,
+    );
+    const gruesasPerdidas = totalEnvasesPerdidos / ENVASES_POR_GRUESA;
+    const deficienciaProductiva = gruesasMaquinas
+      ? (gruesasPerdidas / gruesasMaquinas) * 100
+      : 0;
+
     try {
       const response = await fetch(
-        `http://127.0.0.1:8000/produccion/${registro.idProduccion}`,
+        `http://127.0.0.1:8000/produccion/${registro.idCabecera}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
+            idCabecera: registro.idCabecera,
             fecha,
             turno,
             tecnico,
-            cantEnvasesD1: cantidades[0],
-            cantEnvasesD2: cantidades[1],
-            cantEnvasesD3: cantidades[2],
-            cantEnvasesD4: cantidades[3],
+            maquina1,
+            maquina2,
+            maquina3,
+            maquina4,
+            cantEnvasesD1: maquina1.reduce((sum, e) => sum + e.cantEnvases, 0),
+            cantEnvasesD2: maquina2.reduce((sum, e) => sum + e.cantEnvases, 0),
+            cantEnvasesD3: maquina3.reduce((sum, e) => sum + e.cantEnvases, 0),
+            cantEnvasesD4: maquina4.reduce((sum, e) => sum + e.cantEnvases, 0),
             totalEnvases: totalEnvasesMaquinas,
             totalGruesas: gruesasMaquinas,
             salidas,
@@ -289,6 +508,7 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
               deficienciaProductiva,
               observaciones,
             },
+            justificantes: justificantesValidos,
           }),
         },
       );
@@ -307,6 +527,7 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
       );
     }
   };
+
   const resumenProduccion = modelosForm.reduce(
     (resumen, modelo) => {
       const molde = moldes.find((item) => item.nombre === modelo.modelo);
@@ -319,10 +540,7 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
     },
     { envasesDecorados: 0, envasesLisa: 0 },
   );
-  const totalEnvasesMaquinas = cantidades.reduce(
-    (total, cantidad) => total + cantidad,
-    0,
-  );
+
   const totalEnvasesPerdidos = Math.max(
     0,
     totalEnvasesMaquinas - resumenProduccion.envasesDecorados,
@@ -335,7 +553,7 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
   return (
     <form className={`${styles.form} content`} onSubmit={handleSubmit}>
       <HeaderForm />
-      <h3 className={styles.title}>Editar Registro #{registro.idProduccion}</h3>
+      <h3 className={styles.title}>Editar Registro #{registro.idCabecera}</h3>
       <section className={styles.formData}>
         <fieldset className={`${styles.fieldset} ${styles.identifyWrapper}`}>
           <legend className={styles.legend}>Datos de Identificación</legend>
@@ -370,40 +588,108 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
             />
           </Campo>
         </fieldset>
+
+        {/* === MÁQUINAS DE DECORADO === */}
         <fieldset className={styles.fieldset}>
           <legend className={styles.legend}>Máquinas de Decorado</legend>
-          <div className={styles.fields}>
-            {cantidades.map((cantidad, index) => (
-              <Campo
-                key={index}
-                label={
-                  <>
-                    Nro. de Envases{" "}
-                    <span className={styles.machine}>
-                      (Máquina {index + 1})
-                    </span>
-                  </>
-                }
-                id={`cantidadMaquina${index}`}
+
+          {maquinas.map((maquina, maquinaIndex) => (
+            <div key={maquinaIndex} className={styles.maquinaContainer}>
+              <h4 className={styles.maquinaTitle}>
+                Máquina {maquinaIndex + 1}
+              </h4>
+              {maquina.entradas.map((entrada, entradaIndex) => (
+                <div key={entradaIndex} className={styles.entradaMaquina}>
+                  <div className={styles.inputWrapper}>
+                    <label
+                      htmlFor={`maquina-${maquinaIndex}-molde-${entradaIndex}`}
+                    >
+                      Molde
+                    </label>
+                    <select
+                      id={`maquina-${maquinaIndex}-molde-${entradaIndex}`}
+                      value={entrada.idMolde}
+                      onChange={(event) =>
+                        actualizarEntradaMaquina(
+                          maquinaIndex,
+                          entradaIndex,
+                          "idMolde",
+                          Number(event.target.value),
+                        )
+                      }
+                      disabled={cargandoMoldes}
+                    >
+                      <option value={0}>Selecciona un molde...</option>
+                      {moldes.map((molde) => (
+                        <option key={molde.idMolde} value={molde.idMolde}>
+                          {molde.nombre}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className={styles.inputWrapper}>
+                    <label
+                      htmlFor={`maquina-${maquinaIndex}-cant-${entradaIndex}`}
+                    >
+                      Nro. de Envases
+                    </label>
+                    <input
+                      id={`maquina-${maquinaIndex}-cant-${entradaIndex}`}
+                      type="number"
+                      min="0"
+                      value={entrada.cantEnvases || ""}
+                      onChange={(event) =>
+                        actualizarEntradaMaquina(
+                          maquinaIndex,
+                          entradaIndex,
+                          "cantEnvases",
+                          Math.max(0, Number(event.target.value) || 0),
+                        )
+                      }
+                    />
+                  </div>
+
+                  {maquina.entradas.length > 1 && (
+                    <button
+                      type="button"
+                      className={styles.deleteEntradaButton}
+                      onClick={() =>
+                        eliminarEntradaMaquina(maquinaIndex, entradaIndex)
+                      }
+                    >
+                      ✕
+                    </button>
+                  )}
+                </div>
+              ))}
+
+              <button
+                type="button"
+                className={styles.addEntradaButton}
+                onClick={() => agregarEntradaMaquina(maquinaIndex)}
               >
-                <input
-                  id={`cantidadMaquina${index}`}
-                  type="number"
-                  min="0"
-                  value={cantidad || ""}
-                  onChange={(event) =>
-                    setCantidades((actuales) =>
-                      actuales.map((actual, actualIndex) =>
-                        actualIndex === index
-                          ? Math.max(0, Number(event.target.value) || 0)
-                          : actual,
+                + Agregar Nro. de Envases (Máquina {maquinaIndex + 1})
+              </button>
+
+              <div className={styles.maquinaTotal}>
+                <div className={styles.inputWrapper}>
+                  <label>Total de Envases (Máquina {maquinaIndex + 1})</label>
+                  <input
+                    type="text"
+                    readOnly
+                    value={formatNumber(
+                      maquina.entradas.reduce(
+                        (sum, e) => sum + e.cantEnvases,
+                        0,
                       ),
-                    )
-                  }
-                />
-              </Campo>
-            ))}
-          </div>
+                    )}
+                  />
+                </div>
+              </div>
+            </div>
+          ))}
+
           <div className={styles.machineSummary}>
             <Campo label="Total de Envases" id="totalEnvasesMaquinas">
               <input
@@ -423,6 +709,7 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
             </Campo>
           </div>
         </fieldset>
+
         <fieldset className={styles.fieldset}>
           <legend className={styles.legend}>Total de Paletas</legend>
           <Campo label="Número Total de Paletas" id="totalPaletas">
@@ -436,6 +723,7 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
             />
           </Campo>
         </fieldset>
+
         {modelosForm.map((modelo, index) => (
           <ModeloProduccion
             key={index}
@@ -470,6 +758,7 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
         >
           + Añadir Otro Modelo
         </button>
+
         <fieldset className={styles.fieldset}>
           <legend className={styles.legend}>Resumen</legend>
           <div className={styles.summaryGrid}>
@@ -517,6 +806,7 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
             </Campo>
           </div>
         </fieldset>
+
         <Campo label="Observaciones" id="observaciones">
           <textarea
             id="observaciones"
@@ -525,6 +815,64 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
             rows={8}
           />
         </Campo>
+
+        {/* === JUSTIFICANTES === */}
+        <div className={styles.justificantesContainer}>
+          {justificantesSeleccionados.map((idJustificante, index) => (
+            <fieldset key={index} className={styles.fieldset}>
+              <legend className={styles.legend}>
+                Justificante ({index + 1})
+              </legend>
+              <div className={styles.justificanteRow}>
+                <div className={styles.inputWrapper}>
+                  <label htmlFor={`justificante-${index}`}>Justificante</label>
+                  <select
+                    id={`justificante-${index}`}
+                    value={idJustificante || ""}
+                    onChange={(event) =>
+                      actualizarJustificante(index, Number(event.target.value))
+                    }
+                    disabled={cargandoJustificantes}
+                  >
+                    <option value="">Selecciona un justificante...</option>
+                    {justificantes.map((justificante) => (
+                      <option
+                        key={justificante.idJustificante}
+                        value={justificante.idJustificante}
+                      >
+                        {justificante.etiqueta}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <button
+                  type="button"
+                  className={styles.deleteJustificanteButton}
+                  onClick={() => eliminarJustificante(index)}
+                >
+                  ✕
+                </button>
+              </div>
+              {idJustificante > 0 && (
+                <div className={styles.justificanteDescripcion}>
+                  {
+                    justificantes.find(
+                      (j) => j.idJustificante === idJustificante,
+                    )?.descripcion
+                  }
+                </div>
+              )}
+            </fieldset>
+          ))}
+
+          <button
+            type="button"
+            className={styles.addJustificanteButton}
+            onClick={agregarJustificante}
+          >
+            + Agregar Justificante
+          </button>
+        </div>
       </section>
       {error && <p className={styles.error}>{error}</p>}
       <div className={styles.buttonWrapper}>
@@ -557,6 +905,7 @@ const Campo = ({
     {children}
   </div>
 );
+
 type ModeloProps = {
   modelo: ModeloForm;
   index: number;
@@ -572,6 +921,7 @@ type ModeloProps = {
   ) => void;
   onEliminar: () => void;
 };
+
 const ModeloProduccion = ({
   modelo,
   index,
@@ -664,6 +1014,7 @@ const ModeloProduccion = ({
     </fieldset>
   );
 };
+
 const GrupoProduccion = ({
   title,
   value,
@@ -713,6 +1064,7 @@ const GrupoProduccion = ({
     </Campo>
   </div>
 );
+
 const ResumenColumn = ({
   label,
   total,

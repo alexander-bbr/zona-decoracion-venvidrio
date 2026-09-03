@@ -18,6 +18,7 @@ const API_PRODUCCION = "http://127.0.0.1:8000/produccion";
 
 export const GestionProductiva = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [pagina, setPagina] = useState(1);
   const [registros, setRegistros] = useState<RegistroProduccionLista[]>([]);
   const [totalRegistros, setTotalRegistros] = useState(0);
@@ -28,67 +29,71 @@ export const GestionProductiva = () => {
   const registrosPagina = registros.slice(inicio, inicio + registrosPorPagina);
   const hayMasRegistros = inicio + registrosPagina.length < totalRegistros;
 
-  useEffect(() => {
-    const cargarRegistros = async () => {
-      setCargando(true);
-      setError("");
-      try {
-        const registrosCargados: RegistroProduccionLista[] = [];
-        let skip = 0;
+  const cargarRegistros = async () => {
+    setCargando(true);
+    setError("");
+    try {
+      const registrosCargados: RegistroProduccionLista[] = [];
+      let skip = 0;
 
-        while (true) {
-          const response = await fetch(
-            `${API_PRODUCCION}?skip=${skip}&limit=${registrosPorPagina}`,
-          );
-          if (!response.ok)
-            throw new Error(`Error al cargar registros: ${response.status}`);
-
-          const data = await response.json();
-          // El nuevo endpoint devuelve directamente un array
-          const registrosApi = Array.isArray(data) ? data : (data.data ?? []);
-          const registrosNormalizados = registrosApi.map(
-            (registro: RegistroProduccionLista) => ({
-              ...registro,
-              idCabecera: Number(registro.idCabecera),
-              totalGruesas: Number(registro.totalGruesas),
-              totalGruesasLisas: Number(registro.totalGruesasLisas),
-              totalGruesasDecoradas: Number(registro.totalGruesasDecoradas),
-              eficienciaProductiva: Number(registro.eficienciaProductiva),
-              deficienciaProductiva: Number(registro.deficienciaProductiva),
-            }),
-          );
-
-          registrosCargados.push(...registrosNormalizados);
-
-          // Si la respuesta no tiene total, usamos la longitud del array
-          const totalApi = data.total
-            ? Number(data.total)
-            : registrosApi.length;
-          if (
-            registrosNormalizados.length < registrosPorPagina ||
-            (totalApi > 0 && registrosCargados.length >= totalApi)
-          ) {
-            break;
-          }
-          skip += registrosPorPagina;
-        }
-
-        setRegistros(registrosCargados);
-        setTotalRegistros(registrosCargados.length);
-      } catch (loadError) {
-        setError(
-          loadError instanceof Error
-            ? loadError.message
-            : "Error al cargar producción.",
+      while (true) {
+        const response = await fetch(
+          `${API_PRODUCCION}?skip=${skip}&limit=${registrosPorPagina}`,
         );
-      } finally {
-        setCargando(false);
+        if (!response.ok)
+          throw new Error(`Error al cargar registros: ${response.status}`);
+
+        const data = await response.json();
+        const registrosApi = Array.isArray(data) ? data : (data.data ?? []);
+        const registrosNormalizados = registrosApi.map(
+          (registro: RegistroProduccionLista) => ({
+            ...registro,
+            idCabecera: Number(registro.idCabecera),
+            totalGruesas: Number(registro.totalGruesas),
+            totalGruesasLisas: Number(registro.totalGruesasLisas),
+            totalGruesasDecoradas: Number(registro.totalGruesasDecoradas),
+            eficienciaProductiva: Number(registro.eficienciaProductiva),
+            deficienciaProductiva: Number(registro.deficienciaProductiva),
+          }),
+        );
+
+        registrosCargados.push(...registrosNormalizados);
+
+        const totalApi = data.total ? Number(data.total) : registrosApi.length;
+        if (
+          registrosNormalizados.length < registrosPorPagina ||
+          (totalApi > 0 && registrosCargados.length >= totalApi)
+        ) {
+          break;
+        }
+        skip += registrosPorPagina;
       }
-    };
-    void cargarRegistros();
+
+      setRegistros(registrosCargados);
+      setTotalRegistros(registrosCargados.length);
+    } catch (loadError) {
+      setError(
+        loadError instanceof Error
+          ? loadError.message
+          : "Error al cargar producción.",
+      );
+    } finally {
+      setCargando(false);
+    }
+  };
+
+  // Cargar registros al montar el componente
+  useEffect(() => {
+    cargarRegistros();
   }, []);
 
-  const location = useLocation();
+  // Recargar cuando la ruta cambie a la raíz (cuando volvemos de registrar/editar)
+  useEffect(() => {
+    if (location.pathname === "/gestion-productiva") {
+      cargarRegistros();
+    }
+  }, [location.pathname]);
+
   const isRoot = location.pathname === "/gestion-productiva";
 
   /* Obtener el título para cada acción */
@@ -148,9 +153,11 @@ export const GestionProductiva = () => {
                     <th>Fecha</th>
                     <th>Turno</th>
                     <th>Técnico</th>
-                    <th>Gruesas</th>
+                    <th>Total Gruesas</th>
+                    <th>Gruesas Lisas</th>
                     <th>Gruesas Decoradas</th>
                     <th>Eficiencia</th>
+                    <th>Deficiencia</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -161,13 +168,21 @@ export const GestionProductiva = () => {
                         navigate(`editar-produccion/${registro.idCabecera}`)
                       }
                     >
-                      <td>#{registro.idCabecera}</td>
+                      <td>
+                        <strong>{registro.idCabecera}</strong>
+                      </td>
                       <td>{registro.fecha}</td>
                       <td>{registro.turno}</td>
                       <td>{registro.tecnico}</td>
                       <td>{registro.totalGruesas}</td>
+                      <td>{registro.totalGruesasLisas}</td>
                       <td>{registro.totalGruesasDecoradas}</td>
-                      <td>{registro.eficienciaProductiva}%</td>
+                      <td className={styles.eficent}>
+                        {registro.eficienciaProductiva} %
+                      </td>
+                      <td className={styles.deficent}>
+                        {registro.deficienciaProductiva} %
+                      </td>
                     </tr>
                   ))}
                 </tbody>

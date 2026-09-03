@@ -1,6 +1,6 @@
 .container {
   padding: 20px;
-  max-width: 1200px;
+  max-width: 1300px;
   margin: 0 auto;
 }
 
@@ -75,6 +75,7 @@
   padding: 1.25rem;
   margin: 0rem 0 1.5rem;
 }
+
 .title {
   color: #1f2937;
   font-size: 1.5rem;
@@ -89,32 +90,61 @@
   cursor: pointer;
   font-weight: 600;
 }
+
+/* === TABLE === */
 .tableContainer {
   overflow-x: auto;
 }
+
 .table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 680px;
+  min-width: 900px;
 }
+
 .table th {
   padding: 0.8rem 1rem;
   background: #5181b1;
   color: #fff;
   text-align: center;
+  white-space: nowrap;
 }
+
 .table td {
   padding: 0.8rem 1rem;
   border-bottom: 1px solid #e5e7eb;
   color: #374151;
   text-align: center;
 }
+
 .table tbody tr {
   cursor: pointer;
   transition: background 0.2s;
 }
+
 .table tbody tr:hover {
   background: #eef5fc;
+}
+
+.eficent {
+  font-weight: 600;
+  color: #10812bcd !important;
+}
+.deficent {
+  font-weight: 600;
+  color: #a90919c4 !important;
+}
+
+/* * Estilos específicos para las columnas */
+/* Fecha */
+.table th:nth-child(2),
+.table td:nth-child(2) {
+  min-width: 140px;
+}
+/* Técnico */
+.table th:nth-child(4),
+.table td:nth-child(4) {
+  min-width: 140px;
 }
 
 /* === PAGINACIÓN === */

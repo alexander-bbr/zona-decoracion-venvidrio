@@ -618,7 +618,7 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
         </fieldset>
 
         {/* === MÁQUINAS DE DECORADO === */}
-        <fieldset className={styles.fieldset}>
+        <fieldset className={`${styles.fieldset} ${styles.maquinas}`}>
           <legend className={styles.legend}>Máquinas de Decorado</legend>
 
           {maquinas.map((maquina, maquinaIndex) => (
@@ -647,7 +647,7 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
                       }
                       disabled={cargandoMoldes}
                     >
-                      <option value={0}>Selecciona un molde...</option>
+                      <option value={0}>...</option>
                       {moldes.map((molde) => (
                         <option key={molde.idMolde} value={molde.idMolde}>
                           {molde.nombre}
@@ -863,7 +863,7 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
                     }
                     disabled={cargandoJustificantes}
                   >
-                    <option value="">Selecciona un justificante...</option>
+                    <option value="">...</option>
                     {justificantes.map((justificante) => (
                       <option
                         key={justificante.idJustificante}

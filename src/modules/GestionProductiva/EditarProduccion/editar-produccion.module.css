@@ -110,11 +110,18 @@ textarea {
 }
 
 /* Máquinas */
+.maquinas {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: start;
+  gap: 2rem;
+}
+
 .maquinaContainer {
-  margin-bottom: 2rem;
   padding: 1.5rem 2rem;
-  background: #dee3eb;
   border-radius: 8px;
+  background: #dee3eb;
 }
 
 .maquinaTitle {

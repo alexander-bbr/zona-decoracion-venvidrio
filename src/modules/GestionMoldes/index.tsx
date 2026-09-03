@@ -15,46 +15,55 @@ const API_MOLDES = "http://127.0.0.1:8000/api/gestion-moldes";
 
 export const GestionMoldes = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [moldes, setMoldes] = useState<Molde[]>([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    const cargarMoldes = async () => {
-      setCargando(true);
-      setError("");
-      try {
-        const response = await fetch(API_MOLDES);
-        if (!response.ok) {
-          throw new Error(`Error al cargar moldes: ${response.status}`);
-        }
-        const data = await response.json();
-        const moldesNormalizados = data.map((molde: Molde) => ({
-          ...molde,
-          idMolde: Number(molde.idMolde),
-          numeroCamadas: Number(molde.numeroCamadas),
-          numeroEnvases: Number(molde.numeroEnvases),
-          numeroGruesas: Number(molde.numeroGruesas),
-        }));
-        // Ordenar los moldes por ID de forma ascendente
-        const moldesOrdenados = moldesNormalizados.sort(
-          (a, b) => a.idMolde - b.idMolde,
-        );
-        setMoldes(moldesOrdenados);
-      } catch (loadError) {
-        setError(
-          loadError instanceof Error
-            ? loadError.message
-            : "Error al cargar moldes.",
-        );
-      } finally {
-        setCargando(false);
+  const cargarMoldes = async () => {
+    setCargando(true);
+    setError("");
+    try {
+      const response = await fetch(API_MOLDES);
+      if (!response.ok) {
+        throw new Error(`Error al cargar moldes: ${response.status}`);
       }
-    };
-    void cargarMoldes();
+      const data = await response.json();
+      const moldesNormalizados = data.map((molde: Molde) => ({
+        ...molde,
+        idMolde: Number(molde.idMolde),
+        numeroCamadas: Number(molde.numeroCamadas),
+        numeroEnvases: Number(molde.numeroEnvases),
+        numeroGruesas: Number(molde.numeroGruesas),
+      }));
+      // Ordenar los moldes por ID de forma ascendente
+      const moldesOrdenados = moldesNormalizados.sort(
+        (a, b) => a.idMolde - b.idMolde,
+      );
+      setMoldes(moldesOrdenados);
+    } catch (loadError) {
+      setError(
+        loadError instanceof Error
+          ? loadError.message
+          : "Error al cargar moldes.",
+      );
+    } finally {
+      setCargando(false);
+    }
+  };
+
+  // Cargar moldes al montar el componente
+  useEffect(() => {
+    cargarMoldes();
   }, []);
 
-  const location = useLocation();
+  // Recargar cuando la ruta cambie a la raíz (cuando volvemos de registrar/editar)
+  useEffect(() => {
+    if (location.pathname === "/gestion-moldes") {
+      cargarMoldes();
+    }
+  }, [location.pathname]);
+
   const isRoot = location.pathname === "/gestion-moldes";
 
   const getTitle = () => {

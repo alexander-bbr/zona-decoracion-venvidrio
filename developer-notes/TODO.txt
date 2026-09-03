@@ -11,12 +11,6 @@
 
 ## Gestión Productiva
 
-  - Agregar el resto de campos de Gestión Productiva (la tabla de vista).
-
-  - Quitarle el campo de ID en Gestión Productiva (ya que el usuario no necesita verlo).
-
-  - Cambiar el orden en el que se muestran los registros por ...
-
   - En la columna de Total de Envases en Producción Lisa debe colocarse un mensaje que diga que no se toma en consideración para el cálculo de la Eficiencia y Deficiencia Productiva.
 
   - Darle un color de fondo a las 3 columnas del fieldset de Resumen.
@@ -26,7 +20,6 @@
 
 
 ## Gestión de Moldes
-
 
 
 ---

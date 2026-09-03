@@ -26,6 +26,7 @@ const API_USUARIOS = "http://127.0.0.1:8000/api/usuarios";
 
 export const GestionUsuarios = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { hasPermission } = useAuth();
   const [usuarios, setUsuarios] = useState<Usuario[]>([]);
   const [cargando, setCargando] = useState(true);
@@ -34,15 +35,6 @@ export const GestionUsuarios = () => {
   // Verificar permisos
   const puedeVerUsuarios = hasPermission("gestion_usuarios", "ver_usuarios");
   const puedeCrearEditar = hasPermission("gestion_usuarios", "crear_editar");
-
-  useEffect(() => {
-    if (puedeVerUsuarios) {
-      cargarUsuarios();
-    } else {
-      setCargando(false);
-      setError("No tienes permiso para ver los usuarios");
-    }
-  }, [puedeVerUsuarios]);
 
   const cargarUsuarios = async () => {
     setCargando(true);
@@ -71,7 +63,23 @@ export const GestionUsuarios = () => {
     }
   };
 
-  const location = useLocation();
+  // Cargar usuarios al montar el componente
+  useEffect(() => {
+    if (puedeVerUsuarios) {
+      cargarUsuarios();
+    } else {
+      setCargando(false);
+      setError("No tienes permiso para ver los usuarios");
+    }
+  }, [puedeVerUsuarios]);
+
+  // Recargar cuando la ruta cambie a la raíz (cuando volvemos de registrar/editar)
+  useEffect(() => {
+    if (location.pathname === "/gestion-usuarios" && puedeVerUsuarios) {
+      cargarUsuarios();
+    }
+  }, [location.pathname, puedeVerUsuarios]);
+
   const isRoot = location.pathname === "/gestion-usuarios";
 
   const getTitle = () => {

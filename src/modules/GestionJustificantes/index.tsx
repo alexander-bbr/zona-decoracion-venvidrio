@@ -12,45 +12,54 @@ const API_JUSTIFICANTES = "http://127.0.0.1:8000/api/gestion-justificantes";
 
 export const GestionJustificantes = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [justificantes, setJustificantes] = useState<Justificante[]>([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    const cargarJustificantes = async () => {
-      setCargando(true);
-      setError("");
-      try {
-        const response = await fetch(API_JUSTIFICANTES);
-        if (!response.ok) {
-          throw new Error(`Error al cargar justificantes: ${response.status}`);
-        }
-        const data = await response.json();
-        const justificantesNormalizados = data.map(
-          (justificante: Justificante) => ({
-            ...justificante,
-            idJustificante: Number(justificante.idJustificante),
-          }),
-        );
-        // Ordenar los justificantes por ID de forma ascendente
-        const justificantesOrdenados = justificantesNormalizados.sort(
-          (a, b) => a.idJustificante - b.idJustificante,
-        );
-        setJustificantes(justificantesOrdenados);
-      } catch (loadError) {
-        setError(
-          loadError instanceof Error
-            ? loadError.message
-            : "Error al cargar justificantes.",
-        );
-      } finally {
-        setCargando(false);
+  const cargarJustificantes = async () => {
+    setCargando(true);
+    setError("");
+    try {
+      const response = await fetch(API_JUSTIFICANTES);
+      if (!response.ok) {
+        throw new Error(`Error al cargar justificantes: ${response.status}`);
       }
-    };
-    void cargarJustificantes();
+      const data = await response.json();
+      const justificantesNormalizados = data.map(
+        (justificante: Justificante) => ({
+          ...justificante,
+          idJustificante: Number(justificante.idJustificante),
+        }),
+      );
+      // Ordenar los justificantes por ID de forma ascendente
+      const justificantesOrdenados = justificantesNormalizados.sort(
+        (a, b) => a.idJustificante - b.idJustificante,
+      );
+      setJustificantes(justificantesOrdenados);
+    } catch (loadError) {
+      setError(
+        loadError instanceof Error
+          ? loadError.message
+          : "Error al cargar justificantes.",
+      );
+    } finally {
+      setCargando(false);
+    }
+  };
+
+  // Cargar justificantes al montar el componente
+  useEffect(() => {
+    cargarJustificantes();
   }, []);
 
-  const location = useLocation();
+  // Recargar cuando la ruta cambie a la raíz (cuando volvemos de registrar/editar)
+  useEffect(() => {
+    if (location.pathname === "/gestion-justificantes") {
+      cargarJustificantes();
+    }
+  }, [location.pathname]);
+
   const isRoot = location.pathname === "/gestion-justificantes";
 
   const getTitle = () => {

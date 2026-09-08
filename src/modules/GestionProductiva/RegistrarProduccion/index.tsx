@@ -5,9 +5,11 @@ import { ENVASES_POR_GRUESA } from "../../../../constants";
 import styles from "./registrar-produccion.module.css";
 
 type ModeloForm = {
-  modelo: string;
+  idMolde: number;
+  nombre: string;
   paletasDecoradas: number;
   produccionLisa: number;
+  justificantes: number[];
 };
 
 type Molde = {
@@ -27,17 +29,12 @@ type Justificante = {
 type EntradaMaquina = {
   idMolde: number;
   cantEnvases: number;
+  horaEntrada: string;
 };
 
 type MaquinaProduccion = {
   entradas: EntradaMaquina[];
 };
-
-const modeloInicial = (nombre = ""): ModeloForm => ({
-  modelo: nombre,
-  paletasDecoradas: 0,
-  produccionLisa: 0,
-});
 
 const formatNumber = (value: number) =>
   value.toLocaleString("es-VE", { maximumFractionDigits: 2 });
@@ -48,23 +45,23 @@ export const RegistrarProduccion = () => {
   const [cargandoMoldes, setCargandoMoldes] = useState(true);
   const [justificantes, setJustificantes] = useState<Justificante[]>([]);
   const [cargandoJustificantes, setCargandoJustificantes] = useState(true);
-  const [turno, setTurno] = useState<"A" | "B" | "C">("A");
+
+  // Datos de Identificación
+  const [tipoTurno, setTipoTurno] = useState<"2" | "3" | "">("");
+  const [turno, setTurno] = useState<number | "">("");
+  const [grupo, setGrupo] = useState("");
   const [fecha, setFecha] = useState("");
   const [tecnico, setTecnico] = useState("");
+
   const [maquinas, setMaquinas] = useState<MaquinaProduccion[]>([
-    { entradas: [{ idMolde: 0, cantEnvases: 0 }] },
-    { entradas: [{ idMolde: 0, cantEnvases: 0 }] },
-    { entradas: [{ idMolde: 0, cantEnvases: 0 }] },
-    { entradas: [{ idMolde: 0, cantEnvases: 0 }] },
+    { entradas: [{ idMolde: 0, cantEnvases: 0, horaEntrada: "" }] },
+    { entradas: [{ idMolde: 0, cantEnvases: 0, horaEntrada: "" }] },
+    { entradas: [{ idMolde: 0, cantEnvases: 0, horaEntrada: "" }] },
+    { entradas: [{ idMolde: 0, cantEnvases: 0, horaEntrada: "" }] },
   ]);
   const [totalPaletas, setTotalPaletas] = useState(0);
-  const [modelosForm, setModelosForm] = useState<ModeloForm[]>([
-    modeloInicial(),
-  ]);
+  const [modelosForm, setModelosForm] = useState<ModeloForm[]>([]);
   const [observaciones, setObservaciones] = useState("");
-  const [justificantesSeleccionados, setJustificantesSeleccionados] = useState<
-    number[]
-  >([]);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -82,14 +79,6 @@ export const RegistrarProduccion = () => {
           }),
         );
         setMoldes(moldesCargados);
-        // Actualizar el primer modelo con el primer molde disponible
-        setModelosForm((actuales) =>
-          actuales.map((modelo, index) =>
-            index === 0 && !modelo.modelo && moldesCargados.length > 0
-              ? { ...modelo, modelo: moldesCargados[0].nombre }
-              : modelo,
-          ),
-        );
       } catch (loadError) {
         setError(
           loadError instanceof Error
@@ -126,13 +115,57 @@ export const RegistrarProduccion = () => {
     void cargarJustificantes();
   }, []);
 
+  // Actualizar modelosForm cuando cambian las máquinas
+  useEffect(() => {
+    const moldesUsados = new Map<
+      number,
+      {
+        nombre: string;
+        paletasDecoradas: number;
+        produccionLisa: number;
+        justificantes: number[];
+      }
+    >();
+
+    maquinas.forEach((maquina) => {
+      maquina.entradas.forEach((entrada) => {
+        if (entrada.idMolde > 0) {
+          const molde = moldes.find((m) => m.idMolde === entrada.idMolde);
+          if (molde && !moldesUsados.has(entrada.idMolde)) {
+            moldesUsados.set(entrada.idMolde, {
+              nombre: molde.nombre,
+              paletasDecoradas: 0,
+              produccionLisa: 0,
+              justificantes: [],
+            });
+          }
+        }
+      });
+    });
+
+    const nuevosModelos = Array.from(moldesUsados.entries()).map(
+      ([idMolde, data]) => ({
+        idMolde,
+        nombre: data.nombre,
+        paletasDecoradas: data.paletasDecoradas,
+        produccionLisa: data.produccionLisa,
+        justificantes: data.justificantes,
+      }),
+    );
+
+    setModelosForm(nuevosModelos);
+  }, [maquinas, moldes]);
+
   const agregarEntradaMaquina = (maquinaIndex: number) => {
     setMaquinas((actuales) =>
       actuales.map((maquina, index) =>
         index === maquinaIndex
           ? {
               ...maquina,
-              entradas: [...maquina.entradas, { idMolde: 0, cantEnvases: 0 }],
+              entradas: [
+                ...maquina.entradas,
+                { idMolde: 0, cantEnvases: 0, horaEntrada: "" },
+              ],
             }
           : maquina,
       ),
@@ -159,7 +192,7 @@ export const RegistrarProduccion = () => {
     maquinaIndex: number,
     entradaIndex: number,
     campo: keyof EntradaMaquina,
-    valor: number,
+    valor: number | string,
   ) => {
     setMaquinas((actuales) =>
       actuales.map((maquina, index) =>
@@ -171,6 +204,61 @@ export const RegistrarProduccion = () => {
               ),
             }
           : maquina,
+      ),
+    );
+  };
+
+  const actualizarModelo = (index: number, changes: Partial<ModeloForm>) => {
+    setModelosForm((actuales) =>
+      actuales.map((modelo, modeloIndex) =>
+        modeloIndex === index ? { ...modelo, ...changes } : modelo,
+      ),
+    );
+  };
+
+  const agregarJustificante = (modeloIndex: number) => {
+    setModelosForm((actuales) =>
+      actuales.map((modelo, index) =>
+        index === modeloIndex
+          ? { ...modelo, justificantes: [...modelo.justificantes, 0] }
+          : modelo,
+      ),
+    );
+  };
+
+  const eliminarJustificante = (
+    modeloIndex: number,
+    justificanteIndex: number,
+  ) => {
+    setModelosForm((actuales) =>
+      actuales.map((modelo, index) =>
+        index === modeloIndex
+          ? {
+              ...modelo,
+              justificantes: modelo.justificantes.filter(
+                (_, i) => i !== justificanteIndex,
+              ),
+            }
+          : modelo,
+      ),
+    );
+  };
+
+  const actualizarJustificante = (
+    modeloIndex: number,
+    justificanteIndex: number,
+    idJustificante: number,
+  ) => {
+    setModelosForm((actuales) =>
+      actuales.map((modelo, index) =>
+        index === modeloIndex
+          ? {
+              ...modelo,
+              justificantes: modelo.justificantes.map((id, i) =>
+                i === justificanteIndex ? idJustificante : id,
+              ),
+            }
+          : modelo,
       ),
     );
   };
@@ -190,14 +278,6 @@ export const RegistrarProduccion = () => {
     const limite = Math.max(0, Number(value) || 0);
     setTotalPaletas(limite);
     setModelosForm((actuales) => limitarModelos(actuales, limite));
-  };
-
-  const actualizarModelo = (index: number, changes: Partial<ModeloForm>) => {
-    setModelosForm((actuales) =>
-      actuales.map((modelo, modeloIndex) =>
-        modeloIndex === index ? { ...modelo, ...changes } : modelo,
-      ),
-    );
   };
 
   const obtenerMaximoPaletas = (
@@ -232,36 +312,21 @@ export const RegistrarProduccion = () => {
   };
 
   const handleReset = () => {
-    setTurno("A");
+    setTipoTurno("");
+    setTurno("");
+    setGrupo("");
     setFecha("");
     setTecnico("");
     setMaquinas([
-      { entradas: [{ idMolde: 0, cantEnvases: 0 }] },
-      { entradas: [{ idMolde: 0, cantEnvases: 0 }] },
-      { entradas: [{ idMolde: 0, cantEnvases: 0 }] },
-      { entradas: [{ idMolde: 0, cantEnvases: 0 }] },
+      { entradas: [{ idMolde: 0, cantEnvases: 0, horaEntrada: "" }] },
+      { entradas: [{ idMolde: 0, cantEnvases: 0, horaEntrada: "" }] },
+      { entradas: [{ idMolde: 0, cantEnvases: 0, horaEntrada: "" }] },
+      { entradas: [{ idMolde: 0, cantEnvases: 0, horaEntrada: "" }] },
     ]);
     setTotalPaletas(0);
-    setModelosForm([modeloInicial()]);
+    setModelosForm([]);
     setObservaciones("");
-    setJustificantesSeleccionados([]);
     setError("");
-  };
-
-  const agregarJustificante = () => {
-    setJustificantesSeleccionados((actuales) => [...actuales, 0]);
-  };
-
-  const eliminarJustificante = (index: number) => {
-    setJustificantesSeleccionados((actuales) =>
-      actuales.filter((_, i) => i !== index),
-    );
-  };
-
-  const actualizarJustificante = (index: number, idJustificante: number) => {
-    setJustificantesSeleccionados((actuales) =>
-      actuales.map((actual, i) => (i === index ? idJustificante : actual)),
-    );
   };
 
   // Calcular total de envases de todas las máquinas
@@ -274,8 +339,8 @@ export const RegistrarProduccion = () => {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!fecha || !tecnico || totalPaletas <= 0) {
-      setError("Completa la fecha, el técnico y el total de paletas.");
+    if (!fecha || !tecnico || !turno || !grupo || totalPaletas <= 0) {
+      setError("Completa todos los campos obligatorios.");
       return;
     }
 
@@ -286,6 +351,7 @@ export const RegistrarProduccion = () => {
         .map((entrada) => ({
           idMolde: entrada.idMolde,
           cantEnvases: entrada.cantEnvases,
+          horaEntrada: entrada.horaEntrada || "00:00",
         })),
     );
 
@@ -293,9 +359,9 @@ export const RegistrarProduccion = () => {
 
     // Construir salidas
     const salidas = modelosForm.flatMap((modelo) => {
-      const molde = moldes.find((item) => item.nombre === modelo.modelo);
+      const molde = moldes.find((item) => item.idMolde === modelo.idMolde);
       if (!molde) {
-        console.warn("No se encontró molde para el modelo:", modelo.modelo);
+        console.warn("No se encontró molde para el modelo:", modelo.idMolde);
         return [];
       }
       const camadasDecoradas = modelo.paletasDecoradas * molde.numeroCamadas;
@@ -309,7 +375,7 @@ export const RegistrarProduccion = () => {
       return [
         {
           modeloMolde: molde.idMolde,
-          totalPaletas: modelo.paletasDecoradas + modelo.produccionLisa,
+          totalPaletasMolde: modelo.paletasDecoradas + modelo.produccionLisa,
           cantPaletasLisas: modelo.produccionLisa,
           cantCamadasLisas: camadasLisas,
           cantEnvasesLisas: envasesLisas,
@@ -329,16 +395,22 @@ export const RegistrarProduccion = () => {
       return;
     }
 
-    const justificantesValidos = justificantesSeleccionados.filter(
-      (id) => id > 0,
-    );
+    // Construir justificantes por molde
+    const justificantesPorMolde = modelosForm
+      .filter(
+        (modelo) => modelo.justificantes && modelo.justificantes.length > 0,
+      )
+      .map((modelo) => ({
+        modeloMolde: modelo.idMolde,
+        justificaciones: modelo.justificantes.filter((id) => id > 0),
+      }))
+      .filter((item) => item.justificaciones.length > 0);
+
     const gruesasMaquinas = totalEnvasesMaquinas / ENVASES_POR_GRUESA;
 
     const resumenProduccion = modelosForm.reduce(
       (resumen, modelo) => {
-        const molde = moldes.find(
-          (item) => item.nombre === (modelo.modelo || moldes[0]?.nombre),
-        );
+        const molde = moldes.find((item) => item.idMolde === modelo.idMolde);
         if (molde) {
           resumen.envasesDecorados +=
             modelo.paletasDecoradas * molde.numeroEnvases;
@@ -365,7 +437,8 @@ export const RegistrarProduccion = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           fecha,
-          turno,
+          turno: Number(turno),
+          grupo,
           tecnico,
           maquina1,
           maquina2,
@@ -387,7 +460,7 @@ export const RegistrarProduccion = () => {
             deficienciaProductiva,
             observaciones,
           },
-          justificantes: justificantesValidos,
+          justificantes: justificantesPorMolde,
         }),
       });
       if (!response.ok) {
@@ -408,9 +481,7 @@ export const RegistrarProduccion = () => {
 
   const resumenProduccion = modelosForm.reduce(
     (resumen, modelo) => {
-      const molde = moldes.find(
-        (item) => item.nombre === (modelo.modelo || moldes[0]?.nombre),
-      );
+      const molde = moldes.find((item) => item.idMolde === modelo.idMolde);
       if (molde) {
         resumen.envasesDecorados +=
           modelo.paletasDecoradas * molde.numeroEnvases;
@@ -442,6 +513,28 @@ export const RegistrarProduccion = () => {
         {/* === IDENTIFICACIÓN DEL REGISTRO === */}
         <fieldset className={`${styles.fieldset} ${styles.identifyWrapper}`}>
           <legend className={styles.legend}>Datos de Identificación</legend>
+
+          {/* Tipo de Turno */}
+          <div className={styles.inputWrapper}>
+            <label htmlFor="tipoTurno">
+              Tipo de Turno <span className={styles.requireSymbol}>*</span>
+            </label>
+            <select
+              id="tipoTurno"
+              value={tipoTurno}
+              onChange={(event) => {
+                setTipoTurno(event.target.value as "2" | "3");
+                setTurno("");
+              }}
+              required
+            >
+              <option value="">...</option>
+              <option value="2">2 Turnos</option>
+              <option value="3">3 Turnos</option>
+            </select>
+          </div>
+
+          {/* Turno */}
           <div className={styles.inputWrapper}>
             <label htmlFor="turno">
               Turno <span className={styles.requireSymbol}>*</span>
@@ -449,17 +542,48 @@ export const RegistrarProduccion = () => {
             <select
               id="turno"
               value={turno}
-              onChange={(event) =>
-                setTurno(event.target.value as "A" | "B" | "C")
-              }
+              onChange={(event) => setTurno(Number(event.target.value))}
+              disabled={!tipoTurno}
               required
             >
-              <option>A</option>
-              <option>B</option>
-              <option>C</option>
+              <option value="">...</option>
+              {tipoTurno === "2" && (
+                <>
+                  <option value={1}>1</option>
+                  <option value={2}>2</option>
+                </>
+              )}
+              {tipoTurno === "3" && (
+                <>
+                  <option value={1}>1</option>
+                  <option value={2}>2</option>
+                  <option value={3}>3</option>
+                </>
+              )}
             </select>
           </div>
 
+          {/* Grupo */}
+          <div className={styles.inputWrapper}>
+            <label htmlFor="grupo">
+              Grupo <span className={styles.requireSymbol}>*</span>
+            </label>
+            <select
+              id="grupo"
+              value={grupo}
+              onChange={(event) => setGrupo(event.target.value)}
+              disabled={!tipoTurno}
+              required
+            >
+              <option value="">...</option>
+              <option value="A">A</option>
+              <option value="B">B</option>
+              <option value="C">C</option>
+              <option value="D">D</option>
+            </select>
+          </div>
+
+          {/* Fecha */}
           <div className={styles.inputWrapper}>
             <label htmlFor="fecha">
               Fecha <span className={styles.requireSymbol}>*</span>
@@ -469,10 +593,12 @@ export const RegistrarProduccion = () => {
               type="date"
               value={fecha}
               onChange={(event) => setFecha(event.target.value)}
+              disabled={!tipoTurno}
               required
             />
           </div>
 
+          {/* Técnico */}
           <div className={styles.inputWrapper}>
             <label htmlFor="tecnico">
               Técnico <span className={styles.requireSymbol}>*</span>
@@ -482,6 +608,7 @@ export const RegistrarProduccion = () => {
               type="text"
               value={tecnico}
               onChange={(event) => setTecnico(event.target.value)}
+              disabled={!tipoTurno}
               required
             />
           </div>
@@ -543,6 +670,27 @@ export const RegistrarProduccion = () => {
                           entradaIndex,
                           "cantEnvases",
                           Math.max(0, Number(event.target.value) || 0),
+                        )
+                      }
+                    />
+                  </div>
+
+                  <div className={styles.inputWrapper}>
+                    <label
+                      htmlFor={`maquina-${maquinaIndex}-hora-${entradaIndex}`}
+                    >
+                      Hora de Entrada
+                    </label>
+                    <input
+                      id={`maquina-${maquinaIndex}-hora-${entradaIndex}`}
+                      type="time"
+                      value={entrada.horaEntrada || ""}
+                      onChange={(event) =>
+                        actualizarEntradaMaquina(
+                          maquinaIndex,
+                          entradaIndex,
+                          "horaEntrada",
+                          event.target.value,
                         )
                       }
                     />
@@ -631,38 +779,25 @@ export const RegistrarProduccion = () => {
           </div>
         </fieldset>
 
-        {/* === MODELOS DE ENVASE === */}
+        {/* === MODELOS DE ENVASE (MOLDES) === */}
         {modelosForm.map((modelo, index) => (
           <ModeloProduccion
             key={index}
             modelo={modelo}
             index={index}
             moldes={moldes}
+            justificantes={justificantes}
             cargandoMoldes={cargandoMoldes}
+            cargandoJustificantes={cargandoJustificantes}
             maximoDecoradas={obtenerMaximoPaletas(index, "paletasDecoradas")}
             maximoLisa={obtenerMaximoPaletas(index, "produccionLisa")}
             actualizarModelo={actualizarModelo}
             cambiarPaletas={cambiarPaletas}
-            onEliminar={() =>
-              setModelosForm((actuales) =>
-                actuales.filter((_, modeloIndex) => modeloIndex !== index),
-              )
-            }
+            agregarJustificante={agregarJustificante}
+            eliminarJustificante={eliminarJustificante}
+            actualizarJustificante={actualizarJustificante}
           />
         ))}
-
-        <button
-          type="button"
-          className={styles.addButton}
-          onClick={() =>
-            setModelosForm((actuales) => [
-              ...actuales,
-              modeloInicial(moldes[0]?.nombre),
-            ])
-          }
-        >
-          + Añadir Otro Modelo
-        </button>
 
         {/* === RESUMEN === */}
         <fieldset className={styles.fieldset}>
@@ -743,6 +878,27 @@ export const RegistrarProduccion = () => {
               </div>
             </div>
           </div>
+
+          {/* Paletas por Molde - Resumen */}
+          <div className={styles.paletasPorMolde}>
+            <h4 className={styles.paletasPorMoldeTitle}>Paletas por Molde</h4>
+            <div className={styles.paletasPorMoldeGrid}>
+              {modelosForm.map((modelo, index) => {
+                const molde = moldes.find((m) => m.idMolde === modelo.idMolde);
+                return molde ? (
+                  <div key={index} className={styles.paletasPorMoldeItem}>
+                    <span className={styles.paletasPorMoldeLabel}>
+                      Molde {molde.nombre}:
+                    </span>
+                    <span className={styles.paletasPorMoldeValue}>
+                      {modelo.paletasDecoradas + modelo.produccionLisa}
+                    </span>
+                  </div>
+                ) : null;
+              })}
+            </div>
+          </div>
+
           <div className={styles.productivitySummary}>
             <div className={styles.inputWrapper}>
               <label htmlFor="eficienciaProductiva">
@@ -789,64 +945,6 @@ export const RegistrarProduccion = () => {
             rows={8}
           />
         </div>
-
-        {/* === JUSTIFICANTES === */}
-        <div className={styles.justificantesContainer}>
-          {justificantesSeleccionados.map((idJustificante, index) => (
-            <fieldset key={index} className={styles.fieldset}>
-              <legend className={styles.legend}>
-                Justificante ({index + 1})
-              </legend>
-              <div className={styles.justificanteRow}>
-                <div className={styles.inputWrapper}>
-                  <label htmlFor={`justificante-${index}`}>Justificante</label>
-                  <select
-                    id={`justificante-${index}`}
-                    value={idJustificante || ""}
-                    onChange={(event) =>
-                      actualizarJustificante(index, Number(event.target.value))
-                    }
-                    disabled={cargandoJustificantes}
-                  >
-                    <option value="">...</option>
-                    {justificantes.map((justificante) => (
-                      <option
-                        key={justificante.idJustificante}
-                        value={justificante.idJustificante}
-                      >
-                        {justificante.etiqueta}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <button
-                  type="button"
-                  className={styles.deleteJustificanteButton}
-                  onClick={() => eliminarJustificante(index)}
-                >
-                  ✕
-                </button>
-              </div>
-              {idJustificante > 0 && (
-                <div className={styles.justificanteDescripcion}>
-                  {
-                    justificantes.find(
-                      (j) => j.idJustificante === idJustificante,
-                    )?.descripcion
-                  }
-                </div>
-              )}
-            </fieldset>
-          ))}
-
-          <button
-            type="button"
-            className={styles.addJustificanteButton}
-            onClick={agregarJustificante}
-          >
-            + Agregar Justificante
-          </button>
-        </div>
       </section>
 
       {error && <p className={styles.error}>{error}</p>}
@@ -871,7 +969,9 @@ type ModeloProduccionProps = {
   modelo: ModeloForm;
   index: number;
   moldes: Molde[];
+  justificantes: Justificante[];
   cargandoMoldes: boolean;
+  cargandoJustificantes: boolean;
   maximoDecoradas: number;
   maximoLisa: number;
   actualizarModelo: (index: number, changes: Partial<ModeloForm>) => void;
@@ -880,60 +980,55 @@ type ModeloProduccionProps = {
     campo: "paletasDecoradas" | "produccionLisa",
     value: string,
   ) => void;
-  onEliminar: () => void;
+  agregarJustificante: (modeloIndex: number) => void;
+  eliminarJustificante: (
+    modeloIndex: number,
+    justificanteIndex: number,
+  ) => void;
+  actualizarJustificante: (
+    modeloIndex: number,
+    justificanteIndex: number,
+    idJustificante: number,
+  ) => void;
 };
 
 const ModeloProduccion = ({
   modelo,
   index,
   moldes,
+  justificantes,
   cargandoMoldes,
+  cargandoJustificantes,
   maximoDecoradas,
   maximoLisa,
   actualizarModelo,
   cambiarPaletas,
-  onEliminar,
+  agregarJustificante,
+  eliminarJustificante,
+  actualizarJustificante,
 }: ModeloProduccionProps) => {
-  const definicion = moldes.find(
-    (item) => item.nombre === (modelo.modelo || moldes[0]?.nombre),
-  );
+  const definicion = moldes.find((item) => item.idMolde === modelo.idMolde);
   const resumen = (paletas: number) => ({
     camadas: paletas * (definicion?.numeroCamadas ?? 0),
     envases: paletas * (definicion?.numeroEnvases ?? 0),
     gruesas: (paletas * (definicion?.numeroEnvases ?? 0)) / ENVASES_POR_GRUESA,
   });
+
   return (
     <fieldset className={styles.fieldset}>
       <legend className={styles.legend}>
         Molde <span className={styles.numberModel}>( {index + 1} )</span>
       </legend>
-      {index > 0 && (
-        <button
-          type="button"
-          className={styles.deleteButton}
-          onClick={onEliminar}
-        >
-          Eliminar modelo
-        </button>
-      )}
+
       <div className={styles.modelHeader}>
         <div className={styles.inputWrapper}>
           <label>Código del Molde</label>
-          <select
-            value={modelo.modelo || moldes[0]?.nombre || ""}
+          <input
+            type="text"
+            readOnly
+            value={definicion?.nombre ?? modelo.idMolde}
             disabled={cargandoMoldes || moldes.length === 0}
-            onChange={(event) =>
-              actualizarModelo(index, {
-                modelo: event.target.value,
-              })
-            }
-          >
-            {moldes.map((molde) => (
-              <option key={molde.idMolde} value={molde.nombre}>
-                {molde.nombre}
-              </option>
-            ))}
-          </select>
+          />
         </div>
         <div className={styles.inputWrapper}>
           <label>Descripción</label>
@@ -948,6 +1043,7 @@ const ModeloProduccion = ({
           />
         </div>
       </div>
+
       <div className={styles.productionGrid}>
         <GrupoProduccion
           title="Paletas Decoradas"
@@ -964,6 +1060,7 @@ const ModeloProduccion = ({
           resumen={resumen(modelo.produccionLisa)}
         />
       </div>
+
       <div className={styles.modelTotal}>
         <div className={styles.inputWrapper}>
           <label htmlFor={`totalPaletasModelo${index}`}>
@@ -976,6 +1073,56 @@ const ModeloProduccion = ({
             value={modelo.paletasDecoradas + modelo.produccionLisa}
           />
         </div>
+      </div>
+
+      {/* Justificantes para este molde */}
+      <div className={styles.justificantesContainer}>
+        <h5 className={styles.justificantesTitle}>Justificantes</h5>
+        {modelo.justificantes.map((idJustificante, justificanteIndex) => (
+          <div key={justificanteIndex} className={styles.justificanteRow}>
+            <div className={styles.inputWrapper}>
+              <label htmlFor={`justificante-${index}-${justificanteIndex}`}>
+                Justificante
+              </label>
+              <select
+                id={`justificante-${index}-${justificanteIndex}`}
+                value={idJustificante || ""}
+                onChange={(event) =>
+                  actualizarJustificante(
+                    index,
+                    justificanteIndex,
+                    Number(event.target.value),
+                  )
+                }
+                disabled={cargandoJustificantes}
+              >
+                <option value="">...</option>
+                {justificantes.map((justificante) => (
+                  <option
+                    key={justificante.idJustificante}
+                    value={justificante.idJustificante}
+                  >
+                    {justificante.etiqueta}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <button
+              type="button"
+              className={styles.deleteJustificanteButton}
+              onClick={() => eliminarJustificante(index, justificanteIndex)}
+            >
+              ✕
+            </button>
+          </div>
+        ))}
+        <button
+          type="button"
+          className={styles.addJustificanteButton}
+          onClick={() => agregarJustificante(index)}
+        >
+          + Agregar Justificante
+        </button>
       </div>
     </fieldset>
   );

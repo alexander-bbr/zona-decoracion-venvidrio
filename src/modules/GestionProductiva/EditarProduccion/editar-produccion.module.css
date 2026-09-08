@@ -76,7 +76,7 @@
 .inputWrapper input,
 .inputWrapper select,
 .inputWrapper textarea {
-  padding: 12px 16px;
+  padding: 0.9rem 1rem;
   border: 2px solid #e0e0e0;
   border-radius: 10px;
   font-size: 1rem;
@@ -133,12 +133,18 @@ textarea {
 .entradaMaquina {
   display: flex;
   gap: 1rem;
+  flex-wrap: wrap;
   align-items: flex-end;
   margin-bottom: 1rem;
 }
 
 .entradaMaquina .inputWrapper {
   flex: 1;
+}
+
+/* Disminuye el tamño de los inputs innecesariamente largos en las máquinas */
+.entradaMaquina input {
+  max-width: 9.5rem;
 }
 
 .deleteEntradaButton {
@@ -409,6 +415,66 @@ textarea {
 .error {
   color: #b42318;
   font-weight: 600;
+}
+
+/* Paletas por Molde - Resumen */
+.paletasPorMolde {
+  margin-top: 2rem;
+  padding: 1rem;
+  background: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+.paletasPorMoldeTitle {
+  color: #3563a3;
+  font-size: 1rem;
+  margin: 0 0 1rem 0;
+  text-align: center;
+}
+
+.paletasPorMoldeGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.5rem;
+}
+
+.paletasPorMoldeItem {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem;
+  background: white;
+  border-radius: 4px;
+  border: 1px solid #e5e7eb;
+}
+
+.paletasPorMoldeLabel {
+  font-weight: 500;
+  color: #374151;
+}
+
+.paletasPorMoldeValue {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+/* Justificantes dentro de Molde */
+.justificantesTitle {
+  color: #3563a3;
+  font-size: 0.95rem;
+  margin: 0 0 0.5rem 0;
+  text-align: left;
+}
+
+.justificantesContainer {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: #f8fafc;
+  border-radius: 8px;
+}
+
+input[readonly] {
+  cursor: not-allowed;
 }
 
 @media (max-width: 760px) {

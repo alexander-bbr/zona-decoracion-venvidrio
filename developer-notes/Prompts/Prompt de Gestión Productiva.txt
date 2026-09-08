@@ -2,4 +2,3 @@ Hola Deepseek, le hice un par de cambios a los formularios de RegistrarProduccio
 
 - Le cambié el Legend de Modelo del Envase ( n ) a Molde ( n ) (ya que uno de los usuarios dijo que así lo entendía mejor).
 - Cambié los select de de Molde a Código del Molde (ya que así se entendía mejor que estaba seleccionando el código, no la descripción).
-- Nosotros teníamos 

@@ -19,23 +19,23 @@
 
   - Pasarle a la IA todos los códigos de Gestión Productiva para que vaya al tanto de como voy.
   
+  - Colocar un input con readonly al lado del código del molde en las máquinas, para que así sea más fácil poder guiarse de cuál estamos eligiendo.
+
   - Cambios más importantes:
 
     - Anotar las horas en las que entró cada molde en cada máquina.
-
-    - Colocar un input con readonly al lado del código del molde en las máquinas, para que así sea más fácil poder guiarse de cuál estamos eligiendo.
 
     - Agregar un identificador en las Máquinas de decorados para que el usuario las asocie mejor con la manera en la que las llama: en Máquina 1 por Máquina D3, Máquina 2 por Máquina D4, Máquina 3 por Máquina D11 y Máquina D4 por Máquina D12
 
     - Hacer las correciones de los turnos en el fieldset de Datos de Identificación.
 
-    - Colocar en el resumen el total de cada Molde.
+    - Colocar en el resumen el Número de Paletas (Producción Decorada) (o sea, el input que está en el fieldset de Molde debe cargar el que estará ahora en el Resumen, pero será solo como efecto visual este nuevo input con readonly).
 
     - Las justificaciones deberían estar asociadas a un molde, y pueden haber varios justificaciones en un molde
 
     - Los fieldset de {/* === MODELOS DE ENVASE === */}, deberían aparecer es envase a lo que se haya colocado en {/* === MÁQUINAS DE DECORADO === */}. O sea por ejemplo, si entre las 4 máquinas se usaron 2 moldes, pues entonces en MODELOS DE ENVASE deberían de aparecer 2 fieldset de Molde ( n ). Haciendo que ya no sea necesario el botón de  + Añadir Otro Modelo y el de Eliminar Modelo
 
-    - Ya no se tiene que tomar en cuenta en el input de Número Total de Paletas (del fielset de Total de Paletas), las paletas que sean de producción lisa. Osea, lo único que va a limitar el campo de Número Total de Paletas, son los inputs de Número de Paletas de Producción Decorada entre todos los moldes. Ejemplo: Pusimos 10 en el input de Número total de Paletas, y teníamos dos moldes por todas las máquinas (en la máquina 1 habian 2 moldes: el molde GX0001 y el molde GX0002; y en las máquinas 2, 3 y 4 habían nada más el molde GX0001). Entonces bueno, en el Molde ( 1 ) (el GX0001) en el Numero de Paletas de Producción Decorada pusimos 5, y en el Número de Paletas de Producción Lisa de ese molde pusimos 3 (bueno, este 3 no afecta a la cuenta). Y en el Molde ( 2 ) el Número de Paletas de Producción Decorada pusimos 5 (teniendo entonces 5 + 5 = 10, chévere, no superamos el 10 de Número Total de Paletas).
+    - Ya no se tiene que tomar en cuenta en el input de Número Total de Paletas (del fielset de Total de Paletas), las paletas que sean de producción lisa. Osea, lo único que va a limitar el campo de Número Total de Paletas, son los inputs de Número de Paletas de Producción Decorada entre todos los moldes. Ejemplo: Pusimos 10 en el input de Número total de Paletas, y teníamos dos moldes por todas las máquinas (en la máquina 1 habian 2 moldes: el molde GX0001 y el molde GX0002; y en las máquinas 2, 3 y 4 habían nada más el molde GX0001). Entonces bueno, en el Molde ( 1 ) (el GX0001) en el Numero de Paletas de Producción Decorada pusimos 5, y en el Número de Paletas de Producción Lisa de ese molde pusimos 3 (bueno, este 3 no afecta a la cuenta). Y en el Molde ( 2 ) el Número de Paletas de Producción Decorada pusimos 5 (teniendo entonces 5 + 5 = 10, chévere, no superamos el 10 de Número Total de Paletas). De hecho, el campo de Número Total de Paletas habría que cambiarlo de nombre a Número Total de Paletas Decoradas (así sería más congruente).
 
 
 ---

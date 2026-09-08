@@ -5,38 +5,45 @@ Método: POST
 JSON (Envía el Frontend):
 {
   "fecha": "2026-08-23",
-  "turno": "A",
+  "turno": "1", // Es un string           // ESTO CAMBIÓ
+  "grupo": "A",                           // ESTO ES NUEVO
   "tecnico": "Daniel Pérez",
   "maquina1": [
     {
       "idMolde": 1,
       "cantEnvases": 100
+      "horaEntrada": "8:00"               // ESTO ES NUEVO
     },
     {
       "idMolde": 2,
       "cantEnvases": 2000
+      "horaEntrada": "14:23"              // ESTO ES NUEVO
     }
   ],
   "maquina2": [
     {
       "idMolde": 1,
       "cantEnvases": 100
+      "horaEntrada": "14:00"              // ESTO ES NUEVO
     }
   ],
   "maquina3": [
     {
       "idMolde": 1,
       "cantEnvases": 100
+      "horaEntrada": "18:00"              // ESTO ES NUEVO
     }
   ],
   "maquina4": [
     {
       "idMolde": 1,
       "cantEnvases": 100
+      "horaEntrada": "12:00"              // ESTO ES NUEVO
     },
     {
       "idMolde": 2,
       "cantEnvases": 100
+      "horaEntrada": "19:00"              // ESTO ES NUEVO
     }
   ],
   "cantEnvasesD1": 2100,
@@ -48,7 +55,7 @@ JSON (Envía el Frontend):
   "salidas": [
     {
       "modeloMolde": 1,
-      "totalPaletas": 4,
+      "totalPaletasMolde": 4,                      // ESTO CAMBIÓ (antes se llamaba totalPaletas)
       "cantPaletasLisas": 2,
       "cantCamadasLisas": 4,
       "cantEnvasesLisas": 80,
@@ -57,7 +64,19 @@ JSON (Envía el Frontend):
       "cantCamadasDecoradas": 4,
       "cantEnvasesDecoradas": 80,
       "cantGruesasDecoradas": 0.55
-    }
+    },
+    {
+      "modeloMolde": 2,
+      "totalPaletasMolde": 4,                      // ESTO CAMBIÓ (antes se llamaba totalPaletas)
+      "cantPaletasLisas": 2,
+      "cantCamadasLisas": 4,
+      "cantEnvasesLisas": 80,
+      "cantGruesasLisas": 0.55,
+      "cantPaletasDecoradas": 2,
+      "cantCamadasDecoradas": 4,
+      "cantEnvasesDecoradas": 80,
+      "cantGruesasDecoradas": 0.55
+    },
   ],
   "resultado": {
     "totalGruesasLisas": 0.55,
@@ -66,7 +85,16 @@ JSON (Envía el Frontend):
     "deficienciaProductiva": 5.00,
     "observaciones": "causa"
   },
-  "justificantes": [1, 2, 4]
+    "justificantes": [                        // ESTO CAMBIÓ
+      {
+        "modeloMolde": 1,
+        "justificaciones": [1, 2, 3]
+      },
+      {
+        "modeloMolde": 2,
+        "justificaciones": [2, 3]
+      },
+    ]
 }
 
 JSON (Respuesta en caso de éxito):
@@ -94,7 +122,6 @@ JSON (Envía el Frontend):
 {
   "idCabecera": 262,
   "fecha": "2026-08-30",
-  "turno": "A",
   "tecnico": "holaaaaa Pérez",
   "maquina1": [
     {
@@ -158,9 +185,7 @@ JSON (Envía el Frontend):
     "observaciones": "Prueba de registro",
     "idCabecera": 262
   },
-  "justificantes": [
-      1, 2, 4
-    ]
+  "justificantes": [1, 2, 4]
 }
 
 JSON (Respuesta en caso de éxito):

@@ -632,7 +632,7 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
                     <label
                       htmlFor={`maquina-${maquinaIndex}-molde-${entradaIndex}`}
                     >
-                      Molde
+                      Código del Molde
                     </label>
                     <select
                       id={`maquina-${maquinaIndex}-molde-${entradaIndex}`}
@@ -976,8 +976,7 @@ const ModeloProduccion = ({
   return (
     <fieldset className={styles.fieldset}>
       <legend className={styles.legend}>
-        Modelo de envase{" "}
-        <span className={styles.numberModel}>( {index + 1} )</span>
+        Molde <span className={styles.numberModel}>( {index + 1} )</span>
       </legend>
       {index > 0 && (
         <button
@@ -990,7 +989,7 @@ const ModeloProduccion = ({
       )}
       <div className={styles.modelHeader}>
         <div className={styles.inputWrapper}>
-          <label htmlFor={`modelo${index}`}>Modelo de Envase</label>
+          <label htmlFor={`modelo${index}`}>Código del Molde</label>
           <select
             id={`modelo${index}`}
             value={molde?.nombre ?? modelo.modelo}
@@ -1040,7 +1039,7 @@ const ModeloProduccion = ({
       </div>
       <div className={styles.modelTotal}>
         <Campo
-          label="Total de Paletas por Modelo"
+          label="Total de Paletas por este Molde"
           id={`totalPaletasModelo${index}`}
         >
           <input

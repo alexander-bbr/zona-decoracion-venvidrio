@@ -1,0 +1,375 @@
+Estoy trabajando en una aplicación hecha en React + TS con Vite. En el backend tengo FastAPI con MySQL. El asunto es que tengo un layout donde arriba tengo el header, abajo el footer, por el lado izquiedo la sidebar (es la unica navbar que tengo) y por el lado derecho el main. El asunto es que tengo la sidebar como fija, y pues me gustaria que en su lugar hubiera un botón hamburguesa en el header, que al activarlo me permitiera abrir y cerrrar la sidebar. Y que la sidebar no ocupara un espacio en el layout, o sea que en cualquier caso se pusiera por encima y ya, o sea que no mueva ningun elemento del main por asi decirlo. Ojo, quiero que la sidebar aparezca es debajo del header, o sea, está el header, luego el main, y luego el footer. Hasta ahí todo bien. Pero al momento de presionar el botón hamburguesa para hacer aparecer la sidebar, esta debe aparacer por el costado del main (o sea, ocupando la misma altura que el main). Aquí te paso los códigos de la aplicación. Este es mi App.tsx: import { BrowserRouter } from "react-router-dom";
+import { AuthProvider } from "./contexts/AuthContext";
+import { AppRoutes } from "./config/AppRoutes";
+import { Header } from "./layout/Header";
+import { Sidebar } from "./layout/Sidebar";
+import { Footer } from "./layout/Footer";
+
+function App() {
+  return (
+    <BrowserRouter>
+      <AuthProvider>
+        <Header />
+        <Sidebar />
+        <main id="main">
+          <AppRoutes />
+        </main>
+        <Footer />
+      </AuthProvider>
+    </BrowserRouter>
+  );
+}
+
+export default App;
+este es mi index.css: * {
+  font-family: Montserrat, sans-serif;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+:root {
+  /* Colores del sistema */
+  --primary-color: rgb(53, 116, 211);
+  --secondary-color: rgba(133, 133, 133, 0.664);
+  --tertiary-color: #4e4e4e;
+  --background-color: #e0eaf3;
+
+  /* Colores de los textos */
+  --primary-text-color: rgb(33, 33, 34);
+  --secondary-text-color: #545d66;
+  --third-text-color: #ffffff;
+  --fourth-text-color: #ffffffd7;
+}
+
+body {
+  background: var(--background-color);
+  color: var(--primary-text-color);
+}
+
+#root {
+  min-height: 100vh; /* Mantiene abajo del todo el footer */
+  display: grid;
+  grid-template-columns: auto 1fr 1fr;
+  grid-template-rows: auto 1fr auto;
+  gap: 0px 0px;
+  grid-auto-flow: row;
+  grid-template-areas:
+    "header header header"
+    "sidebar main main"
+    "footer footer footer";
+}
+
+#header {
+  grid-area: header;
+}
+
+#sidebar {
+  grid-area: sidebar;
+}
+
+#main {
+  grid-area: main;
+}
+
+/* Darle una animación al proceso en cuestión */
+.content {
+  animation: fadeIn 0.3s ease-in-out;
+  margin-bottom: 10rem !important;
+}
+
+#footer {
+  grid-area: footer;
+}
+
+/* === ANIMACIONES === */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+Este es mi componente src/layout/Sidebar: import { Link } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
+import styles from "./sidebar.module.css";
+
+export const Sidebar = () => {
+  const { isAuthenticated, user, logout, hasPermission, hasAnyPermission } =
+    useAuth();
+
+  // Si NO está autenticado, muestra los siguientes links
+  if (!isAuthenticated) {
+    return (
+      <nav className={styles.sidebar} id="sidebar">
+        <ul>
+          <li>
+            <Link to="/">Inicio</Link>
+          </li>
+          <li>
+            <Link to="/sign-in">Iniciar Sesión</Link>
+          </li>
+        </ul>
+      </nav>
+    );
+  }
+
+  // Si está autenticado, muestra los siguientes links
+  return (
+    <nav className={styles.sidebar} id="sidebar">
+      {/* === INFORMACIÓN DEL USUARIO ===*/}
+      <section className={styles.userInfo}>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="38"
+          height="38"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="3"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="feather feather-user"
+        >
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+
+        <p>
+          {user?.nombres} {user?.apellidos}
+        </p>
+        <p>{user?.rol}</p>
+      </section>
+
+      {/* === LINKS === */}
+      <ul>
+        {/* Inicio */}
+        <li>
+          <Link to="/">Inicio</Link>
+        </li>
+
+        {/* Dashboard - visible si tiene permiso ver (dashboard) */}
+        {hasPermission("dashboard", "ver") && (
+          <li>
+            <Link to="/rendimiento">Rendimiento</Link>
+          </li>
+        )}
+
+        {/* Consumo de Pintura - visible si tiene algún permiso de insumo_pintura */}
+        {hasAnyPermission("insumo_pintura", [
+          "ver_inventario",
+          "crear_registro",
+          "crear_consumo",
+          "ver_historial_consumo",
+        ]) && (
+          <li>
+            <Link to="/consumo-pintura">Consumo de Pintura</Link>
+          </li>
+        )}
+
+        {/* Gestion Productiva - visible si tiene el permiso de (ver_produccion) */}
+        {hasAnyPermission("gestion_productiva", ["ver_produccion"]) && (
+          <li>
+            <Link to="/gestion-productiva">Gestión Productiva</Link>
+          </li>
+        )}
+
+        {/* Gestion de Moldes - visible si tiene el permiso de gestion_moldes (gestion_productiva) */}
+        {hasAnyPermission("gestion_productiva", ["gestion_moldes"]) && (
+          <li>
+            <Link to="/gestion-moldes">Gestión de Moldes</Link>
+          </li>
+        )}
+
+        {/* Gestion de Justificantes - visible si tiene el permiso de gestion_justificantes (gestion_productiva) */}
+        {hasAnyPermission("gestion_productiva", ["gestion_justificantes"]) && (
+          <li>
+            <Link to="/gestion-justificantes">Gestión de Justificantes</Link>
+          </li>
+        )}
+
+        {/* Gestión de Usuarios - visible si tiene el permiso de ver_usuarios (gestion_usuarios)*/}
+        {hasAnyPermission("gestion_usuarios", ["ver_usuarios"]) && (
+          <li>
+            <Link to="/gestion-usuarios">Gestión de Usuarios</Link>
+          </li>
+        )}
+      </ul>
+
+      {/* Cerrar sesión */}
+      <button onClick={logout} className={styles.logoutButton}>
+        Cerrar Sesión
+      </button>
+    </nav>
+  );
+}; Este es su Sidebar.module.css: .sidebar {
+  width: 250px;
+  background-color: var(--third-text-color);
+  box-shadow: 2px 0 24px rgba(44, 62, 80, 0.08);
+  padding: 2.2rem 0.5rem;
+}
+
+/* === INFORMACIÓN DEL USUARIO === */
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 1.3rem;
+  border-bottom: 2px solid var(--secondary-color);
+}
+.userInfo p:first-of-type {
+  margin: 0.8rem 0 0.8rem;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 600;
+}
+.userInfo p:last-child {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  color: var(--primary-color);
+}
+
+/* === LINKS === */
+ul {
+  list-style: none;
+  margin: 2rem 0 1.8rem;
+}
+
+li a {
+  display: block;
+  padding: 14px 16px;
+  border-radius: 14px;
+  color: var(--primary-text-color);
+  text-decoration: none;
+  font-weight: 600;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+li a:hover {
+  background: rgba(53, 116, 211, 0.12);
+  color: var(--primary-color);
+}
+
+/* Botón de Cierre de Sesión */
+.logoutButton {
+  display: block;
+  margin: auto;
+  width: 85%;
+  padding: 0.6rem 1.2rem;
+  background-color: #707070;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  transition: background 0.2s;
+}
+
+.logoutButton:hover {
+  background: #565656;
+}
+
+Este es mi src/layout/Header: import styles from "./Header.module.css";
+import isotipo from "../../assets/images/favicon.png";
+import { DatosEmpresa } from "../../components/DatosEmpresa";
+
+export const Header = () => {
+  return (
+    <header className={styles.header} id="header">
+      <div className={styles.softwareData}>
+        <img
+          className={styles.isotipo}
+          src={isotipo}
+          alt="Logo del Software de Zona de Decoración"
+        />
+        <div className={styles.softwareNameWrapper}>
+          <h1 className={styles.softwareName}>Zona de Decoración</h1>
+          <p className={styles.softwareDescription}>
+            Aplicación de Gestión Administrativa
+          </p>
+        </div>
+      </div>
+      <DatosEmpresa></DatosEmpresa>
+    </header>
+  );
+};
+Este es su src/layout/Header.module.css: .header {
+  padding: 0.2rem 2rem 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--primary-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.softwareData {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.isotipo {
+  padding-top: 0.5rem;
+  width: 7.2rem;
+  height: 7.2rem;
+}
+
+.softwareNameWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.5rem;
+  align-self: center;
+}
+
+.softwareName {
+  font-size: 2rem;
+  color: var(--third-text-color);
+}
+
+.softwareDescription {
+  font-size: 0.9rem;
+  color: var(--fourth-text-color);
+}
+Este el src/layout/Footer: import styles from "./footer.module.css";
+
+export const Footer = () => {
+  return (
+    <footer className={styles.footer} id="footer">
+      <p>Aplicación de uso exclusivo para personal autorizado</p>
+      <p>Zona de Decoración © 2026 - Todos los derechos reservados</p>
+    </footer>
+  );
+};
+Y este su src/layout/Footer.module.css: .footer {
+  background: var(--tertiary-color);
+  color: var(--third-text-color);
+  padding: 3.5rem 0 3.5rem;
+  font-size: 0.95rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+}
+
+.footer p:first-child {
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.footer p:last-child {
+  font-size: 0.7rem;
+  color: var(--fourth-text-color);
+}
+. O sea te paso todo eso por si lo necesitabas. Y bueno, quisiera saber si podrías ayudarme a lograrlo. Por cierto, si me vas a dar código, dame SIEMPRE el archivo COMPLETO. Por cierto, has los cambios que haga falta hacer, si ya no es necesario una grilla sino un flexbox, pues lo haces, si hay que quitar cierta cosa y meter otra, lo haces, etc.

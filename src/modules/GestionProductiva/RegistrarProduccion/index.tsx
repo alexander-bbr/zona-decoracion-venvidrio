@@ -502,7 +502,7 @@ export const RegistrarProduccion = () => {
                     <label
                       htmlFor={`maquina-${maquinaIndex}-molde-${entradaIndex}`}
                     >
-                      Molde
+                      Código del Molde
                     </label>
                     <select
                       id={`maquina-${maquinaIndex}-molde-${entradaIndex}`}
@@ -905,8 +905,7 @@ const ModeloProduccion = ({
   return (
     <fieldset className={styles.fieldset}>
       <legend className={styles.legend}>
-        Modelo de envase{" "}
-        <span className={styles.numberModel}>( {index + 1} )</span>
+        Molde <span className={styles.numberModel}>( {index + 1} )</span>
       </legend>
       {index > 0 && (
         <button
@@ -919,7 +918,7 @@ const ModeloProduccion = ({
       )}
       <div className={styles.modelHeader}>
         <div className={styles.inputWrapper}>
-          <label>Modelo de Envase</label>
+          <label>Código del Molde</label>
           <select
             value={modelo.modelo || moldes[0]?.nombre || ""}
             disabled={cargandoMoldes || moldes.length === 0}
@@ -936,15 +935,18 @@ const ModeloProduccion = ({
             ))}
           </select>
         </div>
-        <input
-          className={styles.descriptionInput}
-          type="text"
-          readOnly
-          value={definicion?.descripcion ?? ""}
-          placeholder={
-            cargandoMoldes ? "Cargando descripción..." : "Descripción"
-          }
-        />
+        <div className={styles.inputWrapper}>
+          <label>Descripción</label>
+          <input
+            className={styles.descriptionInput}
+            type="text"
+            readOnly
+            value={definicion?.descripcion ?? ""}
+            placeholder={
+              cargandoMoldes ? "Cargando descripción..." : "Descripción"
+            }
+          />
+        </div>
       </div>
       <div className={styles.productionGrid}>
         <GrupoProduccion
@@ -965,7 +967,7 @@ const ModeloProduccion = ({
       <div className={styles.modelTotal}>
         <div className={styles.inputWrapper}>
           <label htmlFor={`totalPaletasModelo${index}`}>
-            Total de Paletas por Modelo
+            Total de Paletas por este Molde
           </label>
           <input
             id={`totalPaletasModelo${index}`}

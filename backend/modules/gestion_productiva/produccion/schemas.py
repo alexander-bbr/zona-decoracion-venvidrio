@@ -35,6 +35,7 @@ class JustificanteResponde(BaseModel):
 class EntradaDetalleBase(BaseModel):
     id_molde: int = Field(alias="idMolde")
     cant_envases: int = Field(alias="cantEnvases")
+    hora_entrada: Optional[str] = Field(default=None, alias="horaEntrada")  # NUEVO
 
     class Config:
         populate_by_name = True
@@ -51,7 +52,7 @@ class EntradaDetalleResponde(EntradaDetalleBase):
 # ESQUEMAS PARA EFICIENCIA PRODUCTIVA SALIDA (Detalle de modelos)
 class SalidaBase(BaseModel):
     modelo_molde: int = Field(alias="modeloMolde")
-    total_paletas: int = Field(default=0, alias="totalPaletas")
+    total_paletas_molde: int = Field(default=0, alias="totalPaletasMolde")  # RENOMBRADO
 
     cant_paletas_lisas: int = Field(default=0, alias="cantPaletasLisas")
     cant_camadas_lisas: int = Field(default=0, alias="cantCamadasLisas")
@@ -71,10 +72,25 @@ class SalidaCrear(SalidaBase):
 
 class SalidaResponde(SalidaBase):
     id_eficiencia: int = Field(alias="idEficiencia")
-    id_cabecera: int = Field(alias="idCabecera")
 
     class Config:
         from_attributes = True
+
+
+# ESQUEMA PARA JUSTIFICANTES POR MOLDE
+class JustificantePorMoldeCrear(BaseModel):
+    modelo_molde: int = Field(alias="modeloMolde")              # NUEVO
+    justificaciones: List[int] = Field(alias="justificaciones") # NUEVO
+
+    class Config:
+        populate_by_name = True
+
+class JustificantePorMoldeResponde(BaseModel):
+    modelo_molde: int = Field(alias="modeloMolde")              # NUEVO
+    justificaciones: List[int] = Field(alias="justificaciones") # NUEVO
+
+    class Config:
+        populate_by_name = True
 
 
 # ESQUEMAS PARA GESTION_PRODUCTIVA_RESULTADO (Consolidado)
@@ -92,7 +108,6 @@ class ResultadoCrear(ResultadoBase):
     pass
 
 class ResultadoResponde(ResultadoBase):
-    id_cabecera: int = Field(alias="idCabecera")
 
     class Config:
         from_attributes = True
@@ -101,7 +116,8 @@ class ResultadoResponde(ResultadoBase):
 # ESQUEMAS PARA GESTION_PRODUCTIVA_CABECERA (Creación)
 class ProduccionCrear(BaseModel):
     fecha: date = Field(alias="fecha")
-    turno: str = Field(alias="turno")
+    turno: int = Field(alias="turno")                           # CAMBIADO a int
+    grupo: Optional[str] = Field(default=None, alias="grupo")  # NUEVO
     tecnico: str = Field(alias="tecnico")
 
     maquina1: List[EntradaDetalleCrear] = Field(default=[], alias="maquina1")
@@ -118,7 +134,7 @@ class ProduccionCrear(BaseModel):
 
     salidas: List[SalidaCrear] = Field(default=[], alias="salidas")
     resultado: ResultadoCrear = Field(alias="resultado")
-    justificantes: List[int] = Field(default=[], alias="justificantes")
+    justificantes: List[JustificantePorMoldeCrear] = Field(default=[], alias="justificantes")  # CAMBIADO
 
     class Config:
         populate_by_name = True
@@ -128,7 +144,8 @@ class ProduccionCrear(BaseModel):
 class ProduccionResponde(BaseModel):
     id_cabecera: int = Field(alias="idCabecera")
     fecha: date = Field(alias="fecha")
-    turno: str = Field(alias="turno")
+    turno: int = Field(alias="turno")                           # CAMBIADO a int
+    grupo: Optional[str] = Field(default=None, alias="grupo")  # NUEVO
     tecnico: str = Field(alias="tecnico")
 
     maquina1: List[EntradaDetalleResponde] = Field(default=[], alias="maquina1")
@@ -145,7 +162,7 @@ class ProduccionResponde(BaseModel):
 
     salidas: List[SalidaResponde] = Field(default=[], alias="salidas")
     resultado: Optional[ResultadoResponde] = Field(default=None, alias="resultado")
-    justificantes: List[int] = Field(default=[], alias="justificantes")
+    justificantes: List[JustificantePorMoldeResponde] = Field(default=[], alias="justificantes")  # CAMBIADO
 
     class Config:
         from_attributes = True
@@ -156,7 +173,8 @@ class ProduccionResponde(BaseModel):
 class ProduccionListaResponde(BaseModel):
     id_cabecera: int = Field(alias="idCabecera")
     fecha: date = Field(alias="fecha")
-    turno: str = Field(alias="turno")
+    turno: int = Field(alias="turno")                           # CAMBIADO a int
+    grupo: Optional[str] = Field(default=None, alias="grupo")  # NUEVO
     tecnico: str = Field(alias="tecnico")
     total_gruesas: Decimal = Field(alias="totalGruesas")
     total_gruesas_lisas: Optional[Decimal] = Field(default=Decimal("0.00"), alias="totalGruesasLisas")
@@ -167,3 +185,11 @@ class ProduccionListaResponde(BaseModel):
     class Config:
         from_attributes = True
         populate_by_name = True
+
+
+class ProduccionActualizadaResponde(BaseModel):
+    status: str
+    id: int
+
+    class Config:
+        from_attributes = True

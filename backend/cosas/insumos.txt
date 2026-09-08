@@ -1,2 +1,30 @@
-#MODULO DE INSUMOS (PINTURA)
-- PENDIENTE LA OPCION DE BUSQUEDA Y DESCARGA DE REGISTROS
+MODELADO DE BASE DE DATOS PARA INSUMOS DE CUARTO DE PANTALLA
+
+#inventaario INSUMOS
+- id_insumo
+- tipo
+- articulo
+- unidad
+- cant_actual
+- cant_minima
+
+#inventario_insumos_entrada
+- id_inventario_entrada pk
+- id_insumo (tipo, articulo)
+
+- fecha
+- tecnico
+- turno
+- grupo
+- cantidad
+
+#inventario_insumos_salida
+- id_inventario_salida pk
+- id_insumo (tipo, articulo)
+
+- fecha
+- tecnico
+- turno
+- grupo
+- cantidad
+

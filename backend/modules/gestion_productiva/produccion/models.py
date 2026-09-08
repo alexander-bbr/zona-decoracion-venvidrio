@@ -1,6 +1,6 @@
 # backend/modules/gestion_productiva/produccion/models.py
 
-from sqlalchemy import Column, Integer, String, Date, Numeric, ForeignKey
+from sqlalchemy import Column, Integer, String, Date, Numeric, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import relationship
 
 from backend.database.conexion import Base
@@ -15,7 +15,8 @@ class GestionProductivaCabecera(Base):
 
     id_cabecera = Column(Integer, primary_key=True, autoincrement=True)
     fecha = Column(Date, nullable=False)
-    turno = Column(String(10), nullable=False)
+    turno = Column(Integer, nullable=False)
+    grupo = Column(String(10), nullable=True)        # NUEVO
     tecnico = Column(String(150), nullable=False)
 
     cant_envases_d1 = Column(Integer, default=0)
@@ -40,9 +41,10 @@ class GestionProductivaEntrada(Base):
 
     id_entrada = Column(Integer, primary_key=True, autoincrement=True)
     id_cabecera = Column(Integer, ForeignKey("gestion_productiva_cabecera.id_cabecera", ondelete="CASCADE"), nullable=False)
-    maquina = Column(Integer, nullable=False)  # 1, 2, 3 o 4
+    maquina = Column(Integer, nullable=False)        # 1, 2, 3 o 4
     id_molde = Column(Integer, ForeignKey("moldes.id_molde"), nullable=False)
     cant_envases = Column(Integer, nullable=False)
+    hora_entrada = Column(String(10), nullable=True) # NUEVO
 
     # Relaciones
     cabecera = relationship("GestionProductivaCabecera", back_populates="entradas")
@@ -58,7 +60,7 @@ class GestionProductivaSalida(Base):
     modelo_molde = Column(Integer, ForeignKey("moldes.id_molde"), nullable=False)
     id_cabecera = Column(Integer, ForeignKey("gestion_productiva_cabecera.id_cabecera", ondelete="CASCADE"), nullable=False)
 
-    total_paletas = Column(Integer, default=0)
+    total_paletas_molde = Column(Integer, default=0) # RENOMBRADO (antes: total_paletas)
 
     cant_paletas_lisas = Column(Integer, default=0)
     cant_camadas_lisas = Column(Integer, default=0)
@@ -99,6 +101,7 @@ class ProduccionJustificante(Base):
     __tablename__ = "produccion_justificantes"
 
     id_cabecera = Column(Integer, ForeignKey("gestion_productiva_cabecera.id_cabecera", ondelete="CASCADE"), primary_key=True)
+    modelo_molde = Column(Integer, ForeignKey("moldes.id_molde"), primary_key=True)
     id_justificante = Column(Integer, ForeignKey("justificantes.id_justificante", ondelete="CASCADE"), primary_key=True)
 
     # Relaciones

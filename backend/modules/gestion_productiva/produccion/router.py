@@ -41,7 +41,7 @@ def listar_produccion(skip: int = 0, limit: int = 50, db: Session = Depends(get_
 
 
 # 4. CREAR NUEVO REGISTRO DE PRODUCCIÓN
-@router.post("/", response_model=schemas.ProduccionResponde, status_code=status.HTTP_201_CREATED)
+@router.post("/", response_model=schemas.ProduccionActualizadaResponde, status_code=status.HTTP_201_CREATED)
 def crear_produccion(datos: schemas.ProduccionCrear, db: Session = Depends(get_db)):
     """
     Recibe la cabecera, la lista de modelos de salida y el resultado consolidado
@@ -67,7 +67,7 @@ def obtener_produccion(id_cabecera: int, db: Session = Depends(get_db)):
 
 
 # 6. ACTUALIZAR REGISTRO DE PRODUCCIÓN
-@router.put("/{id_cabecera}", response_model=schemas.ProduccionResponde)
+@router.put("/{id_cabecera}", response_model=schemas.ProduccionActualizadaResponde)
 def actualizar_produccion(
     id_cabecera: int,
     datos: schemas.ProduccionCrear,
@@ -80,6 +80,6 @@ def actualizar_produccion(
     if not registro_actualizado:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="No se pudo actualizar porque el registro no fue encontrado."
+            detail="No se pudo actualizar porque el registro no fue encontrado"
         )
     return registro_actualizado

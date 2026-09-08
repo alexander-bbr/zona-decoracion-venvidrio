@@ -4,97 +4,110 @@ Método: POST
 
 JSON (Envía el Frontend):
 {
-  "fecha": "2026-08-23",
-  "turno": "1", // Es un string           // ESTO CAMBIÓ
-  "grupo": "A",                           // ESTO ES NUEVO
-  "tecnico": "Daniel Pérez",
+  "fecha": "2026-09-08",
+  "turno": 1,
+  "grupo": "A",
+  "tecnico": "Carlos Mendoza",
   "maquina1": [
     {
       "idMolde": 1,
-      "cantEnvases": 100
-      "horaEntrada": "8:00"               // ESTO ES NUEVO
+      "cantEnvases": 500,
+      "horaEntrada": "07:00"
     },
     {
       "idMolde": 2,
-      "cantEnvases": 2000
-      "horaEntrada": "14:23"              // ESTO ES NUEVO
+      "cantEnvases": 200,
+      "horaEntrada": "11:30"
     }
   ],
   "maquina2": [
     {
-      "idMolde": 1,
-      "cantEnvases": 100
-      "horaEntrada": "14:00"              // ESTO ES NUEVO
+      "idMolde": 4,
+      "cantEnvases": 350,
+      "horaEntrada": "08:15"
     }
   ],
   "maquina3": [
     {
-      "idMolde": 1,
-      "cantEnvases": 100
-      "horaEntrada": "18:00"              // ESTO ES NUEVO
+      "idMolde": 5,
+      "cantEnvases": 100,
+      "horaEntrada": "09:00"
     }
   ],
-  "maquina4": [
-    {
-      "idMolde": 1,
-      "cantEnvases": 100
-      "horaEntrada": "12:00"              // ESTO ES NUEVO
-    },
-    {
-      "idMolde": 2,
-      "cantEnvases": 100
-      "horaEntrada": "19:00"              // ESTO ES NUEVO
-    }
-  ],
-  "cantEnvasesD1": 2100,
-  "cantEnvasesD2": 5,
-  "cantEnvasesD3": 0,
+  "maquina4": [],
+  "cantEnvasesD1": 700,
+  "cantEnvasesD2": 350,
+  "cantEnvasesD3": 100,
   "cantEnvasesD4": 0,
-  "totalEnvases": 15,
-  "totalGruesas": 0.10,
+  "totalEnvases": 1150,
+  "totalGruesas": "7.99",
   "salidas": [
     {
       "modeloMolde": 1,
-      "totalPaletasMolde": 4,                      // ESTO CAMBIÓ (antes se llamaba totalPaletas)
-      "cantPaletasLisas": 2,
-      "cantCamadasLisas": 4,
-      "cantEnvasesLisas": 80,
-      "cantGruesasLisas": 0.55,
-      "cantPaletasDecoradas": 2,
-      "cantCamadasDecoradas": 4,
-      "cantEnvasesDecoradas": 80,
-      "cantGruesasDecoradas": 0.55
+      "totalPaletasMolde": 2,
+      "cantPaletasLisas": 1,
+      "cantCamadasLisas": 5,
+      "cantEnvasesLisas": 250,
+      "cantGruesasLisas": "1.73",
+      "cantPaletasDecoradas": 1,
+      "cantCamadasDecoradas": 5,
+      "cantEnvasesDecoradas": 250,
+      "cantGruesasDecoradas": "1.73"
     },
     {
       "modeloMolde": 2,
-      "totalPaletasMolde": 4,                      // ESTO CAMBIÓ (antes se llamaba totalPaletas)
-      "cantPaletasLisas": 2,
-      "cantCamadasLisas": 4,
-      "cantEnvasesLisas": 80,
-      "cantGruesasLisas": 0.55,
-      "cantPaletasDecoradas": 2,
-      "cantCamadasDecoradas": 4,
-      "cantEnvasesDecoradas": 80,
-      "cantGruesasDecoradas": 0.55
+      "totalPaletasMolde": 1,
+      "cantPaletasLisas": 1,
+      "cantCamadasLisas": 7,
+      "cantEnvasesLisas": 350,
+      "cantGruesasLisas": "2.43",
+      "cantPaletasDecoradas": 0,
+      "cantCamadasDecoradas": 0,
+      "cantEnvasesDecoradas": 0,
+      "cantGruesasDecoradas": "0.00"
     },
+    {
+      "modeloMolde": 4,
+      "totalPaletasMolde": 1,
+      "cantPaletasLisas": 1,
+      "cantCamadasLisas": 4,
+      "cantEnvasesLisas": 200,
+      "cantGruesasLisas": "1.39",
+      "cantPaletasDecoradas": 0,
+      "cantCamadasDecoradas": 0,
+      "cantEnvasesDecoradas": 0,
+      "cantGruesasDecoradas": "0.00"
+    },
+    {
+      "modeloMolde": 5,
+      "totalPaletasMolde": 1,
+      "cantPaletasLisas": 1,
+      "cantCamadasLisas": 2,
+      "cantEnvasesLisas": 100,
+      "cantGruesasLisas": "0.69",
+      "cantPaletasDecoradas": 0,
+      "cantCamadasDecoradas": 0,
+      "cantEnvasesDecoradas": 0,
+      "cantGruesasDecoradas": "0.00"
+    }
   ],
   "resultado": {
-    "totalGruesasLisas": 0.55,
-    "totalGruesasDecoradas": 0.55,
-    "eficienciaProductiva": 95.00,
-    "deficienciaProductiva": 5.00,
-    "observaciones": "causa"
+    "totalGruesasLisas": "6.24",
+    "totalGruesasDecoradas": "1.73",
+    "eficienciaProductiva": "98.50",
+    "deficienciaProductiva": "1.50",
+    "observaciones": "Prueba de guardado omitiendo el ID 3 en moldes y justificantes."
   },
-    "justificantes": [                        // ESTO CAMBIÓ
-      {
-        "modeloMolde": 1,
-        "justificaciones": [1, 2, 3]
-      },
-      {
-        "modeloMolde": 2,
-        "justificaciones": [2, 3]
-      },
-    ]
+  "justificantes": [
+    {
+      "modeloMolde": 1,
+      "justificaciones": [1, 2]
+    },
+    {
+      "modeloMolde": 2,
+      "justificaciones": [4, 5]
+    }
+  ]
 }
 
 JSON (Respuesta en caso de éxito):
@@ -108,11 +121,15 @@ JSON (Respuesta en caso de error):
   "detail": "Error en la validación de los datos enviados"
 }
 
+{
+  "detail": "Error: Ya existe un registro duplicado o un justificante repetido para este molde."
+}
 
 
 
 
----
+
+--------------------------------------------------------------------------
 
 Ruta 2: Editar Registro de Producción
 Endpoint: http://127.0.0.1:8000/produccion/{id_cabecera}
@@ -120,73 +137,112 @@ Método: PUT
 
 JSON (Envía el Frontend):
 {
-  "idCabecera": 262,
-  "fecha": "2026-08-30",
-  "tecnico": "holaaaaa Pérez",
+  "fecha": "2026-09-08",
+  "turno": 1,
+  "grupo": "A",
+  "tecnico": "Carlos Mendoza",
   "maquina1": [
     {
       "idMolde": 1,
-      "cantEnvases": 2000
+      "cantEnvases": 500,
+      "horaEntrada": "07:00"
     },
     {
       "idMolde": 2,
-      "cantEnvases": 1000
+      "cantEnvases": 200,
+      "horaEntrada": "11:30"
     }
   ],
   "maquina2": [
     {
-      "idMolde": 1,
-      "cantEnvases": 1500
+      "idMolde": 4,
+      "cantEnvases": 350,
+      "horaEntrada": "08:15"
     }
   ],
   "maquina3": [
     {
-      "idMolde": 2,
-      "cantEnvases": 800
+      "idMolde": 5,
+      "cantEnvases": 100,
+      "horaEntrada": "09:00"
     }
   ],
-  "maquina4": [
-    {
-      "idMolde": 1,
-      "cantEnvases": 500
-    },
-    {
-      "idMolde": 2,
-      "cantEnvases": 300
-    }
-  ],
-  "cantEnvasesD1": 3000,
-  "cantEnvasesD2": 1500,
-  "cantEnvasesD3": 800,
-  "cantEnvasesD4": 800,
-  "totalEnvases": 6100,
-  "totalGruesas": "42.36",
+  "maquina4": [],
+  "cantEnvasesD1": 700,
+  "cantEnvasesD2": 350,
+  "cantEnvasesD3": 100,
+  "cantEnvasesD4": 0,
+  "totalEnvases": 1150,
+  "totalGruesas": "7.99",
   "salidas": [
     {
       "modeloMolde": 1,
-      "totalPaletas": 2,
-      "cantPaletasLisas": 0,
-      "cantCamadasLisas": 0,
-      "cantEnvasesLisas": 0,
-      "cantGruesasLisas": "0.00",
-      "cantPaletasDecoradas": 2,
-      "cantCamadasDecoradas": 14,
-      "cantEnvasesDecoradas": 6100,
-      "cantGruesasDecoradas": "42.36",
-      "idEficiencia": 519,
-      "idCabecera": 262
+      "totalPaletasMolde": 2,
+      "cantPaletasLisas": 1,
+      "cantCamadasLisas": 5,
+      "cantEnvasesLisas": 250,
+      "cantGruesasLisas": "1.73",
+      "cantPaletasDecoradas": 1,
+      "cantCamadasDecoradas": 5,
+      "cantEnvasesDecoradas": 250,
+      "cantGruesasDecoradas": "1.73"
+    },
+    {
+      "modeloMolde": 2,
+      "totalPaletasMolde": 1,
+      "cantPaletasLisas": 1,
+      "cantCamadasLisas": 7,
+      "cantEnvasesLisas": 350,
+      "cantGruesasLisas": "2.43",
+      "cantPaletasDecoradas": 0,
+      "cantCamadasDecoradas": 0,
+      "cantEnvasesDecoradas": 0,
+      "cantGruesasDecoradas": "0.00"
+    },
+    {
+      "modeloMolde": 4,
+      "totalPaletasMolde": 1,
+      "cantPaletasLisas": 1,
+      "cantCamadasLisas": 4,
+      "cantEnvasesLisas": 200,
+      "cantGruesasLisas": "1.39",
+      "cantPaletasDecoradas": 0,
+      "cantCamadasDecoradas": 0,
+      "cantEnvasesDecoradas": 0,
+      "cantGruesasDecoradas": "0.00"
+    },
+    {
+      "modeloMolde": 5,
+      "totalPaletasMolde": 1,
+      "cantPaletasLisas": 1,
+      "cantCamadasLisas": 2,
+      "cantEnvasesLisas": 100,
+      "cantGruesasLisas": "0.69",
+      "cantPaletasDecoradas": 0,
+      "cantCamadasDecoradas": 0,
+      "cantEnvasesDecoradas": 0,
+      "cantGruesasDecoradas": "0.00"
     }
   ],
   "resultado": {
-    "totalGruesasLisas": "0.00",
-    "totalGruesasDecoradas": "42.36",
-    "eficienciaProductiva": "95.00",
-    "deficienciaProductiva": "5.00",
-    "observaciones": "Prueba de registro",
-    "idCabecera": 262
+    "totalGruesasLisas": "6.24",
+    "totalGruesasDecoradas": "1.73",
+    "eficienciaProductiva": "98.50",
+    "deficienciaProductiva": "1.50",
+    "observaciones": "Prueba de guardado omitiendo el ID 3 en moldes y justificantes."
   },
-  "justificantes": [1, 2, 4]
+  "justificantes": [
+    {
+      "modeloMolde": 1,
+      "justificaciones": [1, 2]
+    },
+    {
+      "modeloMolde": 2,
+      "justificaciones": [4, 5]
+    }
+  ]
 }
+
 
 JSON (Respuesta en caso de éxito):
 {
@@ -195,6 +251,15 @@ JSON (Respuesta en caso de éxito):
 }
 
 JSON (Respuesta en caso de error):
+
+{
+  "detail": "Error en la validación de los datos enviados"
+}
+
+{
+  "detail": "Error: No se pudo actualizar el registro debido a un conflicto de datos o restricciones en la base de datos."
+}
+
 {
   "detail": "No se pudo actualizar porque el registro no fue encontrado"
 }
@@ -214,7 +279,8 @@ Estructura de los datos que recibirá:
   {
     "idCabecera": 262,
     "fecha": "2026-08-30",
-    "turno": "A",
+    "turno": 1,
+    "grupo": "A",
     "tecnico": "holaaaaa Pérez",
     "totalGruesas": "42.36",
     "totalGruesasLisas": "0.00",
@@ -225,7 +291,8 @@ Estructura de los datos que recibirá:
   {
     "idCabecera": 261,
     "fecha": "2026-08-30",
-    "turno": "A",
+    "turno": 1,
+    "grupo": "A",
     "tecnico": "Daniel Pérez",
     "totalGruesas": "42.36",
     "totalGruesasLisas": "0.00",
@@ -264,7 +331,7 @@ URL como PARÁMETROS DE CONSULTA (Query Parameters).
 
 
 
----
+--------------------------------------------------------------------------------
 
 Ruta 4: Ver Registro de Producción (Detalle por ID)
 Endpoint: http://127.0.0.1:8000/produccion/{id_cabecera}
@@ -272,75 +339,121 @@ Método: GET
 
 Estructura de los datos que recibirá:
 {
-  "idCabecera": 262,
-  "fecha": "2026-08-30",
-  "turno": "A",
-  "tecnico": "Daniel Pérez",
+  "idCabecera": 271,
+  "fecha": "2026-09-08",
+  "turno": 1,
+  "grupo": "A",
+  "tecnico": "Carlos Mendoza",
   "maquina1": [
     {
       "idMolde": 1,
-      "cantEnvases": 2000
+      "cantEnvases": 500,
+      "horaEntrada": "07:00"
     },
     {
       "idMolde": 2,
-      "cantEnvases": 1000
+      "cantEnvases": 200,
+      "horaEntrada": "11:30"
     }
   ],
   "maquina2": [
     {
-      "idMolde": 1,
-      "cantEnvases": 1500
+      "idMolde": 4,
+      "cantEnvases": 350,
+      "horaEntrada": "08:15"
     }
   ],
   "maquina3": [
     {
-      "idMolde": 2,
-      "cantEnvases": 800
+      "idMolde": 5,
+      "cantEnvases": 100,
+      "horaEntrada": "09:00"
     }
   ],
-  "maquina4": [
-    {
-      "idMolde": 1,
-      "cantEnvases": 500
-    },
-    {
-      "idMolde": 2,
-      "cantEnvases": 300
-    }
-  ],
-  "cantEnvasesD1": 3000,
-  "cantEnvasesD2": 1500,
-  "cantEnvasesD3": 800,
-  "cantEnvasesD4": 800,
-  "totalEnvases": 6100,
-  "totalGruesas": "42.36",
+  "maquina4": [],
+  "cantEnvasesD1": 700,
+  "cantEnvasesD2": 350,
+  "cantEnvasesD3": 100,
+  "cantEnvasesD4": 0,
+  "totalEnvases": 1150,
+  "totalGruesas": "7.99",
   "salidas": [
     {
       "modeloMolde": 1,
-      "totalPaletas": 2,
-      "cantPaletasLisas": 0,
-      "cantCamadasLisas": 0,
-      "cantEnvasesLisas": 0,
-      "cantGruesasLisas": "0.00",
-      "cantPaletasDecoradas": 2,
-      "cantCamadasDecoradas": 14,
-      "cantEnvasesDecoradas": 6100,
-      "cantGruesasDecoradas": "42.36",
-      "idEficiencia": 519,
-      "idCabecera": 262
+      "totalPaletasMolde": 2,
+      "cantPaletasLisas": 1,
+      "cantCamadasLisas": 5,
+      "cantEnvasesLisas": 250,
+      "cantGruesasLisas": "1.73",
+      "cantPaletasDecoradas": 1,
+      "cantCamadasDecoradas": 5,
+      "cantEnvasesDecoradas": 250,
+      "cantGruesasDecoradas": "1.73",
+      "idEficiencia": 553
+    },
+    {
+      "modeloMolde": 2,
+      "totalPaletasMolde": 1,
+      "cantPaletasLisas": 1,
+      "cantCamadasLisas": 7,
+      "cantEnvasesLisas": 350,
+      "cantGruesasLisas": "2.43",
+      "cantPaletasDecoradas": 0,
+      "cantCamadasDecoradas": 0,
+      "cantEnvasesDecoradas": 0,
+      "cantGruesasDecoradas": "0.00",
+      "idEficiencia": 554
+    },
+    {
+      "modeloMolde": 4,
+      "totalPaletasMolde": 1,
+      "cantPaletasLisas": 1,
+      "cantCamadasLisas": 4,
+      "cantEnvasesLisas": 200,
+      "cantGruesasLisas": "1.39",
+      "cantPaletasDecoradas": 0,
+      "cantCamadasDecoradas": 0,
+      "cantEnvasesDecoradas": 0,
+      "cantGruesasDecoradas": "0.00",
+      "idEficiencia": 555
+    },
+    {
+      "modeloMolde": 5,
+      "totalPaletasMolde": 1,
+      "cantPaletasLisas": 1,
+      "cantCamadasLisas": 2,
+      "cantEnvasesLisas": 100,
+      "cantGruesasLisas": "0.69",
+      "cantPaletasDecoradas": 0,
+      "cantCamadasDecoradas": 0,
+      "cantEnvasesDecoradas": 0,
+      "cantGruesasDecoradas": "0.00",
+      "idEficiencia": 556
     }
   ],
   "resultado": {
-    "totalGruesasLisas": "0.00",
-    "totalGruesasDecoradas": "42.36",
-    "eficienciaProductiva": "95.00",
-    "deficienciaProductiva": "5.00",
-    "observaciones": "Prueba de registro",
-    "idCabecera": 262
+    "totalGruesasLisas": "6.24",
+    "totalGruesasDecoradas": "1.73",
+    "eficienciaProductiva": "98.50",
+    "deficienciaProductiva": "1.50",
+    "observaciones": "Prueba de guardado omitiendo el ID 3 en moldes y justificantes."
   },
   "justificantes": [
-      1, 2, 4
-    ]
+    {
+      "modeloMolde": 1,
+      "justificaciones": [
+        1,
+        2
+      ]
+    },
+    {
+      "modeloMolde": 2,
+      "justificaciones": [
+        4,
+        5
+      ]
+    }
+  ]
 }
 
 JSON (Respuesta en caso de error):
@@ -351,7 +464,7 @@ JSON (Respuesta en caso de error):
 
 
 
----
+-----------------------------------------------------------------------------------------
 
 Ruta 5: Inventario de Moldes (Para el Select)
 Endpoint: http://127.0.0.1:8000/produccion/moldes

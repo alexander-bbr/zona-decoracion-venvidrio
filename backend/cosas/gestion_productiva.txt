@@ -63,96 +63,96 @@ Control de la Producción
 
 
 
+
+
+
+
+MODELADO DE TABLAS DE GESTION PRODUCTIVA
+
+
 #MOLDES
-- id_molde pk
-- Nombre.
-- Descripción.
-- Número de Camadas.
-- Número de Envases.
-- Número de Gruesas
+  1	id_molde Primaria	int(11)		AUTO_INCREMENT
+	2	Nombre	varchar(150)	
+	3	Descripcion	varchar(255)	NULL		
+	4	numero_camadas	int(11)		
+	5	numero_envases	int(11)		
+	6	numero_gruesas	decimal(10,2)	
 
-#gestion_productiva_entrada
 
-- id_detalle — PK, autoincrement
-- id_produccion — FK → gestion_productiva_entrada.id_produccion (CASCADE)
-- maquina — int (1, 2, 3 o 4)
-- id_molde — FK → moldes.id_molde
-- cant_envases — int
+#JUSTIFICANTES
+	1	id_justificante Primaria	int(11)	AUTO_INCREMENT
+	2	etiqueta	varchar(150)	
+	3	descripcion	varchar(255)
 
+
+#JUSTIFICANTES_MOLDES
+id_cabecera
+id_molde
+id_justificante
 
 
 #GESTION PRODUCTIVA CABECERA
-- id_produccion pk
-- Fecha
-- Turno
-- tecnico
+  1	id_cabecera Primaria	int(11)	AUTO_INCREMENT		
+	2	fecha	date
+  - hora ----------------------------NUEVO				
+	3	turno	varchar(10)
+  - grupo ---------------------------NUEVO					
+	4	tecnico	varchar(150)					
+	5	cant_envases_d1	int(11)		NULL				
+	6	cant_envases_d2	int(11)		NULL				
+	7	cant_envases_d3	int(11)		NULL				
+	8	cant_envases_d4	int(11)		NULL				
+	9	total_envases	int(11)		NULL				
+	10	total_gruesas	decimal(12,2)
 
-- cant_envases_d1
-- cant_envases_d2
-- cant_envases_d3
-- cant_envases_d4
 
-- total_envases
-- total_gruesas
+#gestion_productiva_entrada
+
+  1	id_entrada Primaria	int(11)	AUTO_INCREMENT	
+	2	id_cabecera Índice	int(11)			
+	3	maquina	int(11)			
+	4	id_molde Índice	int(11)			
+	5	cant_envases	int(11)
 
 
 
 
 #GESTION PRODUCTIVA SALIDA
-- id_eficiencia pk
-- modelo_molde fk
-- id_produccion fk
-- total_paletas
+	1	id_eficiencia Primaria	int(11)	AUTO_INCREMENT
+	3	id_cabecera Índice	int(11)	
+	
+	4	total_paletas	int(11)	NULL
+  - total_oaletas_lisas --------------------------NUEVO
 
-- cant_paletas_lisas
-- cant_camadas_lisas
-- cant_envases_lisas
-- cant_gruesas_lisas
 
-- cant_paletas_decoradas
-- cant_camadas_decoradas
-- cant_envases_decoradas
-- cant_gruesas_decoradas
+  2	modelo_molde Índice	int(11)
+    5	cant_paletas_lisas	int(11)	NULL		
+    6	cant_camadas_lisas	int(11)	NULL		
+    7	cant_envases_lisas	int(11)	NULL		
+    8	cant_gruesas_lisas	decimal(10,2)	
 
+    9	cant_paletas_decoradas	int(11)	NULL		
+    10	cant_camadas_decoradas	int(11)	NULL		
+    11	cant_envases_decoradas	int(11)	NULL		
+    12	cant_gruesas_decoradas	decimal(10,2)	
 
 
 #GESTION PRODUCTIVA RESULTADO
-- id_resultado pk
-- id_produccion fk
+  1	id_resultado Primaria	int(11)	AUTO_INCREMENT	
+	2	id_cabecera Índice	int(11)
 
-- total_gruesas_lisas
-- total_gruesas_decoradas
+	3	total_gruesas_lisas	decimal(12,2)		
+	4	total_gruesas_decoradas	decimal(12,2)
 
-- eficiencia_productiva
-- deficiencia_productiva
-
-#ENPOINTS
-- INVENTARIO DE MOLDES
-- REGISTROS DE PRODUCCION
-- EDITAR REGISTRO
-- VER
-
-funciones
-def obtener_registros_produccion: 50 en 50, en el front lo mostrara mediante paginado 
-- id_produccion pk
-- Fecha
-- Turno
-- tecnico
-- total_gruesas
-
-- total_gruesas_lisas
-- total_gruesas_decoradas
-- eficiencia_productiva
-- deficiencia_productiva
+	5	eficiencia_productiva	decimal(5,2)			
+	6	deficiencia_productiva	decimal(5,2)			
+	7	observaciones
 
 
 
 
-endpoints para Moldes
-ver
-Registrar
-obtener_registro_id (para editar)
-editar_registro
 
 
-actualmente yo recibo el total de envaces por maquina, pero hubo un cambio, actualmente se seleccionara el molde y la cantidad de envaces (por maquina), osea abraa un selec donde se seleccione el molde con el que trabajo esa maquina y la cantidad de envases que entraron por dicho molde, serian dos campos uno para la clave foranea del molde (creo), y otro para la cantidad asignada a dicho molde (esto se puede haer para uno o mas moldes por maquina), los valores que ponen el total cant_envases_d1234, seguiran existiendo, estos contaran la suma total en caso de que hayan varios moldes y asi. primero creo que hay que modelar la base de datos, ayudame, solo nombre de tabla y sus variables
+
+
+

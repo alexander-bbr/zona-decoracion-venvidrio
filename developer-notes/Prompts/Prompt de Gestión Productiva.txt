@@ -1,4 +1,203 @@
-Hola Deepseek, le hice un par de cambios a los formularios de RegistrarProduccion.txt y el de EditarProduccion.tsx. Básicamente hice los siguientes cambios:
+okey bueno, este era el antiguo endpoint para registrar produccion: Ruta 1: Registro de Producción
+Endpoint: http://127.0.0.1:8000/produccion
+Método: POST
 
-- Le cambié el Legend de Modelo del Envase ( n ) a Molde ( n ) (ya que uno de los usuarios dijo que así lo entendía mejor).
-- Cambié los select de de Molde a Código del Molde (ya que así se entendía mejor que estaba seleccionando el código, no la descripción).
+JSON (Envía el Frontend):
+{
+  "fecha": "2026-08-23",
+  "turno": "A",
+  "tecnico": "Daniel Pérez",
+  "maquina1": [
+    {
+      "idMolde": 1,
+      "cantEnvases": 100
+    },
+    {
+      "idMolde": 2,
+      "cantEnvases": 2000
+    }
+  ],
+  "maquina2": [
+    {
+      "idMolde": 1,
+      "cantEnvases": 100
+    }
+  ],
+  "maquina3": [
+    {
+      "idMolde": 1,
+      "cantEnvases": 100
+    }
+  ],
+  "maquina4": [
+    {
+      "idMolde": 1,
+      "cantEnvases": 100
+    },
+    {
+      "idMolde": 2,
+      "cantEnvases": 100
+    }
+  ],
+  "cantEnvasesD1": 2100,
+  "cantEnvasesD2": 5,
+  "cantEnvasesD3": 0,
+  "cantEnvasesD4": 0,
+  "totalEnvases": 15,
+  "totalGruesas": 0.10,
+  "salidas": [
+    {
+      "modeloMolde": 1,
+      "totalPaletas": 4,
+      "cantPaletasLisas": 2,
+      "cantCamadasLisas": 4,
+      "cantEnvasesLisas": 80,
+      "cantGruesasLisas": 0.55,
+      "cantPaletasDecoradas": 2,
+      "cantCamadasDecoradas": 4,
+      "cantEnvasesDecoradas": 80,
+      "cantGruesasDecoradas": 0.55
+    }
+  ],
+  "resultado": {
+    "totalGruesasLisas": 0.55,
+    "totalGruesasDecoradas": 0.55,
+    "eficienciaProductiva": 95.00,
+    "deficienciaProductiva": 5.00,
+    "observaciones": "causa"
+  },
+  "justificantes": [1, 2, 4]
+}
+
+JSON (Respuesta en caso de éxito):
+{
+  "status": "Registro insertado con éxito",
+  "id": 1
+}
+
+JSON (Respuesta en caso de error):
+{
+  "detail": "Error en la validación de los datos enviados"
+}
+Ahora, tuvimos que hacele unos cuantos cambios y quedó de esta manera: Ruta 1: Registro de Producción
+Endpoint: http://127.0.0.1:8000/produccion
+Método: POST
+
+JSON (Envía el Frontend):
+{
+  "fecha": "2026-08-23",
+  "turno": "1", // Es un string           // ESTO CAMBIÓ, sigue siendo el mismo campo, solo que ahora el select debe mandar 1,2 o 3, en lugar de A, B o C
+  "grupo": "A",                           // ESTO ES NUEVO, aquí se debe mandar A, B, C o D
+  "tecnico": "Daniel Pérez",
+  "maquina1": [
+    {
+      "idMolde": 1,
+      "cantEnvases": 100
+      "horaEntrada": "8:00"               // ESTO ES NUEVO
+    },
+    {
+      "idMolde": 2,
+      "cantEnvases": 2000
+      "horaEntrada": "14:23"              // ESTO ES NUEVO
+    }
+  ],
+  "maquina2": [
+    {
+      "idMolde": 1,
+      "cantEnvases": 100
+      "horaEntrada": "14:00"              // ESTO ES NUEVO
+    }
+  ],
+  "maquina3": [
+    {
+      "idMolde": 1,
+      "cantEnvases": 100
+      "horaEntrada": "18:00"              // ESTO ES NUEVO
+    }
+  ],
+  "maquina4": [
+    {
+      "idMolde": 1,
+      "cantEnvases": 100
+      "horaEntrada": "12:00"              // ESTO ES NUEVO
+    },
+    {
+      "idMolde": 2,
+      "cantEnvases": 100
+      "horaEntrada": "19:00"              // ESTO ES NUEVO
+    }
+  ],
+  "cantEnvasesD1": 2100,
+  "cantEnvasesD2": 5,
+  "cantEnvasesD3": 0,
+  "cantEnvasesD4": 0,
+  "totalEnvases": 15,
+  "totalGruesas": 0.10,
+  "salidas": [
+    {
+      "modeloMolde": 1,
+      "totalPaletasMolde": 4,                      // ESTO CAMBIÓ (antes se llamaba totalPaletas)
+      "cantPaletasLisas": 2,
+      "cantCamadasLisas": 4,
+      "cantEnvasesLisas": 80,
+      "cantGruesasLisas": 0.55,
+      "cantPaletasDecoradas": 2,
+      "cantCamadasDecoradas": 4,
+      "cantEnvasesDecoradas": 80,
+      "cantGruesasDecoradas": 0.55
+    },
+    {
+      "modeloMolde": 2,
+      "totalPaletasMolde": 4,                      // ESTO CAMBIÓ (antes se llamaba totalPaletas)
+      "cantPaletasLisas": 2,
+      "cantCamadasLisas": 4,
+      "cantEnvasesLisas": 80,
+      "cantGruesasLisas": 0.55,
+      "cantPaletasDecoradas": 2,
+      "cantCamadasDecoradas": 4,
+      "cantEnvasesDecoradas": 80,
+      "cantGruesasDecoradas": 0.55
+    },
+  ],
+  "resultado": {
+    "totalGruesasLisas": 0.55,
+    "totalGruesasDecoradas": 0.55,
+    "eficienciaProductiva": 95.00,
+    "deficienciaProductiva": 5.00,
+    "observaciones": "causa"
+  },
+    "justificantes": [                        // ESTO CAMBIÓ
+      {
+        "modeloMolde": 1,
+        "justificaciones": [1, 2, 3]
+      },
+      {
+        "modeloMolde": 2,
+        "justificaciones": [2, 3]
+      },
+    ]
+}
+
+JSON (Respuesta en caso de éxito):
+{
+  "status": "Registro insertado con éxito",
+  "id": 1
+}
+
+JSON (Respuesta en caso de error):
+{
+  "detail": "Error en la validación de los datos enviados"
+}.
+
+
+Okey bueno, como puedes obersvar hay unos cuantos cambios que hay que hacer.
+
+  - Hace falta un input por cada molde en cada máquina, puede ser un input de tipo date (ya que necesitamos saber a qué hora se empezó a trabajar con cada molde de cada máquina)
+
+  - En el fieldset de Datos de Identificación. El select de Turno, el input de Fecha, y en el input de Técnico deben estar con readonly. Y antes de ellos debe de haber un select llamado Tipo de Turno, con dos options: 2 Turnos, 3 Turnos. Al seleccionar cualquiera de los dos, ahí si se pueden usar estos campos Turno, Fecha y Técnico, solo que si en Tipo de Turno se seleccionó 2 Turnos, en el select de Turno, los options serán: 1, 2. Y si en Tipo de Turno se seleccionó 3 Turnos, pues en el select de Turno los options serán, 1, 2 y 3. Adicionalmente, necesito que luego del select de Turno, haya otro select llamado Grupo, y ahí habrán 4 options: A, B, C y D (estos options son iguales no importa el Tipo de Turno, eso sí, también será readonly hasta que haya seleccionado algo en Tipo de Turno). Y ya luego ahí si van los campos de Fecha y Técnico
+
+  - Colocar en el fieldset de Resumen, el Número de Paletas de Producción Decorada por Cada molde (o sea, el input que está en el fieldset de Molde, donde el usuario metía el número de paletas que se decoró por molde ahora también debe mostrarse pero en el Resumen (como un input de readonly), y esto será solo como efecto visual, ya que este dato ya se estaba mandando al backend desde el fieldset de Molde, no hace falta mandarlo dos veces).
+
+  - Los fieldset de {/* === MODELOS DE ENVASE === */}, deberían aparecer es envase a lo que se haya colocado en {/* === MÁQUINAS DE DECORADO === */}. O sea por ejemplo, si entre las 4 máquinas se usaron 2 moldes, pues entonces en MODELOS DE ENVASE deberían de aparecer 2 fieldset de Molde ( n ). Haciendo que ya no sea necesario el botón de  + Añadir Otro Modelo y el de Eliminar Modelo
+
+  - Las justificaciones ahora estan asociadas a un molde (o sea, tienen que ir dentro del fieldset Molde (n) ), y como obviamente pueden haber varios justificaciones por un molde

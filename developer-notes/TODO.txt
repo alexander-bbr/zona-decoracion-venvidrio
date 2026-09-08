@@ -29,9 +29,9 @@
 
     - Hacer las correciones de los turnos en el fieldset de Datos de Identificación.
 
-    - Colocar en el resumen el Número de Paletas (Producción Decorada) (o sea, el input que está en el fieldset de Molde debe cargar el que estará ahora en el Resumen, pero será solo como efecto visual este nuevo input con readonly).
+    - Colocar en el fieldset de Resumen, el Número de Paletas de Producción Decorada por Cada molde (o sea, el input que está en el fieldset de Molde, donde el usuario metía el número de paletas que se decoró por molde ahora también debe mostrarse pero en el Resumen (como un input de readonly), y esto será solo como efecto visual, ya que este dato ya se estaba mandando al backend desde el fieldset de Molde, no hace falta mandarlo dos veces).
 
-    - Las justificaciones deberían estar asociadas a un molde, y pueden haber varios justificaciones en un molde
+    - Las justificaciones deberían estar asociadas a un molde, y pueden haber varios justificaciones en un molde (las justificaciones entonces deberían de estar es dentro de cada fielset de Molde ( n ))
 
     - Los fieldset de {/* === MODELOS DE ENVASE === */}, deberían aparecer es envase a lo que se haya colocado en {/* === MÁQUINAS DE DECORADO === */}. O sea por ejemplo, si entre las 4 máquinas se usaron 2 moldes, pues entonces en MODELOS DE ENVASE deberían de aparecer 2 fieldset de Molde ( n ). Haciendo que ya no sea necesario el botón de  + Añadir Otro Modelo y el de Eliminar Modelo
 

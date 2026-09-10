@@ -2,14 +2,22 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import styles from "./sidebar.module.css";
 
-export const Sidebar = () => {
+interface SidebarProps {
+  isOpen: boolean;
+}
+
+export const Sidebar = ({ isOpen }: SidebarProps) => {
   const { isAuthenticated, user, logout, hasPermission, hasAnyPermission } =
     useAuth();
+
+  const sidebarClassName = `${styles.sidebar} ${
+    isOpen ? styles.sidebarOpen : ""
+  }`;
 
   // Si NO está autenticado, muestra los siguientes links
   if (!isAuthenticated) {
     return (
-      <nav className={styles.sidebar} id="sidebar">
+      <nav className={sidebarClassName} id="sidebar" aria-hidden={!isOpen}>
         <ul>
           <li>
             <Link to="/">Inicio</Link>
@@ -24,7 +32,7 @@ export const Sidebar = () => {
 
   // Si está autenticado, muestra los siguientes links
   return (
-    <nav className={styles.sidebar} id="sidebar">
+    <nav className={sidebarClassName} id="sidebar" aria-hidden={!isOpen}>
       {/* === INFORMACIÓN DEL USUARIO ===*/}
       <section className={styles.userInfo}>
         <svg

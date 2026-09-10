@@ -1,8 +1,17 @@
 .sidebar {
+  position: fixed;
+  inset: var(--header-height) auto 0 0;
   width: 250px;
   background-color: var(--third-text-color);
   box-shadow: 2px 0 24px rgba(44, 62, 80, 0.08);
   padding: 2.2rem 0.5rem;
+  transform: translateX(-100%);
+  transition: transform 0.25s ease;
+  z-index: 20;
+}
+
+.sidebarOpen {
+  transform: translateX(0);
 }
 
 /* === INFORMACIÓN DEL USUARIO === */

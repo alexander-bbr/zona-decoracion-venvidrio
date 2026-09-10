@@ -17,6 +17,7 @@
   --secondary-text-color: #545d66;
   --third-text-color: #ffffff;
   --fourth-text-color: #ffffffd7;
+  --header-height: 8.9rem;
 }
 
 body {
@@ -25,28 +26,32 @@ body {
 }
 
 #root {
-  min-height: 100vh; /* Mantiene abajo del todo el footer */
-  display: grid;
-  grid-template-columns: auto 1fr 1fr;
-  grid-template-rows: auto 1fr auto;
-  gap: 0px 0px;
-  grid-auto-flow: row;
-  grid-template-areas:
-    "header header header"
-    "sidebar main main"
-    "footer footer footer";
+  min-height: 100vh;
+  padding-top: var(--header-height);
 }
 
 #header {
-  grid-area: header;
+  position: fixed;
+  inset: 0 0 auto;
 }
 
-#sidebar {
-  grid-area: sidebar;
+.appContent {
+  position: relative;
+  min-height: calc(100vh - var(--header-height));
 }
 
 #main {
-  grid-area: main;
+  min-height: calc(100vh - var(--header-height));
+}
+
+.sidebarOverlay {
+  position: fixed;
+  inset: var(--header-height) 0 0;
+  border: 0;
+  background: rgba(0, 0, 0, 0.29);
+  cursor: pointer;
+  z-index: 10;
+  animation: fadeIn 0.25s ease-in-out;
 }
 
 /* Darle una animación al proceso en cuestión */
@@ -56,7 +61,7 @@ body {
 }
 
 #footer {
-  grid-area: footer;
+  position: relative;
 }
 
 /* === ANIMACIONES === */

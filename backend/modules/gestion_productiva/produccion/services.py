@@ -119,6 +119,7 @@ def crear_registro_produccion(db: Session, datos):
         # 1. Crear la cabecera del turno
         nueva_cabecera = GestionProductivaCabecera(
             fecha=datos.fecha,
+            tipo_turno=datos.tipo_turno,
             turno=datos.turno,
             grupo=datos.grupo,
             tecnico=datos.tecnico,
@@ -217,6 +218,7 @@ def actualizar_registro_produccion(db: Session, id_cabecera: int, datos):
     try:
         # 1. Actualizar cabecera
         cabecera_actual.fecha = datos.fecha
+        cabecera_actual.tipo_turno = datos.tipo_turno
         cabecera_actual.turno = datos.turno
         cabecera_actual.grupo = datos.grupo
         cabecera_actual.tecnico = datos.tecnico

@@ -339,7 +339,14 @@ export const RegistrarProduccion = () => {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!fecha || !tecnico || !turno || !grupo || totalPaletas <= 0) {
+    if (
+      !fecha ||
+      !tecnico ||
+      !turno ||
+      !grupo ||
+      !tipoTurno ||
+      totalPaletas <= 0
+    ) {
       setError("Completa todos los campos obligatorios.");
       return;
     }
@@ -437,6 +444,7 @@ export const RegistrarProduccion = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           fecha,
+          tipoTurno: tipoTurno === "2" ? "2 Turnos" : "3 Turnos",
           turno: Number(turno),
           grupo,
           tecnico,
@@ -1001,7 +1009,6 @@ const ModeloProduccion = ({
   cargandoJustificantes,
   maximoDecoradas,
   maximoLisa,
-  actualizarModelo,
   cambiarPaletas,
   agregarJustificante,
   eliminarJustificante,

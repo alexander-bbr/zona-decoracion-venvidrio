@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 08-09-2026 a las 22:00:15
+-- Tiempo de generación: 09-09-2026 a las 23:27:48
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -561,17 +561,18 @@ CREATE TABLE `gestion_productiva_cabecera` (
   `cant_envases_d4` int(11) DEFAULT NULL,
   `total_envases` int(11) DEFAULT NULL,
   `total_gruesas` decimal(12,2) DEFAULT NULL,
-  `grupo` varchar(10) DEFAULT NULL
+  `grupo` varchar(10) DEFAULT NULL,
+  `tipo_turno` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `gestion_productiva_cabecera`
 --
 
-INSERT INTO `gestion_productiva_cabecera` (`id_cabecera`, `fecha`, `turno`, `tecnico`, `cant_envases_d1`, `cant_envases_d2`, `cant_envases_d3`, `cant_envases_d4`, `total_envases`, `total_gruesas`, `grupo`) VALUES
-(271, '2026-09-08', 1, 'Carlos Mendoza', 700, 350, 100, 0, 1150, 7.99, 'A'),
-(272, '2026-09-08', 1, 'Carlos Mendoza', 700, 350, 100, 0, 1150, 7.99, 'A'),
-(273, '2026-09-08', 1, 'pruebaaaaaaa', 700, 350, 100, 0, 1150, 7.99, 'A');
+INSERT INTO `gestion_productiva_cabecera` (`id_cabecera`, `fecha`, `turno`, `tecnico`, `cant_envases_d1`, `cant_envases_d2`, `cant_envases_d3`, `cant_envases_d4`, `total_envases`, `total_gruesas`, `grupo`, `tipo_turno`) VALUES
+(271, '2026-09-08', 1, 'Carlos Mendoza', 700, 350, 100, 0, 1150, 7.99, 'A', NULL),
+(272, '2026-09-08', 1, 'Carlos Mendoza', 700, 350, 100, 0, 1150, 7.99, 'A', NULL),
+(273, '2026-09-08', 1, 'pruebaaaaaaa', 700, 350, 100, 0, 1150, 7.99, 'A', NULL);
 
 -- --------------------------------------------------------
 

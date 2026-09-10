@@ -50,6 +50,7 @@ type JustificantePorMoldeApi = {
 type RegistroDetalleApi = {
   idCabecera: number;
   fecha: string;
+  tipoTurno: string;
   turno: number;
   grupo: string;
   tecnico: string;
@@ -132,9 +133,17 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
   const [cargandoJustificantes, setCargandoJustificantes] = useState(true);
 
   // Datos de Identificación
-  const [tipoTurno, setTipoTurno] = useState<"2" | "3">(
-    registro.turno <= 2 ? "2" : "3",
-  );
+  const tipoTurnoInicial: "2" | "3" = (() => {
+    // Primero intentar detectar desde tipoTurno
+    if (registro.tipoTurno) {
+      if (registro.tipoTurno.includes("3")) return "3";
+      if (registro.tipoTurno.includes("2")) return "2";
+    }
+    // Fallback: si el turno es 3, entonces son 3 turnos
+    return registro.turno === 3 ? "3" : "2";
+  })();
+
+  const [tipoTurno, setTipoTurno] = useState<"2" | "3">(tipoTurnoInicial);
   const [turno, setTurno] = useState<number>(registro.turno);
   const [grupo, setGrupo] = useState(registro.grupo);
   const [fecha, setFecha] = useState(registro.fecha);
@@ -472,7 +481,7 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
   };
 
   const handleReset = () => {
-    setTipoTurno(registro.turno <= 2 ? "2" : "3");
+    setTipoTurno(tipoTurnoInicial);
     setTurno(registro.turno);
     setGrupo(registro.grupo);
     setFecha(registro.fecha);
@@ -540,7 +549,14 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!fecha || !tecnico || !turno || !grupo || totalPaletas <= 0) {
+    if (
+      !fecha ||
+      !tecnico ||
+      !turno ||
+      !grupo ||
+      !tipoTurno ||
+      totalPaletas <= 0
+    ) {
       setError("Completa todos los campos obligatorios.");
       return;
     }
@@ -636,6 +652,7 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             fecha,
+            tipoTurno: tipoTurno === "2" ? "2 Turnos" : "3 Turnos",
             turno: Number(turno),
             grupo,
             tecnico,

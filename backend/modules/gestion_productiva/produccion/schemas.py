@@ -116,7 +116,8 @@ class ResultadoResponde(ResultadoBase):
 # ESQUEMAS PARA GESTION_PRODUCTIVA_CABECERA (Creación)
 class ProduccionCrear(BaseModel):
     fecha: date = Field(alias="fecha")
-    turno: int = Field(alias="turno")                           # CAMBIADO a int
+    tipo_turno: Optional[str] = Field(default=None, alias="tipoTurno")
+    turno: int = Field(alias="turno")
     grupo: Optional[str] = Field(default=None, alias="grupo")  # NUEVO
     tecnico: str = Field(alias="tecnico")
 
@@ -144,8 +145,9 @@ class ProduccionCrear(BaseModel):
 class ProduccionResponde(BaseModel):
     id_cabecera: int = Field(alias="idCabecera")
     fecha: date = Field(alias="fecha")
-    turno: int = Field(alias="turno")                           # CAMBIADO a int
-    grupo: Optional[str] = Field(default=None, alias="grupo")  # NUEVO
+    tipo_turno: Optional[str] = Field(default=None, alias="tipoTurno") 
+    turno: int = Field(alias="turno")                      
+    grupo: Optional[str] = Field(default=None, alias="grupo")
     tecnico: str = Field(alias="tecnico")
 
     maquina1: List[EntradaDetalleResponde] = Field(default=[], alias="maquina1")
@@ -173,8 +175,9 @@ class ProduccionResponde(BaseModel):
 class ProduccionListaResponde(BaseModel):
     id_cabecera: int = Field(alias="idCabecera")
     fecha: date = Field(alias="fecha")
-    turno: int = Field(alias="turno")                           # CAMBIADO a int
-    grupo: Optional[str] = Field(default=None, alias="grupo")  # NUEVO
+    tipo_turno: Optional[str] = Field(default=None, alias="tipoTurno") 
+    turno: int = Field(alias="turno")
+    grupo: Optional[str] = Field(default=None, alias="grupo")
     tecnico: str = Field(alias="tecnico")
     total_gruesas: Decimal = Field(alias="totalGruesas")
     total_gruesas_lisas: Optional[Decimal] = Field(default=Decimal("0.00"), alias="totalGruesasLisas")

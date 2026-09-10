@@ -5,6 +5,7 @@ Método: POST
 JSON (Envía el Frontend):
 {
   "fecha": "2026-09-08",
+  "tipoTurno": "string",                   // Aquí está ese campo
   "turno": 1,
   "grupo": "A",
   "tecnico": "Carlos Mendoza",
@@ -138,6 +139,7 @@ Método: PUT
 JSON (Envía el Frontend):
 {
   "fecha": "2026-09-08",
+  "tipoTurno": "string",                         // Aquí está ese campo
   "turno": 1,
   "grupo": "A",
   "tecnico": "Carlos Mendoza",
@@ -268,7 +270,7 @@ JSON (Respuesta en caso de error):
 
 
 
----
+----------------------------------------------------------------------------------------
 
 Ruta 3: Listado de Producción (Vista Principal)
 Endpoint: http://127.0.0.1:8000/produccion?skip=0&limit=50
@@ -279,6 +281,7 @@ Estructura de los datos que recibirá:
   {
     "idCabecera": 262,
     "fecha": "2026-08-30",
+    "tipoTurno": "string",                         // Aquí está ese campo
     "turno": 1,
     "grupo": "A",
     "tecnico": "holaaaaa Pérez",
@@ -341,6 +344,7 @@ Estructura de los datos que recibirá:
 {
   "idCabecera": 271,
   "fecha": "2026-09-08",
+  "tipoTurno": "string",                       // Aquí está ese campo
   "turno": 1,
   "grupo": "A",
   "tecnico": "Carlos Mendoza",
@@ -483,7 +487,7 @@ Estructura de los datos que recibirá:
 ]
 
 
----
+-------------------------------------------------------------------------------------------
 
 Ruta 6: Inventario de justificantes (Para el Select)
 Endpoint: http://127.0.0.1:8000/produccion/justificantes

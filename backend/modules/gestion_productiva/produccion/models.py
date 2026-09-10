@@ -15,8 +15,9 @@ class GestionProductivaCabecera(Base):
 
     id_cabecera = Column(Integer, primary_key=True, autoincrement=True)
     fecha = Column(Date, nullable=False)
+    tipo_turno = Column(String(50), nullable=True)
     turno = Column(Integer, nullable=False)
-    grupo = Column(String(10), nullable=True)        # NUEVO
+    grupo = Column(String(10), nullable=True)       
     tecnico = Column(String(150), nullable=False)
 
     cant_envases_d1 = Column(Integer, default=0)

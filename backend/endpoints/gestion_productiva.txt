@@ -5,7 +5,7 @@ Método: POST
 JSON (Envía el Frontend):
 {
   "fecha": "2026-09-08",
-  "tipoTurno": "string",                   // Aquí está ese campo
+  "tipoTurno": "string",
   "turno": 1,
   "grupo": "A",
   "tecnico": "Carlos Mendoza",
@@ -139,7 +139,7 @@ Método: PUT
 JSON (Envía el Frontend):
 {
   "fecha": "2026-09-08",
-  "tipoTurno": "string",                         // Aquí está ese campo
+  "tipoTurno": "string",
   "turno": 1,
   "grupo": "A",
   "tecnico": "Carlos Mendoza",
@@ -281,7 +281,7 @@ Estructura de los datos que recibirá:
   {
     "idCabecera": 262,
     "fecha": "2026-08-30",
-    "tipoTurno": "string",                         // Aquí está ese campo
+    "tipoTurno": "string",
     "turno": 1,
     "grupo": "A",
     "tecnico": "holaaaaa Pérez",
@@ -344,7 +344,7 @@ Estructura de los datos que recibirá:
 {
   "idCabecera": 271,
   "fecha": "2026-09-08",
-  "tipoTurno": "string",                       // Aquí está ese campo
+  "tipoTurno": "string",
   "turno": 1,
   "grupo": "A",
   "tecnico": "Carlos Mendoza",

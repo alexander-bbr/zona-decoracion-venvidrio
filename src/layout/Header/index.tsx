@@ -1,4 +1,4 @@
-import styles from "./Header.module.css";
+import styles from "./header.module.css";
 import isotipo from "../../assets/images/favicon.png";
 import { DatosEmpresa } from "../../components/DatosEmpresa";
 

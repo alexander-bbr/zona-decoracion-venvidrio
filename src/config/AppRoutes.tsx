@@ -8,12 +8,14 @@ import { Home } from "../modules/Home";
 // Módulo - Rendimiento
 import { Rendimiento } from "../modules/Rendimiento";
 
-// Módulo - Consumo de Pintura
-import { ConsumoDePintura } from "../modules/CuartoDePantalla/ConsumoDePintura";
-import { ConsumirPintura } from "../modules/CuartoDePantalla/ConsumoDePintura/ConsumirPintura";
-import { SuministrarPintura } from "../modules/CuartoDePantalla/ConsumoDePintura/SuministrarPintura";
-import { InventarioPintura } from "../modules/CuartoDePantalla/ConsumoDePintura/InventarioPintura";
-import { HistorialConsumo } from "../modules/CuartoDePantalla/ConsumoDePintura/HistorialConsumo";
+// Módulo - Inventario
+import { Inventario } from "../modules/Inventario";
+import { RegistroInsumo } from "../modules/Inventario/RegistroInsumo";
+import { SalidaInsumo } from "../modules/Inventario/SalidaInsumo";
+import { ListarInventario } from "../modules/Inventario/ListarInventario";
+import { HistorialMovimiento } from "../modules/Inventario/HistorialMovimiento";
+import { CrearInsumo } from "../modules/Inventario/CrearInsumo";
+import { EditarInsumo } from "../modules/Inventario/EditarInsumo";
 
 // Módulo - Gestión Productiva
 import { GestionProductiva } from "../modules/GestionProductiva";
@@ -85,72 +87,91 @@ export const AppRoutes = () => {
       />
 
       {/* 
-        Módulo - Consumo de Pintura 
-        EL PADRE: Requiere AL MENOS UN permiso del módulo insumo_pintura
-        Los submódulos: Requieren permisos específicos
+        Módulo - Inventario - Requiere el permiso ...
       */}
       <Route
-        path="/consumo-pintura"
+        path="/inventario"
         element={
           <PrivateRoute
             requiredPermissions={[
               { modulo: "insumo_pintura", accion: "ver_inventario" },
-              { modulo: "insumo_pintura", accion: "crear_registro" },
-              { modulo: "insumo_pintura", accion: "crear_consumo" },
-              { modulo: "insumo_pintura", accion: "ver_historial_consumo" },
             ]}
             // Usamos requireAnyPermission para que permita si tiene AL MENOS UNO
             requireAnyPermission={true}
           >
-            <ConsumoDePintura />
+            <Inventario />
           </PrivateRoute>
         }
       >
         <Route
-          path="consumir"
+          path="registro-insumo"
           element={
             <PrivateRoute
               requiredPermissions={[
                 { modulo: "insumo_pintura", accion: "crear_consumo" },
               ]}
             >
-              <ConsumirPintura />
+              <RegistroInsumo />
             </PrivateRoute>
           }
         ></Route>
         <Route
-          path="suministrar"
+          path="salida-insumo"
           element={
             <PrivateRoute
               requiredPermissions={[
-                { modulo: "insumo_pintura", accion: "crear_registro" },
+                { modulo: "insumo_pintura", accion: "crear_consumo" },
               ]}
             >
-              <SuministrarPintura />
+              <SalidaInsumo />
             </PrivateRoute>
           }
         />
         <Route
-          path="historial-consumo"
+          path="historial-movimiento"
           element={
             <PrivateRoute
               requiredPermissions={[
-                { modulo: "insumo_pintura", accion: "ver_historial_consumo" },
+                { modulo: "insumo_pintura", accion: "crear_consumo" },
               ]}
             >
-              <HistorialConsumo />
+              <HistorialMovimiento />
             </PrivateRoute>
           }
         />
         <Route
-          path="inventario"
+          path="listar-inventario"
           element={
             <PrivateRoute
               requiredPermissions={[
-                { modulo: "insumo_pintura", accion: "ver_inventario" },
+                { modulo: "insumo_pintura", accion: "crear_insumo" },
               ]}
             >
-              <InventarioPintura />
+              <ListarInventario />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="crear-insumo"
+          element={
+            <PrivateRoute
+              requiredPermissions={[
+                { modulo: "insumo_pintura", accion: "crear_insumo" },
+              ]}
+            >
+              <CrearInsumo />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="editar-insumo"
+          element={
+            <PrivateRoute
+              requiredPermissions={[
+                { modulo: "insumo_pintura", accion: "crear_insumo" },
+              ]}
+            >
+              <EditarInsumo />
             </PrivateRoute>
           }
         />

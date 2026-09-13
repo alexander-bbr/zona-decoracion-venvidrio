@@ -1,12 +1,27 @@
 # TODO
 
+## Rendimiento
 
-## Consumo de Pintura
+  - Corregir la Permisología de dashboard a Rendimiento en donde sea que haga falta.
+  - Conectar con el nuevo endpoint
+  - Hacer que el input de fecha hasta marque siempre por defecto la fecha del día de hoy.
+  - Colocar un límite de fecha en el campo de fecha hasta, para que no se puedan colocar fechas futuras.
+  - Colocar no solo los envases fabricados, sino también que modelos de envases se fabricaron.
 
-  - Hay un bug en el botón de reset, no se están reseteando los formularios
 
 
 ---
+
+
+
+## Inventario
+
+  - Corregir la Permisología en la Sidebar, el AppRoutes, del Inventario.tsx y creo que también en PrivateRoute
+
+
+
+---
+
 
 
 ## Gestión Productiva
@@ -28,19 +43,25 @@
     - Ya no se tiene que tomar en cuenta en el input de Número Total de Paletas (del fielset de Total de Paletas), las paletas que sean de producción lisa. Osea, lo único que va a limitar el campo de Número Total de Paletas, son los inputs de Número de Paletas de Producción Decorada entre todos los moldes. Ejemplo: Pusimos 10 en el input de Número total de Paletas, y teníamos dos moldes por todas las máquinas (en la máquina 1 habian 2 moldes: el molde GX0001 y el molde GX0002; y en las máquinas 2, 3 y 4 habían nada más el molde GX0001). Entonces bueno, en el Molde ( 1 ) (el GX0001) en el Numero de Paletas de Producción Decorada pusimos 5, y en el Número de Paletas de Producción Lisa de ese molde pusimos 3 (bueno, este 3 no afecta a la cuenta). Y en el Molde ( 2 ) el Número de Paletas de Producción Decorada pusimos 5 (teniendo entonces 5 + 5 = 10, chévere, no superamos el 10 de Número Total de Paletas). De hecho, el campo de Número Total de Paletas habría que cambiarlo de nombre a Número Total de Paletas Decoradas (así sería más congruente).
 
 
+
 ---
+
 
 
 ## Gestión de Moldes
 
 
+
 ---
+
 
 
 ## Justificantes
 
 
+
 ---
+
 
 
 ## Sign In
@@ -48,17 +69,9 @@
   - Hacer funcionar la verificación en el backend
 
 
----
-
-
-## Rendimiento
-
-  - Hacer que el input de fecha hasta marque siempre por defecto la fecha del día de hoy.
-  - Colocar un límite de fecha en el campo de fecha hasta, para que no se puedan colocar fechas futuras.
-  - Colocar no solo los envases fabricados, sino también que modelos de envases se fabricaron.
-
 
 ---
+  
 
 
 ## Gestión de Usuarios
@@ -67,11 +80,22 @@
   - Tengo que implementar la validación de los estándares de seguridad de la contraseña.
 
 
+
 ---
+
+
+
+## Layout
+
+  - Hacer menos alto el Header, ya que ocupa demasiado espacio.
+  - Separar más el contenido del main del Header, ya que queda demasiado pegado.
+
+
+
+---
+
 
 
 ## General
 
-  - Verificar que en todos los campos numéricos, hayan como máximo 2 decimales.
   - Hacer Responsive la Aplicación.
-  - Hacer la sidebar como un botón hamburguesa que se sobreponga (es decir, que no ocupe espacio en el layout).

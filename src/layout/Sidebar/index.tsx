@@ -64,7 +64,7 @@ export const Sidebar = ({ isOpen }: SidebarProps) => {
           <Link to="/">Inicio</Link>
         </li>
 
-        {/* Dashboard - visible si tiene permiso ver (dashboard) */}
+        {/* Rendimiento - visible si tiene el permiso ver_dashboard */}
         {hasPermission("dashboard", "ver") && (
           <li>
             <Link to="/rendimiento">Rendimiento</Link>
@@ -72,14 +72,9 @@ export const Sidebar = ({ isOpen }: SidebarProps) => {
         )}
 
         {/* Consumo de Pintura - visible si tiene algún permiso de insumo_pintura */}
-        {hasAnyPermission("insumo_pintura", [
-          "ver_inventario",
-          "crear_registro",
-          "crear_consumo",
-          "ver_historial_consumo",
-        ]) && (
+        {hasAnyPermission("insumo_pintura", ["ver_inventario"]) && (
           <li>
-            <Link to="/consumo-pintura">Consumo de Pintura</Link>
+            <Link to="/inventario">Inventario</Link>
           </li>
         )}
 

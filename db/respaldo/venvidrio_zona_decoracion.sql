@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 08-09-2026 a las 22:00:15
+-- Tiempo de generación: 12-09-2026 a las 15:34:27
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -561,17 +561,17 @@ CREATE TABLE `gestion_productiva_cabecera` (
   `cant_envases_d4` int(11) DEFAULT NULL,
   `total_envases` int(11) DEFAULT NULL,
   `total_gruesas` decimal(12,2) DEFAULT NULL,
-  `grupo` varchar(10) DEFAULT NULL
+  `grupo` varchar(10) DEFAULT NULL,
+  `tipo_turno` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `gestion_productiva_cabecera`
 --
 
-INSERT INTO `gestion_productiva_cabecera` (`id_cabecera`, `fecha`, `turno`, `tecnico`, `cant_envases_d1`, `cant_envases_d2`, `cant_envases_d3`, `cant_envases_d4`, `total_envases`, `total_gruesas`, `grupo`) VALUES
-(271, '2026-09-08', 1, 'Carlos Mendoza', 700, 350, 100, 0, 1150, 7.99, 'A'),
-(272, '2026-09-08', 1, 'Carlos Mendoza', 700, 350, 100, 0, 1150, 7.99, 'A'),
-(273, '2026-09-08', 1, 'pruebaaaaaaa', 700, 350, 100, 0, 1150, 7.99, 'A');
+INSERT INTO `gestion_productiva_cabecera` (`id_cabecera`, `fecha`, `turno`, `tecnico`, `cant_envases_d1`, `cant_envases_d2`, `cant_envases_d3`, `cant_envases_d4`, `total_envases`, `total_gruesas`, `grupo`, `tipo_turno`) VALUES
+(274, '2026-09-10', 1, 'Miguel Bethancourt', 26400, 26400, 0, 0, 52800, 366.67, 'A', '3 Turnos'),
+(275, '2026-09-10', 1, 'Daniel Pérez', 26400, 26400, 0, 0, 52800, 366.67, 'A', '3 Turnos');
 
 -- --------------------------------------------------------
 
@@ -593,18 +593,10 @@ CREATE TABLE `gestion_productiva_entrada` (
 --
 
 INSERT INTO `gestion_productiva_entrada` (`id_entrada`, `id_cabecera`, `maquina`, `id_molde`, `cant_envases`, `hora_entrada`) VALUES
-(132, 271, 1, 1, 500, '07:00'),
-(133, 271, 1, 2, 200, '11:30'),
-(134, 271, 2, 4, 350, '08:15'),
-(135, 271, 3, 5, 100, '09:00'),
-(136, 272, 1, 1, 500, '07:00'),
-(137, 272, 1, 2, 200, '11:30'),
-(138, 272, 2, 4, 350, '08:15'),
-(139, 272, 3, 5, 100, '09:00'),
-(144, 273, 1, 1, 500, '07:00'),
-(145, 273, 1, 2, 200, '11:30'),
-(146, 273, 2, 4, 350, '08:15'),
-(147, 273, 3, 5, 100, '09:00');
+(176, 275, 1, 6, 26400, '10:10'),
+(177, 275, 2, 6, 26400, '10:10'),
+(178, 274, 1, 6, 26400, '09:17'),
+(179, 274, 2, 6, 26400, '09:17');
 
 -- --------------------------------------------------------
 
@@ -627,9 +619,8 @@ CREATE TABLE `gestion_productiva_resultado` (
 --
 
 INSERT INTO `gestion_productiva_resultado` (`id_resultado`, `id_cabecera`, `total_gruesas_lisas`, `total_gruesas_decoradas`, `eficiencia_productiva`, `deficiencia_productiva`, `observaciones`) VALUES
-(269, 271, 6.24, 1.73, 98.50, 1.50, 'Prueba de guardado omitiendo el ID 3 en moldes y justificantes.'),
-(270, 272, 6.24, 1.73, 98.50, 1.50, 'Prueba de guardado omitiendo el ID 3 en moldes y justificantes.'),
-(271, 273, 6.24, 1.73, 98.50, 1.50, 'Prueba de guardado omitiendo el ID 3 en moldes y justificantes.');
+(272, 274, 0.00, 366.67, 100.00, 0.00, ''),
+(273, 275, 0.00, 366.67, 100.00, 0.00, '');
 
 -- --------------------------------------------------------
 
@@ -657,18 +648,8 @@ CREATE TABLE `gestion_productiva_salida` (
 --
 
 INSERT INTO `gestion_productiva_salida` (`id_eficiencia`, `modelo_molde`, `id_cabecera`, `total_paletas_molde`, `cant_paletas_lisas`, `cant_camadas_lisas`, `cant_envases_lisas`, `cant_gruesas_lisas`, `cant_paletas_decoradas`, `cant_camadas_decoradas`, `cant_envases_decoradas`, `cant_gruesas_decoradas`) VALUES
-(553, 1, 271, 2, 1, 5, 250, 1.73, 1, 5, 250, 1.73),
-(554, 2, 271, 1, 1, 7, 350, 2.43, 0, 0, 0, 0.00),
-(555, 4, 271, 1, 1, 4, 200, 1.39, 0, 0, 0, 0.00),
-(556, 5, 271, 1, 1, 2, 100, 0.69, 0, 0, 0, 0.00),
-(557, 1, 272, 2, 1, 5, 250, 1.73, 1, 5, 250, 1.73),
-(558, 2, 272, 1, 1, 7, 350, 2.43, 0, 0, 0, 0.00),
-(559, 4, 272, 1, 1, 4, 200, 1.39, 0, 0, 0, 0.00),
-(560, 5, 272, 1, 1, 2, 100, 0.69, 0, 0, 0, 0.00),
-(565, 1, 273, 2, 1, 5, 250, 1.73, 1, 5, 250, 1.73),
-(566, 2, 273, 1, 1, 7, 350, 2.43, 0, 0, 0, 0.00),
-(567, 4, 273, 1, 1, 4, 200, 1.39, 0, 0, 0, 0.00),
-(568, 5, 273, 1, 1, 2, 100, 0.69, 0, 0, 0, 0.00);
+(587, 6, 275, 15, 0, 0, 0, 0.00, 15, 120, 52800, 366.67),
+(588, 6, 274, 15, 0, 0, 0, 0.00, 15, 120, 52800, 366.67);
 
 -- --------------------------------------------------------
 
@@ -862,24 +843,6 @@ CREATE TABLE `produccion_justificantes` (
   `modelo_molde` int(11) NOT NULL,
   `id_justificante` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `produccion_justificantes`
---
-
-INSERT INTO `produccion_justificantes` (`id_cabecera`, `modelo_molde`, `id_justificante`) VALUES
-(271, 1, 1),
-(271, 1, 2),
-(271, 2, 4),
-(271, 2, 5),
-(272, 1, 1),
-(272, 1, 2),
-(272, 2, 4),
-(272, 2, 5),
-(273, 1, 1),
-(273, 1, 2),
-(273, 2, 4),
-(273, 2, 5);
 
 -- --------------------------------------------------------
 
@@ -1367,25 +1330,25 @@ ALTER TABLE `f_historia_trabajo_decoracion_temperatura`
 -- AUTO_INCREMENT de la tabla `gestion_productiva_cabecera`
 --
 ALTER TABLE `gestion_productiva_cabecera`
-  MODIFY `id_cabecera` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=274;
+  MODIFY `id_cabecera` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=276;
 
 --
 -- AUTO_INCREMENT de la tabla `gestion_productiva_entrada`
 --
 ALTER TABLE `gestion_productiva_entrada`
-  MODIFY `id_entrada` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=148;
+  MODIFY `id_entrada` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=180;
 
 --
 -- AUTO_INCREMENT de la tabla `gestion_productiva_resultado`
 --
 ALTER TABLE `gestion_productiva_resultado`
-  MODIFY `id_resultado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=272;
+  MODIFY `id_resultado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=274;
 
 --
 -- AUTO_INCREMENT de la tabla `gestion_productiva_salida`
 --
 ALTER TABLE `gestion_productiva_salida`
-  MODIFY `id_eficiencia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=569;
+  MODIFY `id_eficiencia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=589;
 
 --
 -- AUTO_INCREMENT de la tabla `justificantes`

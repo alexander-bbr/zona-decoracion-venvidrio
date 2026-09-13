@@ -8,7 +8,7 @@ interface PrivateRouteProps {
     modulo: string;
     accion: string;
   }[];
-  requireAnyPermission?: boolean; // Nueva prop
+  requireAnyPermission?: boolean;
 }
 
 export const PrivateRoute = ({

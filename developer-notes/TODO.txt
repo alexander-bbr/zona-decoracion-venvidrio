@@ -89,6 +89,7 @@
 
   - Hacer menos alto el Header, ya que ocupa demasiado espacio.
   - Separar más el contenido del main del Header, ya que queda demasiado pegado.
+  - Hacer más pequeños los elementos de la sidebar, de tal manera de que no sea tan propenso a dejar de aparecer ítems
 
 
 

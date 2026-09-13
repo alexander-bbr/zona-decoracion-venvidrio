@@ -88,7 +88,7 @@ export const Inventario = () => {
 
           {/* Mostrar solo si tiene el permiso de listarInventario */}
           {permisos.listarInventario && (
-            <NavLink to="inventario" className={styles.actionCard}>
+            <NavLink to="listar-inventario" className={styles.actionCard}>
               <div className={styles.actionIcon}>📦</div>
               <h3>Listar Inventario</h3>
               <p>Revisa la cantidad de todos los insumos en el inventario</p>
@@ -97,7 +97,7 @@ export const Inventario = () => {
 
           {/* Mostrar solo si tiene el permiso de crearInsumo */}
           {permisos.crearInsumo && (
-            <NavLink to="inventario" className={styles.actionCard}>
+            <NavLink to="crear-insumo" className={styles.actionCard}>
               <div className={styles.actionIcon}>🖋️</div>
               <h3>Crear Insumo</h3>
               <p>Crea un nuevo ítem de insumo</p>
@@ -106,7 +106,7 @@ export const Inventario = () => {
 
           {/* Mostrar solo si tiene el permiso de editarInsumo */}
           {permisos.editarInsumo && (
-            <NavLink to="inventario" className={styles.actionCard}>
+            <NavLink to="editar-insumo" className={styles.actionCard}>
               <div className={styles.actionIcon}>🔧</div>
               <h3>Editar Insumo</h3>
               <p>Edita un ítem de insumo</p>

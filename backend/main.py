@@ -4,8 +4,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-# Importamos el router desde tu módulo de pintura
-from backend.modules.insumos.pintura.router import router as pintura_router
+# Importamos el router desde tu módulo de insumos
+from backend.modules.inventario_insumos.router import router as insumos_router
 
 # Importamos el router desde tu módulo de dashboard
 from backend.modules.dashboard.router import router as dashboard_router
@@ -46,8 +46,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Registramos las rutas del módulo de pintura
-app.include_router(pintura_router)
+# Registramos las rutas del módulo de insumos
+app.include_router(insumos_router)
 
 # Registramos las rutas del módulo del dashboard
 app.include_router(dashboard_router)

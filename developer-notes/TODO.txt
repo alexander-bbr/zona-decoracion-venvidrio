@@ -17,6 +17,7 @@
 ## Inventario
 
   - Corregir la Permisología en la Sidebar, el AppRoutes, del Inventario.tsx y creo que también en PrivateRoute
+  - En Listar Inventario, debería mostrar el idInsumo, para que así el usuario lo pueda usar como referencia.
 
 
 

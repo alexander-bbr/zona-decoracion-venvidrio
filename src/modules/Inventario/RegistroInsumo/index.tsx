@@ -1,7 +1,6 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { HeaderForm } from "../../../components/HeaderForm";
-import { mockFetch } from "../../../mocks/inventarioMock";
 import styles from "./registro-insumo.module.css";
 
 type Insumo = {
@@ -49,7 +48,7 @@ export const RegistroInsumo = () => {
     const cargarInsumos = async () => {
       setCargandoInsumos(true);
       try {
-        const response = await mockFetch(API_INSUMOS);
+        const response = await fetch(API_INSUMOS);
         if (!response.ok) {
           throw new Error(`Error al cargar insumos: ${response.status}`);
         }
@@ -104,7 +103,7 @@ export const RegistroInsumo = () => {
     }
 
     try {
-      const response = await mockFetch(API_ENTRADAS, {
+      const response = await fetch(API_ENTRADAS, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -173,8 +172,8 @@ export const RegistroInsumo = () => {
               </option>
               {insumos.map((insumo) => (
                 <option key={insumo.idInsumo} value={insumo.idInsumo}>
-                  {insumo.articulo} ({insumo.tipo}) — {insumo.cantidadActual}{" "}
-                  {insumo.unidad}
+                  ({insumo.tipo}) - {insumo.articulo} --&gt;{" "}
+                  {insumo.cantidadActual} {insumo.unidad}
                 </option>
               ))}
             </select>
@@ -248,7 +247,6 @@ export const RegistroInsumo = () => {
               min="0.01"
               value={formData.cantidad}
               onChange={handleChange}
-              placeholder="Ej: 10.50"
               required
             />
           </div>

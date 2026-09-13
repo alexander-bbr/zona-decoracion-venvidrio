@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { mockFetch } from "../../../mocks/inventarioMock";
 import styles from "./historial-movimiento.module.css";
 
 type Movimiento = {
@@ -33,10 +32,13 @@ export const HistorialMovimiento = () => {
     try {
       const skip = (paginaActual - 1) * LIMIT;
       const url = `${API_HISTORIAL}?skip=${skip}&limit=${LIMIT}`;
-      const response = await mockFetch(url);
+      const response = await fetch(url);
 
       if (!response.ok) {
-        throw new Error(`Error al cargar historial: ${response.status}`);
+        const data = await response.json().catch(() => null);
+        throw new Error(
+          data?.detail ?? `Error al cargar historial: ${response.status}`,
+        );
       }
 
       const data = (await response.json()) as Movimiento[];

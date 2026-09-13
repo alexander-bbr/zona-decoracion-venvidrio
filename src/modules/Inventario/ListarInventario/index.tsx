@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { mockFetch } from "../../../mocks/inventarioMock";
 import styles from "./listar-inventario.module.css";
 
 type Insumo = {
@@ -23,9 +22,12 @@ export const ListarInventario = () => {
       setCargando(true);
       setError("");
       try {
-        const response = await mockFetch(API_INSUMOS);
+        const response = await fetch(API_INSUMOS);
         if (!response.ok) {
-          throw new Error(`Error al cargar inventario: ${response.status}`);
+          const data = await response.json().catch(() => null);
+          throw new Error(
+            data?.detail ?? `Error al cargar inventario: ${response.status}`,
+          );
         }
         const data = (await response.json()) as Insumo[];
         const ordenados = [...data].sort((a, b) =>

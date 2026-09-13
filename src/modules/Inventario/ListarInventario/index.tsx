@@ -30,8 +30,10 @@ export const ListarInventario = () => {
           );
         }
         const data = (await response.json()) as Insumo[];
-        const ordenados = [...data].sort((a, b) =>
-          a.articulo.localeCompare(b.articulo),
+        const ordenados = [...data].sort(
+          (a, b) =>
+            a.tipo.localeCompare(b.tipo) ||
+            a.articulo.localeCompare(b.articulo),
         );
         setInsumos(ordenados);
       } catch (loadError) {
@@ -70,11 +72,21 @@ export const ListarInventario = () => {
                 }`}
               >
                 <header className={styles.cardHeader}>
-                  <span className={styles.cardTipo}>{insumo.tipo}</span>
+                  <div className={styles.cardInfoItemWrapper}>
+                    <span className={styles.cardTipo}>{insumo.tipo}</span>
+                    <span className={styles.cardId}>ID: {insumo.idInsumo}</span>
+                  </div>
+
                   {esBajoStock(insumo) ? (
-                    <span className={styles.badgeBajoStock}>⚠️ Bajo stock</span>
+                    <div className={styles.badgeBajoStock}>
+                      <span>⚠️</span>
+                      <span>Bajo stock</span>
+                    </div>
                   ) : (
-                    <span className={styles.badgeOk}>✔ OK</span>
+                    <span className={styles.badgeOk}>
+                      <span>✅</span>
+                      <span>OK</span>
+                    </span>
                   )}
                 </header>
 

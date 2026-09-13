@@ -53,7 +53,12 @@ export const SalidaInsumo = () => {
           throw new Error(`Error al cargar insumos: ${response.status}`);
         }
         const data = (await response.json()) as Insumo[];
-        setInsumos(data);
+        const ordenados = [...data].sort(
+          (a, b) =>
+            a.tipo.localeCompare(b.tipo) ||
+            a.articulo.localeCompare(b.articulo),
+        );
+        setInsumos(ordenados);
       } catch {
         setError("No se pudieron cargar los insumos.");
       } finally {

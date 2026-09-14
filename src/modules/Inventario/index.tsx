@@ -15,8 +15,7 @@ export const Inventario = () => {
     if (path.includes("salida-insumo")) return "Salida de Insumo";
     if (path.includes("historial-movimiento")) return "Historial de Movimeinto";
     if (path.includes("listar-inventario")) return "Listar Inventario";
-    if (path.includes("crear-insumo")) return "Crear Insumo";
-    if (path.includes("editar-insumo")) return "Editar Insumo";
+    if (path.includes("gestion-insumos")) return "Gestión de Insumos";
     return "";
   };
 
@@ -26,8 +25,7 @@ export const Inventario = () => {
     salidaInsumo: hasPermission("insumo_pintura", "crear_consumo"),
     historialMovimiento: hasPermission("insumo_pintura", "crear_consumo"),
     listarInventario: hasPermission("insumo_pintura", "crear_consumo"),
-    crearInsumo: hasPermission("insumo_pintura", "crear_consumo"),
-    editarInsumo: hasPermission("insumo_pintura", "crear_consumo"),
+    gestionInsumos: hasPermission("insumo_pintura", "crear_consumo"),
   };
 
   return (
@@ -95,21 +93,12 @@ export const Inventario = () => {
             </NavLink>
           )}
 
-          {/* Mostrar solo si tiene el permiso de crearInsumo */}
-          {permisos.crearInsumo && (
-            <NavLink to="crear-insumo" className={styles.actionCard}>
-              <div className={styles.actionIcon}>🖋️</div>
-              <h3>Crear Insumo</h3>
-              <p>Crea un nuevo ítem de insumo</p>
-            </NavLink>
-          )}
-
-          {/* Mostrar solo si tiene el permiso de editarInsumo */}
-          {permisos.editarInsumo && (
-            <NavLink to="editar-insumo" className={styles.actionCard}>
-              <div className={styles.actionIcon}>🔧</div>
-              <h3>Editar Insumo</h3>
-              <p>Edita un ítem de insumo</p>
+          {/* Mostrar solo si tiene el permiso de gestionInsumos */}
+          {permisos.gestionInsumos && (
+            <NavLink to="gestion-insumos" className={styles.actionCard}>
+              <div className={styles.actionIcon}>⚙️</div>
+              <h3>Gestión de Insumos</h3>
+              <p>Gestión del catálogo de insumos</p>
             </NavLink>
           )}
         </div>

@@ -8,7 +8,7 @@ JSON (Envía el Frontend):
   "encargado": "Carlos Mendoza",  # string
   "turno": "Turno 1",            # string
   "grupo": "Grupo A",            # string
-  "cantidad": 10.50               # number
+  "cantidad": "10.50"               # number
 }
 
 JSON (Respuesta en caso de éxito):
@@ -39,7 +39,7 @@ JSON (Envía el Frontend):
   "encargado": "Carlos Mendoza",  # string
   "turno": "Turno 1",            # string
   "grupo": "Grupo A",            # string
-  "cantidad": 5.00                # number
+  "cantidad": "5.00"                # number
 }
 
 JSON (Respuesta en caso de éxito):
@@ -72,16 +72,16 @@ Estructura de los datos que recibirá:
     "tipo": "Pintura",           # string
     "articulo": "Esmalte Blanco",# string
     "unidad": "Litros",          # string
-    "cantidadActual": 120.50,    # number
-    "cantidadMinima": 20.00      # number
+    "cantidadActual": "120.50",    # number
+    "cantidadMinima": "20.00"      # number
   },
   {
     "idInsumo": 2,               # number
     "tipo": "Solvente",          # string
     "articulo": "Tinner Standard",# string
     "unidad": "Galones",         # string
-    "cantidadActual": 45.00,     # number
-    "cantidadMinima": 10.00      # number
+    "cantidadActual": "45.00",     # number
+    "cantidadMinima": "10.00"      # number
   }
 ]
 
@@ -113,7 +113,7 @@ Estructura de los datos que recibirá:
   "encargado": "Carlos Mendoza", # string
   "turno": "Turno 1",          # string
   "grupo": "Grupo A",          # string
-  "cantidad": 10.50             # number
+  "cantidad": "10.50"             # number
   },
   {
   "idInventarioSalida": 1,      # number
@@ -122,7 +122,7 @@ Estructura de los datos que recibirá:
   "encargado": "Carlos Mendoza", # string
   "turno": "Turno 1",          # string
   "grupo": "Grupo A",          # string
-  "cantidad": 5.00              # number
+  "cantidad": "5.00"              # number
   },
   {
   "idInventarioEntrada": 2,     # number
@@ -131,7 +131,7 @@ Estructura de los datos que recibirá:
   "encargado": "Ana Gómez",     # string
   "turno": "Turno 2",          # string
   "grupo": "Grupo B",          # string
-  "cantidad": 20.00             # number
+  "cantidad": "20.00"             # number
   }
 ]
 
@@ -188,8 +188,8 @@ JSON (Envía el Frontend):
   "tipo": "Pintura",            # string
   "articulo": "Esmalte Blanco", # string
   "unidad": "Litros",           # string
-  "cantidadActual": 120.50,     # number
-  "cantidadMinima": 20.00,      # number
+  "cantidadActual": "120.50",     # number
+  "cantidadMinima": "20.00",      # number
   "estado": true          # boolean
 }
 
@@ -220,8 +220,8 @@ Estructura de los datos que recibirá:
   "tipo": "Pintura",            # string
   "articulo": "Esmalte Blanco", # string
   "unidad": "Litros",           # string
-  "cantidadActual": 120.50,     # number
-  "cantidadMinima": 20.00,      # number
+  "cantidadActual": "120.50",     # number
+  "cantidadMinima": "20.00",      # number
   "estado": true          # boolean
 }
 
@@ -244,8 +244,8 @@ JSON (Envía el Frontend):
   "tipo": "Pintura",            # string
   "articulo": "Esmalte Blanco", # string
   "unidad": "Litros",           # string
-  "cantidadActual": 120.50,     # number
-  "cantidadMinima": 20.00,      # number
+  "cantidadActual": "120.50",     # number
+  "cantidadMinima": "20.00",      # number
   "estado": true          # boolean
 }
 

@@ -83,7 +83,7 @@ const formatNumber = (value: number) =>
   value.toLocaleString("es-VE", { maximumFractionDigits: 2 });
 
 export const EditarProduccion = () => {
-  const { id_registro: idRegistro } = useParams<{ id_registro: string }>();
+  const { id: idRegistro } = useParams<{ id: string }>();
   return idRegistro ? (
     <CargarProduccion idRegistro={idRegistro} />
   ) : (

@@ -17,6 +17,7 @@
 ## Inventario
 
   - Corregir la Permisología en la Sidebar, el AppRoutes, del Inventario.tsx y creo que también en PrivateRoute
+  - En la barra de navegación secundaria, deberían de incluirse los módulos de Crear Insumo y Editar Insumo, o sea encontrar la manera de que pueda echarse para atrás pero solo un paso, para que quede en Gestión de Insumos.
 
 
 ---

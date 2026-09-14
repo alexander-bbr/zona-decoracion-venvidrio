@@ -14,8 +14,9 @@ import { RegistroInsumo } from "../modules/Inventario/RegistroInsumo";
 import { SalidaInsumo } from "../modules/Inventario/SalidaInsumo";
 import { ListarInventario } from "../modules/Inventario/ListarInventario";
 import { HistorialMovimiento } from "../modules/Inventario/HistorialMovimiento";
-import { CrearInsumo } from "../modules/Inventario/CrearInsumo";
-import { EditarInsumo } from "../modules/Inventario/EditarInsumo";
+import { GestionInsumos } from "../modules/Inventario/GestionInsumos";
+import { CrearInsumo } from "../modules/Inventario/GestionInsumos/CrearInsumo";
+import { EditarInsumo } from "../modules/Inventario/GestionInsumos/EditarInsumo";
 
 // Módulo - Gestión Productiva
 import { GestionProductiva } from "../modules/GestionProductiva";
@@ -103,6 +104,7 @@ export const AppRoutes = () => {
           </PrivateRoute>
         }
       >
+        {/* Registro de Insumo */}
         <Route
           path="registro-insumo"
           element={
@@ -115,6 +117,7 @@ export const AppRoutes = () => {
             </PrivateRoute>
           }
         ></Route>
+        {/* Salida de Insumo */}
         <Route
           path="salida-insumo"
           element={
@@ -127,6 +130,7 @@ export const AppRoutes = () => {
             </PrivateRoute>
           }
         />
+        {/* Historial de Movimiento */}
         <Route
           path="historial-movimiento"
           element={
@@ -139,6 +143,7 @@ export const AppRoutes = () => {
             </PrivateRoute>
           }
         />
+        {/* Listar Inventario */}
         <Route
           path="listar-inventario"
           element={
@@ -151,30 +156,46 @@ export const AppRoutes = () => {
             </PrivateRoute>
           }
         />
+        {/* Gestión de Insumos */}
         <Route
-          path="crear-insumo"
+          path="gestion-insumos"
           element={
             <PrivateRoute
               requiredPermissions={[
                 { modulo: "insumo_pintura", accion: "crear_consumo" },
               ]}
             >
-              <CrearInsumo />
+              <GestionInsumos />
             </PrivateRoute>
           }
-        />
-        <Route
-          path="editar-insumo"
-          element={
-            <PrivateRoute
-              requiredPermissions={[
-                { modulo: "insumo_pintura", accion: "crear_consumo" },
-              ]}
-            >
-              <EditarInsumo />
-            </PrivateRoute>
-          }
-        />
+        >
+          {/* Crear Insumo */}
+          <Route
+            path="crear-insumo"
+            element={
+              <PrivateRoute
+                requiredPermissions={[
+                  { modulo: "insumo_pintura", accion: "crear_consumo" },
+                ]}
+              >
+                <CrearInsumo />
+              </PrivateRoute>
+            }
+          />
+          {/* Editar Insumo */}
+          <Route
+            path="editar-insumo/:id"
+            element={
+              <PrivateRoute
+                requiredPermissions={[
+                  { modulo: "insumo_pintura", accion: "crear_consumo" },
+                ]}
+              >
+                <EditarInsumo />
+              </PrivateRoute>
+            }
+          />
+        </Route>
       </Route>
 
       {/* 
@@ -210,7 +231,7 @@ export const AppRoutes = () => {
           }
         />
         <Route
-          path="editar-produccion/:id_registro"
+          path="editar-produccion/:id"
           element={
             <PrivateRoute
               requiredPermissions={[

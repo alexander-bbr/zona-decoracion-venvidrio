@@ -11,7 +11,6 @@ class InsumoCrear(BaseModel):
     tipo:            str            = Field(alias="tipo")
     articulo:        str            = Field(alias="articulo")
     unidad:          str            = Field(alias="unidad")
-    cantidad_actual: Decimal        = Field(alias="cantidadActual")
     cantidad_minima: Decimal        = Field(alias="cantidadMinima")
     estado:          bool           = Field(alias="estado")
 
@@ -23,7 +22,6 @@ class InsumoEditar(BaseModel):
     tipo:            str            = Field(alias="tipo")
     articulo:        str            = Field(alias="articulo")
     unidad:          str            = Field(alias="unidad")
-    cantidad_actual: Decimal        = Field(alias="cantidadActual")
     cantidad_minima: Decimal        = Field(alias="cantidadMinima")
     estado:          bool           = Field(alias="estado")
 
@@ -36,7 +34,6 @@ class InsumoResponde(BaseModel):
     tipo:            str            = Field(alias="tipo")
     articulo:        str            = Field(alias="articulo")
     unidad:          str            = Field(alias="unidad")
-    cantidad_actual: Decimal        = Field(alias="cantidadActual")
     cantidad_minima: Decimal        = Field(alias="cantidadMinima")
     estado:          bool           = Field(alias="estado")
 

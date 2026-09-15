@@ -8,7 +8,7 @@ from .models import Insumo, InsumoEntrada, InsumoSalida
 def registrar_entrada(db: Session, datos):
     # Verificar que el insumo existe
     insumo = db.query(Insumo).filter(Insumo.id_insumo == datos.id_insumo).first()
-    if not insumo:
+    if not insumo or not insumo.estado:
         return None
 
     # Registrar el movimiento de entrada
@@ -33,7 +33,10 @@ def registrar_entrada(db: Session, datos):
 def registrar_salida(db: Session, datos):
     # Verificar que el insumo existe
     insumo = db.query(Insumo).filter(Insumo.id_insumo == datos.id_insumo).first()
-    if not insumo:
+    if not insumo or not insumo.estado:
+        return None
+
+    if insumo.cantidad_actual < datos.cantidad:
         return None
 
     # Registrar el movimiento de salida
@@ -138,7 +141,7 @@ def crear_insumo(db: Session, datos):
         tipo            = datos.tipo,
         articulo        = datos.articulo,
         unidad          = datos.unidad,
-        cantidad_actual = datos.cantidad_actual,
+        cantidad_actual = 0.00,
         cantidad_minima = datos.cantidad_minima,
         estado          = datos.estado
     )
@@ -161,7 +164,6 @@ def editar_insumo(db: Session, id_insumo: int, datos):
     insumo.tipo            = datos.tipo
     insumo.articulo        = datos.articulo
     insumo.unidad          = datos.unidad
-    insumo.cantidad_actual = datos.cantidad_actual
     insumo.cantidad_minima = datos.cantidad_minima
     insumo.estado          = datos.estado
 

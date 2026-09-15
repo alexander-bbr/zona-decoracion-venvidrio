@@ -1,4 +1,4 @@
-Ruta 1: Registro de Insumo
+Ruta 1: Entradas de Insumo
   Endpoint: http://127.0.0.1:8000/api/inventario-insumos/entradas
   Método: POST
 
@@ -188,7 +188,6 @@ JSON (Envía el Frontend):
   "tipo": "Pintura",            # string
   "articulo": "Esmalte Blanco", # string
   "unidad": "Litros",           # string
-  "cantidadActual": "120.50",     # number
   "cantidadMinima": "20.00",      # number
   "estado": true          # boolean
 }
@@ -220,7 +219,6 @@ Estructura de los datos que recibirá:
   "tipo": "Pintura",            # string
   "articulo": "Esmalte Blanco", # string
   "unidad": "Litros",           # string
-  "cantidadActual": "120.50",     # number
   "cantidadMinima": "20.00",      # number
   "estado": true          # boolean
 }
@@ -244,7 +242,6 @@ JSON (Envía el Frontend):
   "tipo": "Pintura",            # string
   "articulo": "Esmalte Blanco", # string
   "unidad": "Litros",           # string
-  "cantidadActual": "120.50",     # number
   "cantidadMinima": "20.00",      # number
   "estado": true          # boolean
 }
@@ -259,3 +256,9 @@ JSON (Respuesta en caso de error):
   {
   "detail": "Error al editar el insumo"
   }
+
+
+- que no se pueda hacer entradas y salidas deinsumos desactivados
+- el campo cantidad actual se dejara de esperar tanto para crear como para editar, hay que adaptar los arcivos
+debido a que el campo no se recibira se tiene que adaptar para ue cuando se cree un registro, en la base de datos no de error, ya que no acepta nulos puede dar error, entoces adaptar para que cuando se cree un regisro o venga simplemente vacio, se ponga 0.00 en la base de dato(tambien se le puede hacer a cantidad minima, pero ojo cantidad minima si se manejara en crear insumo y editar)
+- 

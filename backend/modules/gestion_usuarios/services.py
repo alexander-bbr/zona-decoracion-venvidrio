@@ -97,30 +97,26 @@ def listar_usuarios(db: Session):
 
 # 5. Listar catálogo de permisos disponibles
 NOMBRES_MODULOS = {
-    "insumo_pintura":              "Insumo de Pintura",
-    "dashboard":                   "Rendimiento",
-    "gestion_usuarios":            "Gestión de Usuarios",
-    "gestion_productiva":          "Gestión Productiva"
+    "inventario_insumos":   "Inventario de Insumos",
+    "rendimiento":          "Rendimiento",
+    "gestion_usuarios":     "Gestión de Usuarios",
+    "gestion_productiva":   "Gestión Productiva"
 }
 
 NOMBRES_ACCIONES = {
-    "ver_inventario":         "Ver Inventario",
-    "crear_registro":         "Crear Registro",
-    "crear_consumo":          "Crear Consumo",
-    "ver_historial":          "Ver Historial",
-    "crear_salida":           "Crear Salida",
-    "eliminar_registro":      "Eliminar Registro",
-    "ver":                    "Ver",
-    "ver_usuarios":           "Ver Usuarios",
-    "crear_editar":           "Crear / Editar",
-    "ver_historial_consumo":  "Ver Historial de Consumo",
-    "crear":                  "Crear",
-    "editar":                 "Editar",
-    "exportar":               "Exportar",
-    "registrar_produccion":   "Registrar Producción",
-    "ver_produccion":         "Ver Producción",
-    "gestion_moldes":         "Gestión de Moldes",
-    "gestion_justificantes":  "Gestión de Justificantes"
+    "ver_inventario":           "Ver Inventario",
+    "entrada_insumos":          "Entrada de Insumos",
+    "salida_insumos":           "Salida de Insumos",
+    "historial_movimientos":    "Historial de Movimientos",
+    "gestion_insumos":          "Gestión de Insumos",
+    "ver":                      "Ver",
+    "ver_usuarios":             "Ver Usuarios",
+    "crear_editar":             "Crear / Editar",
+    "registrar_produccion":     "Registrar Producción",
+    "ver_produccion":           "Ver Producción",
+    "editar":                   "Editar",
+    "gestion_moldes":           "Gestión de Moldes",
+    "gestion_justificantes":    "Gestión de Justificantes"
 }
 
 # 5. Listar catálogo de permisos disponibles

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 13-09-2026 a las 17:46:03
+-- Tiempo de generación: 13-09-2026 a las 21:04:48
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -151,8 +151,8 @@ CREATE TABLE `inventario_insumos` (
 --
 
 INSERT INTO `inventario_insumos` (`id_insumo`, `tipo`, `articulo`, `unidad`, `cantidad_actual`, `cantidad_minima`, `estado`) VALUES
-(1, 'Pintura', 'SM 00-0200VT38 Blanco', 'Kilogramo', 0.00, 0.00, 1),
-(2, 'Pintura', 'SM 00-2208  - VT azul pepsi', 'Kilogramo', 0.00, 0.00, 1),
+(1, 'Pintura', 'SM 00-0200VT38 Blanco', 'Kilogramo', 4.00, 0.00, 1),
+(2, 'Pintura', 'SM 00-2208  - VT azul pepsi', 'Kilogramo', 600.00, 0.00, 1),
 (3, 'Pintura', 'SM 00-8255  - TA Rojo', 'Kilogramo', 0.00, 0.00, 1),
 (4, 'Malla', 'Malla 230', 'Rollo', 0.00, 0.00, 1),
 (5, 'Malla', 'Malla 220', 'Rollo', 0.00, 0.00, 1),
@@ -174,7 +174,8 @@ INSERT INTO `inventario_insumos` (`id_insumo`, `tipo`, `articulo`, `unidad`, `ca
 (21, 'Stretch', 'Stretch-23-micras', 'Kilogramo', 0.00, 0.00, 1),
 (22, 'Cap-Sheet', 'Cap-Sheet', 'Kilogramo', 0.00, 0.00, 1),
 (23, 'Plástico Termo', 'TERMOENCOGIBLE DE 24\"', 'Kilogramo', 0.00, 0.00, 1),
-(24, 'Plástico Termo', 'TERMOENCOGIBLE DE 28\"', 'Kilogramo', 0.00, 0.00, 1);
+(24, 'Plástico Termo', 'TERMOENCOGIBLE DE 28\"', 'Kilogramo', 0.00, 0.00, 1),
+(25, 'prueba', 'ggg', 'string', 500.00, 5.75, 1);
 
 -- --------------------------------------------------------
 
@@ -192,6 +193,14 @@ CREATE TABLE `inventario_insumos_entrada` (
   `cantidad` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `inventario_insumos_entrada`
+--
+
+INSERT INTO `inventario_insumos_entrada` (`id_inventario_entrada`, `id_insumo`, `fecha`, `encargado`, `turno`, `grupo`, `cantidad`) VALUES
+(1, 1, '2026-09-13 13:50:29', 'string', 'string', 'string', 5.05),
+(2, 2, '2026-09-13 14:15:49', 'string', 'string', 'string', 50.80);
+
 -- --------------------------------------------------------
 
 --
@@ -207,6 +216,14 @@ CREATE TABLE `inventario_insumos_salida` (
   `grupo` varchar(20) NOT NULL,
   `cantidad` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `inventario_insumos_salida`
+--
+
+INSERT INTO `inventario_insumos_salida` (`id_inventario_salida`, `id_insumo`, `fecha`, `encargado`, `turno`, `grupo`, `cantidad`) VALUES
+(1, 1, '2026-09-13 13:51:40', 'string', 'string', 'string', 1.05),
+(2, 2, '2026-09-13 14:16:20', 'string', 'string', 'string', 10.86);
 
 -- --------------------------------------------------------
 
@@ -517,19 +534,19 @@ ALTER TABLE `gestion_productiva_salida`
 -- AUTO_INCREMENT de la tabla `inventario_insumos`
 --
 ALTER TABLE `inventario_insumos`
-  MODIFY `id_insumo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id_insumo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT de la tabla `inventario_insumos_entrada`
 --
 ALTER TABLE `inventario_insumos_entrada`
-  MODIFY `id_inventario_entrada` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_inventario_entrada` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `inventario_insumos_salida`
 --
 ALTER TABLE `inventario_insumos_salida`
-  MODIFY `id_inventario_salida` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_inventario_salida` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `justificantes`

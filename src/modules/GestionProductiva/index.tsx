@@ -106,7 +106,7 @@ export const GestionProductiva = () => {
   };
 
   return (
-    <section className={styles.container}>
+    <section className="container">
       <header className={styles.moduleHeader}>
         <h2 className={styles.moduleTitle}>Gestión Productiva</h2>
         <p className={styles.moduleSubtitle}>
@@ -149,7 +149,7 @@ export const GestionProductiva = () => {
               <table className={styles.table}>
                 <thead>
                   <tr>
-                    <th>ID</th>
+                    <th>Nro. Registro</th>
                     <th>Fecha</th>
                     <th>Turno</th>
                     <th>Técnico</th>

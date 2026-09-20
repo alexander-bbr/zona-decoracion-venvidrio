@@ -32,7 +32,7 @@ export const Inventario = () => {
   };
 
   return (
-    <section className={styles.container}>
+    <section className="container">
       {/* Título del módulo (siempre visible) */}
       <header className={styles.moduleHeader}>
         <h2 className={styles.moduleTitle}>Inventario</h2>

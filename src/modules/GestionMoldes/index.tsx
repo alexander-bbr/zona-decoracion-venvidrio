@@ -74,7 +74,7 @@ export const GestionMoldes = () => {
   };
 
   return (
-    <section className={styles.container}>
+    <section className="container">
       <header className={styles.moduleHeader}>
         <h2 className={styles.moduleTitle}>Gestión de Moldes</h2>
         <p className={styles.moduleSubtitle}>

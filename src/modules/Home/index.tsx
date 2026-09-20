@@ -5,7 +5,7 @@ export const Home = () => {
   const { isAuthenticated, user } = useAuth();
 
   return (
-    <div className={styles.container}>
+    <section className="container">
       <header className={styles.moduleHeader}>
         <h2 className={styles.moduleTitle}>Zona de Decoración</h2>
         <p className={styles.moduleSubtitle}>
@@ -42,6 +42,6 @@ export const Home = () => {
           <a href="/sign-in">Iniciar Sesión</a>
         </div>
       )}
-    </div>
+    </section>
   );
 };

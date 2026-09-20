@@ -16,7 +16,8 @@
 ## Inventario
 
   - En la barra de navegación secundaria, deberían de incluirse los módulos de Crear Insumo y Editar Insumo, o sea encontrar la manera de que pueda echarse para atrás pero solo un paso, para que quede en Gestión de Insumos.
-  - En Historial de Movimiento, pensar en si quito o no el ID, ya que aunque puede ayudar al usuario a encontrar el insumo en Listado de Insumos, en Historial de Movimiento se ve algo desordenado
+  - En Historial de Movimiento, cambiar el campo ID por tipo y articulo.
+
 
 
 ---
@@ -86,9 +87,7 @@
 
 ## Layout
 
-  - Hacer menos alto el Header, ya que ocupa demasiado espacio.
-  - Separar más el contenido del main del Header, ya que queda demasiado pegado.
-  - Hacer más pequeños los elementos de la sidebar, de tal manera de que no sea tan propenso a dejar de aparecer ítems
+  - En la sidebar, hacer que Gestión de Moldes y Gestión de Justificantes sean sub links de Gestión Productiva.
 
 
 
@@ -99,3 +98,5 @@
 ## General
 
   - Hacer Responsive la Aplicación.
+  - Eliminar los registros innecesarios de la BBDD.
+  - Resetear las Primary Keys que tengan el AUTO_INCREMENT

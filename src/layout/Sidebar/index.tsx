@@ -37,8 +37,8 @@ export const Sidebar = ({ isOpen }: SidebarProps) => {
       <section className={styles.userInfo}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="38"
-          height="38"
+          width="34"
+          height="34"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"

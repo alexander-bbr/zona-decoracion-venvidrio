@@ -84,7 +84,7 @@ export const Rendimiento = () => {
     chartType === "lineal" ? Lineal : chartType === "barras" ? Barras : Torta;
 
   return (
-    <div className={styles.container}>
+    <section className="container">
       {/* Título del módulo*/}
       <header className={styles.moduleHeader}>
         <h2 className={styles.moduleTitle}>Rendimiento</h2>
@@ -181,6 +181,6 @@ export const Rendimiento = () => {
           )}
         </section>
       </section>
-    </div>
+    </section>
   );
 };

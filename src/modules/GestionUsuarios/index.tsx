@@ -106,7 +106,7 @@ export const GestionUsuarios = () => {
   };
 
   return (
-    <section className={styles.container}>
+    <section className="container">
       <header className={styles.moduleHeader}>
         <h2 className={styles.moduleTitle}>Gestión de Usuarios</h2>
         <p className={styles.moduleSubtitle}>

@@ -9,7 +9,6 @@ export const DatosEmpresa = () => {
         src={imagotipo}
         alt="Imagotipo de Venezolana del Vidrio C.A."
       />
-      <p className={styles.companyName}>Venezolana del Vidrio, C.A.</p>
       <p className={styles.rif}>RIF: G-20009820-1</p>
     </div>
   );

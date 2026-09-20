@@ -1,13 +1,7 @@
-.container {
-  padding: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
 .unauthorized {
   margin: 2rem auto 0;
-  min-width: 500px;
-  width: 55%;
+  min-width: 450px;
+  width: 43%;
   padding: 40px;
   border-radius: 16px;
   background: var(--third-text-color);

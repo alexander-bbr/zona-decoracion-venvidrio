@@ -95,7 +95,6 @@ export const GestionInsumos = () => {
                 <table className={styles.table}>
                   <thead>
                     <tr>
-                      <th>ID</th>
                       <th>Tipo</th>
                       <th>Artículo</th>
                       <th>Unidad</th>
@@ -112,9 +111,6 @@ export const GestionInsumos = () => {
                         }
                         className={styles.clickableRow}
                       >
-                        <td>
-                          <strong>{insumo.idInsumo}</strong>
-                        </td>
                         <td>{insumo.tipo}</td>
                         <td>{insumo.articulo}</td>
                         <td>{insumo.unidad}</td>

@@ -12,7 +12,7 @@ import { Rendimiento } from "../modules/Rendimiento";
 import { Inventario } from "../modules/Inventario";
 import { RegistroInsumo } from "../modules/Inventario/RegistroInsumo";
 import { SalidaInsumo } from "../modules/Inventario/SalidaInsumo";
-import { ListarInventario } from "../modules/Inventario/ListarInventario";
+import { VerInventario } from "../modules/Inventario/VerInventario";
 import { HistorialMovimiento } from "../modules/Inventario/HistorialMovimiento";
 import { GestionInsumos } from "../modules/Inventario/GestionInsumos";
 import { CrearInsumo } from "../modules/Inventario/GestionInsumos/CrearInsumo";
@@ -155,7 +155,7 @@ export const AppRoutes = () => {
                 { modulo: "inventario_insumos", accion: "ver_inventario" },
               ]}
             >
-              <ListarInventario />
+              <VerInventario />
             </PrivateRoute>
           }
         />
@@ -178,7 +178,7 @@ export const AppRoutes = () => {
             element={
               <PrivateRoute
                 requiredPermissions={[
-                  { modulo: "inventario_insumos", accion: "crear_consumo" },
+                  { modulo: "inventario_insumos", accion: "gestion_insumos" },
                 ]}
               >
                 <CrearInsumo />
@@ -191,7 +191,7 @@ export const AppRoutes = () => {
             element={
               <PrivateRoute
                 requiredPermissions={[
-                  { modulo: "inventario_insumos", accion: "crear_consumo" },
+                  { modulo: "inventario_insumos", accion: "gestion_insumos" },
                 ]}
               >
                 <EditarInsumo />

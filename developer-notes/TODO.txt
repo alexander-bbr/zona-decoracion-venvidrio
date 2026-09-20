@@ -87,8 +87,6 @@
 
 ## Layout
 
-  - En la sidebar, hacer que Gestión de Moldes y Gestión de Justificantes sean sub links de Gestión Productiva.
-
 
 
 ---

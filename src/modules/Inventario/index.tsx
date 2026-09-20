@@ -14,7 +14,7 @@ export const Inventario = () => {
     if (path.includes("registro-insumo")) return "Registro de Insumo";
     if (path.includes("salida-insumo")) return "Salida de Insumo";
     if (path.includes("historial-movimiento")) return "Historial de Movimeinto";
-    if (path.includes("listar-inventario")) return "Listar Inventario";
+    if (path.includes("listar-inventario")) return "Ver Inventario";
     if (path.includes("gestion-insumos")) return "Gestión de Insumos";
     return "";
   };
@@ -27,7 +27,7 @@ export const Inventario = () => {
       "inventario_insumos",
       "historial_movimientos",
     ),
-    listarInventario: hasPermission("inventario_insumos", "ver_inventario"),
+    verInventario: hasPermission("inventario_insumos", "ver_inventario"),
     gestionInsumos: hasPermission("inventario_insumos", "gestion_insumos"),
   };
 
@@ -65,7 +65,7 @@ export const Inventario = () => {
             <NavLink to="registro-insumo" className={styles.actionCard}>
               <div className={styles.actionIcon}>📥</div>
               <h3>Registro de Insumo</h3>
-              <p>Registra la entrada de un insumo en el inventario</p>
+              <p>Registra la entrada de un insumo</p>
             </NavLink>
           )}
 
@@ -74,7 +74,7 @@ export const Inventario = () => {
             <NavLink to="salida-insumo" className={styles.actionCard}>
               <div className={styles.actionIcon}>📤</div>
               <h3>Salida de Insumo</h3>
-              <p>Registra la salida de un insumo en el inventario</p>
+              <p>Registra la salida de un insumo</p>
             </NavLink>
           )}
 
@@ -87,12 +87,12 @@ export const Inventario = () => {
             </NavLink>
           )}
 
-          {/* Mostrar solo si tiene el permiso de listarInventario */}
-          {permisos.listarInventario && (
+          {/* Mostrar solo si tiene el permiso de verInventario */}
+          {permisos.verInventario && (
             <NavLink to="listar-inventario" className={styles.actionCard}>
               <div className={styles.actionIcon}>📦</div>
-              <h3>Listar Inventario</h3>
-              <p>Revisa la cantidad de todos los insumos en el inventario</p>
+              <h3>Ver Inventario</h3>
+              <p>Observa las existencias de los insumos</p>
             </NavLink>
           )}
 

@@ -14,7 +14,7 @@
   transform: translateX(0);
 }
 
-/* === INFORMACIÓN DEL USUARIO === */
+/* Información del Usuario */
 .userInfo {
   display: flex;
   flex-direction: column;
@@ -23,6 +23,7 @@
   padding-bottom: 1.1rem;
   border-bottom: 2px solid var(--secondary-color);
 }
+
 .userInfo p:first-of-type {
   margin: 0.6rem 0 0.4rem;
   padding: 0 2rem;
@@ -31,6 +32,7 @@
   font-weight: 600;
   color: rgba(6, 32, 104, 0.895);
 }
+
 .userInfo p:last-child {
   font-size: 0.8rem;
   font-weight: 600;
@@ -38,7 +40,6 @@
   color: var(--primary-color);
 }
 
-/* === LINKS === */
 ul {
   list-style: none;
   margin: 1.2rem 0 1.8rem;
@@ -48,6 +49,7 @@ ul {
 }
 
 li a {
+  position: relative;
   display: block;
   padding: 0.6rem 1.2rem;
   border-radius: 8px;
@@ -57,7 +59,7 @@ li a {
   text-decoration: none;
   font-weight: 600;
   transition:
-    background 0.25s ease,
+    background 0.2s ease,
     color 0.2s ease;
 }
 
@@ -66,7 +68,180 @@ li a:hover {
   color: var(--primary-color);
 }
 
-/* Botón de Cierre de Sesión */
+/* BARRA INDICADORA DE LINK ACTIVO */
+li a::before,
+.parentLink::before,
+.treeLink::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 20%;
+  bottom: 20%;
+  width: 3px;
+  border-radius: 2px;
+  background: var(--primary-color);
+
+  /* Estado inicial: invisible y encogida */
+  opacity: 0;
+  transform: scaleY(0);
+  transform-origin: center;
+
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+
+/* LINK ACTIVO */
+.activeLink {
+  background: rgba(53, 116, 211, 0.18);
+  color: var(--primary-color);
+  font-weight: 700;
+}
+
+/* La barra aparece suavemente */
+li a.activeLink::before,
+.parentLink.activeLink::before,
+.treeLink.activeLink::before {
+  opacity: 1;
+  transform: scaleY(1);
+}
+
+/* Ajuste fino del padre: separa la barra del borde del sidebar */
+.parentLink.activeLink::before {
+  left: 4px;
+}
+
+/* SUBMENÚ: CONTENEDOR PADRE */
+.submenuItem {
+  display: flex;
+  flex-direction: column;
+}
+
+.parentRow {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.parentLink {
+  position: relative;
+  flex: 1;
+  display: block;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+
+  font-size: 0.9rem;
+  color: var(--primary-text-color);
+  text-decoration: none;
+  font-weight: 600;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.parentLink:hover {
+  background: rgba(53, 116, 211, 0.158);
+  color: var(--primary-color);
+}
+
+/* SUBMENÚ: BOTÓN CHEVRON */
+.submenuToggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  margin-right: 0.4rem;
+
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--primary-text-color);
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.submenuToggle:hover {
+  background: rgba(53, 116, 211, 0.158);
+  color: var(--primary-color);
+}
+
+.chevron {
+  transition: transform 0.25s ease;
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+}
+
+/* SUBMENÚ: ÁRBOL DE HIJOS */
+.tree {
+  list-style: none;
+  margin: 0.15rem 0 0.4rem;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.treeItem {
+  position: relative;
+  padding-left: 2rem; /* espacio para las líneas */
+}
+
+/* Línea vertical que baja desde el padre */
+.treeItem::before {
+  content: "";
+  position: absolute;
+  left: 1.15rem;
+  top: 0;
+  bottom: 0;
+  width: 1.5px;
+  background: rgba(53, 116, 211, 0.35);
+}
+
+/* La última línea vertical solo llega hasta el codo */
+.treeItem:last-child::before {
+  bottom: calc(100% - 1.35rem);
+}
+
+/* Codo horizontal que conecta con el texto */
+.treeItem::after {
+  content: "";
+  position: absolute;
+  left: 1.15rem;
+  top: 1.35rem;
+  width: 0.7rem;
+  height: 1.5px;
+  background: rgba(53, 116, 211, 0.35);
+}
+
+.treeLink {
+  position: relative;
+  display: block;
+  padding: 0.5rem 0.8rem;
+  border-radius: 8px;
+
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--primary-text-color);
+  text-decoration: none;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.treeLink:hover {
+  background: rgba(53, 116, 211, 0.158);
+  color: var(--primary-color);
+}
+
+/* BOTÓN DE CIERRE DE SESIÓN */
 .logoutButton {
   display: block;
   margin: auto;

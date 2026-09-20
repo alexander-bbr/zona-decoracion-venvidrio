@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import styles from "./sidebar.module.css";
 
@@ -10,30 +11,64 @@ export const Sidebar = ({ isOpen }: SidebarProps) => {
   const { isAuthenticated, user, logout, hasPermission, hasAnyPermission } =
     useAuth();
 
+  const location = useLocation();
+  const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
+
+  // Helper: ¿esta ruta es la actual?
+  const isActive = (path: string) => location.pathname === path;
+
+  const toggleSubmenu = (key: string) => {
+    setOpenSubmenu((prev) => (prev === key ? null : key));
+  };
+
+  const canSeeGestionProductiva = hasAnyPermission("gestion_productiva", [
+    "ver_produccion",
+  ]);
+  const canSeeMoldes = hasAnyPermission("gestion_productiva", [
+    "gestion_moldes",
+  ]);
+  const canSeeJustificantes = hasAnyPermission("gestion_productiva", [
+    "gestion_justificantes",
+  ]);
+  const hasChildren = canSeeMoldes || canSeeJustificantes;
+
+  // Abre el submenú si estás en una ruta hija
+  useEffect(() => {
+    const childRoutes = ["/gestion-moldes", "/gestion-justificantes"];
+    if (childRoutes.includes(location.pathname)) {
+      setOpenSubmenu("gestion-productiva");
+    }
+  }, [location.pathname]);
+
   const sidebarClassName = `${styles.sidebar} ${
     isOpen ? styles.sidebarOpen : ""
   }`;
 
-  // Si NO está autenticado, muestra los siguientes links
   if (!isAuthenticated) {
     return (
       <nav className={sidebarClassName} id="sidebar" aria-hidden={!isOpen}>
         <ul>
           <li>
-            <Link to="/">Inicio</Link>
+            <Link to="/" className={isActive("/") ? styles.activeLink : ""}>
+              Inicio
+            </Link>
           </li>
           <li>
-            <Link to="/sign-in">Iniciar Sesión</Link>
+            <Link
+              to="/sign-in"
+              className={isActive("/sign-in") ? styles.activeLink : ""}
+            >
+              Iniciar Sesión
+            </Link>
           </li>
         </ul>
       </nav>
     );
   }
 
-  // Si está autenticado, muestra los siguientes links
   return (
     <nav className={sidebarClassName} id="sidebar" aria-hidden={!isOpen}>
-      {/* === INFORMACIÓN DEL USUARIO ===*/}
+      {/* === INFO USUARIO === */}
       <section className={styles.userInfo}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -45,12 +80,10 @@ export const Sidebar = ({ isOpen }: SidebarProps) => {
           strokeWidth="3"
           strokeLinecap="round"
           strokeLinejoin="round"
-          className="feather feather-user"
         >
           <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
           <circle cx="12" cy="7" r="4"></circle>
         </svg>
-
         <p>
           {user?.nombres} {user?.apellidos}
         </p>
@@ -61,53 +94,125 @@ export const Sidebar = ({ isOpen }: SidebarProps) => {
       <ul>
         {/* Inicio */}
         <li>
-          <Link to="/">Inicio</Link>
+          <Link to="/" className={isActive("/") ? styles.activeLink : ""}>
+            Inicio
+          </Link>
         </li>
 
-        {/* Rendimiento - visible si tiene el permiso rendimiento ver */}
+        {/* Rendimiento */}
         {hasPermission("rendimiento", "ver") && (
           <li>
-            <Link to="/rendimiento">Rendimiento</Link>
+            <Link
+              to="/rendimiento"
+              className={isActive("/rendimiento") ? styles.activeLink : ""}
+            >
+              Rendimiento
+            </Link>
           </li>
         )}
 
-        {/*Inventario - visible si tiene algún permiso de inventario_insumos */}
+        {/* Inventario */}
         {hasAnyPermission("inventario_insumos", ["ver_inventario"]) && (
           <li>
-            <Link to="/inventario">Inventario</Link>
+            <Link
+              to="/inventario"
+              className={isActive("/inventario") ? styles.activeLink : ""}
+            >
+              Inventario
+            </Link>
           </li>
         )}
 
-        {/* Gestion Productiva - visible si tiene el permiso de (ver_produccion) */}
-        {hasAnyPermission("gestion_productiva", ["ver_produccion"]) && (
-          <li>
-            <Link to="/gestion-productiva">Gestión Productiva</Link>
+        {/* === GESTIÓN PRODUCTIVA (padre + submenú) === */}
+        {canSeeGestionProductiva && (
+          <li className={styles.submenuItem}>
+            <div className={styles.parentRow}>
+              <Link
+                to="/gestion-productiva"
+                className={`${styles.parentLink} ${
+                  isActive("/gestion-productiva") ? styles.activeLink : ""
+                }`}
+              >
+                Gestión Productiva
+              </Link>
+
+              {hasChildren && (
+                <button
+                  type="button"
+                  className={styles.submenuToggle}
+                  onClick={() => toggleSubmenu("gestion-productiva")}
+                  aria-expanded={openSubmenu === "gestion-productiva"}
+                  aria-label="Mostrar submenú"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className={`${styles.chevron} ${
+                      openSubmenu === "gestion-productiva"
+                        ? styles.chevronOpen
+                        : ""
+                    }`}
+                  >
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </button>
+              )}
+            </div>
+
+            {hasChildren && openSubmenu === "gestion-productiva" && (
+              <ul className={styles.tree}>
+                {canSeeMoldes && (
+                  <li className={styles.treeItem}>
+                    <Link
+                      to="/gestion-moldes"
+                      className={`${styles.treeLink} ${
+                        isActive("/gestion-moldes") ? styles.activeLink : ""
+                      }`}
+                    >
+                      Gestión de Moldes
+                    </Link>
+                  </li>
+                )}
+
+                {canSeeJustificantes && (
+                  <li className={styles.treeItem}>
+                    <Link
+                      to="/gestion-justificantes"
+                      className={`${styles.treeLink} ${
+                        isActive("/gestion-justificantes")
+                          ? styles.activeLink
+                          : ""
+                      }`}
+                    >
+                      Gestión de Justificantes
+                    </Link>
+                  </li>
+                )}
+              </ul>
+            )}
           </li>
         )}
 
-        {/* Gestion de Moldes - visible si tiene el permiso de gestion_moldes (gestion_productiva) */}
-        {hasAnyPermission("gestion_productiva", ["gestion_moldes"]) && (
-          <li>
-            <Link to="/gestion-moldes">Gestión de Moldes</Link>
-          </li>
-        )}
-
-        {/* Gestion de Justificantes - visible si tiene el permiso de gestion_justificantes (gestion_productiva) */}
-        {hasAnyPermission("gestion_productiva", ["gestion_justificantes"]) && (
-          <li>
-            <Link to="/gestion-justificantes">Gestión de Justificantes</Link>
-          </li>
-        )}
-
-        {/* Gestión de Usuarios - visible si tiene el permiso de ver_usuarios (gestion_usuarios)*/}
+        {/* Gestión de Usuarios */}
         {hasAnyPermission("gestion_usuarios", ["ver_usuarios"]) && (
           <li>
-            <Link to="/gestion-usuarios">Gestión de Usuarios</Link>
+            <Link
+              to="/gestion-usuarios"
+              className={isActive("/gestion-usuarios") ? styles.activeLink : ""}
+            >
+              Gestión de Usuarios
+            </Link>
           </li>
         )}
       </ul>
 
-      {/* Cerrar sesión */}
       <button onClick={logout} className={styles.logoutButton}>
         Cerrar Sesión
       </button>

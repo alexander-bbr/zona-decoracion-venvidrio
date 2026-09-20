@@ -11,13 +11,20 @@ export const Inventario = () => {
   const getTitle = () => {
     const path = location.pathname;
 
+    if (path.includes("crear-insumo")) return "Crear Insumo";
+    if (path.includes("editar-insumo")) return "Editar Insumo";
     if (path.includes("registro-insumo")) return "Registro de Insumo";
     if (path.includes("salida-insumo")) return "Salida de Insumo";
-    if (path.includes("historial-movimiento")) return "Historial de Movimeinto";
-    if (path.includes("listar-inventario")) return "Ver Inventario";
+    if (path.includes("historial-movimiento")) return "Historial de Movimiento";
+    if (path.includes("ver-inventario")) return "Ver Inventario";
     if (path.includes("gestion-insumos")) return "Gestión de Insumos";
     return "";
   };
+
+  const getParentPath = () =>
+    location.pathname.startsWith("/inventario/gestion-insumos/")
+      ? "/inventario/gestion-insumos"
+      : "/inventario";
 
   // Definir los permisos para cada submódulo
   const permisos = {
@@ -44,7 +51,7 @@ export const Inventario = () => {
       {!isRoot ? (
         <nav className={`${styles.subNav} content`} id="subNav">
           <NavLink
-            to="/inventario"
+            to={getParentPath()}
             className={({ isActive }) =>
               isActive
                 ? `${styles.subNavLink} ${styles.active}`
@@ -89,7 +96,7 @@ export const Inventario = () => {
 
           {/* Mostrar solo si tiene el permiso de verInventario */}
           {permisos.verInventario && (
-            <NavLink to="listar-inventario" className={styles.actionCard}>
+            <NavLink to="ver-inventario" className={styles.actionCard}>
               <div className={styles.actionIcon}>📦</div>
               <h3>Ver Inventario</h3>
               <p>Observa las existencias de los insumos</p>

@@ -146,9 +146,9 @@ export const AppRoutes = () => {
             </PrivateRoute>
           }
         />
-        {/* Listar Inventario */}
+        {/* Ver Inventario */}
         <Route
-          path="listar-inventario"
+          path="ver-inventario"
           element={
             <PrivateRoute
               requiredPermissions={[

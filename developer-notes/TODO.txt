@@ -13,10 +13,11 @@
 
 
 
+
 ## Inventario
 
-  - En la barra de navegación secundaria, deberían de incluirse los módulos de Crear Insumo y Editar Insumo, o sea encontrar la manera de que pueda echarse para atrás pero solo un paso, para que quede en Gestión de Insumos.
   - En Historial de Movimiento, cambiar el campo ID por tipo y articulo.
+
 
 
 

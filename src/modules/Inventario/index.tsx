@@ -21,11 +21,14 @@ export const Inventario = () => {
 
   // Definir los permisos para cada submódulo
   const permisos = {
-    registroInsumo: hasPermission("insumo_pintura", "crear_consumo"),
-    salidaInsumo: hasPermission("insumo_pintura", "crear_consumo"),
-    historialMovimiento: hasPermission("insumo_pintura", "crear_consumo"),
-    listarInventario: hasPermission("insumo_pintura", "crear_consumo"),
-    gestionInsumos: hasPermission("insumo_pintura", "crear_consumo"),
+    registroInsumo: hasPermission("inventario_insumos", "entrada_insumos"),
+    salidaInsumo: hasPermission("inventario_insumos", "salida_insumos"),
+    historialMovimiento: hasPermission(
+      "inventario_insumos",
+      "historial_movimientos",
+    ),
+    listarInventario: hasPermission("inventario_insumos", "ver_inventario"),
+    gestionInsumos: hasPermission("inventario_insumos", "gestion_insumos"),
   };
 
   return (

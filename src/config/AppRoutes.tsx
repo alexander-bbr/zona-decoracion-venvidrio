@@ -75,12 +75,12 @@ export const AppRoutes = () => {
       
       */}
 
-      {/* Módulo - Rendimiento - Requiere permiso dashboard.ver */}
+      {/* Módulo - Rendimiento - Requiere permiso rendimiento.ver */}
       <Route
         path="/rendimiento"
         element={
           <PrivateRoute
-            requiredPermissions={[{ modulo: "dashboard", accion: "ver" }]}
+            requiredPermissions={[{ modulo: "rendimiento", accion: "ver" }]}
           >
             <Rendimiento />
           </PrivateRoute>
@@ -88,14 +88,14 @@ export const AppRoutes = () => {
       />
 
       {/* 
-        Módulo - Inventario - Requiere el permiso ...
+        Módulo - Inventario - Requiere al menos un permiso de inventario_insumos
       */}
       <Route
         path="/inventario"
         element={
           <PrivateRoute
             requiredPermissions={[
-              { modulo: "insumo_pintura", accion: "ver_inventario" },
+              { modulo: "inventario_insumos", accion: "ver_inventario" },
             ]}
             // Usamos requireAnyPermission para que permita si tiene AL MENOS UNO
             requireAnyPermission={true}
@@ -110,7 +110,7 @@ export const AppRoutes = () => {
           element={
             <PrivateRoute
               requiredPermissions={[
-                { modulo: "insumo_pintura", accion: "crear_consumo" },
+                { modulo: "inventario_insumos", accion: "entrada_insumos" },
               ]}
             >
               <RegistroInsumo />
@@ -123,7 +123,7 @@ export const AppRoutes = () => {
           element={
             <PrivateRoute
               requiredPermissions={[
-                { modulo: "insumo_pintura", accion: "crear_consumo" },
+                { modulo: "inventario_insumos", accion: "salida_insumos" },
               ]}
             >
               <SalidaInsumo />
@@ -136,7 +136,10 @@ export const AppRoutes = () => {
           element={
             <PrivateRoute
               requiredPermissions={[
-                { modulo: "insumo_pintura", accion: "crear_consumo" },
+                {
+                  modulo: "inventario_insumos",
+                  accion: "historial_movimientos",
+                },
               ]}
             >
               <HistorialMovimiento />
@@ -149,7 +152,7 @@ export const AppRoutes = () => {
           element={
             <PrivateRoute
               requiredPermissions={[
-                { modulo: "insumo_pintura", accion: "crear_consumo" },
+                { modulo: "inventario_insumos", accion: "ver_inventario" },
               ]}
             >
               <ListarInventario />
@@ -162,7 +165,7 @@ export const AppRoutes = () => {
           element={
             <PrivateRoute
               requiredPermissions={[
-                { modulo: "insumo_pintura", accion: "crear_consumo" },
+                { modulo: "inventario_insumos", accion: "gestion_insumos" },
               ]}
             >
               <GestionInsumos />
@@ -175,7 +178,7 @@ export const AppRoutes = () => {
             element={
               <PrivateRoute
                 requiredPermissions={[
-                  { modulo: "insumo_pintura", accion: "crear_consumo" },
+                  { modulo: "inventario_insumos", accion: "crear_consumo" },
                 ]}
               >
                 <CrearInsumo />
@@ -188,7 +191,7 @@ export const AppRoutes = () => {
             element={
               <PrivateRoute
                 requiredPermissions={[
-                  { modulo: "insumo_pintura", accion: "crear_consumo" },
+                  { modulo: "inventario_insumos", accion: "crear_consumo" },
                 ]}
               >
                 <EditarInsumo />

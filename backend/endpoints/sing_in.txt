@@ -12,35 +12,47 @@ JSON (Envía el Frontend):
 
 JSON (Respuesta en caso de éxito):
 {
-  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxMCwiY2FybmV0X3VzdWFyaW8iOiJwcnVlYmEiLCJyb2wiOiIiLCJleHAiOjE3ODYzMTc2MzB9.rYQnJ_dteDp5psq41iN-v6gqHOnSvoD2959o-Qc8BeY",
+  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxMSwiY2FybmV0X3VzdWFyaW8iOiIwMDAiLCJyb2wiOiJhZG1pbmlzdHJhZG9yIiwiZXhwIjoxNzg5OTQyMzk2fQ.n8rWOw6IBZaq3c2bC7aNy7hRb032jcfZ1Uqj0ruBzdw",
   "token_type": "bearer",
-  "rol": "",
+  "rol": "string",
   "nombres": "string",
   "apellidos": "string",
   "permisos": [
     {
-      "modulo": "insumo_pintura",
-      "accion": "crear_registro"
-    },
-    {
-      "modulo": "insumo_pintura",
-      "accion": "crear_consumo"
-    },
-    {
-      "modulo": "insumo_pintura",
-      "accion": "ver_historial_consumo"
-    },
-    {
-      "modulo": "insumo_pintura",
+      "modulo": "inventario_insumos",
       "accion": "ver_inventario"
     },
     {
-      "modulo": "gestion_productiva",
-      "accion": "ver_produccion"
+      "modulo": "inventario_insumos",
+      "accion": "entrada_insumos"
+    },
+    {
+      "modulo": "inventario_insumos",
+      "accion": "salida_insumos"
+    },
+    {
+      "modulo": "inventario_insumos",
+      "accion": "historial_movimientos"
+    },
+    {
+      "modulo": "rendimiento",
+      "accion": "ver"
+    },
+    {
+      "modulo": "gestion_usuarios",
+      "accion": "ver_usuarios"
+    },
+    {
+      "modulo": "gestion_usuarios",
+      "accion": "crear_editar"
     },
     {
       "modulo": "gestion_productiva",
       "accion": "registrar_produccion"
+    },
+    {
+      "modulo": "gestion_productiva",
+      "accion": "ver_produccion"
     },
     {
       "modulo": "gestion_productiva",
@@ -55,16 +67,8 @@ JSON (Respuesta en caso de éxito):
       "accion": "gestion_justificantes"
     },
     {
-      "modulo": "dashboard",
-      "accion": "ver"
-    },
-    {
-      "modulo": "gestion_usuarios",
-      "accion": "ver_usuarios"
-    },
-    {
-      "modulo": "gestion_usuarios",
-      "accion": "crear_editar"
+      "modulo": "inventario_insumos",
+      "accion": "gestion_insumos"
     }
   ]
 }

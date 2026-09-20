@@ -165,9 +165,9 @@ export const Rendimiento = () => {
           </div>
         </section>
 
-        {/* Estadísticas */}
+        {/* Estadística */}
         <section className={styles.chartArea}>
-          <h3 className={styles.chartTitle}>Estadísticas</h3>
+          <h3 className={styles.chartTitle}>Estadística</h3>
           {isLoading ? (
             <p className={styles.loading}>Cargando datos...</p>
           ) : error ? (

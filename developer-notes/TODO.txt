@@ -2,7 +2,6 @@
 
 ## Rendimiento
 
-  - Corregir la Permisología de dashboard a Rendimiento en donde sea que haga falta.
   - Conectar con el nuevo endpoint
   - Hacer que el input de fecha hasta marque siempre por defecto la fecha del día de hoy.
   - Colocar un límite de fecha en el campo de fecha hasta, para que no se puedan colocar fechas futuras.
@@ -16,8 +15,8 @@
 
 ## Inventario
 
-  - Corregir la Permisología en la Sidebar, el AppRoutes, del Inventario.tsx y creo que también en PrivateRoute
   - En la barra de navegación secundaria, deberían de incluirse los módulos de Crear Insumo y Editar Insumo, o sea encontrar la manera de que pueda echarse para atrás pero solo un paso, para que quede en Gestión de Insumos.
+  - En Historial de Movimiento, pensar en si quito o no el ID, ya que aunque puede ayudar al usuario a encontrar el insumo en Listado de Insumos, en Historial de Movimiento se ve algo desordenado
 
 
 ---

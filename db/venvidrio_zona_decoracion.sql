@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 26-09-2026 a las 03:34:02
+-- Tiempo de generación: 28-09-2026 a las 00:14:44
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -50,7 +50,8 @@ CREATE TABLE `gestion_productiva_cabecera` (
 
 INSERT INTO `gestion_productiva_cabecera` (`id_cabecera`, `fecha`, `turno`, `tecnico`, `cant_envases_d1`, `cant_envases_d2`, `cant_envases_d3`, `cant_envases_d4`, `total_envases`, `total_gruesas`, `grupo`, `tipo_turno`) VALUES
 (274, '2026-09-10', 1, 'Miguel Bethancourt', 26400, 26400, 0, 0, 52800, 366.67, 'A', '3 Turnos'),
-(275, '2026-09-10', 1, 'Daniel Pérez', 26400, 26400, 0, 0, 52800, 366.67, 'A', '3 Turnos');
+(275, '2026-09-10', 1, 'Daniel Pérez', 26400, 26400, 0, 0, 52800, 366.67, 'A', '3 Turnos'),
+(276, '2026-09-27', 1, 'Fabio Romero', 10000, 15000, 0, 0, 25000, 173.61, 'A', '2 Turnos');
 
 -- --------------------------------------------------------
 
@@ -75,7 +76,9 @@ INSERT INTO `gestion_productiva_entrada` (`id_entrada`, `id_cabecera`, `maquina`
 (212, 275, 1, 6, 26400, '10:10'),
 (213, 275, 2, 6, 26400, '10:10'),
 (216, 274, 1, 6, 26400, '09:17'),
-(217, 274, 2, 6, 26400, '09:17');
+(217, 274, 2, 6, 26400, '09:17'),
+(224, 276, 1, 6, 10000, '17:59'),
+(225, 276, 2, 6, 15000, '17:59');
 
 -- --------------------------------------------------------
 
@@ -99,7 +102,8 @@ CREATE TABLE `gestion_productiva_resultado` (
 
 INSERT INTO `gestion_productiva_resultado` (`id_resultado`, `id_cabecera`, `total_gruesas_lisas`, `total_gruesas_decoradas`, `eficiencia_productiva`, `deficiencia_productiva`, `observaciones`) VALUES
 (272, 274, 24.44, 268.89, 73.33, 26.67, ''),
-(273, 275, 24.44, 244.44, 66.67, 33.33, '');
+(273, 275, 24.44, 244.44, 66.67, 33.33, ''),
+(274, 276, 24.44, 122.22, 70.40, 29.60, 'Por ahora solo estoy probando');
 
 -- --------------------------------------------------------
 
@@ -128,7 +132,8 @@ CREATE TABLE `gestion_productiva_salida` (
 
 INSERT INTO `gestion_productiva_salida` (`id_eficiencia`, `modelo_molde`, `id_cabecera`, `total_paletas_molde`, `cant_paletas_lisas`, `cant_camadas_lisas`, `cant_envases_lisas`, `cant_gruesas_lisas`, `cant_paletas_decoradas`, `cant_camadas_decoradas`, `cant_envases_decoradas`, `cant_gruesas_decoradas`) VALUES
 (605, 6, 275, 11, 1, 8, 3520, 24.44, 10, 80, 35200, 244.44),
-(607, 6, 274, 12, 1, 8, 3520, 24.44, 11, 88, 38720, 268.89);
+(607, 6, 274, 12, 1, 8, 3520, 24.44, 11, 88, 38720, 268.89),
+(611, 6, 276, 6, 1, 8, 3520, 24.44, 5, 40, 17600, 122.22);
 
 -- --------------------------------------------------------
 
@@ -327,19 +332,6 @@ CREATE TABLE `permisos_usuarios` (
 --
 
 INSERT INTO `permisos_usuarios` (`id_permisou`, `id_usuario`, `id_permisom`) VALUES
-(221, 11, 1),
-(222, 11, 2),
-(223, 11, 3),
-(224, 11, 7),
-(225, 11, 4),
-(226, 11, 5),
-(227, 11, 6),
-(228, 11, 11),
-(229, 11, 12),
-(230, 11, 13),
-(231, 11, 14),
-(232, 11, 28),
-(233, 11, 29),
 (234, 12, 1),
 (235, 12, 2),
 (236, 12, 3),
@@ -365,7 +357,20 @@ INSERT INTO `permisos_usuarios` (`id_permisou`, `id_usuario`, `id_permisom`) VAL
 (292, 10, 28),
 (293, 10, 7),
 (294, 10, 29),
-(295, 10, 14);
+(295, 10, 14),
+(333, 11, 1),
+(334, 11, 2),
+(335, 11, 3),
+(336, 11, 7),
+(337, 11, 5),
+(338, 11, 6),
+(339, 11, 11),
+(340, 11, 12),
+(341, 11, 13),
+(342, 11, 14),
+(343, 11, 28),
+(344, 11, 29),
+(345, 11, 4);
 
 -- --------------------------------------------------------
 
@@ -520,25 +525,25 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `gestion_productiva_cabecera`
 --
 ALTER TABLE `gestion_productiva_cabecera`
-  MODIFY `id_cabecera` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=276;
+  MODIFY `id_cabecera` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=277;
 
 --
 -- AUTO_INCREMENT de la tabla `gestion_productiva_entrada`
 --
 ALTER TABLE `gestion_productiva_entrada`
-  MODIFY `id_entrada` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=218;
+  MODIFY `id_entrada` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=226;
 
 --
 -- AUTO_INCREMENT de la tabla `gestion_productiva_resultado`
 --
 ALTER TABLE `gestion_productiva_resultado`
-  MODIFY `id_resultado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=274;
+  MODIFY `id_resultado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=275;
 
 --
 -- AUTO_INCREMENT de la tabla `gestion_productiva_salida`
 --
 ALTER TABLE `gestion_productiva_salida`
-  MODIFY `id_eficiencia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=608;
+  MODIFY `id_eficiencia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=612;
 
 --
 -- AUTO_INCREMENT de la tabla `inventario_insumos`
@@ -580,7 +585,7 @@ ALTER TABLE `permisos_modulos`
 -- AUTO_INCREMENT de la tabla `permisos_usuarios`
 --
 ALTER TABLE `permisos_usuarios`
-  MODIFY `id_permisou` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=296;
+  MODIFY `id_permisou` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=346;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`

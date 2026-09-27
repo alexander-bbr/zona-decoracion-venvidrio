@@ -63,6 +63,32 @@
   font-size: 1.5rem;
 }
 
+.buttonWrapper {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.downloadButton {
+  border: 0;
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  background: #22bb6e;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s ease;
+}
+
+.downloadButton:hover:not(:disabled) {
+  background: #1ea863;
+}
+
+.downloadButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
 .registerButton {
   border: 0;
   border-radius: 6px;
@@ -134,10 +160,14 @@
 
 @media (max-width: 600px) {
   .controlPanel {
-    align-items: flex-start;
+    align-items: center;
     flex-direction: column;
   }
-  .registerButton {
+  .buttonWrapper {
+    width: 100%;
+  }
+  .registerButton,
+  .downloadButton {
     width: 100%;
   }
 }

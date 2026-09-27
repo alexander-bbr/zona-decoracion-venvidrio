@@ -1,0 +1,101 @@
+
+MÓDULO: EXPORTACIÓN
+===================
+
+
+Ruta 1: Exportar Historial Gestión Productiva
+Endpoint: http://127.0.0.1:8000/api/exportacion/gestion-productiva
+Método: POST
+
+JSON (Envía el Frontend):
+{
+    "fechaDesde": "2024-01-01",
+    "fechaHasta": "2024-12-31"
+}
+
+Respuesta en caso de éxito:
+Archivo .xlsx descargable con el historial de gestión productiva en el rango de fechas indicado.
+
+Respuesta en caso de error:
+{
+    "detail": "No se encontraron registros en el rango de fechas indicado."
+}
+
+
+---
+
+
+Ruta 2: Exportar Historial Movimientos Inventario
+Endpoint: http://127.0.0.1:8000/api/exportacion/movimientos-inventario
+Método: POST
+
+JSON (Envía el Frontend):
+{
+    "fechaDesde": "2024-01-01",
+    "fechaHasta": "2024-12-31"
+}
+
+Respuesta en caso de éxito:
+Archivo .xlsx descargable con el historial de movimientos de inventario en el rango de fechas indicado.
+
+Respuesta en caso de error:
+{
+    "detail": "No se encontraron registros en el rango de fechas indicado."
+}
+
+
+---
+
+
+Ruta 3: Exportar Listado de Moldes
+Endpoint: http://127.0.0.1:8000/api/exportacion/moldes
+Método: POST
+
+JSON (Envía el Frontend):
+No aplica, no requiere body.
+
+Respuesta en caso de éxito:
+Archivo .xlsx descargable con el listado completo de moldes.
+
+Respuesta en caso de error:
+{
+    "detail": "No se encontraron moldes registrados."
+}
+
+
+---
+
+
+Ruta 4: Exportar Listado de Justificantes
+Endpoint: http://127.0.0.1:8000/api/exportacion/justificantes
+Método: POST
+
+JSON (Envía el Frontend):
+No aplica, no requiere body.
+
+Respuesta en caso de éxito:
+Archivo .xlsx descargable con el listado completo de justificantes.
+
+Respuesta en caso de error:
+{
+    "detail": "No se encontraron justificantes registrados."
+}
+
+
+---
+
+
+Ruta 5: Exportar Listado de Insumos
+Endpoint: http://127.0.0.1:8000/api/exportacion/insumos
+Método: POST
+
+JSON (Envía el Frontend):
+No aplica, no requiere body.
+
+Respuesta en caso de éxito:
+Archivo .xlsx descargable con el listado completo de insumos activos.
+
+Respuesta en caso de error:
+{
+    "detail": "No se encontraron insumos registrados."
+}

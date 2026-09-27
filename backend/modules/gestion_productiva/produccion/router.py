@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 from typing import List
 
 from backend.database.conexion import get_db
+from backend.modules.gestion_usuarios.dependencies import require_permiso
 from . import services, schemas
 
 router = APIRouter(
@@ -15,7 +16,10 @@ router = APIRouter(
 
 # 1. LISTAR MOLDES (Para llenar el select en el frontend)
 @router.get("/moldes", response_model=List[schemas.MoldeResponde])
-def listar_moldes_para_select(db: Session = Depends(get_db)):
+def listar_moldes_para_select(
+    db: Session = Depends(get_db),
+    # _=Depends(require_permiso("gestion_productiva", "ver_produccion"))
+):
     """
     Obtiene el catálogo resumido de moldes (ID, nombre y descripción).
     """
@@ -24,7 +28,10 @@ def listar_moldes_para_select(db: Session = Depends(get_db)):
 
 # 2. LISTAR JUSTIFICANTES (Para llenar el select en el frontend)
 @router.get("/justificantes", response_model=List[schemas.JustificanteResponde])
-def listar_justificantes_para_select(db: Session = Depends(get_db)):
+def listar_justificantes_para_select(
+    db: Session = Depends(get_db),
+    # _=Depends(require_permiso("gestion_productiva", "ver_produccion"))
+):
     """
     Obtiene el catálogo de justificantes disponibles.
     """
@@ -33,7 +40,12 @@ def listar_justificantes_para_select(db: Session = Depends(get_db)):
 
 # 3. LISTAR REGISTROS DE PRODUCCIÓN (Vista principal con paginación de 50 en 50)
 @router.get("/", response_model=List[schemas.ProduccionListaResponde])
-def listar_produccion(skip: int = 0, limit: int = 50, db: Session = Depends(get_db)):
+def listar_produccion(
+    skip: int = 0,
+    limit: int = 50,
+    db: Session = Depends(get_db),
+    # _=Depends(require_permiso("gestion_productiva", "ver_produccion"))
+):
     """
     Retorna la lista de movimientos recientes de producción paginados.
     """
@@ -42,7 +54,11 @@ def listar_produccion(skip: int = 0, limit: int = 50, db: Session = Depends(get_
 
 # 4. CREAR NUEVO REGISTRO DE PRODUCCIÓN
 @router.post("/", response_model=schemas.ProduccionActualizadaResponde, status_code=status.HTTP_201_CREATED)
-def crear_produccion(datos: schemas.ProduccionCrear, db: Session = Depends(get_db)):
+def crear_produccion(
+    datos: schemas.ProduccionCrear,
+    db: Session = Depends(get_db),
+    # _=Depends(require_permiso("gestion_productiva", "registrar_produccion"))
+):
     """
     Recibe la cabecera, la lista de modelos de salida y el resultado consolidado
     para guardarlos en una sola transacción.
@@ -52,7 +68,11 @@ def crear_produccion(datos: schemas.ProduccionCrear, db: Session = Depends(get_d
 
 # 5. OBTENER UN REGISTRO POR ID (Para los módulos de VER y EDITAR)
 @router.get("/{id_cabecera}", response_model=schemas.ProduccionResponde)
-def obtener_produccion(id_cabecera: int, db: Session = Depends(get_db)):
+def obtener_produccion(
+    id_cabecera: int,
+    db: Session = Depends(get_db),
+    # _=Depends(require_permiso("gestion_productiva", "editar"))
+):
     """
     Busca un turno específico por su ID y devuelve toda su estructura anidada 
     para rellenar el formulario.
@@ -71,7 +91,8 @@ def obtener_produccion(id_cabecera: int, db: Session = Depends(get_db)):
 def actualizar_produccion(
     id_cabecera: int,
     datos: schemas.ProduccionCrear,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    # _=Depends(require_permiso("gestion_productiva", "editar"))
 ):
     """
     Actualiza la cabecera, los resultados y sincroniza la lista de modelos de salida.

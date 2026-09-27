@@ -2,6 +2,7 @@
 from sqlalchemy import text
 from datetime import datetime
 from sqlalchemy.orm import Session
+from backend.utils.notificaciones.alertas import verificar_stock_insumo
 from .models import Insumo, InsumoEntrada, InsumoSalida
 
 
@@ -55,6 +56,14 @@ def registrar_salida(db: Session, datos):
 
     db.commit()
     db.refresh(nueva_salida)
+
+    #VERIFICAR STOCK Y NOTIFICAR SI ES NECESARIO
+    verificar_stock_insumo(
+        articulo        = insumo.articulo,
+        cantidad_actual = float(insumo.cantidad_actual),
+        cantidad_minima = float(insumo.cantidad_minima)
+    )
+
     return nueva_salida
 
 
@@ -82,27 +91,33 @@ def obtener_historial(db: Session, skip: int, limit: int):
     # consulta. Hacerlo en Python implicaría traer todos los registros a
     # memoria antes de poder paginar, lo cual no escala bien.
     query = """
-        SELECT 'entrada'              AS tipo,
+        SELECT 'entrada'              AS tipo_movimiento,
                id_inventario_entrada  AS id_movimiento,
-               id_insumo,
-               fecha,
-               encargado,
-               turno,
-               grupo,
-               cantidad
-        FROM inventario_insumos_entrada
+               e.id_insumo,
+               i.tipo                 AS tipo_insumo,
+               i.articulo,
+               e.fecha,
+               e.encargado,
+               e.turno,
+               e.grupo,
+               e.cantidad
+        FROM inventario_insumos_entrada e
+        JOIN inventario_insumos i ON e.id_insumo = i.id_insumo
 
         UNION ALL
 
-        SELECT 'salida'              AS tipo,
+        SELECT 'salida'              AS tipo_movimiento,
                id_inventario_salida  AS id_movimiento,
-               id_insumo,
-               fecha,
-               encargado,
-               turno,
-               grupo,
-               cantidad
-        FROM inventario_insumos_salida
+               s.id_insumo,
+               i.tipo                AS tipo_insumo,
+               i.articulo,
+               s.fecha,
+               s.encargado,
+               s.turno,
+               s.grupo,
+               s.cantidad
+        FROM inventario_insumos_salida s
+        JOIN inventario_insumos i ON s.id_insumo = i.id_insumo
 
         ORDER BY fecha DESC
         LIMIT :limit OFFSET :skip
@@ -112,10 +127,11 @@ def obtener_historial(db: Session, skip: int, limit: int):
 
     historial = []
     for fila in filas:
-        if fila.tipo == "entrada":
+        if fila.tipo_movimiento == "entrada":
             historial.append({
                 "id_inventario_entrada": fila.id_movimiento,
-                "id_insumo":             fila.id_insumo,
+                "tipo_insumo":          fila.tipo_insumo,
+                "articulo":             fila.articulo,
                 "fecha":                 fila.fecha.strftime("%Y-%m-%d"),
                 "encargado":             fila.encargado,
                 "turno":                 fila.turno,
@@ -125,7 +141,8 @@ def obtener_historial(db: Session, skip: int, limit: int):
         else:
             historial.append({
                 "id_inventario_salida": fila.id_movimiento,
-                "id_insumo":            fila.id_insumo,
+                "tipo_insumo":           fila.tipo_insumo,
+                "articulo":              fila.articulo,
                 "fecha":                fila.fecha.strftime("%Y-%m-%d"),
                 "encargado":            fila.encargado,
                 "turno":                fila.turno,

@@ -9,6 +9,7 @@ from .models import (
     ProduccionJustificante,
     Molde
 )
+from backend.utils.notificaciones.alertas import verificar_deficiencia_produccion
 from backend.modules.gestion_productiva.gestion_justificantes.models import Justificante
 from sqlalchemy.exc import IntegrityError
 from fastapi import HTTPException
@@ -192,7 +193,35 @@ def crear_registro_produccion(db: Session, datos):
         db.commit()
         db.refresh(nueva_cabecera)
 
-        # 🔁 CAMBIO AQUÍ: devolver solo el status y el ID
+        justificantes_notif = []
+        for item in datos.justificantes:
+            etiquetas = []
+            for id_j in item.justificaciones:
+                justificante = db.query(Justificante).filter(Justificante.id_justificante == id_j).first()
+                if justificante:
+                    etiquetas.append(f"{justificante.etiqueta} - {justificante.descripcion}")
+            molde = db.query(Molde).filter(Molde.id_molde == item.modelo_molde).first()
+            nombre_molde = f"{molde.nombre} - {molde.descripcion}" if molde else str(item.modelo_molde)
+
+            justificantes_notif.append({
+                "molde": nombre_molde,
+                "justificaciones": etiquetas
+            })
+
+
+        verificar_deficiencia_produccion(
+            id_cabecera  = nueva_cabecera.id_cabecera,
+            fecha        = str(datos.fecha),
+            turno        = datos.turno,
+            grupo        = datos.grupo,
+            tecnico      = datos.tecnico,
+            deficiencia  = float(datos.resultado.deficiencia_productiva),
+            total_gruesas = float(datos.total_gruesas),
+            justificantes = justificantes_notif
+        )
+
+
+        #devolver solo el status y el ID
         return {
             "status": "Registro insertado con éxito",
             "id": nueva_cabecera.id_cabecera
@@ -305,6 +334,33 @@ def actualizar_registro_produccion(db: Session, id_cabecera: int, datos):
                 db.add(nueva_relacion)
 
         db.commit()
+
+        justificantes_notif = []
+        for item in datos.justificantes:
+            etiquetas = []
+            for id_j in item.justificaciones:
+                justificante = db.query(Justificante).filter(Justificante.id_justificante == id_j).first()
+                if justificante:
+                    etiquetas.append(f"{justificante.etiqueta} - {justificante.descripcion}")
+            molde = db.query(Molde).filter(Molde.id_molde == item.modelo_molde).first()
+            nombre_molde = f"{molde.nombre} - {molde.descripcion}" if molde else str(item.modelo_molde)
+
+            justificantes_notif.append({
+                "molde": nombre_molde,
+                "justificaciones": etiquetas
+            })
+
+        verificar_deficiencia_produccion(
+            id_cabecera  = id_cabecera,
+            fecha        = str(datos.fecha),
+            turno        = datos.turno,
+            grupo        = datos.grupo,
+            tecnico      = datos.tecnico,
+            deficiencia  = float(datos.resultado.deficiencia_productiva),
+            total_gruesas = float(datos.total_gruesas),
+            justificantes = justificantes_notif
+        )
+
         return {
             "status": "Registro actualizado con éxito",
             "id": id_cabecera

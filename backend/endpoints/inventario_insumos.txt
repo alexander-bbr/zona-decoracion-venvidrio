@@ -4,10 +4,10 @@ Ruta 1: Entradas de Insumo
 
 JSON (Envía el Frontend):
 {
-  "idInsumo": 1,  (fk) #number - Para este, se supone que el frontend tuvo que haber listado con el endpoint 3
-  "encargado": "Carlos Mendoza",  # string
-  "turno": "Turno 1",            # string
-  "grupo": "Grupo A",            # string
+  "idInsumo": 1,  (fk)              # number - Para este, se supone que el frontend tuvo que haber listado con el endpoint 3
+  "encargado": "Carlos Mendoza",    # string
+  "turno": "Turno 1",               # string
+  "grupo": "Grupo A",               # string
   "cantidad": "10.50"               # number
 }
 
@@ -24,7 +24,7 @@ JSON (Respuesta en caso de error):
 
 
 
----------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------
 
 
 
@@ -35,10 +35,10 @@ Ruta 2: Salida de Insumo
 
 JSON (Envía el Frontend):
 {
-  "idInsumo": 1, (fk)   # number - Para este, se supone que el frontend tuvo que haber listado con el endpoint 3
-  "encargado": "Carlos Mendoza",  # string
-  "turno": "Turno 1",            # string
-  "grupo": "Grupo A",            # string
+  "idInsumo": 1, (fk)               # number - Para este, se supone que el frontend tuvo que haber listado con el endpoint 3
+  "encargado": "Carlos Mendoza",    # string
+  "turno": "Turno 1",               # string
+  "grupo": "Grupo A",               # string
   "cantidad": "5.00"                # number
 }
 
@@ -107,31 +107,24 @@ Ruta 4: Historial de Movimiento
 Estructura de los datos que recibirá:
 [
   {
-  "idInventarioEntrada": 1,     # number
-  "idInsumo": 1,                # number
-  "fecha": "2026-09-13",        # string
-  "encargado": "Carlos Mendoza", # string
-  "turno": "Turno 1",          # string
-  "grupo": "Grupo A",          # string
-  "cantidad": "10.50"             # number
+    "idInventarioEntrada": 1,       # number
+    "tipoInsumo": "Cap-Sheet",      # string
+    "articulo": "Cap-Sheet",        # string
+    "fecha": "2026-09-13",          # string
+    "encargado": "Carlos Mendoza",  # string
+    "turno": "Turno 1",             # string
+    "grupo": "Grupo A",             # string
+    "cantidad": "10.50"             # number
   },
   {
-  "idInventarioSalida": 1,      # number
-  "idInsumo": 1,                # number
-  "fecha": "2026-09-13",        # string
-  "encargado": "Carlos Mendoza", # string
-  "turno": "Turno 1",          # string
-  "grupo": "Grupo A",          # string
-  "cantidad": "5.00"              # number
-  },
-  {
-  "idInventarioEntrada": 2,     # number
-  "idInsumo": 2,                # number
-  "fecha": "2026-09-12",        # string
-  "encargado": "Ana Gómez",     # string
-  "turno": "Turno 2",          # string
-  "grupo": "Grupo B",          # string
-  "cantidad": "20.00"             # number
+    "idInventarioSalida": 1,        # number
+    "tipoInsumo": "Cap-Sheet",      # string
+    "articulo": "Cap-Sheet",        # string
+    "fecha": "2026-09-13",          # string
+    "encargado": "Carlos Mendoza",  # string
+    "turno": "Turno 1",             # string
+    "grupo": "Grupo A",             # string
+    "cantidad": "5.00"              # number
   }
 ]
 

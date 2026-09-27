@@ -1,19 +1,4 @@
-#RENDIMIENTO
-- VER: reconoce que no tiene permiso y la opcion desaparece
-
-
-#PRODUCCION LISA (en el frontend da error 401, en pruebas del backend 200) LAS PRUEBAS SE HIZO CON PERMISOS ACTIVOS:
-- CONSUMIR: no carga el el inventaario con los modelos disponibles para el select (error 401 desde el frontend)
-- REGISTRAR: no carga el el inventaario con los modelos disponibles para el select (error 401 desde el frontend)
-- HISTORIAL: al poner el filtro da error 401, sin aplicar filtro no muestra los ultimos 10 registros
-- INVENTARIO: da error 401 en consola (se queda cargando)
-
-#PINTURA
-- CONSUMIR: da error 401, al intentar enviar el formulario (muestra error en frontend)
-- REGISTRAR: da error 401, al intentar enviar el formulario ( no muestra error en frontend)
-- HISTORIAL: 
-- INVENTARIO: da error 401 en consola (se queda cargando)
-
-#GESTION DE USUARIO:
-- VER USUARIOS: da error 401 en consola y frontend ()
--CREAR/EDITAR: 
+enpoint de historia de movimientos de inventario actualizado
+modulo de exportacion
+notificaciones para inventario (minimo para todos es 50)
+notificaciones para deficiencia de produccion superior al 12%

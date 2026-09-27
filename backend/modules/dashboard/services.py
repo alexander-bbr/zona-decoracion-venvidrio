@@ -1,9 +1,8 @@
 # backend/modules/dashboard/services.py
 
 # Importamos la función ORM nueva y le asignamos un alias
-from backend.utils.db_funciones import filtrar_registros_dashboard as filtrar_registros_orm
+
 # Importamos tu función vieja para mantener lo de envases intacto
-from backend.utils.funciones import filtrar_registros_dashboard as filtrar_registros_viejo
 
 from collections import defaultdict
 from sqlalchemy.orm import Session

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 13-09-2026 a las 21:04:48
+-- Tiempo de generación: 14-09-2026 a las 22:57:49
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -151,8 +151,8 @@ CREATE TABLE `inventario_insumos` (
 --
 
 INSERT INTO `inventario_insumos` (`id_insumo`, `tipo`, `articulo`, `unidad`, `cantidad_actual`, `cantidad_minima`, `estado`) VALUES
-(1, 'Pintura', 'SM 00-0200VT38 Blanco', 'Kilogramo', 4.00, 0.00, 1),
-(2, 'Pintura', 'SM 00-2208  - VT azul pepsi', 'Kilogramo', 600.00, 0.00, 1),
+(1, 'Pintura', 'SM 00-0200VT38 Blanco', 'Kilogramo', 120.55, 0.00, 1),
+(2, 'Pintura', 'SM 00-2208  - VT azul pepsi', 'Kilogramo', 600.00, 100.00, 1),
 (3, 'Pintura', 'SM 00-8255  - TA Rojo', 'Kilogramo', 0.00, 0.00, 1),
 (4, 'Malla', 'Malla 230', 'Rollo', 0.00, 0.00, 1),
 (5, 'Malla', 'Malla 220', 'Rollo', 0.00, 0.00, 1),
@@ -172,7 +172,7 @@ INSERT INTO `inventario_insumos` (`id_insumo`, `tipo`, `articulo`, `unidad`, `ca
 (19, 'Dicromato', 'Dicromato de Potacio', 'Unidad', 0.00, 0.00, 1),
 (20, 'Fleje', 'Fleje 1718', 'Rollo', 0.00, 0.00, 1),
 (21, 'Stretch', 'Stretch-23-micras', 'Kilogramo', 0.00, 0.00, 1),
-(22, 'Cap-Sheet', 'Cap-Sheet', 'Kilogramo', 0.00, 0.00, 1),
+(22, 'Cap-Sheet', 'Cap-Sheet', 'Kilogramo', 0.00, 49.95, 1),
 (23, 'Plástico Termo', 'TERMOENCOGIBLE DE 24\"', 'Kilogramo', 0.00, 0.00, 1),
 (24, 'Plástico Termo', 'TERMOENCOGIBLE DE 28\"', 'Kilogramo', 0.00, 0.00, 1),
 (25, 'prueba', 'ggg', 'string', 500.00, 5.75, 1);
@@ -199,7 +199,8 @@ CREATE TABLE `inventario_insumos_entrada` (
 
 INSERT INTO `inventario_insumos_entrada` (`id_inventario_entrada`, `id_insumo`, `fecha`, `encargado`, `turno`, `grupo`, `cantidad`) VALUES
 (1, 1, '2026-09-13 13:50:29', 'string', 'string', 'string', 5.05),
-(2, 2, '2026-09-13 14:15:49', 'string', 'string', 'string', 50.80);
+(2, 2, '2026-09-13 14:15:49', 'string', 'string', 'string', 50.80),
+(3, 1, '2026-09-14 15:22:31', '222', 'Turno 1', 'Grupo A', 150.55);
 
 -- --------------------------------------------------------
 
@@ -223,7 +224,8 @@ CREATE TABLE `inventario_insumos_salida` (
 
 INSERT INTO `inventario_insumos_salida` (`id_inventario_salida`, `id_insumo`, `fecha`, `encargado`, `turno`, `grupo`, `cantidad`) VALUES
 (1, 1, '2026-09-13 13:51:40', 'string', 'string', 'string', 1.05),
-(2, 2, '2026-09-13 14:16:20', 'string', 'string', 'string', 10.86);
+(2, 2, '2026-09-13 14:16:20', 'string', 'string', 'string', 10.86),
+(3, 1, '2026-09-14 15:24:57', '222', 'Turno 2', 'Grupo A', 34.00);
 
 -- --------------------------------------------------------
 
@@ -291,18 +293,19 @@ CREATE TABLE `permisos_modulos` (
 --
 
 INSERT INTO `permisos_modulos` (`id_permisom`, `modulo`, `accion`) VALUES
-(1, 'insumo_pintura', 'ver_inventario'),
-(2, 'insumo_pintura', 'crear_registro'),
-(3, 'insumo_pintura', 'crear_consumo'),
-(4, 'dashboard', 'ver'),
+(1, 'inventario_insumos', 'ver_inventario'),
+(2, 'inventario_insumos', 'entrada_insumos'),
+(3, 'inventario_insumos', 'salida_insumos'),
+(4, 'rendimiento', 'ver'),
 (5, 'gestion_usuarios', 'ver_usuarios'),
 (6, 'gestion_usuarios', 'crear_editar'),
-(7, 'insumo_pintura', 'ver_historial_consumo'),
+(7, 'inventario_insumos', 'historial_movimientos'),
 (11, 'gestion_productiva', 'registrar_produccion'),
 (12, 'gestion_productiva', 'ver_produccion'),
 (13, 'gestion_productiva', 'editar'),
 (14, 'gestion_productiva', 'gestion_moldes'),
-(28, 'gestion_productiva', 'gestion_justificantes');
+(28, 'gestion_productiva', 'gestion_justificantes'),
+(29, 'inventario_insumos', 'gestion_insumos');
 
 -- --------------------------------------------------------
 
@@ -321,41 +324,45 @@ CREATE TABLE `permisos_usuarios` (
 --
 
 INSERT INTO `permisos_usuarios` (`id_permisou`, `id_usuario`, `id_permisom`) VALUES
-(148, 12, 1),
-(149, 12, 2),
-(150, 12, 3),
-(151, 12, 7),
-(152, 12, 4),
-(153, 12, 5),
-(154, 12, 6),
-(155, 12, 11),
-(156, 12, 12),
-(157, 12, 13),
-(158, 12, 14),
-(159, 11, 1),
-(160, 11, 2),
-(161, 11, 3),
-(162, 11, 7),
-(163, 11, 4),
-(164, 11, 5),
-(165, 11, 6),
-(166, 11, 11),
-(167, 11, 12),
-(168, 11, 13),
-(169, 11, 14),
-(170, 11, 28),
-(171, 10, 5),
-(172, 10, 6),
-(173, 10, 11),
-(174, 10, 12),
-(175, 10, 13),
-(176, 10, 14),
-(177, 10, 1),
-(178, 10, 2),
-(179, 10, 3),
-(180, 10, 7),
-(181, 10, 4),
-(182, 10, 28);
+(208, 10, 5),
+(209, 10, 6),
+(210, 10, 11),
+(211, 10, 12),
+(212, 10, 13),
+(213, 10, 14),
+(214, 10, 1),
+(215, 10, 2),
+(216, 10, 3),
+(217, 10, 7),
+(218, 10, 4),
+(219, 10, 28),
+(220, 10, 29),
+(221, 11, 1),
+(222, 11, 2),
+(223, 11, 3),
+(224, 11, 7),
+(225, 11, 4),
+(226, 11, 5),
+(227, 11, 6),
+(228, 11, 11),
+(229, 11, 12),
+(230, 11, 13),
+(231, 11, 14),
+(232, 11, 28),
+(233, 11, 29),
+(234, 12, 1),
+(235, 12, 2),
+(236, 12, 3),
+(237, 12, 7),
+(238, 12, 4),
+(239, 12, 5),
+(240, 12, 6),
+(241, 12, 11),
+(242, 12, 12),
+(243, 12, 13),
+(244, 12, 14),
+(245, 12, 29),
+(246, 12, 28);
 
 -- --------------------------------------------------------
 
@@ -540,13 +547,13 @@ ALTER TABLE `inventario_insumos`
 -- AUTO_INCREMENT de la tabla `inventario_insumos_entrada`
 --
 ALTER TABLE `inventario_insumos_entrada`
-  MODIFY `id_inventario_entrada` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_inventario_entrada` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `inventario_insumos_salida`
 --
 ALTER TABLE `inventario_insumos_salida`
-  MODIFY `id_inventario_salida` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_inventario_salida` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `justificantes`
@@ -564,13 +571,13 @@ ALTER TABLE `moldes`
 -- AUTO_INCREMENT de la tabla `permisos_modulos`
 --
 ALTER TABLE `permisos_modulos`
-  MODIFY `id_permisom` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id_permisom` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT de la tabla `permisos_usuarios`
 --
 ALTER TABLE `permisos_usuarios`
-  MODIFY `id_permisou` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=183;
+  MODIFY `id_permisou` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=247;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`

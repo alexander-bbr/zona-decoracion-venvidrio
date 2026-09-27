@@ -5,7 +5,6 @@ from typing import List
 
 from .models import Usuario, PermisoModulo, PermisoUsuario
 from .schemas import UsuarioCrear, UsuarioEditar
-from backend.utils.db_funciones import obtener_inventario_generico
 from backend.utils.seguridad import hashear_contrasena
 
 # 1. Crear usuario completo (datos personales + permisos)
@@ -92,7 +91,24 @@ def obtener_usuario_completo(db: Session, id_usuario: int):
 
 # 4. Listar todos los usuarios
 def listar_usuarios(db: Session):
-    return obtener_inventario_generico(db, Usuario)
+    usuarios = db.query(Usuario).all()
+    return {
+        "status": "success",
+        "data": [
+            {
+                "id_usuario":     u.id_usuario,
+                "cedula":         u.cedula,
+                "carnet_usuario": u.carnet_usuario,
+                "nombres":        u.nombres,
+                "apellidos":      u.apellidos,
+                "telefono":       u.telefono,
+                "correo":         u.correo,
+                "rol":            u.rol,
+                "activo_usuario": u.activo_usuario
+            }
+            for u in usuarios
+        ]
+    }
 
 
 # 5. Listar catálogo de permisos disponibles

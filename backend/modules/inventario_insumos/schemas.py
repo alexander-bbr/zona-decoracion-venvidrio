@@ -84,7 +84,8 @@ class MovimientoSalidaCrear(BaseModel):
 
 class HistorialEntradaResponde(BaseModel):
     id_inventario_entrada: int     = Field(alias="idInventarioEntrada")
-    id_insumo:             int     = Field(alias="idInsumo")
+    tipo_insumo: str     = Field(alias="tipoInsumo")
+    articulo:    str     = Field(alias="articulo")
     fecha:                 str     = Field(alias="fecha")
     encargado:             str     = Field(alias="encargado")
     turno:                 str     = Field(alias="turno")
@@ -98,7 +99,8 @@ class HistorialEntradaResponde(BaseModel):
 
 class HistorialSalidaResponde(BaseModel):
     id_inventario_salida: int     = Field(alias="idInventarioSalida")
-    id_insumo:            int     = Field(alias="idInsumo")
+    tipo_insumo:          str     = Field(alias="tipoInsumo")
+    articulo:             str     = Field(alias="articulo")
     fecha:                str     = Field(alias="fecha")
     encargado:            str     = Field(alias="encargado")
     turno:                str     = Field(alias="turno")

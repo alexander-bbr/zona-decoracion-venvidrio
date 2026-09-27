@@ -16,9 +16,6 @@ from backend.modules.gestion_usuarios.router import router as gestion_usuarios_r
 # Importamos el router del módulo de autenticación
 from backend.modules.auth.router import router as auth_router
 
-# Importamos el router del módulo de historia de trabajo decoración
-from backend.modules.historia_trabajo_decoracion.router import router as historia_trabajo_router
-
 # Importamos el router del nuevo módulo de gestión productiva
 from backend.modules.gestion_productiva.produccion.router import router as gestion_productiva_router
 
@@ -27,6 +24,9 @@ from backend.modules.gestion_productiva.gestion_moldes.router import router as m
 
 # Importamos el router del módulo de justificantes
 from backend.modules.gestion_productiva.gestion_justificantes.router import router as justificantes_router
+
+# Importamos el router del módulo de exportación
+from backend.modules.exportacion.router import router as exportacion_router
 
 
 # Inicializamos la aplicación FastAPI
@@ -58,9 +58,6 @@ app.include_router(gestion_usuarios_router)
 # Registramos las rutas del módulo de autenticación
 app.include_router(auth_router)
 
-# Registramos las rutas del módulo de historia de trabajo decoración
-app.include_router(historia_trabajo_router)
-
 # Registramos las rutas del módulo de gestión productiva
 app.include_router(gestion_productiva_router)
 
@@ -69,6 +66,9 @@ app.include_router(moldes_router)
 
 # Registramos las rutas del módulo de justificantes
 app.include_router(justificantes_router)
+
+# Registramos las rutas del módulo de exportación
+app.include_router(exportacion_router)
 
 # Ruta base de prueba
 @app.get("/")

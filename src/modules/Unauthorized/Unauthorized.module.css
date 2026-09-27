@@ -19,25 +19,27 @@
 .unauthorized div.notificationWrapper {
   padding: 0.7rem 1rem;
   border-radius: 8px;
-  background-color: #ffcdcd;
-  border: 1px solid #ff5107;
+  background-color: #ffe0e0;
+  border: 1px solid #b42318;
   margin: 0 auto 2rem;
   max-width: fit-content;
 }
 .unauthorized .errorMessage {
   margin: 0;
   text-align: center;
-  font-size: 1.3rem;
-  color: #8b340b;
+  font-size: 1rem;
+  color: #b42318;
 }
 
 .unauthorized .unauthorizedDescription {
   margin-top: 2rem;
+  font-size: 0.9rem;
   color: var(--secondary-text-color);
   text-align: center;
 }
 
 .unauthorized a {
+  font-size: 0.9rem;
   display: block;
   font-weight: 600;
   text-align: center;
@@ -46,6 +48,6 @@
   text-decoration: none;
 }
 
-.home a:hover {
+.unauthorized a:hover {
   text-decoration: underline;
 }

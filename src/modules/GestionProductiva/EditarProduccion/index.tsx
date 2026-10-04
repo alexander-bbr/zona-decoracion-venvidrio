@@ -1018,6 +1018,14 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
               total={resumenProduccion.envasesLisa}
               gruesas={resumenProduccion.envasesLisa / ENVASES_POR_GRUESA}
             />
+
+            <div className={styles.warning}>
+              <p>
+                ⚠️ <strong>IMPORTANTE:</strong> Los envases de Producción Lisa
+                no se toman en consideración para el cáculo de la Eficiencia y
+                Deficiencia Productiva de la Decoración.
+              </p>
+            </div>
           </div>
 
           {/* Paletas por Molde - Resumen */}

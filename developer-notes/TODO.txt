@@ -16,6 +16,7 @@
 ## Inventario
 
   - Hacer el submódulo de iventario de pantallas
+  - Corregir la coloración en Ver Inventario, ya que no se respeta cuando es menor a cantidad mínima
 
 
 
@@ -25,20 +26,14 @@
 
 ## Gestión Productiva
 
-  - Minimizar el tamaño para que se vean 2 o mas items de máquinas uno al lado de otro.
-
-  - En la columna de Total de Envases en Producción Lisa debe colocarse un mensaje que diga que no se toma en consideración para el cálculo de la Eficiencia y Deficiencia Productiva.
-
-  - Darle un color de fondo a las 3 columnas del fieldset de Resumen.
-
   - Verificar si el botón de resetear, si me restaura todo a como debería estar en el formulario de editar.
+
+  - Agregar un identificador en las Máquinas de decorados para que el usuario las asocie mejor con la manera en la que las llama: en Máquina 1 por Máquina D3, Máquina 2 por Máquina D4, Máquina 3 por Máquina D11 y Máquina D4 por Máquina D12
 
   - Cambios más importantes:
 
     - Colocar un input con readonly al lado del código del molde en las máquinas, para que así sea más fácil poder guiarse de cuál estamos eligiendo cuando tenemos códigos similares.
-
-    - Agregar un identificador en las Máquinas de decorados para que el usuario las asocie mejor con la manera en la que las llama: en Máquina 1 por Máquina D3, Máquina 2 por Máquina D4, Máquina 3 por Máquina D11 y Máquina D4 por Máquina D12
-
+    
     - Ya no se tiene que tomar en cuenta en el input de Número Total de Paletas (del fielset de Total de Paletas), las paletas que sean de producción lisa. Osea, lo único que va a limitar el campo de Número Total de Paletas, son los inputs de Número de Paletas de Producción Decorada entre todos los moldes. Ejemplo: Pusimos 10 en el input de Número total de Paletas, y teníamos dos moldes por todas las máquinas (en la máquina 1 habian 2 moldes: el molde GX0001 y el molde GX0002; y en las máquinas 2, 3 y 4 habían nada más el molde GX0001). Entonces bueno, en el Molde ( 1 ) (el GX0001) en el Numero de Paletas de Producción Decorada pusimos 5, y en el Número de Paletas de Producción Lisa de ese molde pusimos 3 (bueno, este 3 no afecta a la cuenta). Y en el Molde ( 2 ) el Número de Paletas de Producción Decorada pusimos 5 (teniendo entonces 5 + 5 = 10, chévere, no superamos el 10 de Número Total de Paletas). De hecho, el campo de Número Total de Paletas habría que cambiarlo de nombre a Número Total de Paletas Decoradas (así sería más congruente).
 
     - Esto significa que hay que verificar el fieldse paletas por molde, a ver si está tomando correctamente el número de paletas decoradas, o el número de paletas decoradas y las de producción lisa (si esto último, estaría mal, debe ser lo primero).

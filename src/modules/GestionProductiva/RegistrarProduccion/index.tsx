@@ -264,13 +264,11 @@ export const RegistrarProduccion = () => {
     );
   };
 
-  // Ahora solo se limitan las paletasDecoradas (no la producción lisa)
   const limitarModelos = (actuales: ModeloForm[], limite: number) => {
     let restantes = limite;
     return actuales.map((modelo) => {
       const paletasDecoradas = Math.min(modelo.paletasDecoradas, restantes);
       restantes -= paletasDecoradas;
-      // La produccionLisa NO se limita
       return { ...modelo, paletasDecoradas };
     });
   };
@@ -281,7 +279,6 @@ export const RegistrarProduccion = () => {
     setModelosForm((actuales) => limitarModelos(actuales, limite));
   };
 
-  // Ahora solo considera las paletasDecoradas (no la producción lisa)
   const obtenerMaximoPaletasDecoradas = (index: number) => {
     const otrasPaletasDecoradas = modelosForm.reduce(
       (total, modelo, modeloIndex) =>
@@ -299,7 +296,6 @@ export const RegistrarProduccion = () => {
     actualizarModelo(index, { paletasDecoradas: cantidad });
   };
 
-  // La producción lisa no tiene límite superior
   const cambiarProduccionLisa = (index: number, value: string) => {
     const cantidad = Math.max(0, Number(value) || 0);
     actualizarModelo(index, { produccionLisa: cantidad });
@@ -323,7 +319,6 @@ export const RegistrarProduccion = () => {
     setError("");
   };
 
-  // Calcular total de envases de todas las máquinas
   const totalEnvasesMaquinas = maquinas.reduce(
     (total, maquina) =>
       total +
@@ -348,7 +343,6 @@ export const RegistrarProduccion = () => {
       return;
     }
 
-    // Construir maquina1, maquina2, maquina3, maquina4
     const maquinasParaEnviar = maquinas.map((maquina) =>
       maquina.entradas
         .filter((entrada) => entrada.idMolde > 0 && entrada.cantEnvases > 0)
@@ -361,7 +355,6 @@ export const RegistrarProduccion = () => {
 
     const [maquina1, maquina2, maquina3, maquina4] = maquinasParaEnviar;
 
-    // Construir salidas
     const salidas = modelosForm.flatMap((modelo) => {
       const molde = moldes.find((item) => item.idMolde === modelo.idMolde);
       if (!molde) {
@@ -399,7 +392,6 @@ export const RegistrarProduccion = () => {
       return;
     }
 
-    // Construir justificantes por molde
     const justificantesPorMolde = modelosForm
       .filter(
         (modelo) => modelo.justificantes && modelo.justificantes.length > 0,
@@ -458,10 +450,14 @@ export const RegistrarProduccion = () => {
           totalGruesas: gruesasMaquinas,
           salidas,
           resultado: {
+            totalEnvasesLisos: resumenProduccion.envasesLisa,
             totalGruesasLisas:
               resumenProduccion.envasesLisa / ENVASES_POR_GRUESA,
+            totalEnvasesDecorados: resumenProduccion.envasesDecorados,
             totalGruesasDecoradas:
               resumenProduccion.envasesDecorados / ENVASES_POR_GRUESA,
+            totalEnvasesPerdidos: totalEnvasesPerdidos,
+            totalGruesasPerdidas: gruesasPerdidas,
             eficienciaProductiva,
             deficienciaProductiva,
             observaciones,

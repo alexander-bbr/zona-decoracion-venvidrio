@@ -65,7 +65,17 @@ type RegistroDetalleApi = {
   totalEnvases: number;
   totalGruesas: string;
   salidas: SalidaApi[];
-  resultado?: { observaciones?: string };
+  resultado?: {
+    totalEnvasesLisos?: string;
+    totalGruesasLisas?: string;
+    totalEnvasesDecorados?: string;
+    totalGruesasDecoradas?: string;
+    totalEnvasesPerdidos?: string;
+    totalGruesasPerdidas?: string;
+    eficienciaProductiva?: string;
+    deficienciaProductiva?: string;
+    observaciones?: string;
+  };
   justificantes?: JustificantePorMoldeApi[];
 };
 
@@ -653,10 +663,14 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
             totalGruesas: gruesasMaquinas,
             salidas,
             resultado: {
+              totalEnvasesLisos: resumenProduccion.envasesLisa,
               totalGruesasLisas:
                 resumenProduccion.envasesLisa / ENVASES_POR_GRUESA,
+              totalEnvasesDecorados: resumenProduccion.envasesDecorados,
               totalGruesasDecoradas:
                 resumenProduccion.envasesDecorados / ENVASES_POR_GRUESA,
+              totalEnvasesPerdidos: totalEnvasesPerdidos,
+              totalGruesasPerdidas: gruesasPerdidas,
               eficienciaProductiva: 100 - deficienciaProductiva,
               deficienciaProductiva,
               observaciones,

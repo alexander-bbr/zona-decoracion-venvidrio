@@ -172,8 +172,12 @@ def crear_registro_produccion(db: Session, datos):
         # 4. Crear el consolidado final
         nuevo_resultado = GestionProductivaResultado(
             id_cabecera=nueva_cabecera.id_cabecera,
+            total_envases_lisos=datos.resultado.total_envases_lisos,
             total_gruesas_lisas=datos.resultado.total_gruesas_lisas,
+            total_envases_decorados=datos.resultado.total_envases_decorados,
             total_gruesas_decoradas=datos.resultado.total_gruesas_decoradas,
+            total_envases_perdidos=datos.resultado.total_envases_perdidos,
+            total_gruesas_perdidas=datos.resultado.total_gruesas_perdidas,
             eficiencia_productiva=datos.resultado.eficiencia_productiva,
             deficiencia_productiva=datos.resultado.deficiencia_productiva,
             observaciones=datos.resultado.observaciones
@@ -303,16 +307,24 @@ def actualizar_registro_produccion(db: Session, id_cabecera: int, datos):
 
         # 4. Actualizar resultado
         if cabecera_actual.resultado:
+            cabecera_actual.resultado.total_envases_lisos = datos.resultado.total_envases_lisos
             cabecera_actual.resultado.total_gruesas_lisas = datos.resultado.total_gruesas_lisas
+            cabecera_actual.resultado.total_envases_decorados = datos.resultado.total_envases_decorados
             cabecera_actual.resultado.total_gruesas_decoradas = datos.resultado.total_gruesas_decoradas
+            cabecera_actual.resultado.total_envases_perdidos = datos.resultado.total_envases_perdidos
+            cabecera_actual.resultado.total_gruesas_perdidas = datos.resultado.total_gruesas_perdidas
             cabecera_actual.resultado.eficiencia_productiva = datos.resultado.eficiencia_productiva
             cabecera_actual.resultado.deficiencia_productiva = datos.resultado.deficiencia_productiva
             cabecera_actual.resultado.observaciones = datos.resultado.observaciones
         else:
             nuevo_resultado = GestionProductivaResultado(
                 id_cabecera=id_cabecera,
+                total_envases_lisos=datos.resultado.total_envases_lisos,
                 total_gruesas_lisas=datos.resultado.total_gruesas_lisas,
+                total_envases_decorados=datos.resultado.total_envases_decorados,
                 total_gruesas_decoradas=datos.resultado.total_gruesas_decoradas,
+                total_envases_perdidos=datos.resultado.total_envases_perdidos,
+                total_gruesas_perdidas=datos.resultado.total_gruesas_perdidas,
                 eficiencia_productiva=datos.resultado.eficiencia_productiva,
                 deficiencia_productiva=datos.resultado.deficiencia_productiva,
                 observaciones=datos.resultado.observaciones

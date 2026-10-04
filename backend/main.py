@@ -7,8 +7,8 @@ from fastapi.middleware.cors import CORSMiddleware
 # Importamos el router desde tu módulo de insumos
 from backend.modules.inventario_insumos.router import router as insumos_router
 
-# Importamos el router desde tu módulo de dashboard
-from backend.modules.dashboard.router import router as dashboard_router
+# Importamos el router desde tu módulo de rendimiento
+from backend.modules.rendimiento.router import router as rendimiento_router
 
 # Importamos el router del módulo de gestión de usuarios
 from backend.modules.gestion_usuarios.router import router as gestion_usuarios_router
@@ -49,8 +49,8 @@ app.add_middleware(
 # Registramos las rutas del módulo de insumos
 app.include_router(insumos_router)
 
-# Registramos las rutas del módulo del dashboard
-app.include_router(dashboard_router)
+# Registramos las rutas del módulo del rendimiento
+app.include_router(rendimiento_router)
 
 # Registramos las rutas del módulo de gestión de usuarios
 app.include_router(gestion_usuarios_router)

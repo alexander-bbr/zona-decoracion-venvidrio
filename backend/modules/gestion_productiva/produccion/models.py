@@ -86,7 +86,11 @@ class GestionProductivaResultado(Base):
     id_cabecera = Column(Integer, ForeignKey("gestion_productiva_cabecera.id_cabecera", ondelete="CASCADE"), primary_key=True)
 
     total_gruesas_lisas = Column(Numeric(12, 2), default=0.00)
+    total_envases_lisos = Column(Integer, default=0)
     total_gruesas_decoradas = Column(Numeric(12, 2), default=0.00)
+    total_envases_decorados = Column(Integer, default=0)
+    total_gruesas_perdidas = Column(Numeric(12, 2), default=0.00)
+    total_envases_perdidos = Column(Integer, default=0)
 
     eficiencia_productiva = Column(Numeric(5, 2), default=0.00)
     deficiencia_productiva = Column(Numeric(5, 2), default=0.00)

@@ -95,8 +95,12 @@ class JustificantePorMoldeResponde(BaseModel):
 
 # ESQUEMAS PARA GESTION_PRODUCTIVA_RESULTADO (Consolidado)
 class ResultadoBase(BaseModel):
+    total_envases_lisos: int = Field(default=0, alias="totalEnvasesLisos")                          # NUEVO
     total_gruesas_lisas: Decimal = Field(default=Decimal("0.00"), alias="totalGruesasLisas")
+    total_envases_decorados: int = Field(default=0, alias="totalEnvasesDecorados")                  # NUEVO
     total_gruesas_decoradas: Decimal = Field(default=Decimal("0.00"), alias="totalGruesasDecoradas")
+    total_envases_perdidos: int = Field(default=0, alias="totalEnvasesPerdidos")                    # NUEVO
+    total_gruesas_perdidas: Decimal = Field(default=Decimal("0.00"), alias="totalGruesasPerdidas")  # NUEVO
     eficiencia_productiva: Decimal = Field(default=Decimal("0.00"), alias="eficienciaProductiva")
     deficiencia_productiva: Decimal = Field(default=Decimal("0.00"), alias="deficienciaProductiva")
     observaciones: Optional[str] = Field(default=None, alias="observaciones")

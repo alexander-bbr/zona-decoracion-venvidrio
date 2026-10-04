@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 28-09-2026 a las 00:14:44
+-- Tiempo de generación: 04-10-2026 a las 23:44:13
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -49,9 +49,10 @@ CREATE TABLE `gestion_productiva_cabecera` (
 --
 
 INSERT INTO `gestion_productiva_cabecera` (`id_cabecera`, `fecha`, `turno`, `tecnico`, `cant_envases_d1`, `cant_envases_d2`, `cant_envases_d3`, `cant_envases_d4`, `total_envases`, `total_gruesas`, `grupo`, `tipo_turno`) VALUES
-(274, '2026-09-10', 1, 'Miguel Bethancourt', 26400, 26400, 0, 0, 52800, 366.67, 'A', '3 Turnos'),
-(275, '2026-09-10', 1, 'Daniel Pérez', 26400, 26400, 0, 0, 52800, 366.67, 'A', '3 Turnos'),
-(276, '2026-09-27', 1, 'Fabio Romero', 10000, 15000, 0, 0, 25000, 173.61, 'A', '2 Turnos');
+(286, '2026-10-03', 3, 'Luis Gómez', 0, 15300, 0, 15400, 30700, 213.19, 'Grupo C', 'Noche'),
+(287, '2026-10-05', 1, 'Carlos Mendoza', 15500, 0, 15500, 0, 31000, 215.28, 'Grupo A', 'Mañana'),
+(288, '2026-10-06', 2, 'María Rodríguez', 0, 15200, 0, 15200, 30400, 211.11, 'Grupo B', 'Tarde'),
+(290, '2026-10-06', 2, 'María Rodríguez', 0, 15200, 0, 15200, 30400, 211.11, 'Grupo B', 'Tarde');
 
 -- --------------------------------------------------------
 
@@ -73,12 +74,14 @@ CREATE TABLE `gestion_productiva_entrada` (
 --
 
 INSERT INTO `gestion_productiva_entrada` (`id_entrada`, `id_cabecera`, `maquina`, `id_molde`, `cant_envases`, `hora_entrada`) VALUES
-(212, 275, 1, 6, 26400, '10:10'),
-(213, 275, 2, 6, 26400, '10:10'),
-(216, 274, 1, 6, 26400, '09:17'),
-(217, 274, 2, 6, 26400, '09:17'),
-(224, 276, 1, 6, 10000, '17:59'),
-(225, 276, 2, 6, 15000, '17:59');
+(245, 286, 2, 5, 15300, '23:00'),
+(246, 286, 4, 6, 15400, '23:30'),
+(247, 287, 1, 1, 15500, '07:00'),
+(248, 287, 3, 4, 15500, '07:30'),
+(249, 288, 2, 2, 15200, '15:00'),
+(250, 288, 4, 5, 15200, '15:15'),
+(252, 290, 2, 2, 15200, '15:00'),
+(253, 290, 4, 5, 15200, '15:15');
 
 -- --------------------------------------------------------
 
@@ -90,7 +93,11 @@ CREATE TABLE `gestion_productiva_resultado` (
   `id_resultado` int(11) NOT NULL,
   `id_cabecera` int(11) NOT NULL,
   `total_gruesas_lisas` decimal(12,2) DEFAULT 0.00,
+  `total_envases_lisos` int(11) DEFAULT 0,
   `total_gruesas_decoradas` decimal(12,2) DEFAULT 0.00,
+  `total_envases_decorados` int(11) DEFAULT 0,
+  `total_envases_perdidos` int(11) DEFAULT 0,
+  `total_gruesas_perdidas` decimal(12,2) DEFAULT 0.00,
   `eficiencia_productiva` decimal(5,2) DEFAULT 0.00,
   `deficiencia_productiva` decimal(5,2) DEFAULT 0.00,
   `observaciones` varchar(255) DEFAULT NULL
@@ -100,10 +107,11 @@ CREATE TABLE `gestion_productiva_resultado` (
 -- Volcado de datos para la tabla `gestion_productiva_resultado`
 --
 
-INSERT INTO `gestion_productiva_resultado` (`id_resultado`, `id_cabecera`, `total_gruesas_lisas`, `total_gruesas_decoradas`, `eficiencia_productiva`, `deficiencia_productiva`, `observaciones`) VALUES
-(272, 274, 24.44, 268.89, 73.33, 26.67, ''),
-(273, 275, 24.44, 244.44, 66.67, 33.33, ''),
-(274, 276, 24.44, 122.22, 70.40, 29.60, 'Por ahora solo estoy probando');
+INSERT INTO `gestion_productiva_resultado` (`id_resultado`, `id_cabecera`, `total_gruesas_lisas`, `total_envases_lisos`, `total_gruesas_decoradas`, `total_envases_decorados`, `total_envases_perdidos`, `total_gruesas_perdidas`, `eficiencia_productiva`, `deficiencia_productiva`, `observaciones`) VALUES
+(284, 286, 0.00, 0, 202.89, 29216, 1484, 10.30, 95.17, 4.83, 'Producción nocturna ajustada a capacidad real de paletas'),
+(285, 287, 0.00, 0, 202.89, 29216, 1784, 12.39, 94.25, 5.75, 'Operación continua en máquinas 1 y 3'),
+(286, 288, 0.00, 0, 202.89, 29216, 1184, 8.22, 96.11, 3.89, 'Proceso estable en turno de la tarde'),
+(287, 290, 0.00, 0, 202.89, 29216, 1184, 8.22, 96.11, 3.89, 'Proceso estable en turno de la tarde');
 
 -- --------------------------------------------------------
 
@@ -131,9 +139,14 @@ CREATE TABLE `gestion_productiva_salida` (
 --
 
 INSERT INTO `gestion_productiva_salida` (`id_eficiencia`, `modelo_molde`, `id_cabecera`, `total_paletas_molde`, `cant_paletas_lisas`, `cant_camadas_lisas`, `cant_envases_lisas`, `cant_gruesas_lisas`, `cant_paletas_decoradas`, `cant_camadas_decoradas`, `cant_envases_decoradas`, `cant_gruesas_decoradas`) VALUES
-(605, 6, 275, 11, 1, 8, 3520, 24.44, 10, 80, 35200, 244.44),
-(607, 6, 274, 12, 1, 8, 3520, 24.44, 11, 88, 38720, 268.89),
-(611, 6, 276, 6, 1, 8, 3520, 24.44, 5, 40, 17600, 122.22);
+(628, 5, 286, 4, 0, 0, 0, 0.00, 4, 32, 14608, 101.44),
+(629, 6, 286, 4, 0, 0, 0, 0.00, 4, 32, 14608, 101.44),
+(630, 1, 287, 4, 0, 0, 0, 0.00, 4, 32, 14608, 101.44),
+(631, 4, 287, 4, 0, 0, 0, 0.00, 4, 32, 14608, 101.44),
+(632, 2, 288, 4, 0, 0, 0, 0.00, 4, 32, 14608, 101.44),
+(633, 5, 288, 4, 0, 0, 0, 0.00, 4, 32, 14608, 101.44),
+(634, 2, 290, 4, 0, 0, 0, 0.00, 4, 32, 14608, 101.44),
+(635, 5, 290, 4, 0, 0, 0, 0.00, 4, 32, 14608, 101.44);
 
 -- --------------------------------------------------------
 
@@ -173,14 +186,14 @@ INSERT INTO `inventario_insumos` (`id_insumo`, `tipo`, `articulo`, `unidad`, `ca
 (15, 'Pega', 'Pega Hercules (Amarilla)', 'Galon', 100.00, 50.00, 1),
 (16, 'Tirro', 'Tirro 1\"', 'Unidad', 100.00, 50.00, 1),
 (17, 'Tirro', 'Tirro 2\"', 'Unidad', 100.00, 50.00, 1),
-(18, 'Cinta', 'Cinta Plástica de 2\"', 'Unidad', 100.00, 50.00, 1),
+(18, 'cinta', 'Cinta Plástica de 2\"', 'Unidad', 100.00, 50.00, 1),
 (19, 'Dicromato', 'Dicromato de Potacio', 'Unidad', 100.00, 50.00, 1),
 (20, 'Fleje', 'Fleje 1718', 'Rollo', 100.00, 50.00, 1),
 (21, 'Stretch', 'Stretch-23-micras', 'Kilogramo', 100.00, 50.00, 1),
 (22, 'Cap-Sheet', 'Cap-Sheet', 'Kilogramo', 100.00, 50.00, 1),
 (23, 'Plástico Termo', 'TERMOENCOGIBLE DE 24\"', 'Kilogramo', 100.00, 50.00, 1),
 (24, 'Plástico Termo', 'TERMOENCOGIBLE DE 28\"', 'Kilogramo', 100.00, 50.00, 1),
-(25, 'prueba', 'ggg', 'string', 100.00, 50.00, 1);
+(25, 'prueba', 'ggg', 'string', 100.00, 50.00, 0);
 
 -- --------------------------------------------------------
 
@@ -389,8 +402,14 @@ CREATE TABLE `produccion_justificantes` (
 --
 
 INSERT INTO `produccion_justificantes` (`id_cabecera`, `modelo_molde`, `id_justificante`) VALUES
-(274, 6, 2),
-(275, 6, 2);
+(286, 5, 1),
+(286, 6, 2),
+(287, 1, 1),
+(287, 4, 3),
+(288, 2, 2),
+(288, 5, 4),
+(290, 2, 2),
+(290, 5, 4);
 
 -- --------------------------------------------------------
 
@@ -525,25 +544,25 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `gestion_productiva_cabecera`
 --
 ALTER TABLE `gestion_productiva_cabecera`
-  MODIFY `id_cabecera` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=277;
+  MODIFY `id_cabecera` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=291;
 
 --
 -- AUTO_INCREMENT de la tabla `gestion_productiva_entrada`
 --
 ALTER TABLE `gestion_productiva_entrada`
-  MODIFY `id_entrada` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=226;
+  MODIFY `id_entrada` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=254;
 
 --
 -- AUTO_INCREMENT de la tabla `gestion_productiva_resultado`
 --
 ALTER TABLE `gestion_productiva_resultado`
-  MODIFY `id_resultado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=275;
+  MODIFY `id_resultado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=288;
 
 --
 -- AUTO_INCREMENT de la tabla `gestion_productiva_salida`
 --
 ALTER TABLE `gestion_productiva_salida`
-  MODIFY `id_eficiencia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=612;
+  MODIFY `id_eficiencia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=636;
 
 --
 -- AUTO_INCREMENT de la tabla `inventario_insumos`

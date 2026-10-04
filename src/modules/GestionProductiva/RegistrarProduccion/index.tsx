@@ -59,10 +59,11 @@ export const RegistrarProduccion = () => {
     { entradas: [{ idMolde: 0, cantEnvases: 0, horaEntrada: "" }] },
     { entradas: [{ idMolde: 0, cantEnvases: 0, horaEntrada: "" }] },
   ]);
-  const [totalPaletas, setTotalPaletas] = useState(0);
+  const [totalPaletasDecoradas, setTotalPaletasDecoradas] = useState(0);
   const [modelosForm, setModelosForm] = useState<ModeloForm[]>([]);
   const [observaciones, setObservaciones] = useState("");
   const [error, setError] = useState("");
+  const [guardando, setGuardando] = useState(false);
 
   useEffect(() => {
     const cargarMoldes = async () => {
@@ -263,52 +264,45 @@ export const RegistrarProduccion = () => {
     );
   };
 
+  // Ahora solo se limitan las paletasDecoradas (no la producción lisa)
   const limitarModelos = (actuales: ModeloForm[], limite: number) => {
     let restantes = limite;
     return actuales.map((modelo) => {
       const paletasDecoradas = Math.min(modelo.paletasDecoradas, restantes);
       restantes -= paletasDecoradas;
-      const produccionLisa = Math.min(modelo.produccionLisa, restantes);
-      restantes -= produccionLisa;
-      return { ...modelo, paletasDecoradas, produccionLisa };
+      // La produccionLisa NO se limita
+      return { ...modelo, paletasDecoradas };
     });
   };
 
-  const actualizarTotalPaletas = (value: string) => {
+  const actualizarTotalPaletasDecoradas = (value: string) => {
     const limite = Math.max(0, Number(value) || 0);
-    setTotalPaletas(limite);
+    setTotalPaletasDecoradas(limite);
     setModelosForm((actuales) => limitarModelos(actuales, limite));
   };
 
-  const obtenerMaximoPaletas = (
-    index: number,
-    campo: "paletasDecoradas" | "produccionLisa",
-  ) => {
-    const otrasPaletas = modelosForm.reduce(
+  // Ahora solo considera las paletasDecoradas (no la producción lisa)
+  const obtenerMaximoPaletasDecoradas = (index: number) => {
+    const otrasPaletasDecoradas = modelosForm.reduce(
       (total, modelo, modeloIndex) =>
-        total +
-        (modeloIndex === index
-          ? modelo[
-              campo === "paletasDecoradas"
-                ? "produccionLisa"
-                : "paletasDecoradas"
-            ]
-          : modelo.paletasDecoradas + modelo.produccionLisa),
+        total + (modeloIndex === index ? 0 : modelo.paletasDecoradas),
       0,
     );
-    return Math.max(0, totalPaletas - otrasPaletas);
+    return Math.max(0, totalPaletasDecoradas - otrasPaletasDecoradas);
   };
 
-  const cambiarPaletas = (
-    index: number,
-    campo: "paletasDecoradas" | "produccionLisa",
-    value: string,
-  ) => {
+  const cambiarPaletasDecoradas = (index: number, value: string) => {
     const cantidad = Math.max(
       0,
-      Math.min(Number(value) || 0, obtenerMaximoPaletas(index, campo)),
+      Math.min(Number(value) || 0, obtenerMaximoPaletasDecoradas(index)),
     );
-    actualizarModelo(index, { [campo]: cantidad });
+    actualizarModelo(index, { paletasDecoradas: cantidad });
+  };
+
+  // La producción lisa no tiene límite superior
+  const cambiarProduccionLisa = (index: number, value: string) => {
+    const cantidad = Math.max(0, Number(value) || 0);
+    actualizarModelo(index, { produccionLisa: cantidad });
   };
 
   const handleReset = () => {
@@ -323,7 +317,7 @@ export const RegistrarProduccion = () => {
       { entradas: [{ idMolde: 0, cantEnvases: 0, horaEntrada: "" }] },
       { entradas: [{ idMolde: 0, cantEnvases: 0, horaEntrada: "" }] },
     ]);
-    setTotalPaletas(0);
+    setTotalPaletasDecoradas(0);
     setModelosForm([]);
     setObservaciones("");
     setError("");
@@ -339,13 +333,16 @@ export const RegistrarProduccion = () => {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    if (guardando) return;
+
     if (
       !fecha ||
       !tecnico ||
       !turno ||
       !grupo ||
       !tipoTurno ||
-      totalPaletas <= 0
+      totalPaletasDecoradas <= 0
     ) {
       setError("Completa todos los campos obligatorios.");
       return;
@@ -439,6 +436,7 @@ export const RegistrarProduccion = () => {
     const eficienciaProductiva = 100 - deficienciaProductiva;
 
     try {
+      setGuardando(true);
       const response = await fetch("http://127.0.0.1:8000/produccion/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -484,6 +482,8 @@ export const RegistrarProduccion = () => {
           ? submitError.message
           : "Error al registrar producción.",
       );
+    } finally {
+      setGuardando(false);
     }
   };
 
@@ -768,20 +768,22 @@ export const RegistrarProduccion = () => {
           </div>
         </fieldset>
 
-        {/* === TOTAL DE PALETAS === */}
+        {/* === TOTAL DE PALETAS DECORADAS === */}
         <fieldset className={styles.fieldset}>
-          <legend className={styles.legend}>Total de Paletas</legend>
+          <legend className={styles.legend}>Total de Paletas Decoradas</legend>
           <div className={styles.inputWrapper}>
-            <label htmlFor="totalPaletas">
-              Número Total de Paletas{" "}
+            <label htmlFor="totalPaletasDecoradas">
+              Número Total de Paletas Decoradas{" "}
               <span className={styles.requireSymbol}>*</span>
             </label>
             <input
-              id="totalPaletas"
+              id="totalPaletasDecoradas"
               type="number"
               min="0"
-              value={totalPaletas || ""}
-              onChange={(event) => actualizarTotalPaletas(event.target.value)}
+              value={totalPaletasDecoradas || ""}
+              onChange={(event) =>
+                actualizarTotalPaletasDecoradas(event.target.value)
+              }
               required
             />
           </div>
@@ -797,10 +799,10 @@ export const RegistrarProduccion = () => {
             justificantes={justificantes}
             cargandoMoldes={cargandoMoldes}
             cargandoJustificantes={cargandoJustificantes}
-            maximoDecoradas={obtenerMaximoPaletas(index, "paletasDecoradas")}
-            maximoLisa={obtenerMaximoPaletas(index, "produccionLisa")}
+            maximoDecoradas={obtenerMaximoPaletasDecoradas(index)}
             actualizarModelo={actualizarModelo}
-            cambiarPaletas={cambiarPaletas}
+            cambiarPaletasDecoradas={cambiarPaletasDecoradas}
+            cambiarProduccionLisa={cambiarProduccionLisa}
             agregarJustificante={agregarJustificante}
             eliminarJustificante={eliminarJustificante}
             actualizarJustificante={actualizarJustificante}
@@ -897,7 +899,9 @@ export const RegistrarProduccion = () => {
 
           {/* Paletas por Molde - Resumen */}
           <div className={styles.paletasPorMolde}>
-            <h4 className={styles.paletasPorMoldeTitle}>Paletas por Molde</h4>
+            <h4 className={styles.paletasPorMoldeTitle}>
+              Total de Paletas por cada Molde
+            </h4>
             <div className={styles.paletasPorMoldeGrid}>
               {modelosForm.map((modelo, index) => {
                 const molde = moldes.find((m) => m.idMolde === modelo.idMolde);
@@ -966,13 +970,18 @@ export const RegistrarProduccion = () => {
       {error && <p className={styles.error}>{error}</p>}
 
       <div className={styles.buttonWrapper}>
-        <button type="submit" className={styles.saveButton}>
-          Guardar
+        <button
+          type="submit"
+          className={styles.saveButton}
+          disabled={guardando}
+        >
+          {guardando ? "Guardando..." : "Guardar"}
         </button>
         <button
           type="button"
           className={styles.resetButton}
           onClick={handleReset}
+          disabled={guardando}
         >
           Resetear
         </button>
@@ -989,13 +998,9 @@ type ModeloProduccionProps = {
   cargandoMoldes: boolean;
   cargandoJustificantes: boolean;
   maximoDecoradas: number;
-  maximoLisa: number;
   actualizarModelo: (index: number, changes: Partial<ModeloForm>) => void;
-  cambiarPaletas: (
-    index: number,
-    campo: "paletasDecoradas" | "produccionLisa",
-    value: string,
-  ) => void;
+  cambiarPaletasDecoradas: (index: number, value: string) => void;
+  cambiarProduccionLisa: (index: number, value: string) => void;
   agregarJustificante: (modeloIndex: number) => void;
   eliminarJustificante: (
     modeloIndex: number,
@@ -1016,8 +1021,8 @@ const ModeloProduccion = ({
   cargandoMoldes,
   cargandoJustificantes,
   maximoDecoradas,
-  maximoLisa,
-  cambiarPaletas,
+  cambiarPaletasDecoradas,
+  cambiarProduccionLisa,
   agregarJustificante,
   eliminarJustificante,
   actualizarJustificante,
@@ -1064,14 +1069,14 @@ const ModeloProduccion = ({
           title="Paletas Decoradas"
           value={modelo.paletasDecoradas}
           max={maximoDecoradas}
-          onChange={(value) => cambiarPaletas(index, "paletasDecoradas", value)}
+          onChange={(value) => cambiarPaletasDecoradas(index, value)}
           resumen={resumen(modelo.paletasDecoradas)}
         />
         <GrupoProduccion
           title="Producción Lisa"
           value={modelo.produccionLisa}
-          max={maximoLisa}
-          onChange={(value) => cambiarPaletas(index, "produccionLisa", value)}
+          max={undefined}
+          onChange={(value) => cambiarProduccionLisa(index, value)}
           resumen={resumen(modelo.produccionLisa)}
         />
       </div>
@@ -1146,7 +1151,7 @@ const ModeloProduccion = ({
 type GrupoProduccionProps = {
   title: string;
   value: number;
-  max: number;
+  max: number | undefined;
   onChange: (value: string) => void;
   resumen: { camadas: number; envases: number; gruesas: number };
 };
@@ -1166,7 +1171,7 @@ const GrupoProduccion = ({
       <input
         type="number"
         min="0"
-        max={Math.max(0, max)}
+        max={max !== undefined ? Math.max(0, max) : undefined}
         value={value || ""}
         onChange={(event) => onChange(event.target.value)}
       />

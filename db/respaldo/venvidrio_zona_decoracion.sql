@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 14-09-2026 a las 22:57:49
+-- Tiempo de generación: 04-10-2026 a las 20:31:58
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -44,14 +44,6 @@ CREATE TABLE `gestion_productiva_cabecera` (
   `tipo_turno` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Volcado de datos para la tabla `gestion_productiva_cabecera`
---
-
-INSERT INTO `gestion_productiva_cabecera` (`id_cabecera`, `fecha`, `turno`, `tecnico`, `cant_envases_d1`, `cant_envases_d2`, `cant_envases_d3`, `cant_envases_d4`, `total_envases`, `total_gruesas`, `grupo`, `tipo_turno`) VALUES
-(274, '2026-09-10', 1, 'Miguel Bethancourt', 26400, 26400, 0, 0, 52800, 366.67, 'A', '3 Turnos'),
-(275, '2026-09-10', 1, 'Daniel Pérez', 26400, 26400, 0, 0, 52800, 366.67, 'A', '3 Turnos');
-
 -- --------------------------------------------------------
 
 --
@@ -67,16 +59,6 @@ CREATE TABLE `gestion_productiva_entrada` (
   `hora_entrada` varchar(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Volcado de datos para la tabla `gestion_productiva_entrada`
---
-
-INSERT INTO `gestion_productiva_entrada` (`id_entrada`, `id_cabecera`, `maquina`, `id_molde`, `cant_envases`, `hora_entrada`) VALUES
-(182, 275, 1, 6, 26400, '10:10'),
-(183, 275, 2, 6, 26400, '10:10'),
-(186, 274, 1, 6, 26400, '09:17'),
-(187, 274, 2, 6, 26400, '09:17');
-
 -- --------------------------------------------------------
 
 --
@@ -87,19 +69,15 @@ CREATE TABLE `gestion_productiva_resultado` (
   `id_resultado` int(11) NOT NULL,
   `id_cabecera` int(11) NOT NULL,
   `total_gruesas_lisas` decimal(12,2) DEFAULT 0.00,
+  `total_envases_lisos` int(11) DEFAULT 0,
   `total_gruesas_decoradas` decimal(12,2) DEFAULT 0.00,
+  `total_envases_decorados` int(11) DEFAULT 0,
+  `total_envases_perdidos` int(11) DEFAULT 0,
+  `total_gruesas_perdidas` decimal(12,2) DEFAULT 0.00,
   `eficiencia_productiva` decimal(5,2) DEFAULT 0.00,
   `deficiencia_productiva` decimal(5,2) DEFAULT 0.00,
   `observaciones` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `gestion_productiva_resultado`
---
-
-INSERT INTO `gestion_productiva_resultado` (`id_resultado`, `id_cabecera`, `total_gruesas_lisas`, `total_gruesas_decoradas`, `eficiencia_productiva`, `deficiencia_productiva`, `observaciones`) VALUES
-(272, 274, 24.44, 342.22, 93.33, 6.67, ''),
-(273, 275, 24.44, 317.78, 86.67, 13.33, '');
 
 -- --------------------------------------------------------
 
@@ -122,14 +100,6 @@ CREATE TABLE `gestion_productiva_salida` (
   `cant_gruesas_decoradas` decimal(10,2) DEFAULT 0.00
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Volcado de datos para la tabla `gestion_productiva_salida`
---
-
-INSERT INTO `gestion_productiva_salida` (`id_eficiencia`, `modelo_molde`, `id_cabecera`, `total_paletas_molde`, `cant_paletas_lisas`, `cant_camadas_lisas`, `cant_envases_lisas`, `cant_gruesas_lisas`, `cant_paletas_decoradas`, `cant_camadas_decoradas`, `cant_envases_decoradas`, `cant_gruesas_decoradas`) VALUES
-(590, 6, 275, 14, 1, 8, 3520, 24.44, 13, 104, 45760, 317.78),
-(592, 6, 274, 15, 1, 8, 3520, 24.44, 14, 112, 49280, 342.22);
-
 -- --------------------------------------------------------
 
 --
@@ -151,31 +121,31 @@ CREATE TABLE `inventario_insumos` (
 --
 
 INSERT INTO `inventario_insumos` (`id_insumo`, `tipo`, `articulo`, `unidad`, `cantidad_actual`, `cantidad_minima`, `estado`) VALUES
-(1, 'Pintura', 'SM 00-0200VT38 Blanco', 'Kilogramo', 120.55, 0.00, 1),
-(2, 'Pintura', 'SM 00-2208  - VT azul pepsi', 'Kilogramo', 600.00, 100.00, 1),
-(3, 'Pintura', 'SM 00-8255  - TA Rojo', 'Kilogramo', 0.00, 0.00, 1),
-(4, 'Malla', 'Malla 230', 'Rollo', 0.00, 0.00, 1),
-(5, 'Malla', 'Malla 220', 'Rollo', 0.00, 0.00, 1),
-(6, 'Malla', 'Malla 200', 'Rollo', 0.00, 0.00, 1),
-(7, 'Malla', 'Malla 165', 'Rollo', 0.00, 0.00, 1),
-(8, 'Malla', 'Malla 180', 'Rollo', 0.00, 0.00, 1),
-(9, 'Malla', 'Malla 160', 'Rollo', 0.00, 0.00, 1),
-(10, 'Malla', 'Malla 325', 'Rollo', 0.00, 0.00, 1),
-(11, 'Goma', 'Goma - Decoracion', 'Und', 0.00, 0.00, 1),
-(12, 'Emulsion', 'Emulsion Foteco', 'Unidad (4Kg)', 0.00, 0.00, 1),
-(13, 'Emulsion', 'Emulsion Ferro', 'Unidad (10Kg)', 0.00, 0.00, 1),
-(14, 'Lecitina', 'Lecitina de Soya', 'Pipa', 0.00, 0.00, 1),
-(15, 'Pega', 'Pega Hercules (Amarilla)', 'Galon', 0.00, 0.00, 1),
-(16, 'Tirro', 'Tirro 1\"', 'Unidad', 0.00, 0.00, 1),
-(17, 'Tirro', 'Tirro 2\"', 'Unidad', 0.00, 0.00, 1),
-(18, 'Cinta', 'Cinta Plástica de 2\"', 'Unidad', 0.00, 0.00, 1),
-(19, 'Dicromato', 'Dicromato de Potacio', 'Unidad', 0.00, 0.00, 1),
-(20, 'Fleje', 'Fleje 1718', 'Rollo', 0.00, 0.00, 1),
-(21, 'Stretch', 'Stretch-23-micras', 'Kilogramo', 0.00, 0.00, 1),
-(22, 'Cap-Sheet', 'Cap-Sheet', 'Kilogramo', 0.00, 49.95, 1),
-(23, 'Plástico Termo', 'TERMOENCOGIBLE DE 24\"', 'Kilogramo', 0.00, 0.00, 1),
-(24, 'Plástico Termo', 'TERMOENCOGIBLE DE 28\"', 'Kilogramo', 0.00, 0.00, 1),
-(25, 'prueba', 'ggg', 'string', 500.00, 5.75, 1);
+(1, 'Pintura', 'SM 00-0200VT38 Blanco', 'Kilogramo', 100.00, 50.00, 1),
+(2, 'Pintura', 'SM 00-2208  - VT azul pepsi', 'Kilogramo', 100.00, 50.00, 1),
+(3, 'Pintura', 'SM 00-8255  - TA Rojo', 'Kilogramo', 100.00, 50.00, 1),
+(4, 'Malla', 'Malla 230', 'Rollo', 100.00, 50.00, 1),
+(5, 'Malla', 'Malla 220', 'Rollo', 100.00, 50.00, 1),
+(6, 'Malla', 'Malla 200', 'Rollo', 100.00, 50.00, 1),
+(7, 'Malla', 'Malla 165', 'Rollo', 100.00, 50.00, 1),
+(8, 'Malla', 'Malla 180', 'Rollo', 100.00, 50.00, 1),
+(9, 'Malla', 'Malla 160', 'Rollo', 100.00, 50.00, 1),
+(10, 'Malla', 'Malla 325', 'Rollo', 100.00, 50.00, 1),
+(11, 'Goma', 'Goma - Decoracion', 'Und', 100.00, 50.00, 1),
+(12, 'Emulsion', 'Emulsion Foteco', 'Unidad (4Kg)', 100.00, 50.00, 1),
+(13, 'Emulsion', 'Emulsion Ferro', 'Unidad (10Kg)', 100.00, 50.00, 1),
+(14, 'Lecitina', 'Lecitina de Soya', 'Pipa', 100.00, 50.00, 1),
+(15, 'Pega', 'Pega Hercules (Amarilla)', 'Galon', 100.00, 50.00, 1),
+(16, 'Tirro', 'Tirro 1\"', 'Unidad', 100.00, 50.00, 1),
+(17, 'Tirro', 'Tirro 2\"', 'Unidad', 100.00, 50.00, 1),
+(18, 'cinta', 'Cinta Plástica de 2\"', 'Unidad', 100.00, 50.00, 1),
+(19, 'Dicromato', 'Dicromato de Potacio', 'Unidad', 100.00, 50.00, 1),
+(20, 'Fleje', 'Fleje 1718', 'Rollo', 100.00, 50.00, 1),
+(21, 'Stretch', 'Stretch-23-micras', 'Kilogramo', 100.00, 50.00, 1),
+(22, 'Cap-Sheet', 'Cap-Sheet', 'Kilogramo', 100.00, 50.00, 1),
+(23, 'Plástico Termo', 'TERMOENCOGIBLE DE 24\"', 'Kilogramo', 100.00, 50.00, 1),
+(24, 'Plástico Termo', 'TERMOENCOGIBLE DE 28\"', 'Kilogramo', 100.00, 50.00, 1),
+(25, 'prueba', 'ggg', 'string', 100.00, 50.00, 0);
 
 -- --------------------------------------------------------
 
@@ -200,7 +170,9 @@ CREATE TABLE `inventario_insumos_entrada` (
 INSERT INTO `inventario_insumos_entrada` (`id_inventario_entrada`, `id_insumo`, `fecha`, `encargado`, `turno`, `grupo`, `cantidad`) VALUES
 (1, 1, '2026-09-13 13:50:29', 'string', 'string', 'string', 5.05),
 (2, 2, '2026-09-13 14:15:49', 'string', 'string', 'string', 50.80),
-(3, 1, '2026-09-14 15:22:31', '222', 'Turno 1', 'Grupo A', 150.55);
+(3, 1, '2026-09-14 15:22:31', '222', 'Turno 1', 'Grupo A', 150.55),
+(4, 22, '2026-09-25 18:30:30', '222', 'Turno 1', 'Grupo A', 1.00),
+(5, 22, '2026-09-25 18:31:44', '222', 'Turno 1', 'Grupo A', 50.00);
 
 -- --------------------------------------------------------
 
@@ -225,7 +197,8 @@ CREATE TABLE `inventario_insumos_salida` (
 INSERT INTO `inventario_insumos_salida` (`id_inventario_salida`, `id_insumo`, `fecha`, `encargado`, `turno`, `grupo`, `cantidad`) VALUES
 (1, 1, '2026-09-13 13:51:40', 'string', 'string', 'string', 1.05),
 (2, 2, '2026-09-13 14:16:20', 'string', 'string', 'string', 10.86),
-(3, 1, '2026-09-14 15:24:57', '222', 'Turno 2', 'Grupo A', 34.00);
+(3, 1, '2026-09-14 15:24:57', '222', 'Turno 2', 'Grupo A', 34.00),
+(4, 22, '2026-09-25 18:32:16', '222', 'Turno 1', 'Grupo A', 2.00);
 
 -- --------------------------------------------------------
 
@@ -245,7 +218,7 @@ CREATE TABLE `justificantes` (
 
 INSERT INTO `justificantes` (`id_justificante`, `etiqueta`, `descripcion`) VALUES
 (1, 'Desperfecto en el decorado', 'Pérdida por mal decorado de la máquina, envases con imperfecciones visuales'),
-(2, 'Rotura por malcocido', 'Envases quebrados debido a una cocción deficiente en el proceso de fabricación'),
+(2, 'Rotura por mal cocido', 'Envases quebrados debido a una cocción deficiente en el proceso de fabricación'),
 (3, 'Falla mecánica de la máquina', 'Parada de producción ocasionada por avería o mal funcionamiento del equipo'),
 (4, 'Material defectuoso', 'Pérdida originada por lote de materia prima en mal estado o fuera de especificación'),
 (5, 'Error de operario', 'Pérdida atribuida a manipulación incorrecta del equipo o del proceso por parte del personal');
@@ -324,32 +297,6 @@ CREATE TABLE `permisos_usuarios` (
 --
 
 INSERT INTO `permisos_usuarios` (`id_permisou`, `id_usuario`, `id_permisom`) VALUES
-(208, 10, 5),
-(209, 10, 6),
-(210, 10, 11),
-(211, 10, 12),
-(212, 10, 13),
-(213, 10, 14),
-(214, 10, 1),
-(215, 10, 2),
-(216, 10, 3),
-(217, 10, 7),
-(218, 10, 4),
-(219, 10, 28),
-(220, 10, 29),
-(221, 11, 1),
-(222, 11, 2),
-(223, 11, 3),
-(224, 11, 7),
-(225, 11, 4),
-(226, 11, 5),
-(227, 11, 6),
-(228, 11, 11),
-(229, 11, 12),
-(230, 11, 13),
-(231, 11, 14),
-(232, 11, 28),
-(233, 11, 29),
 (234, 12, 1),
 (235, 12, 2),
 (236, 12, 3),
@@ -362,7 +309,33 @@ INSERT INTO `permisos_usuarios` (`id_permisou`, `id_usuario`, `id_permisom`) VAL
 (243, 12, 13),
 (244, 12, 14),
 (245, 12, 29),
-(246, 12, 28);
+(246, 12, 28),
+(283, 10, 5),
+(284, 10, 6),
+(285, 10, 11),
+(286, 10, 12),
+(287, 10, 13),
+(288, 10, 1),
+(289, 10, 2),
+(290, 10, 3),
+(291, 10, 4),
+(292, 10, 28),
+(293, 10, 7),
+(294, 10, 29),
+(295, 10, 14),
+(333, 11, 1),
+(334, 11, 2),
+(335, 11, 3),
+(336, 11, 7),
+(337, 11, 5),
+(338, 11, 6),
+(339, 11, 11),
+(340, 11, 12),
+(341, 11, 13),
+(342, 11, 14),
+(343, 11, 28),
+(344, 11, 29),
+(345, 11, 4);
 
 -- --------------------------------------------------------
 
@@ -375,14 +348,6 @@ CREATE TABLE `produccion_justificantes` (
   `modelo_molde` int(11) NOT NULL,
   `id_justificante` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `produccion_justificantes`
---
-
-INSERT INTO `produccion_justificantes` (`id_cabecera`, `modelo_molde`, `id_justificante`) VALUES
-(274, 6, 2),
-(275, 6, 2);
 
 -- --------------------------------------------------------
 
@@ -517,25 +482,25 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `gestion_productiva_cabecera`
 --
 ALTER TABLE `gestion_productiva_cabecera`
-  MODIFY `id_cabecera` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=276;
+  MODIFY `id_cabecera` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=278;
 
 --
 -- AUTO_INCREMENT de la tabla `gestion_productiva_entrada`
 --
 ALTER TABLE `gestion_productiva_entrada`
-  MODIFY `id_entrada` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=188;
+  MODIFY `id_entrada` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=236;
 
 --
 -- AUTO_INCREMENT de la tabla `gestion_productiva_resultado`
 --
 ALTER TABLE `gestion_productiva_resultado`
-  MODIFY `id_resultado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=274;
+  MODIFY `id_resultado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=276;
 
 --
 -- AUTO_INCREMENT de la tabla `gestion_productiva_salida`
 --
 ALTER TABLE `gestion_productiva_salida`
-  MODIFY `id_eficiencia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=593;
+  MODIFY `id_eficiencia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=619;
 
 --
 -- AUTO_INCREMENT de la tabla `inventario_insumos`
@@ -547,13 +512,13 @@ ALTER TABLE `inventario_insumos`
 -- AUTO_INCREMENT de la tabla `inventario_insumos_entrada`
 --
 ALTER TABLE `inventario_insumos_entrada`
-  MODIFY `id_inventario_entrada` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_inventario_entrada` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `inventario_insumos_salida`
 --
 ALTER TABLE `inventario_insumos_salida`
-  MODIFY `id_inventario_salida` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_inventario_salida` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `justificantes`
@@ -577,7 +542,7 @@ ALTER TABLE `permisos_modulos`
 -- AUTO_INCREMENT de la tabla `permisos_usuarios`
 --
 ALTER TABLE `permisos_usuarios`
-  MODIFY `id_permisou` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=247;
+  MODIFY `id_permisou` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=346;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`

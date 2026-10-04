@@ -5,7 +5,7 @@ Control de la Producción
     - Vista:
 
       - Se van a ver enlistados los movimientos de Producción Decorada.
-      - Por ahora no hay ningún filtro, pero si un paginado de máximo 50 registros (obviamente mostrar los más recientes primero).
+      - Por ahora no hay ningún filtro para vision, pero si un paginado de máximo 50 registros (obviamente mostrar los más recientes primero), ademas de una opcion de descarga excel donde si se encuentra un filtro de fecha.
       - Al seleccionar un registro, se carga el módulo de editar con esos datos
 
     -  Sub módulo de Registrar / Editar:
@@ -61,8 +61,8 @@ Control de la Producción
 
 
 
-
-
+- notificaciones de perdida mayor a la acordada, modificable
+- se desea agregar una meta de perdida y ganacia de produccion
 
 
 

@@ -1,0 +1,74 @@
+
+Ruta 1: Lisos por Fecha
+Endpoint: http://127.0.0.1:8000/api/rendimiento/lisos
+Método: GET
+
+Parámetros de consulta: desde, hasta
+Ejemplo: http://127.0.0.1:8000/api/rendimiento/lisos?desde=2026-09-01&hasta=2026-09-30
+
+Estructura de los datos que recibirá:
+{
+    "registrosLisos": [
+        {"fecha": "2026-09-08", "totalEnvasesLisos": 1800, "totalGruesasLisas": "6.24"},
+        {"fecha": "2026-09-09", "totalEnvasesLisos": 3200, "totalGruesasLisas": "11.50"}
+    ],
+    "totalEnvasesLisos": 5000,
+    "totalGruesasLisas": "17.74"
+}
+
+JSON (Respuesta en caso de error):
+{
+    "detail": "No se encontraron registros en el rango de fechas indicado."
+}
+
+
+---
+
+
+Ruta 2: Decorados por Fecha
+Endpoint: http://127.0.0.1:8000/api/rendimiento/decorados
+Método: GET
+
+Parámetros de consulta: desde, hasta
+Ejemplo: http://127.0.0.1:8000/api/rendimiento/decorados?desde=2026-09-01&hasta=2026-09-30
+
+Estructura de los datos que recibirá:
+{
+    "registrosDecorados": [
+        {"fecha": "2026-09-08", "totalEnvasesDecorados": 4800, "totalGruesasDecoradas": "1.73"},
+        {"fecha": "2026-09-09", "totalEnvasesDecorados": 2400, "totalGruesasDecoradas": "0.86"}
+    ],
+    "totalEnvasesDecorados": 7200,
+    "totalGruesasDecoradas": "2.59"
+}
+
+JSON (Respuesta en caso de error):
+{
+    "detail": "No se encontraron registros en el rango de fechas indicado."
+}
+
+
+---
+
+
+Ruta 3: Perdidos por Fecha
+Endpoint: http://127.0.0.1:8000/api/rendimiento/perdidos
+Método: GET
+
+Parámetros de consulta: desde, hasta
+Ejemplo: http://127.0.0.1:8000/api/rendimiento/perdidos?desde=2026-09-01&hasta=2026-09-30
+
+Estructura de los datos que recibirá:
+{
+    "registrosPerdidos": [
+        {"fecha": "2026-09-08", "totalEnvasesPerdidos": 2300, "totalGruesasPerdidas": "5.30"},
+        {"fecha": "2026-09-09", "totalEnvasesPerdidos": 1100, "totalGruesasPerdidas": "2.10"}
+    ],
+    "totalEnvasesPerdidos": 3400,
+    "totalGruesasPerdidas": "7.40"
+}
+
+JSON (Respuesta en caso de error):
+{
+    "detail": "No se encontraron registros en el rango de fechas indicado."
+}

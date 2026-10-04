@@ -231,8 +231,12 @@ JSON (Envía el Frontend):
     }
   ],
   "resultado": {
+    "totalEnvasesLisos": "1800",                # NUEVO
     "totalGruesasLisas": "6.24",
+    "totalEnvasesDecorados": "4800",            # NUEVO
     "totalGruesasDecoradas": "1.73",
+    "totalEnvasesPerdidos": "2300",             # NUEVO
+    "totalGruesasPerdidas": "5.3",              # NUEVO
     "eficienciaProductiva": "98.50",
     "deficienciaProductiva": "1.50",
     "observaciones": "Prueba de guardado omitiendo el ID 3 en moldes y justificantes."
@@ -440,8 +444,12 @@ Estructura de los datos que recibirá:
     }
   ],
   "resultado": {
+    "totalEnvasesLisos": "1800",                # NUEVO
     "totalGruesasLisas": "6.24",
+    "totalEnvasesDecorados": "4800",            # NUEVO
     "totalGruesasDecoradas": "1.73",
+    "totalEnvasesPerdidos": "2300",             # NUEVO
+    "totalGruesasPerdidas": "5.3",              # NUEVO
     "eficienciaProductiva": "98.50",
     "deficienciaProductiva": "1.50",
     "observaciones": "Prueba de guardado omitiendo el ID 3 en moldes y justificantes."

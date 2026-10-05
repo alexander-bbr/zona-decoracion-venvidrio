@@ -9,7 +9,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import type { DashboardDataItem, VisibleMetrics } from "../../../../types";
-import styles from "./Lineal.module.css";
+import styles from "./lineal.module.css";
 
 const COLORS = {
   produceLisa: "#3562d3",

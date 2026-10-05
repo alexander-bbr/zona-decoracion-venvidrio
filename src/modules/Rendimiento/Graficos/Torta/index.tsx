@@ -7,7 +7,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import type { DashboardDataItem, VisibleMetrics } from "../../../../types";
-import styles from "./Torta.module.css";
+import styles from "./torta.module.css";
 
 const COLORS = ["#3562d3", "#0a9c7d", "#f26c4f"];
 

@@ -3,7 +3,7 @@ import { Lineal } from "./Graficos/Lineal";
 import { Barras } from "./Graficos/Barras";
 import { Torta } from "./Graficos/Torta";
 import type { ChartType, DashboardDataItem, VisibleMetrics } from "../../types";
-import styles from "./Rendimiento.module.css";
+import styles from "./rendimiento.module.css";
 
 const chartOptions = [
   { value: "lineal" as const, label: "Lineal" },

@@ -9,7 +9,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import type { DashboardDataItem, VisibleMetrics } from "../../../../types";
-import styles from "./Barras.module.css";
+import styles from "./barras.module.css";
 
 const COLORS = {
   produceLisa: "#3562d3",

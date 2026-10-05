@@ -21,8 +21,8 @@ export const Torta = ({ data, visibleMetrics }: TortaProps) => {
 
   const slices = [
     {
-      name: "Producción Lisa",
-      value: visibleMetrics.produceLisa ? (latest?.produceLisa ?? 0) : 0,
+      name: "Envases Lisos",
+      value: visibleMetrics.envasesLisos ? (latest?.envasesLisos ?? 0) : 0,
     },
     {
       name: "Envases Decorados",
@@ -31,9 +31,9 @@ export const Torta = ({ data, visibleMetrics }: TortaProps) => {
         : 0,
     },
     {
-      name: "Envases con Defectos",
-      value: visibleMetrics.envasesDefectuosos
-        ? (latest?.envasesDefectuosos ?? 0)
+      name: "Envases Perdidos",
+      value: visibleMetrics.envasesPerdidos
+        ? (latest?.envasesPerdidos ?? 0)
         : 0,
     },
   ].filter((item) => item.value > 0);

@@ -4,9 +4,9 @@
 }
 
 .moduleTitle {
-  font-size: 28px;
+  font-size: 1.8rem;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--primary-text-color);
   margin: 0 0 4px 0;
 }
 
@@ -47,7 +47,7 @@
 
 .subNavTitle {
   font-weight: 600;
-  color: #1f2937;
+  color: var(--primary-text-color);
   font-size: 16px;
 }
 
@@ -70,7 +70,7 @@
 }
 
 .title {
-  color: #1f2937;
+  color: var(--primary-text-color);
   font-size: 1.5rem;
 }
 

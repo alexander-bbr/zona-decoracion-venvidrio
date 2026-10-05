@@ -12,9 +12,9 @@ import type { DashboardDataItem, VisibleMetrics } from "../../../../types";
 import styles from "./lineal.module.css";
 
 const COLORS = {
-  produceLisa: "#3562d3",
+  envasesLisos: "#3562d3",
   envasesDecorados: "#0a9c7d",
-  envasesDefectuosos: "#f26c4f",
+  envasesPerdidos: "#f26c4f",
 };
 
 type LinealProps = {
@@ -35,12 +35,12 @@ export const Lineal = ({ data, visibleMetrics }: LinealProps) => {
           <YAxis tick={{ fill: "#5a6777", fontSize: 12 }} />
           <Tooltip />
           <Legend verticalAlign="top" height={40} />
-          {visibleMetrics.produceLisa && (
+          {visibleMetrics.envasesLisos && (
             <Line
               type="monotone"
-              dataKey="produceLisa"
-              name="Producción Lisa"
-              stroke={COLORS.produceLisa}
+              dataKey="envasesLisos"
+              name="Envases Lisos"
+              stroke={COLORS.envasesLisos}
               strokeWidth={3}
               dot={false}
             />
@@ -55,12 +55,12 @@ export const Lineal = ({ data, visibleMetrics }: LinealProps) => {
               dot={false}
             />
           )}
-          {visibleMetrics.envasesDefectuosos && (
+          {visibleMetrics.envasesPerdidos && (
             <Line
               type="monotone"
-              dataKey="envasesDefectuosos"
-              name="Envases con Defectos"
-              stroke={COLORS.envasesDefectuosos}
+              dataKey="envasesPerdidos"
+              name="Envases Perdidos"
+              stroke={COLORS.envasesPerdidos}
               strokeWidth={3}
               dot={false}
             />

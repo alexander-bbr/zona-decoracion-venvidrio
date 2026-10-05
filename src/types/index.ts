@@ -1,14 +1,60 @@
 export type DashboardDataItem = {
   date: string;
-  produceLisa: number;
+  envasesLisos: number;
   envasesDecorados: number;
-  envasesDefectuosos: number;
+  envasesPerdidos: number;
 };
 
 export type VisibleMetrics = {
-  produceLisa: boolean;
+  envasesLisos: boolean;
   envasesDecorados: boolean;
-  envasesDefectuosos: boolean;
+  envasesPerdidos: boolean;
 };
 
 export type ChartType = "lineal" | "barras" | "torta";
+
+// Tipos para las respuestas de la API
+export type LisosRegistro = {
+  fecha: string;
+  totalEnvasesLisos: number;
+  totalGruesasLisas: string;
+};
+
+export type DecoradosRegistro = {
+  fecha: string;
+  totalEnvasesDecorados: number;
+  totalGruesasDecoradas: string;
+};
+
+export type PerdidosRegistro = {
+  fecha: string;
+  totalEnvasesPerdidos: number;
+  totalGruesasPerdidas: string;
+};
+
+export type LisosResponse = {
+  registrosLisos: LisosRegistro[];
+  totalEnvasesLisos: number;
+  totalGruesasLisas: string;
+};
+
+export type DecoradosResponse = {
+  registrosDecorados: DecoradosRegistro[];
+  totalEnvasesDecorados: number;
+  totalGruesasDecoradas: string;
+};
+
+export type PerdidosResponse = {
+  registrosPerdidos: PerdidosRegistro[];
+  totalEnvasesPerdidos: number;
+  totalGruesasPerdidas: string;
+};
+
+export type Totales = {
+  totalEnvasesLisos: number;
+  totalGruesasLisas: string;
+  totalEnvasesDecorados: number;
+  totalGruesasDecoradas: string;
+  totalEnvasesPerdidos: number;
+  totalGruesasPerdidas: string;
+};

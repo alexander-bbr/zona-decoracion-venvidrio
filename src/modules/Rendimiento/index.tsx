@@ -2,7 +2,15 @@ import { useMemo, useState, useEffect } from "react";
 import { Lineal } from "./Graficos/Lineal";
 import { Barras } from "./Graficos/Barras";
 import { Torta } from "./Graficos/Torta";
-import type { ChartType, DashboardDataItem, VisibleMetrics } from "../../types";
+import type {
+  ChartType,
+  DashboardDataItem,
+  VisibleMetrics,
+  Totales,
+  LisosResponse,
+  DecoradosResponse,
+  PerdidosResponse,
+} from "../../types";
 import styles from "./rendimiento.module.css";
 
 const chartOptions = [
@@ -12,48 +20,135 @@ const chartOptions = [
 ];
 
 const visibleMetricLabels: Record<keyof VisibleMetrics, string> = {
-  produceLisa: "Producción Lisa",
+  envasesLisos: "Envases Lisos",
   envasesDecorados: "Envases Decorados",
-  envasesDefectuosos: "Envases con Defectos",
+  envasesPerdidos: "Envases Perdidos",
+};
+
+//* Helpers para fechas por defecto (zona horaria Venezuela)
+const getTodayVenezuela = (): string => {
+  // 'en-CA' produce formato YYYY-MM-DD
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/Caracas",
+  }).format(new Date());
+};
+
+const getStartOfYearVenezuela = (): string => {
+  const today = getTodayVenezuela();
+  const year = today.slice(0, 4);
+  return `${year}-01-01`;
+};
+
+const EMPTY_TOTALES: Totales = {
+  totalEnvasesLisos: 0,
+  totalGruesasLisas: "0",
+  totalEnvasesDecorados: 0,
+  totalGruesasDecoradas: "0",
+  totalEnvasesPerdidos: 0,
+  totalGruesasPerdidas: "0",
 };
 
 export const Rendimiento = () => {
-  const [fromDate, setFromDate] = useState("2026-01-01");
-  const [toDate, setToDate] = useState("2026-07-05");
+  const [fromDate, setFromDate] = useState(getStartOfYearVenezuela());
+  const [toDate, setToDate] = useState(getTodayVenezuela());
   const [chartType, setChartType] = useState<ChartType>("lineal");
   const [visibleMetrics, setVisibleMetrics] = useState<VisibleMetrics>({
-    produceLisa: true,
+    envasesLisos: true,
     envasesDecorados: true,
-    envasesDefectuosos: true,
+    envasesPerdidos: true,
   });
 
   const [apiData, setApiData] = useState<DashboardDataItem[]>([]);
+  const [totales, setTotales] = useState<Totales>(EMPTY_TOTALES);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Buscar los datos cuando el usuario coloque las fechas
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
       setError(null);
 
+      const baseUrl = "http://127.0.0.1:8000/api/rendimiento";
+      const query = `desde=${fromDate}&hasta=${toDate}`;
+
       try {
-        const url = `http://127.0.0.1:8000/api/dashboard/datos?fromDate=${fromDate}&toDate=${toDate}`;
+        const [lisosRes, decoradosRes, perdidosRes] = await Promise.all([
+          fetch(`${baseUrl}/lisos?${query}`),
+          fetch(`${baseUrl}/decorados?${query}`),
+          fetch(`${baseUrl}/perdidos?${query}`),
+        ]);
 
-        const response = await fetch(url);
+        //* Si alguna falla con 404 (sin registros), la tratamos como vacía
+        const parseSafe = async <T,>(res: Response): Promise<T | null> => {
+          if (res.status === 404) return null;
+          if (!res.ok) {
+            throw new Error(`Error HTTP: ${res.status}`);
+          }
+          return (await res.json()) as T;
+        };
 
-        if (!response.ok) {
-          throw new Error(`Error HTTP: ${response.status}`);
-        }
+        const [lisos, decorados, perdidos] = await Promise.all([
+          parseSafe<LisosResponse>(lisosRes),
+          parseSafe<DecoradosResponse>(decoradosRes),
+          parseSafe<PerdidosResponse>(perdidosRes),
+        ]);
 
-        const result = await response.json();
+        //* Guardamos los totales (si no hay datos, quedan en 0)
+        setTotales({
+          totalEnvasesLisos: lisos?.totalEnvasesLisos ?? 0,
+          totalGruesasLisas: lisos?.totalGruesasLisas ?? "0",
+          totalEnvasesDecorados: decorados?.totalEnvasesDecorados ?? 0,
+          totalGruesasDecoradas: decorados?.totalGruesasDecoradas ?? "0",
+          totalEnvasesPerdidos: perdidos?.totalEnvasesPerdidos ?? 0,
+          totalGruesasPerdidas: perdidos?.totalGruesasPerdidas ?? "0",
+        });
 
-        //* La API devuelve { status: "string", data: [...] }, por lo que extraemos solo el array 'data', ya que es el que nos interesa
-        setApiData(result.data || []);
+        //* Combinamos por fecha
+        const map = new Map<string, DashboardDataItem>();
+
+        lisos?.registrosLisos.forEach((r) => {
+          map.set(r.fecha, {
+            date: r.fecha,
+            envasesLisos: r.totalEnvasesLisos,
+            envasesDecorados: 0,
+            envasesPerdidos: 0,
+          });
+        });
+
+        decorados?.registrosDecorados.forEach((r) => {
+          const existing = map.get(r.fecha);
+          if (existing) {
+            existing.envasesDecorados = r.totalEnvasesDecorados;
+          } else {
+            map.set(r.fecha, {
+              date: r.fecha,
+              envasesLisos: 0,
+              envasesDecorados: r.totalEnvasesDecorados,
+              envasesPerdidos: 0,
+            });
+          }
+        });
+
+        perdidos?.registrosPerdidos.forEach((r) => {
+          const existing = map.get(r.fecha);
+          if (existing) {
+            existing.envasesPerdidos = r.totalEnvasesPerdidos;
+          } else {
+            map.set(r.fecha, {
+              date: r.fecha,
+              envasesLisos: 0,
+              envasesDecorados: 0,
+              envasesPerdidos: r.totalEnvasesPerdidos,
+            });
+          }
+        });
+
+        setApiData(Array.from(map.values()));
       } catch (e) {
         console.error(`Error encontrado: ${e}`);
         setError(e instanceof Error ? e.message : "Error al cargar los datos");
         setApiData([]);
+        setTotales(EMPTY_TOTALES);
       } finally {
         setIsLoading(false);
       }
@@ -62,10 +157,7 @@ export const Rendimiento = () => {
     fetchData();
   }, [fromDate, toDate]);
 
-  //* Utilizamos useMemo por si necesitamos ordenar o transformar los datos
-  //? Revisar si es necesario, o si podemos eliminar esta función
   const chartData = useMemo(() => {
-    // Si quieres ordenar por fecha (por si acaso)
     return [...apiData].sort(
       (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
     );
@@ -94,7 +186,7 @@ export const Rendimiento = () => {
       </header>
 
       <section className={`${styles.dashboard} content`}>
-        {/* Panel de control */}
+        {/* === PANEL DE CONTROL === */}
         <section className={styles.controls}>
           {/* Fecha Desde */}
           <div className={styles.controlWrapper}>
@@ -173,7 +265,43 @@ export const Rendimiento = () => {
           ) : error ? (
             <p className={styles.error}>¡Parece que hay un Error!: {error}</p>
           ) : hasData ? (
-            <ChartComponent data={chartData} visibleMetrics={visibleMetrics} />
+            <>
+              <ChartComponent
+                data={chartData}
+                visibleMetrics={visibleMetrics}
+              />
+
+              {/* Totales del período */}
+              <div className={styles.totalesContainer}>
+                <p className={styles.totalItem}>
+                  <span className={styles.totalLabel}>Envases Lisos:</span>{" "}
+                  <strong>
+                    {totales.totalEnvasesLisos.toLocaleString("es-VE")}
+                  </strong>{" "}
+                  <span className={styles.totalGruesas}>
+                    ({totales.totalGruesasLisas} gruesas)
+                  </span>
+                </p>
+                <p className={styles.totalItem}>
+                  <span className={styles.totalLabel}>Envases Decorados:</span>{" "}
+                  <strong>
+                    {totales.totalEnvasesDecorados.toLocaleString("es-VE")}
+                  </strong>{" "}
+                  <span className={styles.totalGruesas}>
+                    ({totales.totalGruesasDecoradas} gruesas)
+                  </span>
+                </p>
+                <p className={styles.totalItem}>
+                  <span className={styles.totalLabel}>Envases Perdidos:</span>{" "}
+                  <strong>
+                    {totales.totalEnvasesPerdidos.toLocaleString("es-VE")}
+                  </strong>{" "}
+                  <span className={styles.totalGruesas}>
+                    ({totales.totalGruesasPerdidas} gruesas)
+                  </span>
+                </p>
+              </div>
+            </>
           ) : (
             <p className={styles.noData}>
               No hay datos para el período seleccionado. Ajusta las fechas.

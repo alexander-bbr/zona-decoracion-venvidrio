@@ -4,9 +4,9 @@
   padding-bottom: 16px;
 }
 .moduleTitle {
-  font-size: 28px;
+  font-size: 1.8rem;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--primary-text-color);
   margin: 0 0 4px 0;
 }
 .moduleSubtitle {
@@ -18,16 +18,17 @@
 /* Dashboard */
 .dashboard {
   margin: auto;
-  max-width: 85%;
-  display: grid;
-  gap: 18px;
-  padding: 24px;
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 2rem 1rem 2.5rem;
   border-radius: 16px;
   background: var(--third-text-color);
   box-shadow: 0 20px 55px rgba(20, 30, 60, 0.08);
 }
 
-/* Panel de Control */
+/* === PANEL DE CONTROL === */
 .controls {
   display: flex;
   flex-wrap: wrap;
@@ -67,7 +68,7 @@
   color: var(--secondary-text-color);
 }
 
-/* Estadísticas */
+/* Estadística */
 .chartArea {
   margin-top: 1rem;
   padding: 0 1rem;
@@ -75,16 +76,44 @@
 }
 .chartTitle {
   text-align: center;
-  font-size: 1.3rem;
+  font-size: 1.7rem;
+  font-weight: 600;
+  color: var(--primary-text-color);
 }
 
 .loading,
 .error,
 .noData {
   display: flex;
-  height: 50%;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  margin-top: 5rem;
+
   color: var(--secondary-text-color);
   font-size: 1rem;
+}
+
+/* === TOTALES DEL PERÍODO === */
+.totalesContainer {
+  border-top: 1px solid rgba(53, 116, 211, 0.484);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 1.3rem 0.7rem;
+  margin-top: 2rem;
+  padding: 2rem 2rem 0rem;
+}
+.totalItem {
+  margin: 0;
+  font-size: 0.98rem;
+  color: var(--primary-text-color);
+}
+.totalLabel {
+  color: var(--secondary-text-color);
+}
+.totalGruesas {
+  color: var(--secondary-text-color);
+  font-size: 0.88rem;
 }

@@ -2,8 +2,6 @@
 
 ## Rendimiento
 
-  - Conectar con el nuevo endpoint
-  - Hacer que el input de fecha hasta marque siempre por defecto la fecha del día de hoy.
   - Colocar un límite de fecha en el campo de fecha hasta, para que no se puedan colocar fechas futuras.
   - Hacer el submódulo del profesor
   - Hacer el submódulo de las metas

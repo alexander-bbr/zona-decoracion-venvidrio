@@ -12,9 +12,9 @@ import type { DashboardDataItem, VisibleMetrics } from "../../../../types";
 import styles from "./barras.module.css";
 
 const COLORS = {
-  produceLisa: "#3562d3",
+  envasesLisos: "#3562d3",
   envasesDecorados: "#0a9c7d",
-  envasesDefectuosos: "#f26c4f",
+  envasesPerdidos: "#f26c4f",
 };
 
 type BarrasProps = {
@@ -35,11 +35,11 @@ export const Barras = ({ data, visibleMetrics }: BarrasProps) => {
           <YAxis tick={{ fill: "#5a6777", fontSize: 12 }} />
           <Tooltip />
           <Legend verticalAlign="top" height={40} />
-          {visibleMetrics.produceLisa && (
+          {visibleMetrics.envasesLisos && (
             <Bar
-              dataKey="produceLisa"
-              name="Producción Lisa"
-              fill={COLORS.produceLisa}
+              dataKey="envasesLisos"
+              name="Envases Lisos"
+              fill={COLORS.envasesLisos}
               radius={[8, 8, 0, 0]}
             />
           )}
@@ -51,11 +51,11 @@ export const Barras = ({ data, visibleMetrics }: BarrasProps) => {
               radius={[8, 8, 0, 0]}
             />
           )}
-          {visibleMetrics.envasesDefectuosos && (
+          {visibleMetrics.envasesPerdidos && (
             <Bar
-              dataKey="envasesDefectuosos"
-              name="Envases con Defectos"
-              fill={COLORS.envasesDefectuosos}
+              dataKey="envasesPerdidos"
+              name="Envases Perdidos"
+              fill={COLORS.envasesPerdidos}
               radius={[8, 8, 0, 0]}
             />
           )}

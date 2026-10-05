@@ -471,7 +471,7 @@ textarea {
 
 .paletasPorMoldeValue {
   font-weight: 600;
-  color: #1f2937;
+  color: var(--primary-text-color);
 }
 
 /* Justificantes dentro de Molde */

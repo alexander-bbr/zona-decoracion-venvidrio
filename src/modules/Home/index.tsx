@@ -1,5 +1,5 @@
 import { useAuth } from "../../contexts/AuthContext";
-import styles from "./Home.module.css";
+import styles from "./home.module.css";
 
 export const Home = () => {
   const { isAuthenticated, user } = useAuth();

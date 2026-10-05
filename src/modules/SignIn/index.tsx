@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
-import styles from "./SignIn.module.css";
+import styles from "./sign-in.module.css";
 import imagotipo from "../../assets/images/imagotipo.png";
 
 export const SignIn = () => {

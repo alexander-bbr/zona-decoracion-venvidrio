@@ -49,8 +49,11 @@ const EMPTY_TOTALES: Totales = {
 };
 
 export const Rendimiento = () => {
+  //* Fecha máxima permitida (hoy en Venezuela). Se calcula una sola vez.
+  const todayVenezuela = useMemo(() => getTodayVenezuela(), []);
+
   const [fromDate, setFromDate] = useState(getStartOfYearVenezuela());
-  const [toDate, setToDate] = useState(getTodayVenezuela());
+  const [toDate, setToDate] = useState(todayVenezuela);
   const [chartType, setChartType] = useState<ChartType>("lineal");
   const [visibleMetrics, setVisibleMetrics] = useState<VisibleMetrics>({
     envasesLisos: true,
@@ -214,6 +217,7 @@ export const Rendimiento = () => {
               type="date"
               value={toDate}
               min={fromDate}
+              max={todayVenezuela}
               onChange={(event) => setToDate(event.target.value)}
             />
           </div>

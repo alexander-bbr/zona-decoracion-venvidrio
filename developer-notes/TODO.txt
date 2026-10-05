@@ -2,9 +2,8 @@
 
 ## Rendimiento
 
-  - Colocar un límite de fecha en el campo de fecha hasta, para que no se puedan colocar fechas futuras.
-  - Hacer el submódulo del profesor
-  - Hacer el submódulo de las metas
+  - Hacer el submódulo del profesor.
+  - Hacer el submódulo de las metas.
 
 
 ---
@@ -13,8 +12,8 @@
 
 ## Inventario
 
-  - Hacer el submódulo de iventario de pantallas
-  - Corregir la coloración en Ver Inventario, ya que no se respeta cuando es menor a cantidad mínima
+  - Hacer el submódulo de iventario de pantallas.
+  - Corregir la coloración en Ver Inventario, ya que no se respeta cuando es menor a cantidad mínima.
 
 
 
@@ -26,7 +25,7 @@
 
   - Pensar en si es lógico mejor eliminar el fieldset de Total de Paletas Decoradas, ya que al final del día no sirve para nada, ya que no tiene lógica limitar eso ya.
 
-  - Agregar un identificador en las Máquinas de decorados para que el usuario las asocie mejor con la manera en la que las llama: en Máquina 1 por Máquina D3, Máquina 2 por Máquina D4, Máquina 3 por Máquina D11 y Máquina D4 por Máquina D12
+  - Agregar un identificador en las Máquinas de decorados para que el usuario las asocie mejor con la manera en la que las llama: en Máquina 1 por Máquina D3, Máquina 2 por Máquina D4, Máquina 3 por Máquina D11 y Máquina D4 por Máquina D12.
 
   - Colocar un input con readonly al lado del código del molde en las máquinas, para que así sea más fácil poder guiarse de cuál estamos eligiendo cuando tenemos códigos similares.
 
@@ -54,7 +53,7 @@
 
 ## Sign In
 
-  - Hacer funcionar la verificación en el backend
+  - Hacer funcionar la verificación en el backend.
 
 
 
@@ -64,7 +63,7 @@
 
 ## Gestión de Usuarios
 
-  - Colocar mensajes de envío de los formularios (exito y error)
+  - Colocar mensajes de envío de los formularios (exito y error).
   - Tengo que implementar la validación de los estándares de seguridad de la contraseña.
 
 
@@ -76,6 +75,7 @@
 ## Exportaciones
 
 - Hacer en cuanto esté disponible el del inventario de pantallas.
+- Corregir el orden de los registros en los excel.
 
 
 
@@ -94,5 +94,14 @@
 ## General
 
   - Hacer Responsive la Aplicación.
+  - Hacer el README.md
+
+
+
+---
+
+
+
+## Lanzamiento
   - Eliminar los registros innecesarios de la BBDD.
-  - Resetear las Primary Keys que tengan el AUTO_INCREMENT
+  - Resetear las Primary Keys que tengan el AUTO_INCREMENT.

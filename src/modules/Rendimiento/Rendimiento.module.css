@@ -117,3 +117,20 @@
   color: var(--secondary-text-color);
   font-size: 0.88rem;
 }
+
+/* Fuerza la Leyenda de los gráficos para esten en horizontal */
+:global(.recharts-legend-wrapper) {
+  width: 100% !important;
+
+  /* Centra horizontalmente y verticalmente el contenedor tenga los items */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+:global(.recharts-default-legend) {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 2rem;
+}

@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import styles from "./Unauthorized.module.css";
+import styles from "./unauthorized.module.css";
 
 export const Unauthorized = () => {
   return (

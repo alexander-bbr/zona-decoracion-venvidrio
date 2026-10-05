@@ -28,13 +28,17 @@ export const Barras = ({ data, visibleMetrics }: BarrasProps) => {
       <ResponsiveContainer width="100%" height={360}>
         <BarChart
           data={data}
-          margin={{ top: 20, right: 16, left: 0, bottom: 10 }}
+          margin={{ top: 10, right: 16, left: 0, bottom: 10 }}
         >
           <CartesianGrid stroke="rgba(0,0,0,0.06)" strokeDasharray="4 4" />
           <XAxis dataKey="date" tick={{ fill: "#5a6777", fontSize: 12 }} />
           <YAxis tick={{ fill: "#5a6777", fontSize: 12 }} />
           <Tooltip />
-          <Legend verticalAlign="top" height={40} />
+          <Legend
+            verticalAlign="top"
+            height={60}
+            wrapperStyle={{ paddingBottom: "20px" }}
+          />
           {visibleMetrics.envasesLisos && (
             <Bar
               dataKey="envasesLisos"

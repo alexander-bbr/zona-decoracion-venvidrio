@@ -1,5 +1,0 @@
-  Gestión Productiva (este es un link, ya que un módulo principal)
-  |
-  |-- Gestión de Moldes
-  |-- Gestión de Justificantes
-

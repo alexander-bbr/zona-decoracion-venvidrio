@@ -49,16 +49,20 @@ export const Torta = ({ data, visibleMetrics }: TortaProps) => {
   return (
     <div className={styles.chartWrapper}>
       <ResponsiveContainer width="100%" height={360}>
-        <PieChart>
+        <PieChart margin={{ top: 10, right: 0, bottom: 10, left: 0 }}>
           <Tooltip />
-          <Legend verticalAlign="top" height={40} />
+          <Legend
+            verticalAlign="top"
+            height={60}
+            wrapperStyle={{ paddingBottom: "20px" }}
+          />
           <Pie
             data={slices}
             dataKey="value"
             nameKey="name"
             cx="50%"
-            cy="45%"
-            outerRadius={120}
+            cy="50%"
+            outerRadius={110}
             label
           />
           {slices.map((_, index) => (

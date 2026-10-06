@@ -181,14 +181,6 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
     },
   ]);
 
-  // Ahora solo cuenta las paletas decoradas
-  const [totalPaletasDecoradas, setTotalPaletasDecoradas] = useState(
-    registro.salidas.reduce(
-      (total, salida) => total + Number(salida.cantPaletasDecoradas),
-      0,
-    ),
-  );
-
   // Inicializar modelos con los datos del registro
   const [modelosForm, setModelosForm] = useState<ModeloForm[]>([]);
 
@@ -435,42 +427,12 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
     );
   };
 
-  // Solo se limita la producción decorada
-  const limitarModelos = (actuales: ModeloForm[], limite: number) => {
-    let restantes = limite;
-    return actuales.map((modelo) => {
-      const paletasDecoradas = Math.min(modelo.paletasDecoradas, restantes);
-      restantes -= paletasDecoradas;
-      // produccionLisa NO se limita
-      return { ...modelo, paletasDecoradas };
-    });
-  };
-
-  const actualizarTotalPaletasDecoradas = (value: string) => {
-    const limite = Math.max(0, Number(value) || 0);
-    setTotalPaletasDecoradas(limite);
-    setModelosForm((actuales) => limitarModelos(actuales, limite));
-  };
-
-  // Solo considera paletas decoradas de los otros moldes
-  const obtenerMaximoPaletasDecoradas = (index: number) => {
-    const otrasPaletasDecoradas = modelosForm.reduce(
-      (total, modelo, modeloIndex) =>
-        total + (modeloIndex === index ? 0 : modelo.paletasDecoradas),
-      0,
-    );
-    return Math.max(0, totalPaletasDecoradas - otrasPaletasDecoradas);
-  };
-
+  // Ya no hay límite para las paletas decoradas
   const cambiarPaletasDecoradas = (index: number, value: string) => {
-    const cantidad = Math.max(
-      0,
-      Math.min(Number(value) || 0, obtenerMaximoPaletasDecoradas(index)),
-    );
+    const cantidad = Math.max(0, Number(value) || 0);
     actualizarModelo(index, { paletasDecoradas: cantidad });
   };
 
-  // La producción lisa no tiene límite superior
   const cambiarProduccionLisa = (index: number, value: string) => {
     const cantidad = Math.max(0, Number(value) || 0);
     actualizarModelo(index, { produccionLisa: cantidad });
@@ -504,12 +466,6 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
           : [{ idMolde: 0, cantEnvases: 0, horaEntrada: "" }],
       },
     ]);
-    setTotalPaletasDecoradas(
-      registro.salidas.reduce(
-        (total, salida) => total + Number(salida.cantPaletasDecoradas),
-        0,
-      ),
-    );
     const modelosIniciales: ModeloForm[] = registro.salidas.map((salida) => {
       const moldeEncontrado = moldes.find(
         (m) => m.idMolde === salida.modeloMolde,
@@ -532,7 +488,6 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
     setError("");
   };
 
-  // Calcular total de envases de todas las máquinas
   const totalEnvasesMaquinas = maquinas.reduce(
     (total, maquina) =>
       total +
@@ -545,14 +500,7 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
 
     if (guardando) return;
 
-    if (
-      !fecha ||
-      !tecnico ||
-      !turno ||
-      !grupo ||
-      !tipoTurno ||
-      totalPaletasDecoradas <= 0
-    ) {
+    if (!fecha || !tecnico || !turno || !grupo || !tipoTurno) {
       setError("Completa todos los campos obligatorios.");
       return;
     }
@@ -963,26 +911,6 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
           </div>
         </fieldset>
 
-        {/* === TOTAL DE PALETAS DECORADAS === */}
-        <fieldset className={styles.fieldset}>
-          <legend className={styles.legend}>Total de Paletas Decoradas</legend>
-          <Campo
-            label="Número Total de Paletas Decoradas"
-            id="totalPaletasDecoradas"
-          >
-            <input
-              id="totalPaletasDecoradas"
-              type="number"
-              min="0"
-              value={totalPaletasDecoradas || ""}
-              onChange={(event) =>
-                actualizarTotalPaletasDecoradas(event.target.value)
-              }
-              required
-            />
-          </Campo>
-        </fieldset>
-
         {/* === MODELOS DE ENVASE (MOLDES) === */}
         {modelosForm.map((modelo, index) => (
           <ModeloProduccion
@@ -993,7 +921,6 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
             justificantes={justificantes}
             cargandoMoldes={cargandoMoldes}
             cargandoJustificantes={cargandoJustificantes}
-            maximoDecoradas={obtenerMaximoPaletasDecoradas(index)}
             cambiarPaletasDecoradas={cambiarPaletasDecoradas}
             cambiarProduccionLisa={cambiarProduccionLisa}
             agregarJustificante={agregarJustificante}
@@ -1138,7 +1065,6 @@ type ModeloProps = {
   justificantes: Justificante[];
   cargandoMoldes: boolean;
   cargandoJustificantes: boolean;
-  maximoDecoradas: number;
   cambiarPaletasDecoradas: (index: number, value: string) => void;
   cambiarProduccionLisa: (index: number, value: string) => void;
   agregarJustificante: (modeloIndex: number) => void;
@@ -1160,7 +1086,6 @@ const ModeloProduccion = ({
   justificantes,
   cargandoMoldes,
   cargandoJustificantes,
-  maximoDecoradas,
   cambiarPaletasDecoradas,
   cambiarProduccionLisa,
   agregarJustificante,
@@ -1209,14 +1134,12 @@ const ModeloProduccion = ({
         <GrupoProduccion
           title="Paletas Decoradas"
           value={modelo.paletasDecoradas}
-          max={maximoDecoradas}
           onChange={(value) => cambiarPaletasDecoradas(index, value)}
           resumen={resumen(modelo.paletasDecoradas)}
         />
         <GrupoProduccion
           title="Producción Lisa"
           value={modelo.produccionLisa}
-          max={undefined}
           onChange={(value) => cambiarProduccionLisa(index, value)}
           resumen={resumen(modelo.produccionLisa)}
         />
@@ -1292,13 +1215,11 @@ const ModeloProduccion = ({
 const GrupoProduccion = ({
   title,
   value,
-  max,
   onChange,
   resumen,
 }: {
   title: string;
   value: number;
-  max: number | undefined;
   onChange: (value: string) => void;
   resumen: Resumen;
 }) => (
@@ -1309,7 +1230,6 @@ const GrupoProduccion = ({
         id={`${title}-paletas`}
         type="number"
         min="0"
-        max={max !== undefined ? Math.max(0, max) : undefined}
         value={value || ""}
         onChange={(event) => onChange(event.target.value)}
       />

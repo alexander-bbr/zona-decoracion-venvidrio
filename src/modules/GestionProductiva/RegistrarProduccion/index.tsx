@@ -59,7 +59,6 @@ export const RegistrarProduccion = () => {
     { entradas: [{ idMolde: 0, cantEnvases: 0, horaEntrada: "" }] },
     { entradas: [{ idMolde: 0, cantEnvases: 0, horaEntrada: "" }] },
   ]);
-  const [totalPaletasDecoradas, setTotalPaletasDecoradas] = useState(0);
   const [modelosForm, setModelosForm] = useState<ModeloForm[]>([]);
   const [observaciones, setObservaciones] = useState("");
   const [error, setError] = useState("");
@@ -264,35 +263,8 @@ export const RegistrarProduccion = () => {
     );
   };
 
-  const limitarModelos = (actuales: ModeloForm[], limite: number) => {
-    let restantes = limite;
-    return actuales.map((modelo) => {
-      const paletasDecoradas = Math.min(modelo.paletasDecoradas, restantes);
-      restantes -= paletasDecoradas;
-      return { ...modelo, paletasDecoradas };
-    });
-  };
-
-  const actualizarTotalPaletasDecoradas = (value: string) => {
-    const limite = Math.max(0, Number(value) || 0);
-    setTotalPaletasDecoradas(limite);
-    setModelosForm((actuales) => limitarModelos(actuales, limite));
-  };
-
-  const obtenerMaximoPaletasDecoradas = (index: number) => {
-    const otrasPaletasDecoradas = modelosForm.reduce(
-      (total, modelo, modeloIndex) =>
-        total + (modeloIndex === index ? 0 : modelo.paletasDecoradas),
-      0,
-    );
-    return Math.max(0, totalPaletasDecoradas - otrasPaletasDecoradas);
-  };
-
   const cambiarPaletasDecoradas = (index: number, value: string) => {
-    const cantidad = Math.max(
-      0,
-      Math.min(Number(value) || 0, obtenerMaximoPaletasDecoradas(index)),
-    );
+    const cantidad = Math.max(0, Number(value) || 0);
     actualizarModelo(index, { paletasDecoradas: cantidad });
   };
 
@@ -313,7 +285,6 @@ export const RegistrarProduccion = () => {
       { entradas: [{ idMolde: 0, cantEnvases: 0, horaEntrada: "" }] },
       { entradas: [{ idMolde: 0, cantEnvases: 0, horaEntrada: "" }] },
     ]);
-    setTotalPaletasDecoradas(0);
     setModelosForm([]);
     setObservaciones("");
     setError("");
@@ -331,14 +302,7 @@ export const RegistrarProduccion = () => {
 
     if (guardando) return;
 
-    if (
-      !fecha ||
-      !tecnico ||
-      !turno ||
-      !grupo ||
-      !tipoTurno ||
-      totalPaletasDecoradas <= 0
-    ) {
+    if (!fecha || !tecnico || !turno || !grupo || !tipoTurno) {
       setError("Completa todos los campos obligatorios.");
       return;
     }
@@ -764,27 +728,6 @@ export const RegistrarProduccion = () => {
           </div>
         </fieldset>
 
-        {/* === TOTAL DE PALETAS DECORADAS === */}
-        <fieldset className={styles.fieldset}>
-          <legend className={styles.legend}>Total de Paletas Decoradas</legend>
-          <div className={styles.inputWrapper}>
-            <label htmlFor="totalPaletasDecoradas">
-              Número Total de Paletas Decoradas{" "}
-              <span className={styles.requireSymbol}>*</span>
-            </label>
-            <input
-              id="totalPaletasDecoradas"
-              type="number"
-              min="0"
-              value={totalPaletasDecoradas || ""}
-              onChange={(event) =>
-                actualizarTotalPaletasDecoradas(event.target.value)
-              }
-              required
-            />
-          </div>
-        </fieldset>
-
         {/* === MODELOS DE ENVASE (MOLDES) === */}
         {modelosForm.map((modelo, index) => (
           <ModeloProduccion
@@ -795,7 +738,6 @@ export const RegistrarProduccion = () => {
             justificantes={justificantes}
             cargandoMoldes={cargandoMoldes}
             cargandoJustificantes={cargandoJustificantes}
-            maximoDecoradas={obtenerMaximoPaletasDecoradas(index)}
             actualizarModelo={actualizarModelo}
             cambiarPaletasDecoradas={cambiarPaletasDecoradas}
             cambiarProduccionLisa={cambiarProduccionLisa}
@@ -993,7 +935,6 @@ type ModeloProduccionProps = {
   justificantes: Justificante[];
   cargandoMoldes: boolean;
   cargandoJustificantes: boolean;
-  maximoDecoradas: number;
   actualizarModelo: (index: number, changes: Partial<ModeloForm>) => void;
   cambiarPaletasDecoradas: (index: number, value: string) => void;
   cambiarProduccionLisa: (index: number, value: string) => void;
@@ -1016,7 +957,6 @@ const ModeloProduccion = ({
   justificantes,
   cargandoMoldes,
   cargandoJustificantes,
-  maximoDecoradas,
   cambiarPaletasDecoradas,
   cambiarProduccionLisa,
   agregarJustificante,
@@ -1064,14 +1004,12 @@ const ModeloProduccion = ({
         <GrupoProduccion
           title="Paletas Decoradas"
           value={modelo.paletasDecoradas}
-          max={maximoDecoradas}
           onChange={(value) => cambiarPaletasDecoradas(index, value)}
           resumen={resumen(modelo.paletasDecoradas)}
         />
         <GrupoProduccion
           title="Producción Lisa"
           value={modelo.produccionLisa}
-          max={undefined}
           onChange={(value) => cambiarProduccionLisa(index, value)}
           resumen={resumen(modelo.produccionLisa)}
         />
@@ -1147,7 +1085,6 @@ const ModeloProduccion = ({
 type GrupoProduccionProps = {
   title: string;
   value: number;
-  max: number | undefined;
   onChange: (value: string) => void;
   resumen: { camadas: number; envases: number; gruesas: number };
 };
@@ -1155,7 +1092,6 @@ type GrupoProduccionProps = {
 const GrupoProduccion = ({
   title,
   value,
-  max,
   onChange,
   resumen,
 }: GrupoProduccionProps) => (
@@ -1167,7 +1103,6 @@ const GrupoProduccion = ({
       <input
         type="number"
         min="0"
-        max={max !== undefined ? Math.max(0, max) : undefined}
         value={value || ""}
         onChange={(event) => onChange(event.target.value)}
       />

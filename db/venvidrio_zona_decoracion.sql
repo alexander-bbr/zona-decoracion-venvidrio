@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 05-10-2026 a las 04:45:42
+-- Tiempo de generación: 06-10-2026 a las 04:07:38
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -49,8 +49,7 @@ CREATE TABLE `gestion_productiva_cabecera` (
 --
 
 INSERT INTO `gestion_productiva_cabecera` (`id_cabecera`, `fecha`, `turno`, `tecnico`, `cant_envases_d1`, `cant_envases_d2`, `cant_envases_d3`, `cant_envases_d4`, `total_envases`, `total_gruesas`, `grupo`, `tipo_turno`) VALUES
-(292, '2026-10-04', 1, 'Miguel Bethancourt', 50000, 10000, 0, 0, 60000, 416.67, 'A', '2 Turnos'),
-(293, '2026-10-04', 1, 'Javier Hernández', 50000, 55600, 0, 0, 105600, 733.33, 'A', '2 Turnos');
+(294, '2026-10-05', 1, 'Miguel Bethancourt', 50000, 55600, 0, 0, 105600, 733.33, 'D', '2 Turnos');
 
 -- --------------------------------------------------------
 
@@ -72,10 +71,8 @@ CREATE TABLE `gestion_productiva_entrada` (
 --
 
 INSERT INTO `gestion_productiva_entrada` (`id_entrada`, `id_cabecera`, `maquina`, `id_molde`, `cant_envases`, `hora_entrada`) VALUES
-(268, 292, 1, 6, 50000, '00:00'),
-(269, 292, 2, 5, 10000, '00:00'),
-(270, 293, 1, 6, 50000, '19:09'),
-(271, 293, 2, 6, 55600, '19:09');
+(276, 294, 1, 6, 50000, '09:48'),
+(277, 294, 2, 5, 55600, '09:48');
 
 -- --------------------------------------------------------
 
@@ -102,8 +99,7 @@ CREATE TABLE `gestion_productiva_resultado` (
 --
 
 INSERT INTO `gestion_productiva_resultado` (`id_resultado`, `id_cabecera`, `total_gruesas_lisas`, `total_envases_lisos`, `total_gruesas_decoradas`, `total_envases_decorados`, `total_envases_perdidos`, `total_gruesas_perdidas`, `eficiencia_productiva`, `deficiencia_productiva`, `observaciones`) VALUES
-(289, 292, 0.00, 0, 349.56, 50336, 9664, 67.11, 83.89, 16.11, 'TUTU'),
-(290, 293, 24.44, 3520, 708.89, 102080, 3520, 24.44, 96.67, 3.33, 'Estoy probando el nuevo guardado');
+(291, 294, 0.00, 0, 710.11, 102256, 3344, 23.22, 96.83, 3.17, 'Registro de Prueba para verificar el módulo');
 
 -- --------------------------------------------------------
 
@@ -131,9 +127,8 @@ CREATE TABLE `gestion_productiva_salida` (
 --
 
 INSERT INTO `gestion_productiva_salida` (`id_eficiencia`, `modelo_molde`, `id_cabecera`, `total_paletas_molde`, `cant_paletas_lisas`, `cant_camadas_lisas`, `cant_envases_lisas`, `cant_gruesas_lisas`, `cant_paletas_decoradas`, `cant_camadas_decoradas`, `cant_envases_decoradas`, `cant_gruesas_decoradas`) VALUES
-(647, 6, 292, 10, 0, 0, 0, 0.00, 10, 80, 35200, 244.44),
-(648, 5, 292, 4, 0, 0, 0, 0.00, 4, 32, 15136, 105.11),
-(649, 6, 293, 30, 1, 8, 3520, 24.44, 29, 232, 102080, 708.89);
+(654, 6, 294, 14, 0, 0, 0, 0.00, 14, 112, 49280, 342.22),
+(655, 5, 294, 14, 0, 0, 0, 0.00, 14, 112, 52976, 367.89);
 
 -- --------------------------------------------------------
 
@@ -180,7 +175,8 @@ INSERT INTO `inventario_insumos` (`id_insumo`, `tipo`, `articulo`, `unidad`, `ca
 (22, 'Cap-Sheet', 'Cap-Sheet', 'Kilogramo', 100.00, 50.00, 1),
 (23, 'Plástico Termo', 'TERMOENCOGIBLE DE 24\"', 'Kilogramo', 100.00, 50.00, 1),
 (24, 'Plástico Termo', 'TERMOENCOGIBLE DE 28\"', 'Kilogramo', 100.00, 50.00, 1),
-(25, 'prueba', 'ggg', 'string', 100.00, 50.00, 0);
+(25, 'prueba', 'ggg', 'string', 100.00, 50.00, 0),
+(26, 'Pintura', 'SM 00-2208  - VT vinotinto', 'Kilogramos', 100.00, 50.00, 1);
 
 -- --------------------------------------------------------
 
@@ -207,7 +203,10 @@ INSERT INTO `inventario_insumos_entrada` (`id_inventario_entrada`, `id_insumo`, 
 (2, 2, '2026-09-13 14:15:49', 'string', 'string', 'string', 50.80),
 (3, 1, '2026-09-14 15:22:31', '222', 'Turno 1', 'Grupo A', 150.55),
 (4, 22, '2026-09-25 18:30:30', '222', 'Turno 1', 'Grupo A', 1.00),
-(5, 22, '2026-09-25 18:31:44', '222', 'Turno 1', 'Grupo A', 50.00);
+(5, 22, '2026-09-25 18:31:44', '222', 'Turno 1', 'Grupo A', 50.00),
+(6, 26, '2026-10-05 20:27:04', 'Miguel Alexander Bethancourt Briceño', 'Turno 1', 'Grupo A', 20.00),
+(8, 22, '2026-10-05 20:54:18', 'Miguel Alexander', 'Turno 1', 'Grupo A', 70.00),
+(9, 26, '2026-10-05 20:54:44', 'Miguel Alexander', 'Turno 1', 'Grupo A', 99.00);
 
 -- --------------------------------------------------------
 
@@ -233,7 +232,9 @@ INSERT INTO `inventario_insumos_salida` (`id_inventario_salida`, `id_insumo`, `f
 (1, 1, '2026-09-13 13:51:40', 'string', 'string', 'string', 1.05),
 (2, 2, '2026-09-13 14:16:20', 'string', 'string', 'string', 10.86),
 (3, 1, '2026-09-14 15:24:57', '222', 'Turno 2', 'Grupo A', 34.00),
-(4, 22, '2026-09-25 18:32:16', '222', 'Turno 1', 'Grupo A', 2.00);
+(4, 22, '2026-09-25 18:32:16', '222', 'Turno 1', 'Grupo A', 2.00),
+(5, 22, '2026-10-05 20:51:55', 'Gabi', 'Turno 1', 'Grupo A', 70.00),
+(6, 26, '2026-10-05 20:52:53', 'tuti', 'Turno 1', 'Grupo A', 19.00);
 
 -- --------------------------------------------------------
 
@@ -389,7 +390,8 @@ CREATE TABLE `produccion_justificantes` (
 --
 
 INSERT INTO `produccion_justificantes` (`id_cabecera`, `modelo_molde`, `id_justificante`) VALUES
-(293, 6, 5);
+(294, 5, 2),
+(294, 6, 1);
 
 -- --------------------------------------------------------
 
@@ -524,43 +526,43 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `gestion_productiva_cabecera`
 --
 ALTER TABLE `gestion_productiva_cabecera`
-  MODIFY `id_cabecera` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=294;
+  MODIFY `id_cabecera` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=295;
 
 --
 -- AUTO_INCREMENT de la tabla `gestion_productiva_entrada`
 --
 ALTER TABLE `gestion_productiva_entrada`
-  MODIFY `id_entrada` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=272;
+  MODIFY `id_entrada` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=278;
 
 --
 -- AUTO_INCREMENT de la tabla `gestion_productiva_resultado`
 --
 ALTER TABLE `gestion_productiva_resultado`
-  MODIFY `id_resultado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=291;
+  MODIFY `id_resultado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=292;
 
 --
 -- AUTO_INCREMENT de la tabla `gestion_productiva_salida`
 --
 ALTER TABLE `gestion_productiva_salida`
-  MODIFY `id_eficiencia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=650;
+  MODIFY `id_eficiencia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=656;
 
 --
 -- AUTO_INCREMENT de la tabla `inventario_insumos`
 --
 ALTER TABLE `inventario_insumos`
-  MODIFY `id_insumo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id_insumo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT de la tabla `inventario_insumos_entrada`
 --
 ALTER TABLE `inventario_insumos_entrada`
-  MODIFY `id_inventario_entrada` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_inventario_entrada` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT de la tabla `inventario_insumos_salida`
 --
 ALTER TABLE `inventario_insumos_salida`
-  MODIFY `id_inventario_salida` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_inventario_salida` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `justificantes`

@@ -30,7 +30,13 @@ export const VerInventario = () => {
           );
         }
         const data = (await response.json()) as Insumo[];
-        const ordenados = [...data].sort(
+        const normalizados = data.map((insumo) => ({
+          ...insumo,
+          idInsumo: Number(insumo.idInsumo),
+          cantidadActual: Number(insumo.cantidadActual),
+          cantidadMinima: Number(insumo.cantidadMinima),
+        }));
+        const ordenados = normalizados.sort(
           (a, b) =>
             a.tipo.localeCompare(b.tipo) ||
             a.articulo.localeCompare(b.articulo),

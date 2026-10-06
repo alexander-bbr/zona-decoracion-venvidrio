@@ -13,7 +13,6 @@
 ## Inventario
 
   - Hacer el submódulo de iventario de pantallas.
-  - Corregir la coloración en Ver Inventario, ya que no se respeta cuando es menor a cantidad mínima.
 
 
 

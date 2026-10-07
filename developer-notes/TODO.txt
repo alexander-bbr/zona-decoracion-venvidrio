@@ -2,6 +2,7 @@
 
 ## Rendimiento
 
+  - Agregar la Eficiencia y Deficiencia. Esta vendrá tanto por cada lote de registro, como por el total de todo el rango de fechas
   - Hacer el submódulo del profesor.
   - Hacer el submódulo de las metas.
 
@@ -10,9 +11,22 @@
 
 
 
-## Inventario
+## Inventario de Insumos
 
   - Hacer el submódulo de iventario de pantallas.
+  - Cambiarle el nombre a este módulo, de inventario a inventario de insumos.
+
+
+
+---
+
+
+
+## Inventario de Pantallas
+
+  - Hacer el módulo completo.
+  - Tendrán su propia metodología (similar al del inventario de insumos).
+  - Tendrán sus propias exportaciones.
 
 
 
@@ -25,6 +39,10 @@
   - Agregar un identificador en las Máquinas de decorados para que el usuario las asocie mejor con la manera en la que las llama: en Máquina 1 por Máquina D3, Máquina 2 por Máquina D4, Máquina 3 por Máquina D11 y Máquina D4 por Máquina D12.
 
   - Colocar un input con readonly al lado del código del molde en las máquinas, para que así sea más fácil poder guiarse de cuál estamos eligiendo cuando tenemos códigos similares.
+
+  - Limitar el campo de fecha, para que no acepte fechas futuras
+
+  - Centrar el input de Total de Paletas por este molde
 
 
 

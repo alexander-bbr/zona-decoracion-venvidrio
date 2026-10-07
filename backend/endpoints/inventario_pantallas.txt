@@ -1,0 +1,251 @@
+Ruta 1: Entradas de Pantallas
+  Endpoint: http://127.0.0.1:8000/api/inventario-pantallas/entradas
+  Método: POST
+
+JSON (Envía el Frontend):
+{
+  "idPantalla": 1,  (fk)              # number - Para este, se supone que el frontend tuvo que haber listado con el endpoint 3
+  "encargado": "Carlos Mendoza",    # string
+  "turno": "Turno 1",               # string
+  "grupo": "Grupo A",               # string
+  "cantidad": "10"                  # number (entero)
+}
+
+JSON (Respuesta en caso de éxito):
+{
+  "status": "Registro insertado con éxito",
+  "id": 1
+}
+
+JSON (Respuesta en caso de error):
+{
+  "detail": "Error en el registro"
+}
+
+
+
+-----------------------------------------------------------------------------------
+
+
+
+
+Ruta 2: Salida de Pantalla
+  Endpoint: http://127.0.0.1:8000/api/inventario-pantallas/salidas
+  Método: POST
+
+JSON (Envía el Frontend):
+{
+  "idPantalla": 1, (fk)             # number - Para este, se supone que el frontend tuvo que haber listado con el endpoint 3
+  "encargado": "Carlos Mendoza",    # string
+  "turno": "Turno 1",               # string
+  "grupo": "Grupo A",               # string
+  "cantidad": "5"                   # number (entero)
+}
+
+JSON (Respuesta en caso de éxito):
+{
+  "status": "Salida registrada con éxito",
+  "id": 1
+}
+
+JSON (Respuesta en caso de error):
+{
+  "detail": "Error en la salida"
+}
+
+
+
+
+-----------------------------------------------------------------------------------
+
+
+
+
+Ruta 3: Listar Inventario (Vista Principal)
+  Endpoint: http://127.0.0.1:8000/api/inventario-pantallas
+  Método: GET
+
+Estructura de los datos que recibirá:
+[
+  {
+    "idPantalla": 1,                    # number
+    "nombre": "Pantalla ZTY",           # string
+    "descripcion": "Modelito grande",   # string
+    "tipo": "Malla 240",                # string
+    "cantidad": "120",                  # number (entero)
+  },
+  {
+    "idInsumo": 2,                      # number
+    "nombre": "Pantalla ZTX",           # string
+    "descripcion": "Modelito pequeño",  # string
+    "tipo": "Malla 230",                # string
+    "cantidad": "45",                   # number (entero)
+  }
+]
+
+JSON (Respuesta en caso de error):
+{
+  "detail": "No se pudo listar el inventario"
+}
+
+
+ACLARACIÓN: Se listan TODOS los pantallas que tengan el estado con true
+
+
+
+------------------------------------
+
+
+
+
+Ruta 4: Historial de Movimiento
+  Endpoint: http://127.0.0.1:8000/api/inventario-pantallas/historial
+  Método: GET
+
+Estructura de los datos que recibirá:
+[
+  {
+    "idInventarioEntrada": 1,           # number
+    "nombre": "Pantalla ZTY",           # string
+    "descripcion": "Modelito grande",   # string
+    "tipo": "Malla 240",                # string
+    "fecha": "2026-09-13",              # string
+    "encargado": "Carlos Mendoza",      # string
+    "turno": "Turno 1",                 # string
+    "grupo": "Grupo A",                 # string
+    "cantidad": "10"                    # number (entero)
+  },
+  {
+    "idInventarioSalida": 1,            # number
+    "nombre": "Pantalla ZTX",           # string
+    "descripcion": "Modelito pequeño",  # string
+    "tipo": "Malla 230",                # string
+    "fecha": "2026-09-13",              # string
+    "encargado": "Carlos Mendoza",      # string
+    "turno": "Turno 1",                 # string
+    "grupo": "Grupo A",                 # string
+    "cantidad": "5"                     # number (entero)
+  }
+]
+
+JSON (Respuesta en caso de error):
+{
+  "detail": "No se pudo listar el historial de inventario"
+}
+
+
+NOTA TÉCNICA DE PAGINACIÓN:
+
+Este endpoint es de tipo GET. Por lo tanto, los valores de paginación NO se envían 
+en el cuerpo de la petición (como un POST o un JSON), sino directamente en la 
+URL como PARÁMETROS DE CONSULTA (Query Parameters).
+
+- ¿Cómo los recibe el backend?
+  El backend los captura automáticamente de la URL mediante los argumentos 
+  'skip' y 'limit' configurados en la función de Python.
+
+- Comportamiento y Valores por Defecto:
+  1. Si el frontend hace la petición limpia sin enviar nada (ej. GET /produccion/), 
+     el backend asume por defecto 'skip=0' y 'limit=50', devolviendo automáticamente 
+     los primeros 50 registros.
+  2. Cuando el usuario navega a otra página, el frontend debe agregarlos a la URL 
+     especificando cuántos registros se salta ('skip') y el tope ('limit').
+
+- Ejemplos de uso desde el Frontend (Cliente):
+  * Página 1 (Primeros 50 registros):  GET /historial+movimiento?skip=0&limit=50
+  * Página 2 (Siguientes 50 registros): GET /historial+movimiento?skip=50&limit=50
+  * Página 3 (Siguientes 50 registros): GET /historial+movimiento?skip=100&limit=50
+
+- Fórmula general para calcular el skip en el frontend según el número de página:
+  skip = (numero_de_pagina - 1) * 50
+
+
+NOTA TÉCNICA N°2 DE LA RESPUESTA:
+
+Este Endpoint deberá regresar los 50 primeros registros entre ambas tablas, o sea, basándose en el campo fecha. Esto quiere decir, que puede que regresa 25 de registro y 25 de salida; o 43 de registro y 7 de salida, etc.
+
+
+
+
+--------------------------------------------------------------------------------------------------
+
+
+
+
+Ruta 5: Crear Pantalla
+  Endpoint: http://127.0.0.1:8000/api/inventario-pantallas
+  Método: POST
+
+JSON (Envía el Frontend):
+{
+  "nombre": "Pantalla ZTY",           # string
+  "descripcion": "Modelito grande",   # string
+  "tipo": "Malla 240",                # string
+  "estado": true                      # boolean
+}
+
+JSON (Respuesta en caso de éxito):
+{
+    "status": "Pantalla creada con éxito",
+    "id": 1
+}
+
+JSON (Respuesta en caso de error):
+{
+    "detail": "Error al crear la pantalla"
+}
+
+
+
+-----------------------------------------------------------------------------
+
+
+
+Ruta 6: Ver Insumo por ID
+  Endpoint: http://127.0.0.1:8000/api/inventario-pantallas/{id_pantalla}
+  Método: GET
+
+Estructura de los datos que recibirá:
+{
+  "idPantalla": 1,                    # number
+  "nombre": "Pantalla ZTY",           # string
+  "descripcion": "Modelito grande",   # string
+  "tipo": "Malla 240",                # string
+  "estado": true                      # boolean
+}
+
+JSON (Respuesta en caso de error):
+{
+    "detail": "Pantalla no encontrada"
+}
+
+
+
+
+-----------------------------------------------------------------------------
+
+Ruta 7: Editar Pantalla
+  Endpoint: http://127.0.0.1:8000/api/inventario-pantallas/{id_pantalla}
+  Método: PUT
+
+JSON (Envía el Frontend):
+{
+  "nombre": "Pantalla ZTY",           # string
+  "descripcion": "Modelito grande",   # string
+  "tipo": "Malla 240",                # string
+  "estado": true                      # boolean
+}
+
+JSON (Respuesta en caso de éxito):
+  {
+  "status": "Pantalla editada con éxito",
+  "id": 1
+  }
+
+JSON (Respuesta en caso de error):
+  {
+  "detail": "Error al editar la pantalla"
+  }
+
+
+NOTA TÉCNICA: No se puede hacer entradas y salidas de pantallas desactivados

@@ -48,7 +48,9 @@ JSON (Respuesta en caso de error):
 }
 
 
+
 ---
+
 
 
 Ruta 3: Perdidos por Fecha
@@ -66,6 +68,34 @@ Estructura de los datos que recibirá:
     ],
     "totalEnvasesPerdidos": 3400,
     "totalGruesasPerdidas": "7.40"
+}
+
+JSON (Respuesta en caso de error):
+{
+    "detail": "No se encontraron registros en el rango de fechas indicado."
+}
+
+
+
+---
+
+
+
+Ruta 4: Rendimiento por Fecha
+Endpoint: http://127.0.0.1:8000/api/rendimiento/eficiencia-deficiencia
+Método: GET
+
+Parámetros de consulta: desde, hasta
+Ejemplo: http://127.0.0.1:8000/api/rendimiento/eficiencia-deficiencia?desde=2026-09-01&hasta=2026-09-30
+
+Estructura de los datos que recibirá:
+{
+    "rendimiento": [
+        {"fecha": "2026-09-08", "eficiencia": 73, "deficiencia": "27"},
+        {"fecha": "2026-09-09", "eficiencia": 89, "deficiencia": "11"}
+    ],
+    "eficienciaGeneral": 81,
+    "deficienciaGeneral": 19
 }
 
 JSON (Respuesta en caso de error):

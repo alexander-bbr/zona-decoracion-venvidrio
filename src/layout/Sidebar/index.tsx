@@ -111,14 +111,16 @@ export const Sidebar = ({ isOpen }: SidebarProps) => {
           </li>
         )}
 
-        {/* Inventario */}
+        {/* Inventario de Insumos*/}
         {hasAnyPermission("inventario_insumos", ["ver_inventario"]) && (
           <li>
             <Link
-              to="/inventario"
-              className={isActive("/inventario") ? styles.activeLink : ""}
+              to="/inventario-insumos"
+              className={
+                isActive("/inventario-insumos") ? styles.activeLink : ""
+              }
             >
-              Inventario
+              Inventario de Insumos
             </Link>
           </li>
         )}

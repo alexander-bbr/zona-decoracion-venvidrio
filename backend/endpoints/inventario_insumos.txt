@@ -53,6 +53,7 @@ JSON (Respuesta en caso de error):
   "detail": "Error en la salida del insumo"
 }
 
+NOTA TÉCNICA: No se pueda hacer entradas y salidas deinsumos desactivados
 
 
 
@@ -249,9 +250,3 @@ JSON (Respuesta en caso de error):
   {
   "detail": "Error al editar el insumo"
   }
-
-
-- que no se pueda hacer entradas y salidas deinsumos desactivados
-- el campo cantidad actual se dejara de esperar tanto para crear como para editar, hay que adaptar los arcivos
-debido a que el campo no se recibira se tiene que adaptar para ue cuando se cree un registro, en la base de datos no de error, ya que no acepta nulos puede dar error, entoces adaptar para que cuando se cree un regisro o venga simplemente vacio, se ponga 0.00 en la base de dato(tambien se le puede hacer a cantidad minima, pero ojo cantidad minima si se manejara en crear insumo y editar)
-- 

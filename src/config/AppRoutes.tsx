@@ -8,15 +8,15 @@ import { Home } from "../modules/Home";
 // Módulo - Rendimiento
 import { Rendimiento } from "../modules/Rendimiento";
 
-// Módulo - Inventario
-import { Inventario } from "../modules/Inventario";
-import { RegistroInsumo } from "../modules/Inventario/RegistroInsumo";
-import { SalidaInsumo } from "../modules/Inventario/SalidaInsumo";
-import { VerInventario } from "../modules/Inventario/VerInventario";
-import { HistorialMovimiento } from "../modules/Inventario/HistorialMovimiento";
-import { GestionInsumos } from "../modules/Inventario/GestionInsumos";
-import { CrearInsumo } from "../modules/Inventario/GestionInsumos/CrearInsumo";
-import { EditarInsumo } from "../modules/Inventario/GestionInsumos/EditarInsumo";
+// Módulo - Inventario de Insumos
+import { InventarioInsumos } from "../modules/InventarioInsumos";
+import { RegistroInsumo } from "../modules/InventarioInsumos/RegistroInsumo";
+import { SalidaInsumo } from "../modules/InventarioInsumos/SalidaInsumo";
+import { VerInventario } from "../modules/InventarioInsumos/VerInventario";
+import { HistorialMovimiento } from "../modules/InventarioInsumos/HistorialMovimiento";
+import { GestionInsumos } from "../modules/InventarioInsumos/GestionInsumos";
+import { CrearInsumo } from "../modules/InventarioInsumos/GestionInsumos/CrearInsumo";
+import { EditarInsumo } from "../modules/InventarioInsumos/GestionInsumos/EditarInsumo";
 
 // Módulo - Gestión Productiva
 import { GestionProductiva } from "../modules/GestionProductiva";
@@ -88,10 +88,10 @@ export const AppRoutes = () => {
       />
 
       {/* 
-        Módulo - Inventario - Requiere al menos un permiso de inventario_insumos
+        Módulo - Inventario de Insumos - Requiere al menos un permiso de inventario_insumos
       */}
       <Route
-        path="/inventario"
+        path="/inventario-insumos"
         element={
           <PrivateRoute
             requiredPermissions={[
@@ -100,7 +100,7 @@ export const AppRoutes = () => {
             // Usamos requireAnyPermission para que permita si tiene AL MENOS UNO
             requireAnyPermission={true}
           >
-            <Inventario />
+            <InventarioInsumos />
           </PrivateRoute>
         }
       >

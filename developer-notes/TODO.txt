@@ -13,9 +13,6 @@
 
 ## Inventario de Insumos
 
-  - Hacer el submódulo de iventario de pantallas.
-  - Cambiarle el nombre a este módulo, de inventario a inventario de insumos.
-
 
 
 ---
@@ -25,8 +22,8 @@
 ## Inventario de Pantallas
 
   - Hacer el módulo completo.
-  - Tendrán su propia metodología (similar al del inventario de insumos).
-  - Tendrán sus propias exportaciones.
+  - Aplicar la metodología real.
+  - Hacer el botón de exportaciones.
 
 
 
@@ -91,6 +88,7 @@
 
 - Hacer en cuanto esté disponible el del inventario de pantallas.
 - Corregir el orden de los registros en los excel.
+- Hay que corregir el .txt de exportaciones, ya que ahora ya no debería de decir inventario, sino inventario-insumos, y también debemos de crear el de inventario-pantallas
 
 
 

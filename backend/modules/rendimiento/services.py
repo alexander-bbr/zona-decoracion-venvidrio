@@ -117,3 +117,53 @@ def obtener_perdidos_por_fecha(db: Session, desde: str, hasta: str):
         "totalEnvasesPerdidos": sum(r["totalEnvasesPerdidos"] for r in registros_perdidos),
         "totalGruesasPerdidas": str(sum(Decimal(r["totalGruesasPerdidas"]) for r in registros_perdidos))
     }
+
+
+def obtener_eficiencia_deficiencia_por_fecha(db: Session, desde: str, hasta: str):
+    registros = db.query(
+        GestionProductivaCabecera.fecha,
+        func.sum(GestionProductivaCabecera.total_envases).label("total_envases"),
+        func.sum(GestionProductivaResultado.total_envases_decorados).label("total_envases_decorados"),
+        func.sum(GestionProductivaResultado.total_envases_perdidos).label("total_envases_perdidos")
+    ).join(
+        GestionProductivaResultado,
+        GestionProductivaCabecera.id_cabecera == GestionProductivaResultado.id_cabecera
+    ).filter(
+        GestionProductivaCabecera.fecha >= desde,
+        GestionProductivaCabecera.fecha <= hasta
+    ).group_by(
+        GestionProductivaCabecera.fecha
+    ).order_by(
+        GestionProductivaCabecera.fecha.asc()
+    ).all()
+
+    if not registros:
+        raise HTTPException(status_code=404, detail="No se encontraron registros en el rango de fechas indicado.")
+
+    rendimiento = []
+    total_envases_rango = 0
+    total_decorados_rango = 0
+    total_perdidos_rango = 0
+
+    for reg in registros:
+        total_envases_rango += reg.total_envases
+        total_decorados_rango += reg.total_envases_decorados
+        total_perdidos_rango += reg.total_envases_perdidos
+
+        eficiencia = round((reg.total_envases_decorados / reg.total_envases) * 100, 2)
+        deficiencia = round((reg.total_envases_perdidos / reg.total_envases) * 100, 2)
+
+        rendimiento.append({
+            "fecha": str(reg.fecha),
+            "eficiencia": eficiencia,
+            "deficiencia": deficiencia
+        })
+
+    eficiencia_general = round((total_decorados_rango / total_envases_rango) * 100, 2)
+    deficiencia_general = round((total_perdidos_rango / total_envases_rango) * 100, 2)
+
+    return {
+        "rendimiento": rendimiento,
+        "eficienciaGeneral": eficiencia_general,
+        "deficienciaGeneral": deficiencia_general
+    }

@@ -1,0 +1,10 @@
+nuevo
+- modulo de inventario de pantallas terminado
+- exportacion para movimiento de pantallas
+- exportacion para listar pantallas
+- funcion de rendimiento eficiencia-deficiencia
+
+corregido
+- exportacion de movimiento de produccion y inventario ordenado desde el mas nuevo en adelante
+- exportacion de insumos por orden alfabetico tipo articulo
+- exportacion de moldes ordenados por id asc

@@ -1,4 +1,0 @@
-enpoint de historia de movimientos de inventario actualizado
-modulo de exportacion
-notificaciones para inventario (minimo para todos es 50)
-notificaciones para deficiencia de produccion superior al 12%

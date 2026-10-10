@@ -1,26 +1,26 @@
 Ruta 1: Entradas de Insumo
-  Endpoint: http://127.0.0.1:8000/api/inventario-insumos/entradas
-  Método: POST
+    Endpoint: http://127.0.0.1:8000/api/inventario-insumos/entradas
+    Método: POST
 
-JSON (Envía el Frontend):
-{
-  "idInsumo": 1,  (fk)              # number - Para este, se supone que el frontend tuvo que haber listado con el endpoint 3
-  "encargado": "Carlos Mendoza",    # string
-  "turno": "Turno 1",               # string
-  "grupo": "Grupo A",               # string
-  "cantidad": "10.50"               # number
-}
+  JSON (Envía el Frontend):
+  {
+    "idInsumo": 1,  (fk)              # number - Para este, se supone que el frontend tuvo que haber listado con el endpoint 3
+    "encargado": "Carlos Mendoza",    # string
+    "turno": "Turno 1",               # string
+    "grupo": "Grupo A",               # string
+    "cantidad": "10.50"               # number
+  }
 
-JSON (Respuesta en caso de éxito):
-{
-  "status": "Registro insertado con éxito",
-  "id": 1
-}
+  JSON (Respuesta en caso de éxito):
+  {
+    "status": "Registro insertado con éxito",
+    "id": 1
+  }
 
-JSON (Respuesta en caso de error):
-{
-  "detail": "Error en el registro"
-}
+  JSON (Respuesta en caso de error):
+  {
+    "detail": "Error en el registro"
+  }
 
 
 
@@ -30,30 +30,29 @@ JSON (Respuesta en caso de error):
 
 
 Ruta 2: Salida de Insumo
-  Endpoint: http://127.0.0.1:8000/api/inventario-insumos/salidas
-  Método: POST
+    Endpoint: http://127.0.0.1:8000/api/inventario-insumos/salidas
+    Método: POST
 
-JSON (Envía el Frontend):
-{
-  "idInsumo": 1, (fk)               # number - Para este, se supone que el frontend tuvo que haber listado con el endpoint 3
-  "encargado": "Carlos Mendoza",    # string
-  "turno": "Turno 1",               # string
-  "grupo": "Grupo A",               # string
-  "cantidad": "5.00"                # number
-}
+  JSON (Envía el Frontend):
+  {
+    "idInsumo": 1, (fk)               # number - Para este, se supone que el frontend tuvo que haber listado con el endpoint 3
+    "encargado": "Carlos Mendoza",    # string
+    "turno": "Turno 1",               # string
+    "grupo": "Grupo A",               # string
+    "cantidad": "5.00"                # number
+  }
 
-JSON (Respuesta en caso de éxito):
-{
-  "status": "Salida registrada con éxito",
-  "id": 1
-}
+  JSON (Respuesta en caso de éxito):
+  {
+    "status": "Salida registrada con éxito",
+    "id": 1
+  }
 
-JSON (Respuesta en caso de error):
-{
-  "detail": "Error en la salida del insumo"
-}
+  JSON (Respuesta en caso de error):
+  {
+    "detail": "Error en la salida del insumo"
+  }
 
-NOTA TÉCNICA: No se pueda hacer entradas y salidas deinsumos desactivados
 
 
 
@@ -63,36 +62,36 @@ NOTA TÉCNICA: No se pueda hacer entradas y salidas deinsumos desactivados
 
 
 Ruta 3: Listar Inventario (Vista Principal)
-  Endpoint: http://127.0.0.1:8000/api/inventario-insumos
-  Método: GET
+    Endpoint: http://127.0.0.1:8000/api/inventario-insumos
+    Método: GET
 
-Estructura de los datos que recibirá:
-[
+  Estructura de los datos que recibirá:
+  [
+    {
+      "idInsumo": 1,               # number
+      "tipo": "Pintura",           # string
+      "articulo": "Esmalte Blanco",# string
+      "unidad": "Litros",          # string
+      "cantidadActual": "120.50",    # number
+      "cantidadMinima": "20.00"      # number
+    },
+    {
+      "idInsumo": 2,               # number
+      "tipo": "Solvente",          # string
+      "articulo": "Tinner Standard",# string
+      "unidad": "Galones",         # string
+      "cantidadActual": "45.00",     # number
+      "cantidadMinima": "10.00"      # number
+    }
+  ]
+
+  JSON (Respuesta en caso de error):
   {
-    "idInsumo": 1,               # number
-    "tipo": "Pintura",           # string
-    "articulo": "Esmalte Blanco",# string
-    "unidad": "Litros",          # string
-    "cantidadActual": "120.50",    # number
-    "cantidadMinima": "20.00"      # number
-  },
-  {
-    "idInsumo": 2,               # number
-    "tipo": "Solvente",          # string
-    "articulo": "Tinner Standard",# string
-    "unidad": "Galones",         # string
-    "cantidadActual": "45.00",     # number
-    "cantidadMinima": "10.00"      # number
+    "detail": "No se pudo listar el inventario"
   }
-]
-
-JSON (Respuesta en caso de error):
-{
-  "detail": "No se pudo listar el inventario"
-}
 
 
-ACLARACIÓN: Se listan TODOS los insumos que tengan el estado con true
+  ACLARACIÓN: Se listan TODOS los insumos que tengan el estado con true
 
 
 
@@ -102,68 +101,68 @@ ACLARACIÓN: Se listan TODOS los insumos que tengan el estado con true
 
 
 Ruta 4: Historial de Movimiento
-  Endpoint: http://127.0.0.1:8000/api/inventario-insumos/historial
-  Método: GET
+    Endpoint: http://127.0.0.1:8000/api/inventario-insumos/historial
+    Método: GET
 
-Estructura de los datos que recibirá:
-[
+  Estructura de los datos que recibirá:
+  [
+    {
+      "idInventarioEntrada": 1,       # number
+      "tipoInsumo": "Cap-Sheet",      # string
+      "articulo": "Cap-Sheet",        # string
+      "fecha": "2026-09-13",          # string
+      "encargado": "Carlos Mendoza",  # string
+      "turno": "Turno 1",             # string
+      "grupo": "Grupo A",             # string
+      "cantidad": "10.50"             # number
+    },
+    {
+      "idInventarioSalida": 1,        # number
+      "tipoInsumo": "Cap-Sheet",      # string
+      "articulo": "Cap-Sheet",        # string
+      "fecha": "2026-09-13",          # string
+      "encargado": "Carlos Mendoza",  # string
+      "turno": "Turno 1",             # string
+      "grupo": "Grupo A",             # string
+      "cantidad": "5.00"              # number
+    }
+  ]
+
+  JSON (Respuesta en caso de error):
   {
-    "idInventarioEntrada": 1,       # number
-    "tipoInsumo": "Cap-Sheet",      # string
-    "articulo": "Cap-Sheet",        # string
-    "fecha": "2026-09-13",          # string
-    "encargado": "Carlos Mendoza",  # string
-    "turno": "Turno 1",             # string
-    "grupo": "Grupo A",             # string
-    "cantidad": "10.50"             # number
-  },
-  {
-    "idInventarioSalida": 1,        # number
-    "tipoInsumo": "Cap-Sheet",      # string
-    "articulo": "Cap-Sheet",        # string
-    "fecha": "2026-09-13",          # string
-    "encargado": "Carlos Mendoza",  # string
-    "turno": "Turno 1",             # string
-    "grupo": "Grupo A",             # string
-    "cantidad": "5.00"              # number
+    "detail": "No se pudo listar el historial de inventario"
   }
-]
-
-JSON (Respuesta en caso de error):
-{
-  "detail": "No se pudo listar el historial de inventario"
-}
 
 
 NOTA TÉCNICA DE PAGINACIÓN:
 
-Este endpoint es de tipo GET. Por lo tanto, los valores de paginación NO se envían 
-en el cuerpo de la petición (como un POST o un JSON), sino directamente en la 
-URL como PARÁMETROS DE CONSULTA (Query Parameters).
+  Este endpoint es de tipo GET. Por lo tanto, los valores de paginación NO se envían 
+  en el cuerpo de la petición (como un POST o un JSON), sino directamente en la 
+  URL como PARÁMETROS DE CONSULTA (Query Parameters).
 
-- ¿Cómo los recibe el backend?
-  El backend los captura automáticamente de la URL mediante los argumentos 
-  'skip' y 'limit' configurados en la función de Python.
+  - ¿Cómo los recibe el backend?
+    El backend los captura automáticamente de la URL mediante los argumentos 
+    'skip' y 'limit' configurados en la función de Python.
 
-- Comportamiento y Valores por Defecto:
-  1. Si el frontend hace la petición limpia sin enviar nada (ej. GET /produccion/), 
-     el backend asume por defecto 'skip=0' y 'limit=50', devolviendo automáticamente 
-     los primeros 50 registros.
-  2. Cuando el usuario navega a otra página, el frontend debe agregarlos a la URL 
-     especificando cuántos registros se salta ('skip') y el tope ('limit').
+  - Comportamiento y Valores por Defecto:
+    1. Si el frontend hace la petición limpia sin enviar nada (ej. GET /produccion/), 
+      el backend asume por defecto 'skip=0' y 'limit=50', devolviendo automáticamente 
+      los primeros 50 registros.
+    2. Cuando el usuario navega a otra página, el frontend debe agregarlos a la URL 
+      especificando cuántos registros se salta ('skip') y el tope ('limit').
 
-- Ejemplos de uso desde el Frontend (Cliente):
-  * Página 1 (Primeros 50 registros):  GET /historial+movimiento?skip=0&limit=50
-  * Página 2 (Siguientes 50 registros): GET /historial+movimiento?skip=50&limit=50
-  * Página 3 (Siguientes 50 registros): GET /historial+movimiento?skip=100&limit=50
+  - Ejemplos de uso desde el Frontend (Cliente):
+    * Página 1 (Primeros 50 registros):  GET /historial+movimiento?skip=0&limit=50
+    * Página 2 (Siguientes 50 registros): GET /historial+movimiento?skip=50&limit=50
+    * Página 3 (Siguientes 50 registros): GET /historial+movimiento?skip=100&limit=50
 
-- Fórmula general para calcular el skip en el frontend según el número de página:
-  skip = (numero_de_pagina - 1) * 50
+  - Fórmula general para calcular el skip en el frontend según el número de página:
+    skip = (numero_de_pagina - 1) * 50
 
 
 NOTA TÉCNICA N°2 DE LA RESPUESTA:
 
-Este Endpoint deberá regresar los 50 primeros registros entre ambas tablas, o sea, basándose en el campo fecha. Esto quiere decir, que puede que regresa 25 de registro y 25 de salida; o 43 de registro y 7 de salida, etc.
+  Este Endpoint deberá regresar los 50 primeros registros entre ambas tablas, o sea, basándose en el campo fecha. Esto quiere decir, que puede que regresa 25 de registro y 25 de salida; o 43 de registro y 7 de salida, etc.
 
 
 
@@ -174,28 +173,28 @@ Este Endpoint deberá regresar los 50 primeros registros entre ambas tablas, o s
 
 
 Ruta 5: Crear Insumo
-  Endpoint: http://127.0.0.1:8000/api/inventario-insumos
-  Método: POST
+    Endpoint: http://127.0.0.1:8000/api/inventario-insumos
+    Método: POST
 
-JSON (Envía el Frontend):
-{
-  "tipo": "Pintura",            # string
-  "articulo": "Esmalte Blanco", # string
-  "unidad": "Litros",           # string
-  "cantidadMinima": "20.00",      # number
-  "estado": true          # boolean
-}
+  JSON (Envía el Frontend):
+  {
+    "tipo": "Pintura",            # string
+    "articulo": "Esmalte Blanco", # string
+    "unidad": "Litros",           # string
+    "cantidadMinima": "20.00",      # number
+    "estado": true          # boolean
+  }
 
-JSON (Respuesta en caso de éxito):
-{
-    "status": "Insumo creado con éxito",
-    "id": 1
-}
+  JSON (Respuesta en caso de éxito):
+  {
+      "status": "Insumo creado con éxito",
+      "id": 1
+  }
 
-JSON (Respuesta en caso de error):
-{
-    "detail": "Error al crear un insumo"
-}
+  JSON (Respuesta en caso de error):
+  {
+      "detail": "Error al crear un insumo"
+  }
 
 
 
@@ -204,23 +203,23 @@ JSON (Respuesta en caso de error):
 
 
 Ruta 6: Ver Insumo por ID
-  Endpoint: http://127.0.0.1:8000/api/inventario-insumos/{id_insumo}
-  Método: GET
+    Endpoint: http://127.0.0.1:8000/api/inventario-insumos/{id_insumo}
+    Método: GET
 
-Estructura de los datos que recibirá:
-{
-  "idInsumo": 1,                # number
-  "tipo": "Pintura",            # string
-  "articulo": "Esmalte Blanco", # string
-  "unidad": "Litros",           # string
-  "cantidadMinima": "20.00",      # number
-  "estado": true          # boolean
-}
+  Estructura de los datos que recibirá:
+  {
+    "idInsumo": 1,                # number
+    "tipo": "Pintura",            # string
+    "articulo": "Esmalte Blanco", # string
+    "unidad": "Litros",           # string
+    "cantidadMinima": "20.00",      # number
+    "estado": true          # boolean
+  }
 
-JSON (Respuesta en caso de error):
-{
-    "detail": "Insumo no encontrado"
-}
+  JSON (Respuesta en caso de error):
+  {
+      "detail": "Insumo no encontrado"
+  }
 
 
 
@@ -228,25 +227,25 @@ JSON (Respuesta en caso de error):
 -----------------------------------------------------------------------------
 
 Ruta 7: Editar Insumo
-  Endpoint: http://127.0.0.1:8000/api/inventario-insumos/{id_insumo}
-  Método: PUT
+    Endpoint: http://127.0.0.1:8000/api/inventario-insumos/{id_insumo}
+    Método: PUT
 
-JSON (Envía el Frontend):
-{
-  "tipo": "Pintura",            # string
-  "articulo": "Esmalte Blanco", # string
-  "unidad": "Litros",           # string
-  "cantidadMinima": "20.00",      # number
-  "estado": true          # boolean
-}
-
-JSON (Respuesta en caso de éxito):
+  JSON (Envía el Frontend):
   {
-  "status": "Insumo editado con éxito",
-  "id": 1
+    "tipo": "Pintura",            # string
+    "articulo": "Esmalte Blanco", # string
+    "unidad": "Litros",           # string
+    "cantidadMinima": "20.00",      # number
+    "estado": true          # boolean
   }
 
-JSON (Respuesta en caso de error):
-  {
-  "detail": "Error al editar el insumo"
-  }
+  JSON (Respuesta en caso de éxito):
+    {
+    "status": "Insumo editado con éxito",
+    "id": 1
+    }
+
+  JSON (Respuesta en caso de error):
+    {
+    "detail": "Error al editar el insumo"
+    }

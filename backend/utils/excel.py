@@ -70,6 +70,7 @@ def escribir_filas(hoja, filas: list[dict], columnas: list[str]):
             celda.font      = EstilosExcel.fuente_datos
             celda.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
             celda.border    = EstilosExcel.borde_fino
+            
 
 
 def crear_libro(nombre_hoja: str):

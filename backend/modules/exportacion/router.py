@@ -11,7 +11,9 @@ from backend.modules.exportacion.services import (
     exportar_movimientos_inventario,
     exportar_moldes,
     exportar_justificantes,
-    exportar_insumos
+    exportar_insumos,
+    exportar_movimientos_pantallas,
+    exportar_pantallas
 )
 
 router = APIRouter(prefix="/api/exportacion", tags=["Exportación"])
@@ -64,4 +66,23 @@ def exportar_listado_insumos(db: Session = Depends(get_db)):
         BytesIO(archivo),
         media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         headers={"Content-Disposition": "attachment; filename=listado_insumos.xlsx"}
+    )
+
+@router.post("/movimientos-pantallas")
+def exportar_historial_movimientos_pantallas(filtro: FiltroFechas, db: Session = Depends(get_db)):
+    archivo = exportar_movimientos_pantallas(db, filtro.fechaDesde, filtro.fechaHasta)
+    return StreamingResponse(
+        BytesIO(archivo),
+        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        headers={"Content-Disposition": "attachment; filename=historial_movimientos_pantallas.xlsx"}
+    )
+
+
+@router.post("/pantallas")
+def exportar_listado_pantallas(db: Session = Depends(get_db)):
+    archivo = exportar_pantallas(db)
+    return StreamingResponse(
+        BytesIO(archivo),
+        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        headers={"Content-Disposition": "attachment; filename=listado_pantallas.xlsx"}
     )

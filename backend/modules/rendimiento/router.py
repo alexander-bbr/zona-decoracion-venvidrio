@@ -53,3 +53,12 @@ def obtener_perdidos(
     Retorna el total de envases y gruesas perdidas agrupados por fecha.
     """
     return services.obtener_perdidos_por_fecha(db, desde, hasta)
+
+@router.get("/eficiencia-deficiencia")
+def obtener_eficiencia_deficiencia(
+    desde: date,
+    hasta: date,
+    db: Session = Depends(get_db),
+    # _=Depends(require_permiso("rendimiento", "ver"))
+):
+    return services.obtener_eficiencia_deficiencia_por_fecha(db, desde, hasta)

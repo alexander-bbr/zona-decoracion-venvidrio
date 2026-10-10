@@ -6,6 +6,7 @@ from datetime import date
 
 from backend.modules.gestion_productiva.produccion.services import obtener_lista_moldes, obtener_lista_justificantes
 from backend.modules.inventario_insumos.services import obtener_lista_insumos
+from backend.modules.inventario_pantallas.services import obtener_lista_pantallas
 from backend.modules.gestion_productiva.produccion.models import GestionProductivaCabecera, GestionProductivaResultado
 from backend.utils.excel import crear_libro, escribir_cabecera, escribir_filas, libro_a_bytes
 
@@ -32,7 +33,7 @@ def obtener_produccion_por_fechas(db: Session, fecha_desde: date, fecha_hasta: d
         func.date(GestionProductivaCabecera.fecha) >= fecha_desde,
         func.date(GestionProductivaCabecera.fecha) <= fecha_hasta
     ).order_by(
-        GestionProductivaCabecera.fecha.asc()
+        GestionProductivaCabecera.fecha.desc()
     ).all()
 
     return [
@@ -81,7 +82,7 @@ def obtener_movimientos_inventario_por_fechas(db: Session, fecha_desde: date, fe
         JOIN inventario_insumos i ON s.id_insumo = i.id_insumo
         WHERE DATE(s.fecha) >= :fecha_desde AND DATE(s.fecha) <= :fecha_hasta
 
-        ORDER BY fecha ASC
+        ORDER BY fecha DESC
     """
 
     filas = db.execute(text(query), {"fecha_desde": fecha_desde, "fecha_hasta": fecha_hasta}).fetchall()
@@ -91,6 +92,59 @@ def obtener_movimientos_inventario_por_fechas(db: Session, fecha_desde: date, fe
             "Tipo Movimiento":  fila.tipo_movimiento,
             "Tipo Insumo":      fila.tipo_insumo,
             "Artículo":         fila.articulo,
+            "Fecha":            fila.fecha.strftime("%d/%m/%Y") if fila.fecha else None,
+            "Encargado":        fila.encargado,
+            "Turno":            fila.turno,
+            "Grupo":            fila.grupo,
+            "Cantidad":         fila.cantidad
+        }
+        for fila in filas
+    ]
+
+
+#CONSULTA EL HISTORIAL DE MOVIMIENTOS DE PANTALLAS FILTRADO POR RANGO DE FECHAS
+#USA SQL NATIVO CON UNION ALL SIN PAGINACION Y CON FILTRO DE FECHAS
+def obtener_movimientos_pantallas_por_fechas(db: Session, fecha_desde: date, fecha_hasta: date):
+    query = """
+        SELECT 'Entrada'              AS tipo_movimiento,
+               p.nombre,
+               p.descripcion,
+               p.tipo,
+               e.fecha,
+               e.encargado,
+               e.turno,
+               e.grupo,
+               e.cantidad
+        FROM inventario_pantallas_entrada e
+        JOIN inventario_pantallas p ON e.id_pantalla = p.id_pantalla
+        WHERE DATE(e.fecha) >= :fecha_desde AND DATE(e.fecha) <= :fecha_hasta
+
+        UNION ALL
+
+        SELECT 'Salida'               AS tipo_movimiento,
+               p.nombre,
+               p.descripcion,
+               p.tipo,
+               s.fecha,
+               s.encargado,
+               s.turno,
+               s.grupo,
+               s.cantidad
+        FROM inventario_pantallas_salida s
+        JOIN inventario_pantallas p ON s.id_pantalla = p.id_pantalla
+        WHERE DATE(s.fecha) >= :fecha_desde AND DATE(s.fecha) <= :fecha_hasta
+
+        ORDER BY fecha DESC
+    """
+
+    filas = db.execute(text(query), {"fecha_desde": fecha_desde, "fecha_hasta": fecha_hasta}).fetchall()
+
+    return [
+        {
+            "Tipo Movimiento":  fila.tipo_movimiento,
+            "Nombre":           fila.nombre,
+            "Descripción":      fila.descripcion,
+            "Tipo":             fila.tipo,
             "Fecha":            fila.fecha.strftime("%d/%m/%Y") if fila.fecha else None,
             "Encargado":        fila.encargado,
             "Turno":            fila.turno,
@@ -133,9 +187,10 @@ def exportar_movimientos_inventario(db: Session, fecha_desde: date, fecha_hasta:
     return libro_a_bytes(libro)
 
 
+
 #GENERA EL ARCHIVO EXCEL DEL LISTADO DE MOLDES
 def exportar_moldes(db: Session) -> bytes:
-    datos = obtener_lista_moldes(db)
+    datos = sorted(obtener_lista_moldes(db), key=lambda x: x["id_molde"])
 
     if not datos:
         raise HTTPException(status_code=404, detail="No se encontraron moldes registrados.")
@@ -169,7 +224,7 @@ def exportar_justificantes(db: Session) -> bytes:
 
 #GENERA EL ARCHIVO EXCEL DEL LISTADO DE INSUMOS
 def exportar_insumos(db: Session) -> bytes:
-    datos = obtener_lista_insumos(db)
+    datos = sorted(obtener_lista_insumos(db), key=lambda x: (x["tipo"].lower(), x["articulo"].lower()))
 
     if not datos:
         raise HTTPException(status_code=404, detail="No se encontraron insumos registrados.")
@@ -178,6 +233,38 @@ def exportar_insumos(db: Session) -> bytes:
     cabeceras = ["Tipo", "Artículo", "Unidad", "Cantidad Actual", "Cantidad Mínima"]
 
     libro, hoja = crear_libro("Insumos")
+    escribir_cabecera(hoja, cabeceras)
+    escribir_filas(hoja, datos, columnas)
+
+    return libro_a_bytes(libro)
+
+#GENERA EL ARCHIVO EXCEL DE HISTORIAL DE MOVIMIENTOS DE PANTALLAS
+def exportar_movimientos_pantallas(db: Session, fecha_desde: date, fecha_hasta: date) -> bytes:
+    datos = obtener_movimientos_pantallas_por_fechas(db, fecha_desde, fecha_hasta)
+
+    if not datos:
+        raise HTTPException(status_code=404, detail="No se encontraron registros en el rango de fechas indicado.")
+
+    columnas = ["Tipo Movimiento", "Nombre", "Descripción", "Tipo", "Fecha", "Encargado", "Turno", "Grupo", "Cantidad"]
+
+    libro, hoja = crear_libro("Movimientos Pantallas")
+    escribir_cabecera(hoja, columnas)
+    escribir_filas(hoja, datos, columnas)
+
+    return libro_a_bytes(libro)
+
+
+#GENERA EL ARCHIVO EXCEL DEL LISTADO DE PANTALLAS
+def exportar_pantallas(db: Session) -> bytes:
+    datos = sorted(obtener_lista_pantallas(db), key=lambda x: x["id_pantalla"])
+
+    if not datos:
+        raise HTTPException(status_code=404, detail="No se encontraron pantallas registradas.")
+
+    columnas = ["nombre", "descripcion", "tipo", "cantidad_actual"]
+    cabeceras = ["Nombre", "Descripción", "Tipo", "Cantidad Actual"]
+
+    libro, hoja = crear_libro("Pantallas")
     escribir_cabecera(hoja, cabeceras)
     escribir_filas(hoja, datos, columnas)
 

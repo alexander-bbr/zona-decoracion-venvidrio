@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 07-10-2026 a las 05:00:50
+-- Tiempo de generación: 10-10-2026 a las 04:41:55
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -373,6 +373,81 @@ INSERT INTO `inventario_insumos_salida` (`id_inventario_salida`, `id_insumo`, `f
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `inventario_pantallas`
+--
+
+CREATE TABLE `inventario_pantallas` (
+  `id_pantalla` int(11) NOT NULL,
+  `nombre` varchar(150) NOT NULL,
+  `descripcion` varchar(255) NOT NULL,
+  `tipo` varchar(50) NOT NULL,
+  `cantidad_actual` int(11) NOT NULL DEFAULT 0,
+  `estado` tinyint(1) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `inventario_pantallas`
+--
+
+INSERT INTO `inventario_pantallas` (`id_pantalla`, `nombre`, `descripcion`, `tipo`, `cantidad_actual`, `estado`) VALUES
+(6, 'Pantalla Polar Light', 'Diseño para decoración de botella Polar Light', 'Malla 120T', 28, 1),
+(7, 'Pantalla Polarcita 222 ML', 'Diseño para decoración de botella Polarcita 222 ML', 'Malla 120T', 26, 1),
+(8, 'Pantalla Golden 350 ML', 'Diseño para decoración de botella Golden 350 ML', 'Malla 150T', 10, 1),
+(9, 'Pantalla Pepsi 350 ML', 'Diseño para decoración de botella Pepsi 350 ML', 'Malla 150T', 7, 1),
+(10, 'Pantalla Cerveza 330 RET', 'Diseño para decoración de botella Cerveza 330 RET', 'Malla 90T', 5, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `inventario_pantallas_entrada`
+--
+
+CREATE TABLE `inventario_pantallas_entrada` (
+  `id_inventario_entrada` int(11) NOT NULL,
+  `id_pantalla` int(11) NOT NULL,
+  `fecha` datetime NOT NULL,
+  `encargado` varchar(100) NOT NULL,
+  `turno` varchar(20) NOT NULL,
+  `grupo` varchar(20) NOT NULL,
+  `cantidad` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `inventario_pantallas_entrada`
+--
+
+INSERT INTO `inventario_pantallas_entrada` (`id_inventario_entrada`, `id_pantalla`, `fecha`, `encargado`, `turno`, `grupo`, `cantidad`) VALUES
+(1, 6, '2026-10-09 21:42:57', 'string', 'string', 'string', 50),
+(2, 7, '2026-10-09 21:43:09', 'string', 'string', 'string', 50);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `inventario_pantallas_salida`
+--
+
+CREATE TABLE `inventario_pantallas_salida` (
+  `id_inventario_salida` int(11) NOT NULL,
+  `id_pantalla` int(11) NOT NULL,
+  `fecha` datetime NOT NULL,
+  `encargado` varchar(100) NOT NULL,
+  `turno` varchar(20) NOT NULL,
+  `grupo` varchar(20) NOT NULL,
+  `cantidad` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `inventario_pantallas_salida`
+--
+
+INSERT INTO `inventario_pantallas_salida` (`id_inventario_salida`, `id_pantalla`, `fecha`, `encargado`, `turno`, `grupo`, `cantidad`) VALUES
+(1, 6, '2026-10-09 21:43:28', 'string', 'string', 'string', 0),
+(2, 6, '2026-10-09 21:43:42', 'string', 'string', 'string', 30),
+(3, 7, '2026-10-09 21:43:48', 'string', 'string', 'string', 30);
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `justificantes`
 --
 
@@ -627,6 +702,26 @@ ALTER TABLE `inventario_insumos_salida`
   ADD KEY `id_insumo` (`id_insumo`);
 
 --
+-- Indices de la tabla `inventario_pantallas`
+--
+ALTER TABLE `inventario_pantallas`
+  ADD PRIMARY KEY (`id_pantalla`);
+
+--
+-- Indices de la tabla `inventario_pantallas_entrada`
+--
+ALTER TABLE `inventario_pantallas_entrada`
+  ADD PRIMARY KEY (`id_inventario_entrada`),
+  ADD KEY `id_pantalla` (`id_pantalla`);
+
+--
+-- Indices de la tabla `inventario_pantallas_salida`
+--
+ALTER TABLE `inventario_pantallas_salida`
+  ADD PRIMARY KEY (`id_inventario_salida`),
+  ADD KEY `id_pantalla` (`id_pantalla`);
+
+--
 -- Indices de la tabla `justificantes`
 --
 ALTER TABLE `justificantes`
@@ -716,6 +811,24 @@ ALTER TABLE `inventario_insumos_salida`
   MODIFY `id_inventario_salida` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT de la tabla `inventario_pantallas`
+--
+ALTER TABLE `inventario_pantallas`
+  MODIFY `id_pantalla` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT de la tabla `inventario_pantallas_entrada`
+--
+ALTER TABLE `inventario_pantallas_entrada`
+  MODIFY `id_inventario_entrada` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de la tabla `inventario_pantallas_salida`
+--
+ALTER TABLE `inventario_pantallas_salida`
+  MODIFY `id_inventario_salida` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT de la tabla `justificantes`
 --
 ALTER TABLE `justificantes`
@@ -780,6 +893,18 @@ ALTER TABLE `inventario_insumos_entrada`
 --
 ALTER TABLE `inventario_insumos_salida`
   ADD CONSTRAINT `inventario_insumos_salida_ibfk_1` FOREIGN KEY (`id_insumo`) REFERENCES `inventario_insumos` (`id_insumo`);
+
+--
+-- Filtros para la tabla `inventario_pantallas_entrada`
+--
+ALTER TABLE `inventario_pantallas_entrada`
+  ADD CONSTRAINT `inventario_pantallas_entrada_ibfk_1` FOREIGN KEY (`id_pantalla`) REFERENCES `inventario_pantallas` (`id_pantalla`);
+
+--
+-- Filtros para la tabla `inventario_pantallas_salida`
+--
+ALTER TABLE `inventario_pantallas_salida`
+  ADD CONSTRAINT `inventario_pantallas_salida_ibfk_1` FOREIGN KEY (`id_pantalla`) REFERENCES `inventario_pantallas` (`id_pantalla`);
 
 --
 -- Filtros para la tabla `permisos_usuarios`

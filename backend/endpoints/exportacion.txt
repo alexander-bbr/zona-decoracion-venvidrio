@@ -99,3 +99,4 @@ Respuesta en caso de error:
 {
     "detail": "No se encontraron insumos registrados."
 }
+

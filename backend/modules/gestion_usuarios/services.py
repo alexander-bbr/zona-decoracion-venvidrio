@@ -116,7 +116,8 @@ NOMBRES_MODULOS = {
     "inventario_insumos":   "Inventario de Insumos",
     "rendimiento":          "Rendimiento",
     "gestion_usuarios":     "Gestión de Usuarios",
-    "gestion_productiva":   "Gestión Productiva"
+    "gestion_productiva":   "Gestión Productiva",
+    "inventario_pantallas":   "Inventario de Pantallas"
 }
 
 NOMBRES_ACCIONES = {
@@ -132,7 +133,10 @@ NOMBRES_ACCIONES = {
     "ver_produccion":           "Ver Producción",
     "editar":                   "Editar",
     "gestion_moldes":           "Gestión de Moldes",
-    "gestion_justificantes":    "Gestión de Justificantes"
+    "gestion_justificantes":    "Gestión de Justificantes",
+    "entrada_pantallas":        "Entrada de Pantallas",
+    "salida_pantallas":         "Salida de Pantallas",
+    "gestion_pantallas":        "Gestión de Pantallas"
 }
 
 # 5. Listar catálogo de permisos disponibles

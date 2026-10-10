@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import styles from "./historial-movimiento.module.css";
+import styles from "./historial-movimiento-insumos.module.css";
 
 type Movimiento = {
   idInventarioEntrada?: number;
@@ -19,7 +19,7 @@ const API_EXPORTAR_MOVIMIENTOS =
 
 const LIMIT = 50;
 
-export const HistorialMovimiento = () => {
+export const HistorialMovimientoInsumos = () => {
   const [movimientos, setMovimientos] = useState<Movimiento[]>([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState("");

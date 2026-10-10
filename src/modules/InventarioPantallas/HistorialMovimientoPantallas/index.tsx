@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import styles from "./historial-movimiento.module.css";
+import styles from "./historial-movimiento-pantallas.module.css";
 
 type Movimiento = {
   idInventarioEntrada?: number;

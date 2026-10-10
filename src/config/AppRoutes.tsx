@@ -12,8 +12,8 @@ import { Rendimiento } from "../modules/Rendimiento";
 import { InventarioInsumos } from "../modules/InventarioInsumos";
 import { RegistroInsumo } from "../modules/InventarioInsumos/RegistroInsumo";
 import { SalidaInsumo } from "../modules/InventarioInsumos/SalidaInsumo";
-import { VerInventario } from "../modules/InventarioInsumos/VerInventario";
-import { HistorialMovimiento } from "../modules/InventarioInsumos/HistorialMovimiento";
+import { VerInventarioInsumos } from "../modules/InventarioInsumos/VerInventarioInsumos";
+import { HistorialMovimientoInsumos } from "../modules/InventarioInsumos/HistorialMovimientoInsumos";
 import { GestionInsumos } from "../modules/InventarioInsumos/GestionInsumos";
 import { CrearInsumo } from "../modules/InventarioInsumos/GestionInsumos/CrearInsumo";
 import { EditarInsumo } from "../modules/InventarioInsumos/GestionInsumos/EditarInsumo";
@@ -152,7 +152,7 @@ export const AppRoutes = () => {
                 },
               ]}
             >
-              <HistorialMovimiento />
+              <HistorialMovimientoInsumos />
             </PrivateRoute>
           }
         />
@@ -165,7 +165,7 @@ export const AppRoutes = () => {
                 { modulo: "inventario_insumos", accion: "ver_inventario" },
               ]}
             >
-              <VerInventario />
+              <VerInventarioInsumos />
             </PrivateRoute>
           }
         />

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import styles from "./ver-inventario.module.css";
+import styles from "./ver-inventario-insumos.module.css";
 
 type Insumo = {
   idInsumo: number;
@@ -12,7 +12,7 @@ type Insumo = {
 
 const API_INSUMOS = "http://127.0.0.1:8000/api/inventario-insumos";
 
-export const VerInventario = () => {
+export const VerInventarioInsumos = () => {
   const [insumos, setInsumos] = useState<Insumo[]>([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState("");

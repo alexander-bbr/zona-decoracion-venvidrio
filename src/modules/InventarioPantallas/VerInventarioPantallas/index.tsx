@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import styles from "./ver-inventario.module.css";
+import styles from "./ver-inventario-pantallas.module.css";
 
 type Pantalla = {
   idPantalla: number;

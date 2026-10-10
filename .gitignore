@@ -30,3 +30,9 @@ venv
 
 # Notas de Desarrollo
 Formatos de procesos finales 2025/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so

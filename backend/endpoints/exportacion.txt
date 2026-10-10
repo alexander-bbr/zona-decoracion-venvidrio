@@ -1,6 +1,6 @@
-
 MÓDULO: EXPORTACIÓN
 ===================
+
 
 
 Ruta 1: Exportar Historial Gestión Productiva
@@ -22,7 +22,9 @@ Respuesta en caso de error:
 }
 
 
+
 ---
+
 
 
 Ruta 2: Exportar Historial Movimientos Inventario
@@ -36,7 +38,7 @@ JSON (Envía el Frontend):
 }
 
 Respuesta en caso de éxito:
-Archivo .xlsx descargable con el historial de movimientos de inventario en el rango de fechas indicado.
+Archivo .xlsx descargable con el historial de movimientos del inventario de insumos en el rango de fechas indicado.
 
 Respuesta en caso de error:
 {
@@ -44,7 +46,9 @@ Respuesta en caso de error:
 }
 
 
+
 ---
+
 
 
 Ruta 3: Exportar Listado de Moldes
@@ -63,7 +67,9 @@ Respuesta en caso de error:
 }
 
 
+
 ---
+
 
 
 Ruta 4: Exportar Listado de Justificantes
@@ -82,7 +88,9 @@ Respuesta en caso de error:
 }
 
 
+
 ---
+
 
 
 Ruta 5: Exportar Listado de Insumos
@@ -100,3 +108,47 @@ Respuesta en caso de error:
     "detail": "No se encontraron insumos registrados."
 }
 
+
+
+---
+
+
+
+Ruta 6: Exportar Historial Movimientos Pantallas
+Endpoint: http://127.0.0.1:8000/api/exportacion/movimientos-pantallas
+Método: POST
+
+JSON (Envía el Frontend):
+{
+    "fechaDesde": "2024-01-01",
+    "fechaHasta": "2024-12-31"
+}
+
+Respuesta en caso de éxito:
+Archivo .xlsx descargable con el historial de movimientos del inventario de pantallas en el rango de fechas indicado.
+
+Respuesta en caso de error:
+{
+    "detail": "No se encontraron registros en el rango de fechas indicado."
+}
+
+
+
+---
+
+
+
+Ruta 7: Exportar Listado de Pantallas
+Endpoint: http://127.0.0.1:8000/api/exportacion/pantallas
+Método: POST
+
+JSON (Envía el Frontend):
+No aplica, no requiere body.
+
+Respuesta en caso de éxito:
+Archivo .xlsx descargable con el listado completo de pantallas activos.
+
+Respuesta en caso de error:
+{
+    "detail": "No se encontraron pantallas registradas."
+}

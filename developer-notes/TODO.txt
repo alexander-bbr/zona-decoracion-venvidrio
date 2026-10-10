@@ -86,9 +86,7 @@
 
 ## Exportaciones
 
-- Hacer en cuanto esté disponible el del inventario de pantallas.
-- Corregir el orden de los registros en los excel.
-- Hay que corregir el .txt de exportaciones, ya que ahora ya no debería de decir inventario, sino inventario-insumos, y también debemos de crear el de inventario-pantallas
+- Corregir el orden de los registros de los dos excel del Módulo de Inventario de Pantallas.
 
 
 
@@ -108,6 +106,7 @@
 
   - Hacer Responsive la Aplicación.
   - Hacer el README.md
+  - Eliminar TODOS los archivos de notas de desarrollo innecesarios
 
 
 

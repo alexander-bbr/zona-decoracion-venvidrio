@@ -85,6 +85,11 @@
   border-color: #3498db;
 }
 
+.inputWrapper textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
 .row {
   display: flex;
   gap: 1rem;

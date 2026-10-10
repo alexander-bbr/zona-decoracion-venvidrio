@@ -1,39 +1,38 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { HeaderForm } from "../../../components/HeaderForm";
-import styles from "./salida-insumo.module.css";
+import styles from "./salida-pantalla.module.css";
 
-type Insumo = {
-  idInsumo: number;
+type Pantalla = {
+  idPantalla: number;
+  nombre: string;
+  descripcion: string;
   tipo: string;
-  articulo: string;
-  unidad: string;
-  cantidadActual: number;
-  cantidadMinima: number;
+  cantidad: number;
 };
 
 type FormData = {
-  idInsumo: string;
+  idPantalla: string;
   encargado: string;
   turno: string;
   grupo: string;
   cantidad: string;
 };
 
-const API_INSUMOS = "http://127.0.0.1:8000/api/inventario-insumos";
-const API_SALIDAS = "http://127.0.0.1:8000/api/inventario-insumos/salidas";
+const API_PANTALLAS = "http://127.0.0.1:8000/api/inventario-pantallas";
+const API_SALIDAS = "http://127.0.0.1:8000/api/inventario-pantallas/salidas";
 
 const TURNOS = ["Turno 1", "Turno 2", "Turno 3"];
 const GRUPOS = ["Grupo A", "Grupo B", "Grupo C", "Grupo D"];
 
-export const SalidaInsumo = () => {
+export const SalidaPantalla = () => {
   const navigate = useNavigate();
 
-  const [insumos, setInsumos] = useState<Insumo[]>([]);
-  const [cargandoInsumos, setCargandoInsumos] = useState(true);
+  const [pantallas, setPantallas] = useState<Pantalla[]>([]);
+  const [cargandoPantallas, setCargandoPantallas] = useState(true);
 
   const [formData, setFormData] = useState<FormData>({
-    idInsumo: "",
+    idPantalla: "",
     encargado: "",
     turno: "",
     grupo: "",
@@ -43,29 +42,28 @@ export const SalidaInsumo = () => {
   const [error, setError] = useState("");
   const [cargando, setCargando] = useState(false);
 
-  // Cargar los insumos disponibles para el select
+  // Cargar las pantallas disponibles para el select
   useEffect(() => {
-    const cargarInsumos = async () => {
-      setCargandoInsumos(true);
+    const cargarPantallas = async () => {
+      setCargandoPantallas(true);
       try {
-        const response = await fetch(API_INSUMOS);
+        const response = await fetch(API_PANTALLAS);
         if (!response.ok) {
-          throw new Error(`Error al cargar insumos: ${response.status}`);
+          throw new Error(`Error al cargar pantallas: ${response.status}`);
         }
-        const data = (await response.json()) as Insumo[];
+        const data = (await response.json()) as Pantalla[];
         const ordenados = [...data].sort(
           (a, b) =>
-            a.tipo.localeCompare(b.tipo) ||
-            a.articulo.localeCompare(b.articulo),
+            a.tipo.localeCompare(b.tipo) || a.nombre.localeCompare(b.nombre),
         );
-        setInsumos(ordenados);
+        setPantallas(ordenados);
       } catch {
-        setError("No se pudieron cargar los insumos.");
+        setError("No se pudieron cargar las pantallas.");
       } finally {
-        setCargandoInsumos(false);
+        setCargandoPantallas(false);
       }
     };
-    void cargarInsumos();
+    void cargarPantallas();
   }, []);
 
   const handleChange = (
@@ -75,9 +73,9 @@ export const SalidaInsumo = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Insumo seleccionado actualmente (para mostrar stock disponible)
-  const insumoSeleccionado = insumos.find(
-    (i) => i.idInsumo === Number(formData.idInsumo),
+  // Pantalla seleccionada actualmente (para mostrar stock disponible)
+  const pantallaSeleccionada = pantallas.find(
+    (p) => p.idPantalla === Number(formData.idPantalla),
   );
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -86,8 +84,8 @@ export const SalidaInsumo = () => {
     setCargando(true);
 
     // Validaciones
-    if (!formData.idInsumo) {
-      setError("Debes seleccionar un insumo.");
+    if (!formData.idPantalla) {
+      setError("Debes seleccionar una pantalla.");
       setCargando(false);
       return;
     }
@@ -111,12 +109,17 @@ export const SalidaInsumo = () => {
       setCargando(false);
       return;
     }
+    if (!Number.isInteger(Number(formData.cantidad))) {
+      setError("La cantidad debe ser un número entero.");
+      setCargando(false);
+      return;
+    }
     if (
-      insumoSeleccionado &&
-      Number(formData.cantidad) > insumoSeleccionado.cantidadActual
+      pantallaSeleccionada &&
+      Number(formData.cantidad) > pantallaSeleccionada.cantidad
     ) {
       setError(
-        `La cantidad supera el stock disponible (${insumoSeleccionado.cantidadActual} ${insumoSeleccionado.unidad}).`,
+        `La cantidad supera el stock disponible (${pantallaSeleccionada.cantidad}).`,
       );
       setCargando(false);
       return;
@@ -127,7 +130,7 @@ export const SalidaInsumo = () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          idInsumo: Number(formData.idInsumo),
+          idPantalla: Number(formData.idPantalla),
           encargado: formData.encargado,
           turno: formData.turno,
           grupo: formData.grupo,
@@ -142,7 +145,7 @@ export const SalidaInsumo = () => {
         );
       }
 
-      navigate("/inventario");
+      navigate("/inventario-pantallas");
     } catch (submitError) {
       setError(
         submitError instanceof Error
@@ -156,7 +159,7 @@ export const SalidaInsumo = () => {
 
   const handleReset = () => {
     setFormData({
-      idInsumo: "",
+      idPantalla: "",
       encargado: "",
       turno: "",
       grupo: "",
@@ -169,42 +172,39 @@ export const SalidaInsumo = () => {
     <form className={`${styles.form} content`} onSubmit={handleSubmit}>
       <HeaderForm />
 
-      <h3 className={styles.title}>Registro de Salida de Insumo</h3>
+      <h3 className={styles.title}>Registro de Salida de Pantalla</h3>
 
       <section className={styles.formData}>
         <fieldset className={styles.fieldset}>
           <legend className={styles.legend}>Datos del Movimiento</legend>
 
           <div className={styles.inputWrapper}>
-            <label htmlFor="idInsumo">
-              Insumo <span className={styles.requireSymbol}>*</span>
+            <label htmlFor="idPantalla">
+              Pantalla <span className={styles.requireSymbol}>*</span>
             </label>
             <select
-              id="idInsumo"
-              name="idInsumo"
-              value={formData.idInsumo}
+              id="idPantalla"
+              name="idPantalla"
+              value={formData.idPantalla}
               onChange={handleChange}
-              disabled={cargandoInsumos}
+              disabled={cargandoPantallas}
               required
             >
               <option value="">
-                {cargandoInsumos ? "Cargando insumos..." : "..."}
+                {cargandoPantallas ? "Cargando pantallas..." : "..."}
               </option>
-              {insumos.map((insumo) => (
-                <option key={insumo.idInsumo} value={insumo.idInsumo}>
-                  ({insumo.tipo}) - {insumo.articulo} --&gt;{" "}
-                  {insumo.cantidadActual} {insumo.unidad}
+              {pantallas.map((pantalla) => (
+                <option key={pantalla.idPantalla} value={pantalla.idPantalla}>
+                  ({pantalla.tipo}) - {pantalla.nombre} --&gt;{" "}
+                  {pantalla.cantidad}
                 </option>
               ))}
             </select>
           </div>
 
-          {insumoSeleccionado && (
+          {pantallaSeleccionada && (
             <p className={styles.stockInfo}>
-              Stock disponible:{" "}
-              <strong>
-                {insumoSeleccionado.cantidadActual} {insumoSeleccionado.unidad}
-              </strong>
+              Stock disponible: <strong>{pantallaSeleccionada.cantidad}</strong>
             </p>
           )}
 
@@ -272,8 +272,8 @@ export const SalidaInsumo = () => {
               id="cantidad"
               name="cantidad"
               type="number"
-              step="0.01"
-              min="0.01"
+              step="1"
+              min="1"
               value={formData.cantidad}
               onChange={handleChange}
               required

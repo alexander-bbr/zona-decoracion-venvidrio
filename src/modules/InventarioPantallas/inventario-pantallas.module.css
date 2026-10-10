@@ -112,7 +112,6 @@
   .actions {
     grid-template-columns: 1fr;
   }
-
   .actionCard {
     padding: 32px 20px;
   }

@@ -21,10 +21,6 @@
 
 ## Inventario de Pantallas
 
-  - Hacer el módulo completo.
-  - Aplicar la metodología real.
-  - Hacer el botón de exportaciones.
-
 
 
 ---

@@ -2,7 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import { PrivateRoute } from "./PrivateRoute";
 import { PublicRoute } from "./PublicRoute";
 
-// Módulo - Home
+// Módulo - Inicio
 import { Home } from "../modules/Home";
 
 // Módulo - Rendimiento
@@ -17,6 +17,16 @@ import { HistorialMovimiento } from "../modules/InventarioInsumos/HistorialMovim
 import { GestionInsumos } from "../modules/InventarioInsumos/GestionInsumos";
 import { CrearInsumo } from "../modules/InventarioInsumos/GestionInsumos/CrearInsumo";
 import { EditarInsumo } from "../modules/InventarioInsumos/GestionInsumos/EditarInsumo";
+
+// Módulo - Inventario de Pantallas
+import { InventarioPantallas } from "../modules/InventarioPantallas";
+import { RegistroPantalla } from "../modules/InventarioPantallas/RegistroPantalla";
+import { SalidaPantalla } from "../modules/InventarioPantallas/SalidaPantalla";
+import { VerInventarioPantallas } from "../modules/InventarioPantallas/VerInventarioPantallas";
+import { HistorialMovimientoPantallas } from "../modules/InventarioPantallas/HistorialMovimientoPantallas";
+import { GestionPantallas } from "../modules/InventarioPantallas/GestionPantallas";
+import { CrearPantalla } from "../modules/InventarioPantallas/GestionPantallas/CrearPantalla";
+import { EditarPantalla } from "../modules/InventarioPantallas/GestionPantallas/EditarPantalla";
 
 // Módulo - Gestión Productiva
 import { GestionProductiva } from "../modules/GestionProductiva";
@@ -195,6 +205,126 @@ export const AppRoutes = () => {
                 ]}
               >
                 <EditarInsumo />
+              </PrivateRoute>
+            }
+          />
+        </Route>
+      </Route>
+
+      {/* 
+        Módulo - Inventario de Pantallas - Requiere al menos un permiso de inventario_pantallas
+      */}
+      <Route
+        path="/inventario-pantallas"
+        element={
+          <PrivateRoute
+            requiredPermissions={[
+              { modulo: "inventario_pantallas", accion: "ver_inventario" },
+            ]}
+            // Usamos requireAnyPermission para que permita si tiene AL MENOS UNO
+            requireAnyPermission={true}
+          >
+            <InventarioPantallas />
+          </PrivateRoute>
+        }
+      >
+        {/* Registro de Pantalla */}
+        <Route
+          path="registro-pantalla"
+          element={
+            <PrivateRoute
+              requiredPermissions={[
+                { modulo: "inventario_pantallas", accion: "entrada_pantallas" },
+              ]}
+            >
+              <RegistroPantalla />
+            </PrivateRoute>
+          }
+        ></Route>
+        {/* Salida de Pantalla */}
+        <Route
+          path="salida-pantalla"
+          element={
+            <PrivateRoute
+              requiredPermissions={[
+                { modulo: "inventario_pantallas", accion: "salida_pantallas" },
+              ]}
+            >
+              <SalidaPantalla />
+            </PrivateRoute>
+          }
+        />
+        {/* Historial de Movimiento */}
+        <Route
+          path="historial-movimiento"
+          element={
+            <PrivateRoute
+              requiredPermissions={[
+                {
+                  modulo: "inventario_pantallas",
+                  accion: "historial_movimientos",
+                },
+              ]}
+            >
+              <HistorialMovimientoPantallas />
+            </PrivateRoute>
+          }
+        />
+        {/* Ver Inventario */}
+        <Route
+          path="ver-inventario"
+          element={
+            <PrivateRoute
+              requiredPermissions={[
+                { modulo: "inventario_pantallas", accion: "ver_inventario" },
+              ]}
+            >
+              <VerInventarioPantallas />
+            </PrivateRoute>
+          }
+        />
+        {/* Gestión de Pantallas */}
+        <Route
+          path="gestion-pantallas"
+          element={
+            <PrivateRoute
+              requiredPermissions={[
+                { modulo: "inventario_pantallas", accion: "gestion_pantallas" },
+              ]}
+            >
+              <GestionPantallas />
+            </PrivateRoute>
+          }
+        >
+          {/* Crear Pantalla */}
+          <Route
+            path="crear-pantalla"
+            element={
+              <PrivateRoute
+                requiredPermissions={[
+                  {
+                    modulo: "inventario_pantallas",
+                    accion: "gestion_pantallas",
+                  },
+                ]}
+              >
+                <CrearPantalla />
+              </PrivateRoute>
+            }
+          />
+          {/* Editar Pantalla */}
+          <Route
+            path="editar-pantalla/:id"
+            element={
+              <PrivateRoute
+                requiredPermissions={[
+                  {
+                    modulo: "inventario_pantallas",
+                    accion: "gestion_pantallas",
+                  },
+                ]}
+              >
+                <EditarPantalla />
               </PrivateRoute>
             }
           />

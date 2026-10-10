@@ -1,32 +1,32 @@
 import { useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { HeaderForm } from "../../../../components/HeaderForm";
-import styles from "./crear-insumo.module.css";
+import styles from "./crear-pantalla.module.css";
 
 type FormData = {
+  nombre: string;
+  descripcion: string;
   tipo: string;
-  articulo: string;
-  unidad: string;
-  cantidadMinima: string;
   estado: boolean;
 };
 
-const API_INSUMOS = "http://127.0.0.1:8000/api/inventario-insumos";
+const API_PANTALLAS = "http://127.0.0.1:8000/api/inventario-pantallas";
 
-export const CrearInsumo = () => {
+export const CrearPantalla = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState<FormData>({
+    nombre: "",
+    descripcion: "",
     tipo: "",
-    articulo: "",
-    unidad: "",
-    cantidadMinima: "",
     estado: true,
   });
   const [error, setError] = useState("");
   const [cargando, setCargando] = useState(false);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >,
   ) => {
     const { name, value, type } = e.target;
     if (type === "checkbox") {
@@ -43,36 +43,30 @@ export const CrearInsumo = () => {
     setCargando(true);
 
     // Validaciones
+    if (!formData.nombre.trim()) {
+      setError("El nombre de la pantalla es obligatorio.");
+      setCargando(false);
+      return;
+    }
+    if (!formData.descripcion.trim()) {
+      setError("La descripción es obligatoria.");
+      setCargando(false);
+      return;
+    }
     if (!formData.tipo.trim()) {
-      setError("El tipo de insumo es obligatorio.");
-      setCargando(false);
-      return;
-    }
-    if (!formData.articulo.trim()) {
-      setError("El artículo es obligatorio.");
-      setCargando(false);
-      return;
-    }
-    if (!formData.unidad.trim()) {
-      setError("La unidad es obligatoria.");
-      setCargando(false);
-      return;
-    }
-    if (!formData.cantidadMinima || Number(formData.cantidadMinima) < 0) {
-      setError("La cantidad mínima no puede ser negativa.");
+      setError("El tipo es obligatorio.");
       setCargando(false);
       return;
     }
 
     try {
-      const response = await fetch(API_INSUMOS, {
+      const response = await fetch(API_PANTALLAS, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          nombre: formData.nombre,
+          descripcion: formData.descripcion,
           tipo: formData.tipo,
-          articulo: formData.articulo,
-          unidad: formData.unidad,
-          cantidadMinima: Number(formData.cantidadMinima),
           estado: formData.estado,
         }),
       });
@@ -80,16 +74,16 @@ export const CrearInsumo = () => {
       if (!response.ok) {
         const data = await response.json().catch(() => null);
         throw new Error(
-          data?.detail ?? `Error al crear insumo: ${response.status}`,
+          data?.detail ?? `Error al crear pantalla: ${response.status}`,
         );
       }
 
-      navigate("/inventario/gestion-insumos");
+      navigate("/inventario-pantallas/gestion-pantallas");
     } catch (submitError) {
       setError(
         submitError instanceof Error
           ? submitError.message
-          : "Error al crear el insumo.",
+          : "Error al crear la pantalla.",
       );
     } finally {
       setCargando(false);
@@ -98,10 +92,9 @@ export const CrearInsumo = () => {
 
   const handleReset = () => {
     setFormData({
+      nombre: "",
+      descripcion: "",
       tipo: "",
-      articulo: "",
-      unidad: "",
-      cantidadMinima: "",
       estado: true,
     });
     setError("");
@@ -111,11 +104,11 @@ export const CrearInsumo = () => {
     <form className={`${styles.form} content`} onSubmit={handleSubmit}>
       <HeaderForm />
 
-      <h3 className={styles.title}>Crear Nuevo Insumo</h3>
+      <h3 className={styles.title}>Crear Nueva Pantalla</h3>
 
       <section className={styles.formData}>
         <fieldset className={styles.fieldset}>
-          <legend className={styles.legend}>Datos del Insumo</legend>
+          <legend className={styles.legend}>Datos de la Pantalla</legend>
 
           <div className={styles.row}>
             <div className={styles.inputWrapper}>
@@ -133,14 +126,14 @@ export const CrearInsumo = () => {
             </div>
 
             <div className={styles.inputWrapper}>
-              <label htmlFor="unidad">
-                Unidad <span className={styles.requireSymbol}>*</span>
+              <label htmlFor="nombre">
+                Nombre <span className={styles.requireSymbol}>*</span>
               </label>
               <input
-                id="unidad"
-                name="unidad"
+                id="nombre"
+                name="nombre"
                 type="text"
-                value={formData.unidad}
+                value={formData.nombre}
                 onChange={handleChange}
                 required
               />
@@ -148,31 +141,15 @@ export const CrearInsumo = () => {
           </div>
 
           <div className={styles.inputWrapper}>
-            <label htmlFor="articulo">
-              Artículo <span className={styles.requireSymbol}>*</span>
+            <label htmlFor="descripcion">
+              Descripción <span className={styles.requireSymbol}>*</span>
             </label>
-            <input
-              id="articulo"
-              name="articulo"
-              type="text"
-              value={formData.articulo}
+            <textarea
+              id="descripcion"
+              name="descripcion"
+              value={formData.descripcion}
               onChange={handleChange}
-              required
-            />
-          </div>
-
-          <div className={styles.inputWrapper}>
-            <label htmlFor="cantidadMinima">
-              Cantidad Mínima <span className={styles.requireSymbol}>*</span>
-            </label>
-            <input
-              id="cantidadMinima"
-              name="cantidadMinima"
-              type="number"
-              step="0.01"
-              min="0"
-              value={formData.cantidadMinima}
-              onChange={handleChange}
+              rows={3}
               required
             />
           </div>
@@ -185,7 +162,7 @@ export const CrearInsumo = () => {
               checked={formData.estado}
               onChange={handleChange}
             />
-            <label htmlFor="estado">Insumo Activo</label>
+            <label htmlFor="estado">Pantalla Activa</label>
           </div>
         </fieldset>
 

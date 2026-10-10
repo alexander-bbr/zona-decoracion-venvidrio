@@ -4,8 +4,9 @@ import styles from "./historial-movimiento.module.css";
 type Movimiento = {
   idInventarioEntrada?: number;
   idInventarioSalida?: number;
-  tipoInsumo: string;
-  articulo: string;
+  nombre: string;
+  descripcion: string;
+  tipo: string;
   fecha: string;
   encargado: string;
   turno: string;
@@ -13,13 +14,14 @@ type Movimiento = {
   cantidad: number;
 };
 
-const API_HISTORIAL = "http://127.0.0.1:8000/api/inventario-insumos/historial";
+const API_HISTORIAL =
+  "http://127.0.0.1:8000/api/inventario-pantallas/historial";
 const API_EXPORTAR_MOVIMIENTOS =
-  "http://127.0.0.1:8000/api/exportacion/movimientos-inventario";
+  "http://127.0.0.1:8000/api/exportacion/movimientos-pantallas";
 
 const LIMIT = 50;
 
-export const HistorialMovimiento = () => {
+export const HistorialMovimientoPantallas = () => {
   const [movimientos, setMovimientos] = useState<Movimiento[]>([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState("");
@@ -132,7 +134,7 @@ export const HistorialMovimiento = () => {
 
       // Obtener el nombre del archivo desde Content-Disposition (si existe)
       const contentDisposition = response.headers.get("Content-Disposition");
-      let nombreArchivo = "Historial de Movimientos.xlsx";
+      let nombreArchivo = "Historial de Movimientos de Pantallas.xlsx";
       if (contentDisposition) {
         const match = contentDisposition.match(/filename="?([^"]+)"?/);
         if (match && match[1]) {
@@ -195,8 +197,9 @@ export const HistorialMovimiento = () => {
                 <thead>
                   <tr>
                     <th>Tipo</th>
-                    <th>Tipo Insumo</th>
-                    <th>Artículo</th>
+                    <th>Tipo Pantalla</th>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
                     <th>Fecha</th>
                     <th>Encargado</th>
                     <th>Turno</th>
@@ -207,7 +210,7 @@ export const HistorialMovimiento = () => {
                 <tbody>
                   {movimientos.map((mov, index) => (
                     <tr
-                      key={`${mov.tipoInsumo}-${mov.articulo}-${mov.fecha}-${index}`}
+                      key={`${mov.nombre}-${mov.fecha}-${index}`}
                       className={
                         esEntrada(mov) ? styles.rowEntrada : styles.rowSalida
                       }
@@ -223,8 +226,9 @@ export const HistorialMovimiento = () => {
                           {esEntrada(mov) ? "Entrada" : "Salida"}
                         </span>
                       </td>
-                      <td>{mov.tipoInsumo}</td>
-                      <td>{mov.articulo}</td>
+                      <td>{mov.tipo}</td>
+                      <td>{mov.nombre}</td>
+                      <td>{mov.descripcion}</td>
                       <td>{mov.fecha}</td>
                       <td>{mov.encargado}</td>
                       <td>{mov.turno}</td>
@@ -283,7 +287,7 @@ export const HistorialMovimiento = () => {
 
             <p className={styles.modalDescription}>
               Selecciona el rango de fechas para exportar los movimientos de
-              inventario.
+              inventario de pantallas.
             </p>
 
             <div className={styles.modalBody}>

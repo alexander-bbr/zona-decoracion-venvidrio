@@ -92,14 +92,14 @@ export const Sidebar = ({ isOpen }: SidebarProps) => {
 
       {/* === LINKS === */}
       <ul>
-        {/* Inicio */}
+        {/* === INICIO === */}
         <li>
           <Link to="/" className={isActive("/") ? styles.activeLink : ""}>
             Inicio
           </Link>
         </li>
 
-        {/* Rendimiento */}
+        {/* === RENDIMIENTO === */}
         {hasPermission("rendimiento", "ver") && (
           <li>
             <Link
@@ -111,7 +111,7 @@ export const Sidebar = ({ isOpen }: SidebarProps) => {
           </li>
         )}
 
-        {/* Inventario de Insumos*/}
+        {/* === INVENTARIO DE INSUMOS === */}
         {hasAnyPermission("inventario_insumos", ["ver_inventario"]) && (
           <li>
             <Link
@@ -121,6 +121,20 @@ export const Sidebar = ({ isOpen }: SidebarProps) => {
               }
             >
               Inventario de Insumos
+            </Link>
+          </li>
+        )}
+
+        {/* === INVENTARIO DE PANTALLAS === */}
+        {hasAnyPermission("inventario_pantallas", ["ver_inventario"]) && (
+          <li>
+            <Link
+              to="/inventario-pantallas"
+              className={
+                isActive("/inventario-pantallas") ? styles.activeLink : ""
+              }
+            >
+              Inventario de Pantallas
             </Link>
           </li>
         )}

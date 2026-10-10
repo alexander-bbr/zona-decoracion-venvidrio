@@ -1,44 +1,41 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { HeaderForm } from "../../../../components/HeaderForm";
-import styles from "./editar-insumo.module.css";
+import styles from "./editar-pantalla.module.css";
 
-type Insumo = {
-  idInsumo: number;
+type Pantalla = {
+  idPantalla: number;
+  nombre: string;
+  descripcion: string;
   tipo: string;
-  articulo: string;
-  unidad: string;
-  cantidadMinima: number;
   estado: boolean;
 };
 
 type FormData = {
+  nombre: string;
+  descripcion: string;
   tipo: string;
-  articulo: string;
-  unidad: string;
-  cantidadMinima: string;
   estado: boolean;
 };
 
-const API_INSUMOS = "http://127.0.0.1:8000/api/inventario-insumos";
+const API_PANTALLAS = "http://127.0.0.1:8000/api/inventario-pantallas";
 
-export const EditarInsumo = () => {
+export const EditarPantalla = () => {
   const { id } = useParams<{ id: string }>();
 
   if (!id) {
-    return <p className={styles.error}>ID de insumo inválido.</p>;
+    return <p className={styles.error}>ID de pantalla inválido.</p>;
   }
 
-  return <CargarInsumo idInsumo={id} />;
+  return <CargarPantalla idPantalla={id} />;
 };
 
-const CargarInsumo = ({ idInsumo }: { idInsumo: string }) => {
+const CargarPantalla = ({ idPantalla }: { idPantalla: string }) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState<FormData>({
+    nombre: "",
+    descripcion: "",
     tipo: "",
-    articulo: "",
-    unidad: "",
-    cantidadMinima: "",
     estado: true,
   });
   const [cargando, setCargando] = useState(true);
@@ -46,43 +43,44 @@ const CargarInsumo = ({ idInsumo }: { idInsumo: string }) => {
   const [guardando, setGuardando] = useState(false);
 
   useEffect(() => {
-    const cargarInsumo = async () => {
+    const cargarPantalla = async () => {
       setCargando(true);
       setError("");
       try {
-        const response = await fetch(`${API_INSUMOS}/${idInsumo}`);
+        const response = await fetch(`${API_PANTALLAS}/${idPantalla}`);
         if (!response.ok) {
           const data = await response.json().catch(() => null);
           throw new Error(
             data?.detail ??
               (response.status === 404
-                ? "El Insumo especificado no existe."
-                : `Error al cargar insumo: ${response.status}`),
+                ? "La pantalla especificada no existe."
+                : `Error al cargar pantalla: ${response.status}`),
           );
         }
-        const insumo = (await response.json()) as Insumo;
+        const pantalla = (await response.json()) as Pantalla;
         setFormData({
-          tipo: insumo.tipo,
-          articulo: insumo.articulo,
-          unidad: insumo.unidad,
-          cantidadMinima: String(insumo.cantidadMinima),
-          estado: insumo.estado,
+          nombre: pantalla.nombre,
+          descripcion: pantalla.descripcion,
+          tipo: pantalla.tipo,
+          estado: pantalla.estado,
         });
       } catch (loadError) {
         setError(
           loadError instanceof Error
             ? loadError.message
-            : "Error al cargar insumo.",
+            : "Error al cargar pantalla.",
         );
       } finally {
         setCargando(false);
       }
     };
-    void cargarInsumo();
-  }, [idInsumo]);
+    void cargarPantalla();
+  }, [idPantalla]);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >,
   ) => {
     const { name, value, type } = e.target;
     if (type === "checkbox") {
@@ -99,36 +97,30 @@ const CargarInsumo = ({ idInsumo }: { idInsumo: string }) => {
     setGuardando(true);
 
     // Validaciones
+    if (!formData.nombre.trim()) {
+      setError("El nombre de la pantalla es obligatorio.");
+      setGuardando(false);
+      return;
+    }
+    if (!formData.descripcion.trim()) {
+      setError("La descripción es obligatoria.");
+      setGuardando(false);
+      return;
+    }
     if (!formData.tipo.trim()) {
-      setError("El tipo de insumo es obligatorio.");
-      setGuardando(false);
-      return;
-    }
-    if (!formData.articulo.trim()) {
-      setError("El artículo es obligatorio.");
-      setGuardando(false);
-      return;
-    }
-    if (!formData.unidad.trim()) {
-      setError("La unidad es obligatoria.");
-      setGuardando(false);
-      return;
-    }
-    if (!formData.cantidadMinima || Number(formData.cantidadMinima) < 0) {
-      setError("La cantidad mínima no puede ser negativa.");
+      setError("El tipo es obligatorio.");
       setGuardando(false);
       return;
     }
 
     try {
-      const response = await fetch(`${API_INSUMOS}/${idInsumo}`, {
+      const response = await fetch(`${API_PANTALLAS}/${idPantalla}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          nombre: formData.nombre,
+          descripcion: formData.descripcion,
           tipo: formData.tipo,
-          articulo: formData.articulo,
-          unidad: formData.unidad,
-          cantidadMinima: Number(formData.cantidadMinima),
           estado: formData.estado,
         }),
       });
@@ -136,16 +128,16 @@ const CargarInsumo = ({ idInsumo }: { idInsumo: string }) => {
       if (!response.ok) {
         const data = await response.json().catch(() => null);
         throw new Error(
-          data?.detail ?? `Error al actualizar insumo: ${response.status}`,
+          data?.detail ?? `Error al actualizar pantalla: ${response.status}`,
         );
       }
 
-      navigate("/inventario/gestion-insumos");
+      navigate("/inventario-pantallas/gestion-pantallas");
     } catch (submitError) {
       setError(
         submitError instanceof Error
           ? submitError.message
-          : "Error al actualizar insumo.",
+          : "Error al actualizar pantalla.",
       );
     } finally {
       setGuardando(false);
@@ -154,15 +146,14 @@ const CargarInsumo = ({ idInsumo }: { idInsumo: string }) => {
 
   const handleReset = async () => {
     try {
-      const response = await fetch(`${API_INSUMOS}/${idInsumo}`);
+      const response = await fetch(`${API_PANTALLAS}/${idPantalla}`);
       if (response.ok) {
-        const insumo = (await response.json()) as Insumo;
+        const pantalla = (await response.json()) as Pantalla;
         setFormData({
-          tipo: insumo.tipo,
-          articulo: insumo.articulo,
-          unidad: insumo.unidad,
-          cantidadMinima: String(insumo.cantidadMinima),
-          estado: insumo.estado,
+          nombre: pantalla.nombre,
+          descripcion: pantalla.descripcion,
+          tipo: pantalla.tipo,
+          estado: pantalla.estado,
         });
       }
     } catch {
@@ -172,18 +163,18 @@ const CargarInsumo = ({ idInsumo }: { idInsumo: string }) => {
   };
 
   if (cargando) {
-    return <p className={styles.loading}>Cargando insumo...</p>;
+    return <p className={styles.loading}>Cargando pantalla...</p>;
   }
 
   return (
     <form className={`${styles.form} content`} onSubmit={handleSubmit}>
       <HeaderForm />
 
-      <h3 className={styles.title}>Editar Insumo #{idInsumo}</h3>
+      <h3 className={styles.title}>Editar Pantalla #{idPantalla}</h3>
 
       <section className={styles.formData}>
         <fieldset className={styles.fieldset}>
-          <legend className={styles.legend}>Datos del Insumo</legend>
+          <legend className={styles.legend}>Datos de la Pantalla</legend>
 
           <div className={styles.row}>
             <div className={styles.inputWrapper}>
@@ -201,14 +192,14 @@ const CargarInsumo = ({ idInsumo }: { idInsumo: string }) => {
             </div>
 
             <div className={styles.inputWrapper}>
-              <label htmlFor="unidad">
-                Unidad <span className={styles.requireSymbol}>*</span>
+              <label htmlFor="nombre">
+                Nombre <span className={styles.requireSymbol}>*</span>
               </label>
               <input
-                id="unidad"
-                name="unidad"
+                id="nombre"
+                name="nombre"
                 type="text"
-                value={formData.unidad}
+                value={formData.nombre}
                 onChange={handleChange}
                 required
               />
@@ -216,31 +207,15 @@ const CargarInsumo = ({ idInsumo }: { idInsumo: string }) => {
           </div>
 
           <div className={styles.inputWrapper}>
-            <label htmlFor="articulo">
-              Artículo <span className={styles.requireSymbol}>*</span>
+            <label htmlFor="descripcion">
+              Descripción <span className={styles.requireSymbol}>*</span>
             </label>
-            <input
-              id="articulo"
-              name="articulo"
-              type="text"
-              value={formData.articulo}
+            <textarea
+              id="descripcion"
+              name="descripcion"
+              value={formData.descripcion}
               onChange={handleChange}
-              required
-            />
-          </div>
-
-          <div className={styles.inputWrapper}>
-            <label htmlFor="cantidadMinima">
-              Cantidad Mínima <span className={styles.requireSymbol}>*</span>
-            </label>
-            <input
-              id="cantidadMinima"
-              name="cantidadMinima"
-              type="number"
-              step="0.01"
-              min="0"
-              value={formData.cantidadMinima}
-              onChange={handleChange}
+              rows={3}
               required
             />
           </div>
@@ -253,7 +228,7 @@ const CargarInsumo = ({ idInsumo }: { idInsumo: string }) => {
               checked={formData.estado}
               onChange={handleChange}
             />
-            <label htmlFor="estado">Insumo Activo</label>
+            <label htmlFor="estado">Pantalla Activa</label>
           </div>
         </fieldset>
 

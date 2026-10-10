@@ -1,47 +1,44 @@
 import { useEffect, useState } from "react";
 import styles from "./ver-inventario.module.css";
 
-type Insumo = {
-  idInsumo: number;
+type Pantalla = {
+  idPantalla: number;
+  nombre: string;
+  descripcion: string;
   tipo: string;
-  articulo: string;
-  unidad: string;
-  cantidadActual: number;
-  cantidadMinima: number;
+  cantidad: number;
 };
 
-const API_INSUMOS = "http://127.0.0.1:8000/api/inventario-insumos";
+const API_PANTALLAS = "http://127.0.0.1:8000/api/inventario-pantallas";
 
-export const VerInventario = () => {
-  const [insumos, setInsumos] = useState<Insumo[]>([]);
+export const VerInventarioPantallas = () => {
+  const [pantallas, setPantallas] = useState<Pantalla[]>([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const cargarInsumos = async () => {
+    const cargarPantallas = async () => {
       setCargando(true);
       setError("");
       try {
-        const response = await fetch(API_INSUMOS);
+        const response = await fetch(API_PANTALLAS);
         if (!response.ok) {
           const data = await response.json().catch(() => null);
           throw new Error(
             data?.detail ?? `Error al cargar inventario: ${response.status}`,
           );
         }
-        const data = (await response.json()) as Insumo[];
-        const normalizados = data.map((insumo) => ({
-          ...insumo,
-          idInsumo: Number(insumo.idInsumo),
-          cantidadActual: Number(insumo.cantidadActual),
-          cantidadMinima: Number(insumo.cantidadMinima),
+        const data = (await response.json()) as Pantalla[];
+        const normalizados = data.map((pantalla) => ({
+          ...pantalla,
+          idPantalla: Number(pantalla.idPantalla),
+          cantidad: Number(pantalla.cantidad),
         }));
         const ordenados = normalizados.sort(
           (a, b) =>
-            a.tipo.localeCompare(b.tipo) ||
-            a.articulo.localeCompare(b.articulo),
+            a.tipo.localeCompare(b.tipo) || a.nombre.localeCompare(b.nombre),
         );
-        setInsumos(ordenados);
+        setPantallas(ordenados);
       } catch (loadError) {
         setError(
           loadError instanceof Error
@@ -52,11 +49,10 @@ export const VerInventario = () => {
         setCargando(false);
       }
     };
-    void cargarInsumos();
+    void cargarPantallas();
   }, []);
 
-  const esBajoStock = (insumo: Insumo) =>
-    insumo.cantidadActual <= insumo.cantidadMinima;
+  const esBajoStock = (pantalla: Pantalla) => pantalla.cantidad <= 0;
 
   return (
     <section className={`content`}>
@@ -65,28 +61,30 @@ export const VerInventario = () => {
 
       {!cargando && !error && (
         <div className={`${styles.cardsContainer} content`}>
-          {insumos.length === 0 ? (
+          {pantallas.length === 0 ? (
             <p className={styles.emptyMessage}>
-              No hay insumos registrados en el inventario.
+              No hay pantallas registradas en el inventario.
             </p>
           ) : (
-            insumos.map((insumo) => (
+            pantallas.map((pantalla) => (
               <article
-                key={insumo.idInsumo}
+                key={pantalla.idPantalla}
                 className={`${styles.card} ${
-                  esBajoStock(insumo) ? styles.cardBajoStock : ""
+                  esBajoStock(pantalla) ? styles.cardBajoStock : ""
                 }`}
               >
                 <header className={styles.cardHeader}>
                   <div className={styles.cardInfoItemWrapper}>
-                    <span className={styles.cardTipo}>{insumo.tipo}</span>
-                    <span className={styles.cardId}>ID: {insumo.idInsumo}</span>
+                    <span className={styles.cardTipo}>{pantalla.tipo}</span>
+                    <span className={styles.cardId}>
+                      ID: {pantalla.idPantalla}
+                    </span>
                   </div>
 
-                  {esBajoStock(insumo) ? (
+                  {esBajoStock(pantalla) ? (
                     <div className={styles.badgeBajoStock}>
                       <span>⚠️</span>
-                      <span>Bajo stock</span>
+                      <span>Sin stock</span>
                     </div>
                   ) : (
                     <span className={styles.badgeOk}>
@@ -96,19 +94,15 @@ export const VerInventario = () => {
                   )}
                 </header>
 
-                <h4 className={styles.cardArticulo}>{insumo.articulo}</h4>
+                <h4 className={styles.cardArticulo}>{pantalla.nombre}</h4>
+
+                <p className={styles.cardDescripcion}>{pantalla.descripcion}</p>
 
                 <div className={styles.cardData}>
                   <div className={styles.dataItem}>
                     <span className={styles.dataLabel}>Cantidad actual</span>
                     <span className={styles.dataValue}>
-                      {insumo.cantidadActual} {insumo.unidad}
-                    </span>
-                  </div>
-                  <div className={styles.dataItem}>
-                    <span className={styles.dataLabel}>Cantidad mínima</span>
-                    <span className={styles.dataValue}>
-                      {insumo.cantidadMinima} {insumo.unidad}
+                      {pantalla.cantidad}
                     </span>
                   </div>
                 </div>

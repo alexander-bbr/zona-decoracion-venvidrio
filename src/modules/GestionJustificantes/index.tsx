@@ -30,7 +30,7 @@ export const GestionJustificantes = () => {
         throw new Error(`Error al cargar justificantes: ${response.status}`);
       }
       const data = await response.json();
-      const justificantesNormalizados = data.map(
+      const justificantesNormalizados: Justificante[] = data.map(
         (justificante: Justificante) => ({
           ...justificante,
           idJustificante: Number(justificante.idJustificante),

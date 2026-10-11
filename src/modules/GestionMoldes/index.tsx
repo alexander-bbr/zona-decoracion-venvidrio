@@ -32,7 +32,7 @@ export const GestionMoldes = () => {
         throw new Error(`Error al cargar moldes: ${response.status}`);
       }
       const data = await response.json();
-      const moldesNormalizados = data.map((molde: Molde) => ({
+      const moldesNormalizados: Molde[] = data.map((molde: Molde) => ({
         ...molde,
         idMolde: Number(molde.idMolde),
         numeroCamadas: Number(molde.numeroCamadas),

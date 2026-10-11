@@ -12,7 +12,7 @@ class PantallaCrear(BaseModel):
     estado:      bool = Field(alias="estado")
 
     class Config:
-        populate_by_name = True
+        allow_population_by_field_name = True
 
 
 class PantallaEditar(BaseModel):
@@ -22,7 +22,7 @@ class PantallaEditar(BaseModel):
     estado:      bool = Field(alias="estado")
 
     class Config:
-        populate_by_name = True
+        allow_population_by_field_name = True
 
 
 class PantallaResponde(BaseModel):
@@ -33,8 +33,8 @@ class PantallaResponde(BaseModel):
     estado:      bool = Field(alias="estado")
 
     class Config:
-        from_attributes  = True
-        populate_by_name = True
+        orm_mode                       = True
+        allow_population_by_field_name = True
 
 
 class PantallaListaResponde(BaseModel):
@@ -45,8 +45,8 @@ class PantallaListaResponde(BaseModel):
     cantidad_actual: int = Field(alias="cantidad")
 
     class Config:
-        from_attributes  = True
-        populate_by_name = True
+        orm_mode                       = True
+        allow_population_by_field_name = True
 
 
 # ─── MOVIMIENTOS ──────────────────────────────────────────────────────────────
@@ -59,7 +59,7 @@ class MovimientoEntradaCrear(BaseModel):
     cantidad:    int = Field(alias="cantidad")
 
     class Config:
-        populate_by_name = True
+        allow_population_by_field_name = True
 
 
 class MovimientoSalidaCrear(BaseModel):
@@ -70,7 +70,7 @@ class MovimientoSalidaCrear(BaseModel):
     cantidad:    int = Field(alias="cantidad")
 
     class Config:
-        populate_by_name = True
+        allow_population_by_field_name = True
 
 
 # ─── HISTORIAL ────────────────────────────────────────────────────────────────
@@ -87,8 +87,8 @@ class HistorialEntradaResponde(BaseModel):
     cantidad:              int = Field(alias="cantidad")
 
     class Config:
-        from_attributes  = True
-        populate_by_name = True
+        orm_mode                       = True
+        allow_population_by_field_name = True
 
 
 class HistorialSalidaResponde(BaseModel):
@@ -103,5 +103,5 @@ class HistorialSalidaResponde(BaseModel):
     cantidad:             int = Field(alias="cantidad")
 
     class Config:
-        from_attributes  = True
-        populate_by_name = True
+        orm_mode                       = True
+        allow_population_by_field_name = True

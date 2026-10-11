@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 10-10-2026 a las 16:44:47
+-- Tiempo de generación: 11-10-2026 a las 22:01:32
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -547,45 +547,24 @@ CREATE TABLE `permisos_usuarios` (
 --
 
 INSERT INTO `permisos_usuarios` (`id_permisou`, `id_usuario`, `id_permisom`) VALUES
-(234, 12, 1),
-(235, 12, 2),
-(236, 12, 3),
-(237, 12, 7),
-(238, 12, 4),
-(239, 12, 5),
-(240, 12, 6),
-(241, 12, 11),
-(242, 12, 12),
-(243, 12, 13),
-(244, 12, 14),
-(245, 12, 29),
-(246, 12, 28),
-(283, 10, 5),
-(284, 10, 6),
-(285, 10, 11),
-(286, 10, 12),
-(287, 10, 13),
-(288, 10, 1),
-(289, 10, 2),
-(290, 10, 3),
-(291, 10, 4),
-(292, 10, 28),
-(293, 10, 7),
-(294, 10, 29),
-(295, 10, 14),
-(333, 11, 1),
-(334, 11, 2),
-(335, 11, 3),
-(336, 11, 7),
-(337, 11, 5),
-(338, 11, 6),
-(339, 11, 11),
-(340, 11, 12),
-(341, 11, 13),
-(342, 11, 14),
-(343, 11, 28),
-(344, 11, 29),
-(345, 11, 4);
+(366, 13, 5),
+(367, 13, 6),
+(368, 13, 4),
+(369, 13, 1),
+(370, 13, 2),
+(371, 13, 3),
+(372, 13, 29),
+(373, 13, 7),
+(374, 13, 11),
+(375, 13, 12),
+(376, 13, 13),
+(377, 13, 14),
+(378, 13, 28),
+(379, 13, 34),
+(380, 13, 33),
+(381, 13, 32),
+(382, 13, 31),
+(383, 13, 30);
 
 -- --------------------------------------------------------
 
@@ -649,9 +628,7 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id_usuario`, `cedula`, `carnet_usuario`, `contrasena`, `nombres`, `apellidos`, `telefono`, `correo`, `rol`, `activo_usuario`, `creado_en`) VALUES
-(10, '30670857', '111', '$argon2id$v=19$m=65536,t=3,p=4$CkFIaY1RivHeu9e6NyaEsA$rtdZu3HTE9nKFkeXi/QguC7E5wxIKoaruCOY7ojW17U', 'Daniel Alexander', 'Perez Moreno', '0416-7383181', 'd30670857@gmail.com', 'administrador', 1, '2026-08-09 14:46:05'),
-(11, '30717851', '000', '$argon2id$v=19$m=65536,t=3,p=4$iNGa877XmlOqdU5JiRHC2A$K1niqF75/hqWw+7nz6zUnPxkI2rRrju9nDGHqJ8hoBI', 'Miguel Alexander', 'Bethancourt Briceño', '0412-1986816', 'mbethancourt2005@gmail.com', 'administrador', 1, '2026-08-27 01:12:11'),
-(12, '30670913', '222', '$argon2id$v=19$m=65536,t=3,p=4$plQq5bw3BmCsNQYgpHTO+Q$obEOZpk7qGRmCP0lfmOYk7ZvAmxLqiDCvNjNRw0wzsw', 'Fabio', 'Romero Vera', '0416-3660482', 'fabioromero7809@gmail.com', 'administrador', 1, '2026-08-27 01:15:12');
+(13, '30670857', '111', '$argon2id$v=19$m=65536,t=3,p=4$I75+GpsINIENlVdAILewdQ$NDL/xQgGzRsBPUx9aQmNxPttrjKan56br5pQleN38CQ', 'Daniel', 'Perez', '04167383181', 'd30670857@gmail.com', 'administrador', 1, '2026-10-11 19:30:27');
 
 --
 -- Índices para tablas volcadas
@@ -855,13 +832,13 @@ ALTER TABLE `permisos_modulos`
 -- AUTO_INCREMENT de la tabla `permisos_usuarios`
 --
 ALTER TABLE `permisos_usuarios`
-  MODIFY `id_permisou` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=346;
+  MODIFY `id_permisou` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=384;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- Restricciones para tablas volcadas

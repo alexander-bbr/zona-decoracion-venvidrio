@@ -21,7 +21,7 @@ def crear_usuario_completo(db: Session, datos: UsuarioCrear):
 
     try:
         # Extraemos los datos excluyendo la lista de permisos para el modelo Usuario
-        datos_dict = datos.model_dump(by_alias=False, exclude={"ids_permisos"})
+        datos_dict = datos.dict(by_alias=False, exclude={"ids_permisos"})
         datos_dict["contrasena"] = hashear_contrasena(datos_dict["contrasena"])
 
         # Insertamos al usuario
@@ -49,7 +49,7 @@ def editar_usuario_completo(db: Session, id_usuario: int, datos: UsuarioEditar):
 
     try:
         # Actualizamos la información personal (incluye el estado activo/inactivo)
-        datos_dict = datos.model_dump(by_alias=False, exclude={"ids_permisos"})
+        datos_dict = datos.dict(by_alias=False, exclude={"ids_permisos"})
         for campo, valor in datos_dict.items():
             setattr(usuario, campo, valor)
 

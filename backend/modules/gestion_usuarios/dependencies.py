@@ -5,7 +5,7 @@ load_dotenv()
 
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
-from jose import JWTError, jwt
+import jwt
 from sqlalchemy.orm import Session
 import os
 
@@ -36,14 +36,13 @@ def obtener_usuario_actual(
     )
     
     try:
-        # decodifica el JWT y extrae el id del usuario
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         id_usuario: int = payload.get("id_usuario")
         
         if id_usuario is None:
             raise credentials_exception
             
-    except JWTError:
+    except jwt.PyJWTError:
         raise credentials_exception
     
     usuario = db.query(Usuario).filter(Usuario.id_usuario == id_usuario).first()

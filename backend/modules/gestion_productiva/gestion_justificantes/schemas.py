@@ -9,7 +9,7 @@ class JustificanteCrear(BaseModel):
     descripcion: Optional[str] = Field(default=None, alias="descripcion")
 
     class Config:
-        populate_by_name = True
+        allow_population_by_field_name = True
 
 
 class JustificanteResponde(BaseModel):
@@ -18,5 +18,5 @@ class JustificanteResponde(BaseModel):
     descripcion: Optional[str] = Field(default=None, alias="descripcion")
 
     class Config:
-        from_attributes = True
-        populate_by_name = True
+        orm_mode                       = True
+        allow_population_by_field_name = True

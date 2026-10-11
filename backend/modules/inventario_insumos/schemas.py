@@ -15,7 +15,7 @@ class InsumoCrear(BaseModel):
     estado:          bool           = Field(alias="estado")
 
     class Config:
-        populate_by_name = True
+        allow_population_by_field_name = True
 
 
 class InsumoEditar(BaseModel):
@@ -26,7 +26,7 @@ class InsumoEditar(BaseModel):
     estado:          bool           = Field(alias="estado")
 
     class Config:
-        populate_by_name = True
+        allow_population_by_field_name = True
 
 
 class InsumoResponde(BaseModel):
@@ -38,8 +38,8 @@ class InsumoResponde(BaseModel):
     estado:          bool           = Field(alias="estado")
 
     class Config:
-        from_attributes  = True
-        populate_by_name = True
+        orm_mode                    = True
+        allow_population_by_field_name = True
 
 
 class InsumoListaResponde(BaseModel):
@@ -51,8 +51,8 @@ class InsumoListaResponde(BaseModel):
     cantidad_minima: Decimal        = Field(alias="cantidadMinima")
 
     class Config:
-        from_attributes  = True
-        populate_by_name = True
+        orm_mode                    = True
+        allow_population_by_field_name = True
 
 
 # ─── MOVIMIENTOS ──────────────────────────────────────────────────────────────
@@ -65,7 +65,7 @@ class MovimientoEntradaCrear(BaseModel):
     cantidad:  Decimal = Field(alias="cantidad")
 
     class Config:
-        populate_by_name = True
+        allow_population_by_field_name = True
 
 
 class MovimientoSalidaCrear(BaseModel):
@@ -76,7 +76,7 @@ class MovimientoSalidaCrear(BaseModel):
     cantidad:  Decimal = Field(alias="cantidad")
 
     class Config:
-        populate_by_name = True
+        allow_population_by_field_name = True
 
 
 # ─── Historial ──────────────────────────────────────────────────────────────
@@ -93,8 +93,8 @@ class HistorialEntradaResponde(BaseModel):
     cantidad:              Decimal = Field(alias="cantidad")
 
     class Config:
-        from_attributes  = True
-        populate_by_name = True
+        orm_mode                    = True
+        allow_population_by_field_name = True
 
 
 class HistorialSalidaResponde(BaseModel):
@@ -108,5 +108,5 @@ class HistorialSalidaResponde(BaseModel):
     cantidad:             Decimal  = Field(alias="cantidad")
 
     class Config:
-        from_attributes  = True
-        populate_by_name = True
+        orm_mode                    = True
+        allow_population_by_field_name = True

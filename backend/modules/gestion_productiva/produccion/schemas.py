@@ -16,7 +16,7 @@ class MoldeResponde(BaseModel):
     numero_gruesas: Decimal = Field(alias="numeroGruesas")
 
     class Config:
-        populate_by_name = True
+        allow_population_by_field_name = True
         from_attributes = True
 
 
@@ -27,7 +27,7 @@ class JustificanteResponde(BaseModel):
     descripcion: Optional[str] = Field(default=None, alias="descripcion")
 
     class Config:
-        populate_by_name = True
+        allow_population_by_field_name = True
         from_attributes = True
 
 
@@ -38,7 +38,7 @@ class EntradaDetalleBase(BaseModel):
     hora_entrada: Optional[str] = Field(default=None, alias="horaEntrada")  # NUEVO
 
     class Config:
-        populate_by_name = True
+        allow_population_by_field_name = True
 
 class EntradaDetalleCrear(EntradaDetalleBase):
     pass
@@ -65,7 +65,7 @@ class SalidaBase(BaseModel):
     cant_gruesas_decoradas: Decimal = Field(default=Decimal("0.00"), alias="cantGruesasDecoradas")
 
     class Config:
-        populate_by_name = True
+        allow_population_by_field_name = True
 
 class SalidaCrear(SalidaBase):
     pass
@@ -83,14 +83,14 @@ class JustificantePorMoldeCrear(BaseModel):
     justificaciones: List[int] = Field(alias="justificaciones") # NUEVO
 
     class Config:
-        populate_by_name = True
+        allow_population_by_field_name = True
 
 class JustificantePorMoldeResponde(BaseModel):
     modelo_molde: int = Field(alias="modeloMolde")              # NUEVO
     justificaciones: List[int] = Field(alias="justificaciones") # NUEVO
 
     class Config:
-        populate_by_name = True
+        allow_population_by_field_name = True
 
 
 # ESQUEMAS PARA GESTION_PRODUCTIVA_RESULTADO (Consolidado)
@@ -106,7 +106,7 @@ class ResultadoBase(BaseModel):
     observaciones: Optional[str] = Field(default=None, alias="observaciones")
 
     class Config:
-        populate_by_name = True
+        allow_population_by_field_name = True
 
 class ResultadoCrear(ResultadoBase):
     pass
@@ -142,7 +142,7 @@ class ProduccionCrear(BaseModel):
     justificantes: List[JustificantePorMoldeCrear] = Field(default=[], alias="justificantes")  # CAMBIADO
 
     class Config:
-        populate_by_name = True
+        allow_population_by_field_name = True
 
 
 # ESQUEMA DE RESPUESTA COMPLETA (Para VER y EDITAR un registro)
@@ -171,8 +171,8 @@ class ProduccionResponde(BaseModel):
     justificantes: List[JustificantePorMoldeResponde] = Field(default=[], alias="justificantes")  # CAMBIADO
 
     class Config:
-        from_attributes = True
-        populate_by_name = True
+        orm_mode                       = True
+        allow_population_by_field_name = True
 
 
 # ESQUEMA PARA LA VISTA PRINCIPAL (Listado paginado de 50 en 50)
@@ -190,8 +190,8 @@ class ProduccionListaResponde(BaseModel):
     deficiencia_productiva: Optional[Decimal] = Field(default=Decimal("0.00"), alias="deficienciaProductiva")
 
     class Config:
-        from_attributes = True
-        populate_by_name = True
+        orm_mode                       = True
+        allow_population_by_field_name = True
 
 
 class ProduccionActualizadaResponde(BaseModel):

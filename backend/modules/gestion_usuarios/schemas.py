@@ -1,5 +1,5 @@
 # backend/modules/gestion_usuarios/schemas.py
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, validator
 from typing import Optional, List
 from datetime import datetime
 
@@ -18,14 +18,14 @@ class UsuarioCrear(BaseModel):
     activo_usuario: bool = Field(default=True, alias="activoUsuario")
     ids_permisos: List[int] = Field(default_factory=list, alias="idsPermisos")
 
-    @field_validator("rol")
+    @validator("rol")
     @classmethod
     def normalizar_rol(cls, valor):
         return valor.lower()
 
-    class Config:
-        populate_by_name = True
 
+    class Config:
+        allow_population_by_field_name = True
 
 # 2. Editar usuario (Recibe datos personales + estado + permisos)
 class UsuarioEditar(BaseModel):
@@ -39,14 +39,13 @@ class UsuarioEditar(BaseModel):
     activo_usuario: bool = Field(alias="activoUsuario")
     ids_permisos: List[int] = Field(default_factory=list, alias="idsPermisos")
 
-    @field_validator("rol")
+    @validator("rol")
     @classmethod
     def normalizar_rol(cls, valor):
         return valor.lower()
 
     class Config:
-        populate_by_name = True
-
+        allow_population_by_field_name = True
 
 # 3. Mostrar datos del usuario (Para la tabla principal y para prellenar datos)
 class UsuarioResponde(BaseModel):
@@ -62,7 +61,7 @@ class UsuarioResponde(BaseModel):
     creado_en: datetime
 
     class Config:
-        from_attributes = True
+        orm_mode = True
 
 
 
@@ -74,7 +73,7 @@ class PermisoModuloResponde(BaseModel):
     accion: str
 
     class Config:
-        from_attributes = True
+        orm_mode = True
 
 
 

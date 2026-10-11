@@ -1,10 +1,12 @@
-from passlib.context import CryptContext
+from argon2 import PasswordHasher
 
-# Configuramos passlib para usar argon2 en lugar de bcrypt
-pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
+ph = PasswordHasher()
 
 def hashear_contrasena(contrasena: str) -> str:
-    return pwd_context.hash(contrasena)
+    return ph.hash(contrasena)
 
 def verificar_contrasena(contrasena_plana: str, contrasena_hash: str) -> bool:
-    return pwd_context.verify(contrasena_plana, contrasena_hash)
+    try:
+        return ph.verify(contrasena_hash, contrasena_plana)
+    except Exception:
+        return False

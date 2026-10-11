@@ -13,7 +13,7 @@ class MoldeCrear(BaseModel):
     numero_gruesas: Decimal = Field(alias="numeroGruesas")
 
     class Config:
-        populate_by_name = True
+        allow_population_by_field_name = True
 
 
 class MoldeResponde(BaseModel):
@@ -25,5 +25,5 @@ class MoldeResponde(BaseModel):
     numero_gruesas: Decimal = Field(alias="numeroGruesas")
 
     class Config:
-        from_attributes = True
-        populate_by_name = True
+        orm_mode                       = True
+        allow_population_by_field_name = True

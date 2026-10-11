@@ -5,7 +5,7 @@ load_dotenv()
 
 import os
 from datetime import datetime, timedelta
-from jose import jwt
+import jwt
 from sqlalchemy.orm import Session
 
 from backend.modules.gestion_usuarios.models import Usuario, PermisoUsuario, PermisoModulo
@@ -23,6 +23,7 @@ def crear_token_acceso(datos: dict):
     expiracion = datetime.utcnow() + timedelta(minutes=EXPIRATION_MINUTES)
     datos_a_codificar.update({"exp": expiracion})
     token = jwt.encode(datos_a_codificar, SECRET_KEY, algorithm=ALGORITHM)
+    token = token if isinstance(token, str) else token.decode("utf-8")
     return token
 
 

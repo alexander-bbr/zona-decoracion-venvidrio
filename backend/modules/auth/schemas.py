@@ -9,7 +9,7 @@ class LoginRequest(BaseModel):
     contrasena: str = Field(alias="contrasena")
 
     class Config:
-        populate_by_name = True
+        allow_population_by_field_name = True
 
 
 # SE USA EN: cada permiso individual dentro de la respuesta del login

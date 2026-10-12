@@ -14,8 +14,9 @@ export const HeaderForm = () => {
       <h2 className={styles.headerTitle}>
         GERENCIA DE ZONA FRÍA Y PROCESOS FINALES
       </h2>
-      <div className={styles.codeWrapper}>
-        <p className={styles.headerCode}>Sin Código</p>
+      <div className={styles.rifWrapper}>
+        <h3>RIF:</h3>
+        <p>G-20009820-1</p>
       </div>
     </header>
   );

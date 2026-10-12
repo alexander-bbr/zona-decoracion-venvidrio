@@ -50,11 +50,13 @@ export const Lineal = ({ data, visibleMetrics }: LinealProps) => {
             tickFormatter={(value) => `${value}%`}
           />
           <Tooltip
-            formatter={(value: number, name: string) => {
+            formatter={(value, name) => {
+              const numValue =
+                typeof value === "number" ? value : Number(value);
               if (name === "Eficiencia" || name === "Deficiencia") {
-                return [`${value}%`, name];
+                return [`${numValue}%`, name];
               }
-              return [value, name];
+              return [numValue.toLocaleString("es-VE"), name];
             }}
           />
           <Legend

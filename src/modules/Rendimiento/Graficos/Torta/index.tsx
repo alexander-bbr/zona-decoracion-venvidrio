@@ -61,10 +61,11 @@ export const Torta = ({ visibleMetrics, totales }: TortaProps) => {
       <ResponsiveContainer width="100%" height={360}>
         <PieChart margin={{ top: 10, right: 0, bottom: 10, left: 0 }}>
           <Tooltip
-            formatter={(value: number, name: string) => [
-              value.toLocaleString("es-VE"),
-              name,
-            ]}
+            formatter={(value, name) => {
+              const numValue =
+                typeof value === "number" ? value : Number(value);
+              return [numValue.toLocaleString("es-VE"), name];
+            }}
           />
           <Legend
             verticalAlign="top"

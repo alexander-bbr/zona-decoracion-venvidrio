@@ -1,148 +1,163 @@
-
-#GESTION DE USUARIOS
+# GESTION DE USUARIOS
 
 Ruta 1: Crear Usuario
-Endpoint: [http://127.0.0.1:8000/api/usuarios](http://127.0.0.1:8000/api/usuarios)
+Endpoint: http://127.0.0.1:8000/api/usuarios
 Método: POST
 
 JSON (Envía el Frontend):
 {
-"cedula": "String",
-"carnetUsuario": "String",
-"contrasena": "String",
-"nombres": "String",
-"apellidos": "String",
-"telefono": "String",
-"correo": "String",
-"rol": "administrador" | "operador",
-"activoUsuario": true,
-"idsPermisos": [1, 2]
+  "cedula": "String",
+  "carnetUsuario": "String",
+  "contrasena": "String",
+  "nombres": "String",
+  "apellidos": "String",
+  "telefono": "String",
+  "correo": "String",
+  "rol": "administrador" | "operador",
+  "activoUsuario": true,
+  "idsPermisos": [1, 2]
 }
 
 JSON (Respuesta en caso de éxito):
 {
-"mensaje": "Usuario creado con éxito",
-"id": 1
+  "mensaje": "Usuario creado con éxito",
+  "id": 1
 }
 
 JSON (Respuesta en caso de error):
+
 #caso 1
 {
-"detail": "El carnet ya está registrado"
+  "detail": "El carnet ya está registrado"
 }
 
 #caso 2
 {
-"detail": "La cédula ya está registrada"
+  "detail": "La cédula ya está registrada"
 }
 
 #caso 3
 {
-"detail": "El correo ya está registrado"
+  "detail": "El correo ya está registrado"
 }
 
+
+
 ---
+
+
 
 Ruta 2: Listar Usuarios
-Endpoint: [http://127.0.0.1:8000/api/usuarios](http://127.0.0.1:8000/api/usuarios)
+Endpoint: http://127.0.0.1:8000/api/usuarios
 Método: GET
 
 Estructura de los datos que recibirá:
 {
-"data": [
-{
-"id_usuario": "number",
-"cedula": "string",
-"carnet_usuario": "string",
-"nombres": "string",
-"apellidos": "string",
-"telefono": "string",
-"correo": "string",
-"rol": "string",
-"activo_usuario": "boolean"
+  "data": [
+    {
+      "id_usuario": "number",
+      "cedula": "string",
+      "carnet_usuario": "string",
+      "nombres": "string",
+      "apellidos": "string",
+      "telefono": "string",
+      "correo": "string",
+      "rol": "string",
+      "activo_usuario": "boolean"
+    }
+  ]
 }
-]
-}
+
+
 
 ---
 
+
+
 Ruta 3: Obtener Usuario por ID (para prellenar formulario de edición)
-Endpoint: [http://127.0.0.1:8000/api/usuarios/](http://127.0.0.1:8000/api/usuarios/){id_usuario}
+Endpoint: http://127.0.0.1:8000/api/usuarios/{id_usuario}
 Método: GET
 
 Estructura de los datos que recibirá:
 {
-"data": {
-"usuario": {
-"id_usuario": "number",
-"cedula": "string",
-"carnet_usuario": "string",
-"nombres": "string",
-"apellidos": "string",
-"telefono": "string",
-"correo": "string",
-"rol": "string",
-"activo_usuario": "boolean",
-},
-"permisos": [
-{
-"id_permisom": "number",
-"modulo": "string",
-"accion": "string"
-}
-]
-}
+  "data": {
+    "usuario": {
+        "id_usuario": "number",
+        "cedula": "string",
+        "carnet_usuario": "string",
+        "nombres": "string",
+        "apellidos": "string",
+        "telefono": "string",
+        "correo": "string",
+        "rol": "string",
+        "activo_usuario": "boolean",
+      },
+      "permisos": [
+        {
+          "id_permisom": "number",
+          "modulo": "string",
+          "accion": "string"
+        }
+    ]
+  }
 }
 
 JSON (Respuesta en caso de error):
 {
-"detail": "Usuario no encontrado"
+  "detail": "Usuario no encontrado"
 }
+
+
 
 ---
 
+
+
 Ruta 4: Editar Usuario
-Endpoint: [http://127.0.0.1:8000/api/usuarios/](http://127.0.0.1:8000/api/usuarios/){id_usuario}
+Endpoint: http://127.0.0.1:8000/api/usuarios/{id_usuario}
 Método: PUT
 
 JSON (Envía el Frontend):
 {
-"cedula": "String",
-"carnetUsuario": "String",
-"contrasena": "string"
-"nombres": "String",
-"apellidos": "String",
-"telefono": "String",
-"correo": "String",
-"rol": "administrador" | "operador",
-"activoUsuario": true,
-"idsPermisos": [1, 2]
+  "cedula": "String",
+  "carnetUsuario": "String",
+  "nombres": "String",
+  "apellidos": "String",
+  "telefono": "String",
+  "correo": "String",
+  "rol": "administrador" | "operador",
+  "activoUsuario": true,
+  "idsPermisos": [1, 2]
 }
 
 JSON (Respuesta en caso de éxito):
 {
-"mensaje": "Usuario actualizado con éxito",
-"id": 1
+  "mensaje": "Usuario actualizado con éxito",
+  "id": 1
 }
 
 JSON (Respuesta en caso de error):
 {
-"detail": "Usuario no encontrado"
+  "detail": "Usuario no encontrado"
 }
+
+
 
 ---
 
+
+
 Ruta 5: Catálogo de Permisos
-Endpoint: [http://127.0.0.1:8000/api/usuarios/permisos/catalogo](http://127.0.0.1:8000/api/usuarios/permisos/catalogo)
+Endpoint: http://127.0.0.1:8000/api/usuarios/permisos/catalogo
 Método: GET
 
 Estructura de los datos que recibirá:
 {
-"data": [
-{
-"id_permisom": "number",
-"modulo": "string",
-"accion": "string"
-}
-]
+  "data": [
+    {
+      "id_permisom": "number",
+      "modulo": "string",
+      "accion": "string"
+    }
+  ]
 }

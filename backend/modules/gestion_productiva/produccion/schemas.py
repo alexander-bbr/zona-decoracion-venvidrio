@@ -17,7 +17,7 @@ class MoldeResponde(BaseModel):
 
     class Config:
         allow_population_by_field_name = True
-        from_attributes = True
+        orm_mode = True
 
 
 # ESQUEMA PARA JUSTIFICANTES (Vista para el select)
@@ -28,7 +28,7 @@ class JustificanteResponde(BaseModel):
 
     class Config:
         allow_population_by_field_name = True
-        from_attributes = True
+        orm_mode = True
 
 
 # ESQUEMAS PARA GESTION_PRODUCTIVA_ENTRADA (Detalle por máquina y molde)
@@ -46,7 +46,8 @@ class EntradaDetalleCrear(EntradaDetalleBase):
 class EntradaDetalleResponde(EntradaDetalleBase):
 
     class Config:
-        from_attributes = True
+        orm_mode = True
+        allow_population_by_field_name = True
 
 
 # ESQUEMAS PARA EFICIENCIA PRODUCTIVA SALIDA (Detalle de modelos)
@@ -74,7 +75,8 @@ class SalidaResponde(SalidaBase):
     id_eficiencia: int = Field(alias="idEficiencia")
 
     class Config:
-        from_attributes = True
+        orm_mode = True
+        allow_population_by_field_name = True
 
 
 # ESQUEMA PARA JUSTIFICANTES POR MOLDE
@@ -114,7 +116,8 @@ class ResultadoCrear(ResultadoBase):
 class ResultadoResponde(ResultadoBase):
 
     class Config:
-        from_attributes = True
+        orm_mode = True
+        allow_population_by_field_name = True
 
 
 # ESQUEMAS PARA GESTION_PRODUCTIVA_CABECERA (Creación)
@@ -199,4 +202,4 @@ class ProduccionActualizadaResponde(BaseModel):
     id: int
 
     class Config:
-        from_attributes = True
+        orm_mode = True

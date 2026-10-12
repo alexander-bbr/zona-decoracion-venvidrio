@@ -79,7 +79,12 @@ export const Torta = ({ visibleMetrics, totales }: TortaProps) => {
             cx="50%"
             cy="50%"
             outerRadius={110}
-            label
+            label={({ value }) => {
+              const numValue =
+                typeof value === "number" ? value : Number(value);
+              return numValue.toLocaleString("es-VE");
+            }}
+            labelLine
           >
             {slices.map((slice, index) => (
               <Cell key={`slice-${index}`} fill={slice.color} />

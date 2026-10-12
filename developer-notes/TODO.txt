@@ -2,10 +2,10 @@
 
 ## Rendimiento
 
-  - Corregir el error en el tipo de gráfico de torta
-  - Agregar la Eficiencia y Deficiencia. Esta vendrá tanto por cada lote de registro, como por el total de todo el rango de fechas
+  - Preguntarle a Daniel si le parece bien que en el gráfico de Torta no aparezca el valor de eficiencia y deficiencia
   - Hacer el submódulo del profesor.
   - Hacer el submódulo de las metas.
+  - Incluir las metas en el gráfico (puede ser solo en el lineal y de barras).
 
 
 ---
@@ -73,7 +73,6 @@
 
 ## Gestión de Usuarios
 
-  - Colocar mensajes de envío de los formularios (exito y error).
   - En el formulario de Editar, agregar un campo de nueva contraseña
   - Si ver inventario de insumos/pantallas no está activo, no me deja ver el inventario.
   - Si no tengo ver produccion, no puedo ver Justificantes ni Moldes
@@ -106,7 +105,8 @@
 
   - Hacer Responsive la Aplicación.
   - Hacer el README.md
-  - Eliminar TODOS los archivos de notas de desarrollo innecesarios
+  - Eliminar TODOS los archivos de notas de desarrollo innecesarios.
+  - Colocar mensajes de envío de los formularios (exito y error).
 
 
 

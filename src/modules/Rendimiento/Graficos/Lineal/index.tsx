@@ -8,18 +8,25 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import type { DashboardDataItem, VisibleMetrics } from "../../../../types";
+import type {
+  DashboardDataItem,
+  VisibleMetrics,
+  Totales,
+} from "../../../../types";
 import styles from "./lineal.module.css";
 
 const COLORS = {
   envasesLisos: "#3562d3",
   envasesDecorados: "#0a9c7d",
   envasesPerdidos: "#f26c4f",
+  eficiencia: "#7c3aed",
+  deficiencia: "#d946ef",
 };
 
 type LinealProps = {
   data: DashboardDataItem[];
   visibleMetrics: VisibleMetrics;
+  totales: Totales;
 };
 
 export const Lineal = ({ data, visibleMetrics }: LinealProps) => {
@@ -32,8 +39,24 @@ export const Lineal = ({ data, visibleMetrics }: LinealProps) => {
         >
           <CartesianGrid stroke="rgba(0,0,0,0.06)" strokeDasharray="4 4" />
           <XAxis dataKey="date" tick={{ fill: "#5a6777", fontSize: 12 }} />
-          <YAxis tick={{ fill: "#5a6777", fontSize: 12 }} />
-          <Tooltip />
+          {/* Eje izquierdo: envases */}
+          <YAxis yAxisId="left" tick={{ fill: "#5a6777", fontSize: 12 }} />
+          {/* Eje derecho: porcentajes (0-100) */}
+          <YAxis
+            yAxisId="right"
+            orientation="right"
+            domain={[0, 100]}
+            tick={{ fill: "#5a6777", fontSize: 12 }}
+            tickFormatter={(value) => `${value}%`}
+          />
+          <Tooltip
+            formatter={(value: number, name: string) => {
+              if (name === "Eficiencia" || name === "Deficiencia") {
+                return [`${value}%`, name];
+              }
+              return [value, name];
+            }}
+          />
           <Legend
             verticalAlign="top"
             height={60}
@@ -41,6 +64,7 @@ export const Lineal = ({ data, visibleMetrics }: LinealProps) => {
           />
           {visibleMetrics.envasesLisos && (
             <Line
+              yAxisId="left"
               type="monotone"
               dataKey="envasesLisos"
               name="Envases Lisos"
@@ -51,6 +75,7 @@ export const Lineal = ({ data, visibleMetrics }: LinealProps) => {
           )}
           {visibleMetrics.envasesDecorados && (
             <Line
+              yAxisId="left"
               type="monotone"
               dataKey="envasesDecorados"
               name="Envases Decorados"
@@ -61,12 +86,37 @@ export const Lineal = ({ data, visibleMetrics }: LinealProps) => {
           )}
           {visibleMetrics.envasesPerdidos && (
             <Line
+              yAxisId="left"
               type="monotone"
               dataKey="envasesPerdidos"
               name="Envases Perdidos"
               stroke={COLORS.envasesPerdidos}
               strokeWidth={3}
               dot={false}
+            />
+          )}
+          {visibleMetrics.eficiencia && (
+            <Line
+              yAxisId="right"
+              type="monotone"
+              dataKey="eficiencia"
+              name="Eficiencia"
+              stroke={COLORS.eficiencia}
+              strokeWidth={3}
+              dot={false}
+              strokeDasharray="5 3"
+            />
+          )}
+          {visibleMetrics.deficiencia && (
+            <Line
+              yAxisId="right"
+              type="monotone"
+              dataKey="deficiencia"
+              name="Deficiencia"
+              stroke={COLORS.deficiencia}
+              strokeWidth={3}
+              dot={false}
+              strokeDasharray="5 3"
             />
           )}
         </LineChart>

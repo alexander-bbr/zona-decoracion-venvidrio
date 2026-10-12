@@ -3,12 +3,16 @@ export type DashboardDataItem = {
   envasesLisos: number;
   envasesDecorados: number;
   envasesPerdidos: number;
+  eficiencia: number;
+  deficiencia: number;
 };
 
 export type VisibleMetrics = {
   envasesLisos: boolean;
   envasesDecorados: boolean;
   envasesPerdidos: boolean;
+  eficiencia: boolean;
+  deficiencia: boolean;
 };
 
 export type ChartType = "lineal" | "barras" | "torta";
@@ -32,6 +36,12 @@ export type PerdidosRegistro = {
   totalGruesasPerdidas: string;
 };
 
+export type RendimientoRegistro = {
+  fecha: string;
+  eficiencia: number;
+  deficiencia: string;
+};
+
 export type LisosResponse = {
   registrosLisos: LisosRegistro[];
   totalEnvasesLisos: number;
@@ -50,6 +60,12 @@ export type PerdidosResponse = {
   totalGruesasPerdidas: string;
 };
 
+export type RendimientoResponse = {
+  rendimiento: RendimientoRegistro[];
+  eficienciaGeneral: number;
+  deficienciaGeneral: number;
+};
+
 export type Totales = {
   totalEnvasesLisos: number;
   totalGruesasLisas: string;
@@ -57,4 +73,6 @@ export type Totales = {
   totalGruesasDecoradas: string;
   totalEnvasesPerdidos: number;
   totalGruesasPerdidas: string;
+  eficienciaGeneral: number;
+  deficienciaGeneral: number;
 };

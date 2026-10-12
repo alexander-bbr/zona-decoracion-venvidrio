@@ -10,6 +10,7 @@ import type {
   LisosResponse,
   DecoradosResponse,
   PerdidosResponse,
+  RendimientoResponse,
 } from "../../types";
 import styles from "./rendimiento.module.css";
 
@@ -23,11 +24,13 @@ const visibleMetricLabels: Record<keyof VisibleMetrics, string> = {
   envasesLisos: "Envases Lisos",
   envasesDecorados: "Envases Decorados",
   envasesPerdidos: "Envases Perdidos",
+  eficiencia: "Eficiencia (%)",
+  deficiencia: "Deficiencia (%)",
 };
 
 //* Helpers para fechas por defecto (zona horaria Venezuela)
+//* Nota: 'en-CA' produce formato YYYY-MM-DD, justo como lo esperan los endpoints.
 const getTodayVenezuela = (): string => {
-  // 'en-CA' produce formato YYYY-MM-DD
   return new Intl.DateTimeFormat("en-CA", {
     timeZone: "America/Caracas",
   }).format(new Date());
@@ -46,6 +49,8 @@ const EMPTY_TOTALES: Totales = {
   totalGruesasDecoradas: "0",
   totalEnvasesPerdidos: 0,
   totalGruesasPerdidas: "0",
+  eficienciaGeneral: 0,
+  deficienciaGeneral: 0,
 };
 
 export const Rendimiento = () => {
@@ -59,6 +64,8 @@ export const Rendimiento = () => {
     envasesLisos: true,
     envasesDecorados: true,
     envasesPerdidos: true,
+    eficiencia: true,
+    deficiencia: true,
   });
 
   const [apiData, setApiData] = useState<DashboardDataItem[]>([]);
@@ -72,14 +79,17 @@ export const Rendimiento = () => {
       setError(null);
 
       const baseUrl = "http://127.0.0.1:8000/api/rendimiento";
+      //* Las fechas vienen en formato YYYY-MM-DD, que es el que esperan los endpoints.
       const query = `desde=${fromDate}&hasta=${toDate}`;
 
       try {
-        const [lisosRes, decoradosRes, perdidosRes] = await Promise.all([
-          fetch(`${baseUrl}/lisos?${query}`),
-          fetch(`${baseUrl}/decorados?${query}`),
-          fetch(`${baseUrl}/perdidos?${query}`),
-        ]);
+        const [lisosRes, decoradosRes, perdidosRes, rendimientoRes] =
+          await Promise.all([
+            fetch(`${baseUrl}/lisos?${query}`),
+            fetch(`${baseUrl}/decorados?${query}`),
+            fetch(`${baseUrl}/perdidos?${query}`),
+            fetch(`${baseUrl}/eficiencia-deficiencia?${query}`),
+          ]);
 
         //* Si alguna falla con 404 (sin registros), la tratamos como vacía
         const parseSafe = async <T,>(res: Response): Promise<T | null> => {
@@ -90,10 +100,11 @@ export const Rendimiento = () => {
           return (await res.json()) as T;
         };
 
-        const [lisos, decorados, perdidos] = await Promise.all([
+        const [lisos, decorados, perdidos, rendimiento] = await Promise.all([
           parseSafe<LisosResponse>(lisosRes),
           parseSafe<DecoradosResponse>(decoradosRes),
           parseSafe<PerdidosResponse>(perdidosRes),
+          parseSafe<RendimientoResponse>(rendimientoRes),
         ]);
 
         //* Guardamos los totales (si no hay datos, quedan en 0)
@@ -104,6 +115,8 @@ export const Rendimiento = () => {
           totalGruesasDecoradas: decorados?.totalGruesasDecoradas ?? "0",
           totalEnvasesPerdidos: perdidos?.totalEnvasesPerdidos ?? 0,
           totalGruesasPerdidas: perdidos?.totalGruesasPerdidas ?? "0",
+          eficienciaGeneral: rendimiento?.eficienciaGeneral ?? 0,
+          deficienciaGeneral: rendimiento?.deficienciaGeneral ?? 0,
         });
 
         //* Combinamos por fecha
@@ -115,6 +128,8 @@ export const Rendimiento = () => {
             envasesLisos: r.totalEnvasesLisos,
             envasesDecorados: 0,
             envasesPerdidos: 0,
+            eficiencia: 0,
+            deficiencia: 0,
           });
         });
 
@@ -128,6 +143,8 @@ export const Rendimiento = () => {
               envasesLisos: 0,
               envasesDecorados: r.totalEnvasesDecorados,
               envasesPerdidos: 0,
+              eficiencia: 0,
+              deficiencia: 0,
             });
           }
         });
@@ -142,6 +159,28 @@ export const Rendimiento = () => {
               envasesLisos: 0,
               envasesDecorados: 0,
               envasesPerdidos: r.totalEnvasesPerdidos,
+              eficiencia: 0,
+              deficiencia: 0,
+            });
+          }
+        });
+
+        rendimiento?.rendimiento.forEach((r) => {
+          const existing = map.get(r.fecha);
+          //* 'eficiencia' ya es number, pero 'deficiencia' viene como string ("27").
+          const eficiencia = r.eficiencia;
+          const deficiencia = Number(r.deficiencia);
+          if (existing) {
+            existing.eficiencia = eficiencia;
+            existing.deficiencia = deficiencia;
+          } else {
+            map.set(r.fecha, {
+              date: r.fecha,
+              envasesLisos: 0,
+              envasesDecorados: 0,
+              envasesPerdidos: 0,
+              eficiencia,
+              deficiencia,
             });
           }
         });
@@ -273,6 +312,7 @@ export const Rendimiento = () => {
               <ChartComponent
                 data={chartData}
                 visibleMetrics={visibleMetrics}
+                totales={totales}
               />
 
               {/* Totales del período */}
@@ -303,6 +343,16 @@ export const Rendimiento = () => {
                   <span className={styles.totalGruesas}>
                     ({totales.totalGruesasPerdidas} gruesas)
                   </span>
+                </p>
+                <p className={styles.totalItem}>
+                  <span className={styles.totalLabel}>Eficiencia General:</span>{" "}
+                  <strong>{totales.eficienciaGeneral}%</strong>
+                </p>
+                <p className={styles.totalItem}>
+                  <span className={styles.totalLabel}>
+                    Deficiencia General:
+                  </span>{" "}
+                  <strong>{totales.deficienciaGeneral}%</strong>
                 </p>
               </div>
             </>

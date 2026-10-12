@@ -6,35 +6,45 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import type { DashboardDataItem, VisibleMetrics } from "../../../../types";
+import type {
+  DashboardDataItem,
+  VisibleMetrics,
+  Totales,
+} from "../../../../types";
 import styles from "./torta.module.css";
 
-const COLORS = ["#3562d3", "#0a9c7d", "#f26c4f"];
+//* Mismos colores que Barras y Lineal para envases
+const COLORS = {
+  envasesLisos: "#3562d3",
+  envasesDecorados: "#0a9c7d",
+  envasesPerdidos: "#f26c4f",
+};
 
 type TortaProps = {
   data: DashboardDataItem[];
   visibleMetrics: VisibleMetrics;
+  totales: Totales;
 };
 
-export const Torta = ({ data, visibleMetrics }: TortaProps) => {
-  const latest = data[data.length - 1];
-
+export const Torta = ({ visibleMetrics, totales }: TortaProps) => {
+  //* Usamos los totales del período (no el último registro)
   const slices = [
     {
       name: "Envases Lisos",
-      value: visibleMetrics.envasesLisos ? (latest?.envasesLisos ?? 0) : 0,
+      value: visibleMetrics.envasesLisos ? totales.totalEnvasesLisos : 0,
+      color: COLORS.envasesLisos,
     },
     {
       name: "Envases Decorados",
       value: visibleMetrics.envasesDecorados
-        ? (latest?.envasesDecorados ?? 0)
+        ? totales.totalEnvasesDecorados
         : 0,
+      color: COLORS.envasesDecorados,
     },
     {
       name: "Envases Perdidos",
-      value: visibleMetrics.envasesPerdidos
-        ? (latest?.envasesPerdidos ?? 0)
-        : 0,
+      value: visibleMetrics.envasesPerdidos ? totales.totalEnvasesPerdidos : 0,
+      color: COLORS.envasesPerdidos,
     },
   ].filter((item) => item.value > 0);
 
@@ -50,7 +60,12 @@ export const Torta = ({ data, visibleMetrics }: TortaProps) => {
     <div className={styles.chartWrapper}>
       <ResponsiveContainer width="100%" height={360}>
         <PieChart margin={{ top: 10, right: 0, bottom: 10, left: 0 }}>
-          <Tooltip />
+          <Tooltip
+            formatter={(value: number, name: string) => [
+              value.toLocaleString("es-VE"),
+              name,
+            ]}
+          />
           <Legend
             verticalAlign="top"
             height={60}
@@ -64,10 +79,11 @@ export const Torta = ({ data, visibleMetrics }: TortaProps) => {
             cy="50%"
             outerRadius={110}
             label
-          />
-          {slices.map((_, index) => (
-            <Cell key={`slice-${index}`} fill={COLORS[index % COLORS.length]} />
-          ))}
+          >
+            {slices.map((slice, index) => (
+              <Cell key={`slice-${index}`} fill={slice.color} />
+            ))}
+          </Pie>
         </PieChart>
       </ResponsiveContainer>
     </div>

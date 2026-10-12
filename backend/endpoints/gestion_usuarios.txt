@@ -109,6 +109,7 @@ JSON (Envía el Frontend):
 {
 "cedula": "String",
 "carnetUsuario": "String",
+"contrasena": "string"
 "nombres": "String",
 "apellidos": "String",
 "telefono": "String",

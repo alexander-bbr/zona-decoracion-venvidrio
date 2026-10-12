@@ -72,7 +72,7 @@
 ## Gestión de Usuarios
 
   - Colocar mensajes de envío de los formularios (exito y error).
-  - Tengo que implementar la validación de los estándares de seguridad de la contraseña.
+  - En el formulario de Editar, agregar un campo de nueva contraseña
 
 
 
@@ -82,7 +82,7 @@
 
 ## Exportaciones
 
-- Corregir el orden de los registros de los dos excel del Módulo de Inventario de Pantallas.
+- Corregir el orden de los registros de los dos excel de Listado de Pantallas.
 
 
 
@@ -103,6 +103,7 @@
   - Hacer Responsive la Aplicación.
   - Hacer el README.md
   - Eliminar TODOS los archivos de notas de desarrollo innecesarios
+  - Remplazar los emojis por íconos.
 
 
 

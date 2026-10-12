@@ -120,16 +120,16 @@ Método: GET
 
 Estructura de los datos que recibirá:
 [
-    {"idMeta": 1, "anio": "2026", "mes": "enero", "eficiencia": "85"},
-    {"idMeta": 2, "anio": "2026", "mes": "febrero", "eficiencia": "92"},
-    {"idMeta": 3, "anio": "2026", "mes": "marzo", "eficiencia": "93"},
-    {"idMeta": 4, "anio": "2026", "mes": "abril", "eficiencia": "87"},
-    {"idMeta": 5, "anio": "2026", "mes": "mayo", "eficiencia": "75"},
-    {"idMeta": 6, "anio": "2026", "mes": "junio", "eficiencia": "85"},
-    {"idMeta": 7, "anio": "2026", "mes": "julio", "eficiencia": "89"},
-    {"idMeta": 8, "anio": "2026", "mes": "agosto", "eficiencia": "93"},
-    {"idMeta": 9, "anio": "2026", "mes": "septiembre", "eficiencia": "91"},
-    {"idMeta": 10, "anio": "2026", "mes": "octubre", "eficiencia": "98"},
+    {"idMeta": 1, "anio": "2026", "mes": "enero", "deficiencia": "85", "estado": false},
+    {"idMeta": 2, "anio": "2026", "mes": "febrero", "deficiencia": "92", "estado": false},
+    {"idMeta": 3, "anio": "2026", "mes": "marzo", "deficiencia": "93", "estado": false},
+    {"idMeta": 4, "anio": "2026", "mes": "abril", "deficiencia": "87", "estado": false},
+    {"idMeta": 5, "anio": "2026", "mes": "mayo", "deficiencia": "75", "estado": false},
+    {"idMeta": 6, "anio": "2026", "mes": "junio", "deficiencia": "85", "estado": false},
+    {"idMeta": 7, "anio": "2026", "mes": "julio", "deficiencia": "89", "estado": false},
+    {"idMeta": 8, "anio": "2026", "mes": "agosto", "deficiencia": "93", "estado": false},
+    {"idMeta": 9, "anio": "2026", "mes": "septiembre", "deficiencia": "91", "estado": false},
+    {"idMeta": 10, "anio": "2026", "mes": "octubre", "deficiencia": "98", "estado": true}
 ]
 
 JSON (Respuesta en caso de error):
@@ -153,7 +153,8 @@ JSON (Envía el Frontend):
 {
     "anio": "2026",
     "mes": "octubre",
-    "eficiencia": "89",
+    "deficiencia": "89",
+    "estado" : true         # Boolean 
 }
 
 JSON (Respuesta en caso de éxito):
@@ -182,7 +183,8 @@ Estructura de los datos que recibirá:
     "idMeta": 1,
     "anio": "2026",
     "mes": "enero",
-    "eficiencia": 85,
+    "deficiencia": 85,
+    "estado": true, # Boolean
 }
 
 JSON (Respuesta en caso de error):
@@ -204,7 +206,8 @@ JSON (Envía el Frontend):
 {
     "anio": "2026",
     "mes": "enero",
-    "eficiencia": 93
+    "deficiencia": 93
+    "estado": true # boolean
 }
 
 JSON (Respuesta en caso de éxito):

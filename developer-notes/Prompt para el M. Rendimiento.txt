@@ -1,4 +1,6 @@
-Okey deep, así dejé mi Rendimiento.module.css: /* Encabezado */
+Okey deep, así dejé mi Rendimiento.module.css:
+
+/* Encabezado */
 .moduleHeader {
   margin-bottom: 32px;
   padding-bottom: 16px;
@@ -696,7 +698,7 @@ Y este su Rendimiento/Graficos/Lineal/Lineal.module.css: .chartWrapper {
 }
 
 
-Y este es el archivo types, o sea: src/types/index.ts:
+Y este es el archivo types (src/types/index.ts):
 
 export type DashboardDataItem = {
   date: string;
@@ -760,7 +762,9 @@ export type Totales = {
 };
 
 
-Y bueno, como bien sabes estos son los endpoints que utiliza el módulo:
+
+Y bueno, estos son los endpoints que utiliza el módulo:
+
 
 
 Ruta 1: Lisos por Fecha
@@ -856,7 +860,7 @@ Estructura de los datos que recibirá:
 {
     "rendimiento": [
         {"fecha": "2026-09-08", "eficiencia": 73, "deficiencia": "27"},
-        {"fecha": "2026-09-09", "eficiencia": 89, "deficiencia": "11"}
+        {"fecha": "2026-09-25", "eficiencia": 89, "deficiencia": "11"}
     ],
     "eficienciaGeneral": 81,
     "deficienciaGeneral": 19
@@ -867,7 +871,11 @@ JSON (Respuesta en caso de error):
     "detail": "No se encontraron registros en el rango de fechas indicado."
 }
 
+NOTA TÉCNICA: En los endpoints de Ruta 1,2,3 y 4, las fechas de desde y hasta, tienen que enviarse en formato año-mes-dia
 
-Pero hay un detalle, si te fijas, tenemos un nuevo endpoint, el de ruta 4, que me dice el porcentaje de eficiencia y deficiencia en cada registro (o sea me da el numero, por ejemplo 89, pero nosotros tenemos que añadirle un % para quel usuario entienda que es un porcentaje pues), por lo que habría que añadirlo a cada registro, y claro, poner tambien los generales con el Totales del periodo del componente Rendimiento.
 
-Por cierto, en el gráfico de torta, quiero que en lugar de ver los datos del registro más reciente, se vea la sumatoria de los registros (no hace falta sumarlo nosotros, ya que los endpoints ya nos los están dando, en el totalEnvasesLisos, totalEnvasesDecorados, totalEnvasesPerdidos). En este gráfico de Torta, no hay que colocar el endpoint de ruta 4, ya que se vería raro. Eso si, hay que cambiarle los colores a este grafico de torta, o sea como los de Barras y y Lineal pues, que se vea con esos colores
+Pero hay un detalle, si te fijas, tenemos un nuevo endpoint, el de ruta 4, que me dice el porcentaje de eficiencia y deficiencia en cada registro (o sea me da el numero, por ejemplo 89, pero nosotros tenemos que añadirle un % para que el usuario sepa que es un porcentaje pues), por lo que habría que añadirlo a cada registro, y claro, poner tambien los generales con el Totales del periodo del componente Rendimiento.
+
+Por cierto, en el gráfico de torta, quiero que en lugar de ver los datos del registro más reciente, se vea la sumatoria de los registros (no hace falta sumarlo nosotros, ya que los endpoints ya nos los están dando, en el totalEnvasesLisos, totalEnvasesDecorados, totalEnvasesPerdidos). En este gráfico de Torta, no hay que colocar el endpoint de ruta 4. Eso si, hay que cambiarle los colores a este grafico de torta, o sea que tenga el objeto COLORS como lo tiene el gráfico de Barras y y Lineal.
+
+Otra cosa, no sé si ya estaba funcionando de esa manera, pero te agregué la aclaración de la NOTA TÉCNICA, o sea de que los endpoinst trabajan es con las fechas en formato año-mes-dia. Entonces para que lo tengas en cuenta en caso de que no lo supieras

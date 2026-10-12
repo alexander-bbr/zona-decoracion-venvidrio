@@ -1,4 +1,3 @@
-// src/App.tsx
 import { BrowserRouter } from "react-router-dom";
 import { useState } from "react";
 import { AuthProvider } from "./contexts/AuthContext";

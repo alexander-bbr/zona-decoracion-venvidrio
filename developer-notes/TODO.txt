@@ -2,6 +2,7 @@
 
 ## Rendimiento
 
+  - Corregir el error en el tipo de gráfico de torta
   - Agregar la Eficiencia y Deficiencia. Esta vendrá tanto por cada lote de registro, como por el total de todo el rango de fechas
   - Hacer el submódulo del profesor.
   - Hacer el submódulo de las metas.
@@ -37,6 +38,7 @@
 
   - Centrar el input de Total de Paletas por este molde
 
+  - Tengo que ocultar el botón de Registrar y la opción de editar si no tengo los permisos de gestion_productiva: registrar_produccion y gestion_productiva: editar, respectivamente.
 
 
 ---
@@ -73,6 +75,8 @@
 
   - Colocar mensajes de envío de los formularios (exito y error).
   - En el formulario de Editar, agregar un campo de nueva contraseña
+  - Si ver inventario de insumos/pantallas no está activo, no me deja ver el inventario.
+  - Si no tengo ver produccion, no puedo ver Justificantes ni Moldes
 
 
 
@@ -82,7 +86,7 @@
 
 ## Exportaciones
 
-- Corregir el orden de los registros de los dos excel de Listado de Pantallas.
+- Corregir el orden de los registros de los excel de Listado de Pantallas.
 
 
 
@@ -103,7 +107,6 @@
   - Hacer Responsive la Aplicación.
   - Hacer el README.md
   - Eliminar TODOS los archivos de notas de desarrollo innecesarios
-  - Remplazar los emojis por íconos.
 
 
 

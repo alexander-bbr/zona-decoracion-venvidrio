@@ -6,7 +6,7 @@ type Meta = {
   idMeta: number;
   anio: number;
   mes: string;
-  deficiencia: number;
+  deficiencia: string;
   estado: boolean;
 };
 
@@ -25,17 +25,25 @@ export const Metas = () => {
     try {
       const response = await fetch(API_METAS);
       if (!response.ok) {
-        throw new Error(`Error al cargar metas: ${response.status}`);
+        const data = await response.json().catch(() => null);
+        throw new Error(
+          data?.detail ?? `Error al cargar metas: ${response.status}`,
+        );
       }
       const data = await response.json();
-      //* Normalizamos tipos por si el backend manda algún valor como string
       const metasNormalizadas: Meta[] = data.map((meta: Meta) => ({
         ...meta,
         idMeta: Number(meta.idMeta),
         anio: Number(meta.anio),
-        deficiencia: Number(meta.deficiencia),
+        //* 'deficiencia' viene como string desde el backend ("85"), lo dejamos así.
+        deficiencia: String(meta.deficiencia),
         estado: Boolean(meta.estado),
       }));
+      //* Ordenar por año y mes, MÁS RECIENTES PRIMERO (descendente)
+      metasNormalizadas.sort((a, b) => {
+        if (a.anio !== b.anio) return b.anio - a.anio;
+        return mesToNumber(b.mes) - mesToNumber(a.mes);
+      });
       setMetas(metasNormalizadas);
     } catch (loadError) {
       setError(
@@ -48,12 +56,12 @@ export const Metas = () => {
     }
   };
 
-  //* Cargar metas al montar el componente
+  // Cargar metas al montar el componente
   useEffect(() => {
     cargarMetas();
   }, []);
 
-  //* Recargar cuando volvemos a la raíz (al salir de registrar/editar)
+  // Recargar cuando la ruta cambie a /rendimiento/metas
   useEffect(() => {
     if (location.pathname === "/rendimiento/metas") {
       cargarMetas();
@@ -70,9 +78,9 @@ export const Metas = () => {
   };
 
   return (
-    <section className={styles.metasSection}>
+    <section className={styles.metasWrapper}>
       {!isRoot ? (
-        <nav className={`${styles.subNav} content`} id="subNav">
+        <nav className={`${styles.subNav}`} id="subNav">
           <NavLink
             to="/rendimiento/metas"
             className={({ isActive }) =>
@@ -127,17 +135,17 @@ export const Metas = () => {
                         className={styles.clickableRow}
                       >
                         <td>{meta.anio}</td>
-                        <td className={styles.mesCell}>{meta.mes}</td>
+                        <td className={styles.capitalize}>{meta.mes}</td>
                         <td>{meta.deficiencia}%</td>
                         <td>
                           <span
                             className={
                               meta.estado
-                                ? `${styles.estadoBadge} ${styles.estadoActivo}`
-                                : `${styles.estadoBadge} ${styles.estadoInactivo}`
+                                ? styles.badgeActive
+                                : styles.badgeInactive
                             }
                           >
-                            {meta.estado ? "Cumplida" : "Pendiente"}
+                            {meta.estado ? "Activa" : "Inactiva"}
                           </span>
                         </td>
                       </tr>
@@ -153,4 +161,24 @@ export const Metas = () => {
       )}
     </section>
   );
+};
+
+//* Helper para ordenar por mes
+const mesToNumber = (mes: string): number => {
+  const meses = [
+    "enero",
+    "febrero",
+    "marzo",
+    "abril",
+    "mayo",
+    "junio",
+    "julio",
+    "agosto",
+    "septiembre",
+    "octubre",
+    "noviembre",
+    "diciembre",
+  ];
+  const idx = meses.indexOf(mes.toLowerCase().trim());
+  return idx === -1 ? 99 : idx;
 };

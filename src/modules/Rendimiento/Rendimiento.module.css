@@ -15,10 +15,45 @@
   margin: 0;
 }
 
+/* Sub navegación (cuando estás en un submódulo) */
+.subNav {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 2rem;
+  padding: 12px 16px;
+  background: #f9fafb;
+  border-radius: 8px;
+}
+
+:global(#subNav) {
+  margin-bottom: 2rem !important;
+}
+
+.subNavLink {
+  color: #6b7280;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.subNavLink:hover {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.subNavTitle {
+  font-weight: 600;
+  color: var(--primary-text-color);
+  font-size: 16px;
+}
+
 /* Dashboard */
 .dashboard {
   margin: auto;
-  width: 100%;
+  width: 90%;
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -118,11 +153,47 @@
   font-size: 0.88rem;
 }
 
+/* === LINK AL SUBMÓDULO DE METAS === */
+.modulesLink {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+}
+.moduleLinkCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 1.25rem 2rem;
+  border-radius: 12px;
+  background: white;
+  border: 1px solid rgba(52, 73, 94, 0.14);
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s,
+    border-color 0.2s;
+  min-width: 280px;
+  text-align: center;
+}
+.moduleLinkCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  border-color: var(--primary-color);
+}
+.moduleLinkTitle {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--primary-text-color);
+}
+.moduleLinkDesc {
+  font-size: 0.9rem;
+  color: var(--secondary-text-color);
+}
+
 /* Fuerza la Leyenda de los gráficos para esten en horizontal */
 :global(.recharts-legend-wrapper) {
   width: 100% !important;
-
-  /* Centra horizontalmente y verticalmente el contenedor tenga los items */
   display: flex;
   justify-content: center;
   align-items: center;

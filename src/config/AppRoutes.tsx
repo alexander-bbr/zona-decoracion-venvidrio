@@ -7,6 +7,9 @@ import { Home } from "../modules/Home";
 
 // Módulo - Rendimiento
 import { Rendimiento } from "../modules/Rendimiento";
+import { Metas } from "../modules/Rendimiento/Metas";
+import { RegistrarMeta } from "../modules/Rendimiento/Metas/RegistrarMeta";
+import { EditarMeta } from "../modules/Rendimiento/Metas/EditarMeta";
 
 // Módulo - Inventario de Insumos
 import { InventarioInsumos } from "../modules/InventarioInsumos";
@@ -95,7 +98,42 @@ export const AppRoutes = () => {
             <Rendimiento />
           </PrivateRoute>
         }
-      />
+      >
+        {/* Submódulo - Metas */}
+        <Route
+          path="metas"
+          element={
+            <PrivateRoute
+              requiredPermissions={[{ modulo: "rendimiento", accion: "ver" }]}
+            >
+              <Metas />
+            </PrivateRoute>
+          }
+        >
+          {/* Registrar Meta */}
+          <Route
+            path="registrar-meta"
+            element={
+              <PrivateRoute
+                requiredPermissions={[{ modulo: "rendimiento", accion: "ver" }]}
+              >
+                <RegistrarMeta />
+              </PrivateRoute>
+            }
+          />
+          {/* Editar Meta */}
+          <Route
+            path="editar-meta/:id"
+            element={
+              <PrivateRoute
+                requiredPermissions={[{ modulo: "rendimiento", accion: "ver" }]}
+              >
+                <EditarMeta />
+              </PrivateRoute>
+            }
+          />
+        </Route>
+      </Route>
 
       {/* 
         Módulo - Inventario de Insumos - Requiere al menos un permiso de inventario_insumos

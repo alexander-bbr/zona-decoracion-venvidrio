@@ -48,12 +48,15 @@
 
 /* Dashboard */
 .dashboard {
-  margin: auto auto 8rem;
+  margin: auto;
+  margin-bottom: 8rem;
   width: 100%;
+
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  padding: 2rem 1rem 2.5rem;
+
+  padding: 2rem 2rem 2.5rem;
   border-radius: 16px;
   background: var(--third-text-color);
   box-shadow: 0 20px 55px rgba(20, 30, 60, 0.08);
@@ -64,8 +67,50 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: space-evenly;
-  gap: 12px;
+  gap: 1.7rem;
+  border-bottom: 1px solid var(--secondary-color);
+  padding-bottom: 1.2rem;
 }
+/* Wrapper para la Configuración y los botones de enlace */
+.mainButtons {
+  align-self: start;
+  flex-grow: 1;
+
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+/* Wrapper para los botones de enlace */
+.linkButtons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Botón de enlace al Módulo de Metas */
+.objectivesModule {
+  display: block;
+  flex-grow: 0;
+
+  text-align: center;
+  text-decoration: none;
+  border: 0;
+  border-radius: 6px;
+  padding: 0.55rem 1rem;
+  background: var(--primary-color);
+  color: #fff;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: background 0.3s ease;
+}
+.objectivesModule:hover {
+  background: #2563eb;
+}
+
+/* Configuración del Dashboard */
 .controlWrapper {
   display: flex;
   flex-direction: column;
@@ -86,10 +131,13 @@
   color: var(--primary-text-color);
   background: white;
 }
+
+/* Elementos del Dashboard */
 .checkboxList {
   display: flex;
-  flex-direction: column;
-  margin-left: 2rem;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  gap: 3rem;
 }
 .checkboxItem {
   display: inline-flex;
@@ -102,12 +150,12 @@
 /* Estadística */
 .chartArea {
   margin-top: 1rem;
-  padding: 0 1rem;
   min-height: 380px;
 }
 .chartTitle {
   text-align: center;
-  font-size: 1.7rem;
+  margin-bottom: 2rem;
+  font-size: 1.9rem;
   font-weight: 600;
   color: var(--primary-text-color);
 }
@@ -128,7 +176,7 @@
 
 /* === TOTALES DEL PERÍODO === */
 .totalesContainer {
-  border-top: 1px solid rgba(53, 116, 211, 0.484);
+  border-top: 1px solid var(--secondary-color);
   display: flex;
   flex-wrap: wrap;
   justify-content: space-evenly;
@@ -147,44 +195,6 @@
 .totalGruesas {
   color: var(--secondary-text-color);
   font-size: 0.88rem;
-}
-
-/* === LINK AL SUBMÓDULO DE METAS === */
-.modulesLink {
-  margin-top: 0rem;
-  display: flex;
-  justify-content: center;
-}
-.moduleLinkCard {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  padding: 1.25rem 2rem;
-  border-radius: 12px;
-  background: white;
-  border: 1px solid rgba(52, 73, 94, 0.14);
-  text-decoration: none;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  transition:
-    transform 0.2s,
-    box-shadow 0.2s,
-    border-color 0.2s;
-  min-width: 280px;
-  text-align: center;
-}
-.moduleLinkCard:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-  border-color: var(--primary-color);
-}
-.moduleLinkTitle {
-  font-size: 1.15rem;
-  font-weight: 600;
-  color: var(--primary-text-color);
-}
-.moduleLinkDesc {
-  font-size: 0.9rem;
-  color: var(--secondary-text-color);
 }
 
 /* Fuerza la Leyenda de los gráficos para esten en horizontal */

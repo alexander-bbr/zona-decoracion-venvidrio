@@ -273,62 +273,73 @@ export const Rendimiento = () => {
           <section className={`${styles.dashboard} content-only-animation`}>
             {/* === PANEL DE CONTROL === */}
             <section className={styles.controls}>
-              {/* Fecha Desde */}
-              <div className={styles.controlWrapper}>
-                <label htmlFor="fromDate" className={styles.controlLabel}>
-                  Fecha Desde
-                </label>
-                <input
-                  id="fromDate"
-                  className={styles.dateInput}
-                  type="date"
-                  value={fromDate}
-                  max={toDate}
-                  onChange={(event) => setFromDate(event.target.value)}
-                />
-              </div>
+              {/* Botones principales */}
+              <div className={styles.mainButtons}>
+                {/* Fecha Desde */}
+                <div className={styles.controlWrapper}>
+                  <label htmlFor="fromDate" className={styles.controlLabel}>
+                    Fecha Desde
+                  </label>
+                  <input
+                    id="fromDate"
+                    className={styles.dateInput}
+                    type="date"
+                    value={fromDate}
+                    max={toDate}
+                    onChange={(event) => setFromDate(event.target.value)}
+                  />
+                </div>
 
-              {/* Fecha Hasta */}
-              <div className={styles.controlWrapper}>
-                <label htmlFor="toDate" className={styles.controlLabel}>
-                  Fecha Hasta
-                </label>
-                <input
-                  id="toDate"
-                  className={styles.dateInput}
-                  type="date"
-                  value={toDate}
-                  min={fromDate}
-                  max={todayVenezuela}
-                  onChange={(event) => setToDate(event.target.value)}
-                />
-              </div>
+                {/* Fecha Hasta */}
+                <div className={styles.controlWrapper}>
+                  <label htmlFor="toDate" className={styles.controlLabel}>
+                    Fecha Hasta
+                  </label>
+                  <input
+                    id="toDate"
+                    className={styles.dateInput}
+                    type="date"
+                    value={toDate}
+                    min={fromDate}
+                    max={todayVenezuela}
+                    onChange={(event) => setToDate(event.target.value)}
+                  />
+                </div>
 
-              {/* Tipo de Gráfico */}
-              <div className={styles.controlWrapper}>
-                <label htmlFor="chartType" className={styles.controlLabel}>
-                  Tipo de gráfico
-                </label>
-                <select
-                  id="chartType"
-                  className={styles.select}
-                  value={chartType}
-                  onChange={(event) =>
-                    setChartType(event.target.value as ChartType)
-                  }
-                >
-                  {chartOptions.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
+                {/* Tipo de Gráfico */}
+                <div className={styles.controlWrapper}>
+                  <label htmlFor="chartType" className={styles.controlLabel}>
+                    Tipo de gráfico
+                  </label>
+                  <select
+                    id="chartType"
+                    className={styles.select}
+                    value={chartType}
+                    onChange={(event) =>
+                      setChartType(event.target.value as ChartType)
+                    }
+                  >
+                    {chartOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Botones de Enlace */}
+                <div className={styles.linkButtons}>
+                  <NavLink
+                    to="/rendimiento/metas"
+                    className={styles.objectivesModule}
+                  >
+                    Metas
+                  </NavLink>
+                </div>
               </div>
 
               {/* Variables a observar */}
-              <div
-                className={`${styles.controlWrapper} ${styles.checkboxList}`}
-              >
+              <div className={styles.checkboxList}>
                 {Object.keys(visibleMetricLabels).map((metric) => {
                   const key = metric as keyof VisibleMetrics;
                   //* Deshabilitamos el checkbox de la meta si no hay meta activa
@@ -431,16 +442,6 @@ export const Rendimiento = () => {
                 </p>
               )}
             </section>
-          </section>
-
-          {/* Link al submódulo de Metas */}
-          <section className={styles.modulesLink}>
-            <NavLink to="/rendimiento/metas" className={styles.moduleLinkCard}>
-              <span className={styles.moduleLinkTitle}>Metas</span>
-              <span className={styles.moduleLinkDesc}>
-                Gestiona las metas de eficiencia y deficiencia mensuales
-              </span>
-            </NavLink>
           </section>
         </>
       ) : (

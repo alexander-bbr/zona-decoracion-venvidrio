@@ -1,0 +1,2129 @@
+Okey deep lo dejé tal cual como me lo diste, funciona bien todo.
+
+Pero, necesito añadir un submódulo en el componente Rendimiento, o sea debajo del <section className={`${styles.dashboard} content`}>, añadir un submódulo que es para trabajar con las metas. O sea, se enlistan las metas, el usuario puede darle click a un registro, y lo redirige al componente de EditarMeta.tsx, o si presionó el botón de Agregar Meta pues pueda redirigirse al componente EditarMeta.tsx.
+
+
+
+Es decir, la estructura de este módulo quedaría de la siguiente manera:
+
+
+Rendimiento/
+  - index.tsx
+  - Rendimiento.module.css
+  - Graficos/
+    - Barras/
+      - index.tsx
+      - Barras.module.css
+    - Lineal/
+      - index.tsx
+      - Lineal.module.css
+    - Torta/
+      - index.tsx
+      - Torta.module.css
+  - Metas/ (Este directorio es el nuevo)
+    - index.tsx
+    - metas.module.css
+    - EditarMeta/
+      - index.tsx
+      - editar-meta.module.css
+    - RegistrarMeta/
+      - index.tsx
+      - registrar-meta.module.css
+
+
+De hecho, tengo un módulo bastante similar llamdo GestionMoldes. Donde tengo un componente principal (GestionMoldes/index.tsx) que me enlista todos los moldes, y al hacer click en uno me carga el componente EditarMolde (GestionMoldes/EditarMolde/index.tsx) o si le dí a Registrar Molde pues me carga el componente Registrar Molde (GestionMoldes/RegistrarMolde/index.tsx).
+
+Dicho módulo sigue esta estructura:
+
+- GestionMoldes/
+  - index.tsx
+  - gestion-moldes.module.css
+  - EditarMolde/
+    - index.tsx
+    - editar-molde.module.css
+  - RegistrarMolde/
+    - index.tsx
+    - registrar-molde.module.css
+
+
+Mira te voy a pasar los código para que lo tengas como contexto:
+
+
+Este es GestionMoldes/index.tsx:
+import { useEffect, useState } from "react";
+import { useNavigate, NavLink, useLocation, Outlet } from "react-router-dom";
+import styles from "./gestion-moldes.module.css";
+
+type Molde = {
+  idMolde: number;
+  nombre: string;
+  descripcion: string | null;
+  numeroCamadas: number;
+  numeroEnvases: number;
+  numeroGruesas: number;
+};
+
+const API_MOLDES = "http://127.0.0.1:8000/api/gestion-moldes";
+const API_EXPORTAR_MOLDES = "http://127.0.0.1:8000/api/exportacion/moldes";
+
+export const GestionMoldes = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [moldes, setMoldes] = useState<Molde[]>([]);
+  const [cargando, setCargando] = useState(true);
+  const [error, setError] = useState("");
+  const [errorDescarga, setErrorDescarga] = useState("");
+  const [descargando, setDescargando] = useState(false);
+
+  const cargarMoldes = async () => {
+    setCargando(true);
+    setError("");
+    try {
+      const response = await fetch(API_MOLDES);
+      if (!response.ok) {
+        throw new Error(`Error al cargar moldes: ${response.status}`);
+      }
+      const data = await response.json();
+      const moldesNormalizados: Molde[] = data.map((molde: Molde) => ({
+        ...molde,
+        idMolde: Number(molde.idMolde),
+        numeroCamadas: Number(molde.numeroCamadas),
+        numeroEnvases: Number(molde.numeroEnvases),
+        numeroGruesas: Number(molde.numeroGruesas),
+      }));
+      // Ordenar los moldes por ID de forma ascendente
+      const moldesOrdenados = moldesNormalizados.sort(
+        (a, b) => a.idMolde - b.idMolde,
+      );
+      setMoldes(moldesOrdenados);
+    } catch (loadError) {
+      setError(
+        loadError instanceof Error
+          ? loadError.message
+          : "Error al cargar moldes.",
+      );
+    } finally {
+      setCargando(false);
+    }
+  };
+
+  // Cargar moldes al montar el componente
+  useEffect(() => {
+    cargarMoldes();
+  }, []);
+
+  // Recargar cuando la ruta cambie a la raíz (cuando volvemos de registrar/editar)
+  useEffect(() => {
+    if (location.pathname === "/gestion-moldes") {
+      cargarMoldes();
+    }
+  }, [location.pathname]);
+
+  const handleDescargarExcel = async () => {
+    setDescargando(true);
+    setErrorDescarga("");
+    try {
+      const response = await fetch(API_EXPORTAR_MOLDES, {
+        method: "POST",
+        body: "",
+      });
+
+      if (!response.ok) {
+        // Intentar leer el error como JSON, y si falla, usar un mensaje genérico
+        let mensajeError = `Error al generar el Excel: ${response.status}`;
+        try {
+          const data = await response.json();
+          if (data?.detail) {
+            mensajeError =
+              typeof data.detail === "string"
+                ? data.detail
+                : JSON.stringify(data.detail);
+          }
+        } catch {
+          // La respuesta no era JSON, dejamos el mensaje genérico
+        }
+        throw new Error(mensajeError);
+      }
+
+      // Obtener el nombre del archivo desde Content-Disposition (si existe), sino se utiliza el nombre establecido:
+      const contentDisposition = response.headers.get("Content-Disposition");
+      let nombreArchivo = "Listado de Moldes.xlsx";
+      if (contentDisposition) {
+        const match = contentDisposition.match(/filename="?([^"]+)"?/);
+        if (match && match[1]) {
+          nombreArchivo = match[1];
+        }
+      }
+
+      // Convertir la respuesta a Blob y descargar
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = nombreArchivo;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (downloadError) {
+      setErrorDescarga(
+        downloadError instanceof Error
+          ? downloadError.message
+          : "Error al descargar el Excel.",
+      );
+    } finally {
+      setDescargando(false);
+    }
+  };
+
+  const isRoot = location.pathname === "/gestion-moldes";
+
+  const getTitle = () => {
+    const path = location.pathname;
+    if (path.includes("registrar-molde")) return "Registrar Molde";
+    if (path.includes("editar-molde")) return "Editar Molde";
+    return "";
+  };
+
+  return (
+    <section className="container">
+      <header className={styles.moduleHeader}>
+        <h2 className={styles.moduleTitle}>Gestión de Moldes</h2>
+        <p className={styles.moduleSubtitle}>
+          Catálogo de los moldes disponibles en la aplicación
+        </p>
+      </header>
+
+      {!isRoot ? (
+        <nav className={`${styles.subNav} content`} id="subNav">
+          <NavLink
+            to="/gestion-moldes"
+            className={({ isActive }) =>
+              isActive
+                ? `${styles.subNavLink} ${styles.active}`
+                : styles.subNavLink
+            }
+          >
+            ← Volver
+          </NavLink>
+          <span className={styles.subNavTitle}>{getTitle()}</span>
+        </nav>
+      ) : null}
+
+      {isRoot ? (
+        <section className={`${styles.gestionMoldes} content`}>
+          {/* === PANEL DE CONTROL === */}
+          <section className={styles.controlPanel}>
+            <h2 className={styles.title}>Listado de Moldes</h2>
+
+            <div className={styles.buttonWrapper}>
+              <button
+                className={styles.downloadButton}
+                onClick={handleDescargarExcel}
+                disabled={descargando || cargando}
+              >
+                {descargando ? "Descargando..." : "↓ Descargar"}
+              </button>
+              <button
+                className={styles.registerButton}
+                onClick={() => navigate("registrar-molde")}
+              >
+                + Registrar Molde
+              </button>
+            </div>
+          </section>
+
+          {errorDescarga && <p className={styles.error}>{errorDescarga}</p>}
+
+          {cargando && <p className={styles.loading}>Cargando moldes...</p>}
+          {error && <p className={styles.error}>{error}</p>}
+          {!cargando && !error && (
+            <div className={styles.tableContainer}>
+              {moldes.length === 0 ? (
+                <p className={styles.emptyMessage}>
+                  No hay moldes registrados.
+                </p>
+              ) : (
+                <table className={styles.table}>
+                  <thead>
+                    <tr>
+                      <th>Nombre</th>
+                      <th>Descripción</th>
+                      <th>Camadas</th>
+                      <th>Envases</th>
+                      <th>Gruesas</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {moldes.map((molde) => (
+                      <tr
+                        key={molde.idMolde}
+                        onClick={() =>
+                          navigate(`editar-molde/${molde.idMolde}`)
+                        }
+                        className={styles.clickableRow}
+                      >
+                        <td>{molde.nombre}</td>
+                        <td>{molde.descripcion || "—"}</td>
+                        <td>{molde.numeroCamadas}</td>
+                        <td>{molde.numeroEnvases}</td>
+                        <td>{molde.numeroGruesas}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
+          )}
+        </section>
+      ) : (
+        <Outlet />
+      )}
+    </section>
+  );
+};
+
+Este es su GestionMoldes/gestion-moldes.module.css:
+
+.moduleHeader {
+  margin-bottom: 32px;
+  padding-bottom: 16px;
+}
+
+.moduleTitle {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--primary-text-color);
+  margin: 0 0 4px 0;
+}
+
+.moduleSubtitle {
+  font-size: 16px;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* Sub navegación (cuando estás en un submódulo) */
+.subNav {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 4rem;
+  padding: 12px 16px;
+  background: #f9fafb;
+  border-radius: 8px;
+}
+
+:global(#subNav) {
+  margin-bottom: 4rem !important;
+}
+
+.subNavLink {
+  color: #6b7280;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.subNavLink:hover {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.subNavTitle {
+  font-weight: 600;
+  color: var(--primary-text-color);
+  font-size: 16px;
+}
+
+.gestionMoldes {
+  padding: 20px;
+  width: 85%;
+  margin: 0 auto;
+  background-color: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* === CONTROLS PANEL=== */
+.controlPanel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem;
+  margin: 0rem 0 1.5rem;
+}
+
+.title {
+  color: var(--primary-text-color);
+  font-size: 1.5rem;
+}
+
+.buttonWrapper {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.downloadButton {
+  border: 0;
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  background: #22bb6e;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s ease;
+}
+
+.downloadButton:hover:not(:disabled) {
+  background: #1ea863;
+}
+
+.downloadButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.registerButton {
+  border: 0;
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  background: var(--primary-color);
+  color: #fff;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s ease;
+}
+
+.registerButton:hover {
+  background: #2563eb;
+}
+
+.tableContainer {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 680px;
+}
+
+.table th {
+  padding: 0.8rem 1rem;
+  background: #5181b1;
+  color: #fff;
+  text-align: center;
+}
+
+.table td {
+  padding: 0.8rem 1rem;
+  border-bottom: 1px solid #e5e7eb;
+  color: #374151;
+  text-align: center;
+}
+
+.clickableRow {
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.clickableRow:hover {
+  background: #eef5fc;
+}
+
+.loading {
+  text-align: center;
+  color: #6b7280;
+  padding: 2rem;
+}
+
+.error {
+  color: #b42318;
+  font-weight: 600;
+  text-align: center;
+  padding: 1rem;
+}
+
+.emptyMessage {
+  text-align: center;
+  color: #6b7280;
+  padding: 3rem;
+  font-size: 1.1rem;
+}
+
+@media (max-width: 600px) {
+  .controlPanel {
+    align-items: center;
+    flex-direction: column;
+  }
+  .buttonWrapper {
+    width: 100%;
+  }
+  .registerButton,
+  .downloadButton {
+    width: 100%;
+  }
+}
+
+Este es GestionMoldes/RegistrarMolde/index.tsx:
+
+import { useState, type FormEvent } from "react";
+import { useNavigate } from "react-router-dom";
+import { HeaderForm } from "../../../components/HeaderForm";
+import { ENVASES_POR_GRUESA } from "../../../../constants";
+import styles from "./registrar-molde.module.css";
+
+type FormData = {
+  nombre: string;
+  descripcion: string;
+  numeroCamadas: number;
+  numeroEnvases: number;
+  numeroGruesas: number;
+};
+
+const API_MOLDES = "http://127.0.0.1:8000/api/gestion-moldes";
+
+export const RegistrarMolde = () => {
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState<FormData>({
+    nombre: "",
+    descripcion: "",
+    numeroCamadas: 0,
+    numeroEnvases: 0,
+    numeroGruesas: 0,
+  });
+  const [error, setError] = useState("");
+  const [cargando, setCargando] = useState(false);
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value, type } = e.target;
+
+    if (name === "numeroEnvases") {
+      const envases = value === "" ? 0 : Number(value);
+      const gruesas = envases / ENVASES_POR_GRUESA;
+      setFormData((prev) => ({
+        ...prev,
+        numeroEnvases: envases,
+        numeroGruesas: Number(gruesas.toFixed(2)),
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: type === "number" ? (value === "" ? 0 : Number(value)) : value,
+      }));
+    }
+  };
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setError("");
+    setCargando(true);
+
+    // Validaciones
+    if (!formData.nombre.trim()) {
+      setError("El nombre del molde es obligatorio.");
+      setCargando(false);
+      return;
+    }
+    if (formData.numeroCamadas <= 0) {
+      setError("El número de camadas debe ser mayor a 0.");
+      setCargando(false);
+      return;
+    }
+    if (formData.numeroEnvases <= 0) {
+      setError("El número de envases debe ser mayor a 0.");
+      setCargando(false);
+      return;
+    }
+
+    // Preparar datos para enviar (incluyendo numeroGruesas calculado)
+    const datosEnviar = {
+      ...formData,
+      numeroGruesas: formData.numeroEnvases / ENVASES_POR_GRUESA,
+    };
+
+    try {
+      const response = await fetch(API_MOLDES, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(datosEnviar),
+      });
+
+      if (!response.ok) {
+        const data = await response.json().catch(() => null);
+        throw new Error(
+          data?.detail ?? `Error al registrar molde: ${response.status}`,
+        );
+      }
+
+      navigate("/gestion-moldes");
+    } catch (submitError) {
+      setError(
+        submitError instanceof Error
+          ? submitError.message
+          : "Error al registrar molde.",
+      );
+    } finally {
+      setCargando(false);
+    }
+  };
+
+  const handleReset = () => {
+    setFormData({
+      nombre: "",
+      descripcion: "",
+      numeroCamadas: 0,
+      numeroEnvases: 0,
+      numeroGruesas: 0,
+    });
+    setError("");
+  };
+
+  return (
+    <form className={`${styles.form} content`} onSubmit={handleSubmit}>
+      <HeaderForm />
+
+      <h3 className={styles.title}>Registrar Nuevo Molde</h3>
+
+      <section className={styles.formData}>
+        <fieldset className={styles.fieldset}>
+          <legend className={styles.legend}>Datos del Molde</legend>
+
+          <div className={styles.inputWrapper}>
+            <label htmlFor="nombre">
+              Nombre del Molde <span className={styles.requireSymbol}>*</span>
+            </label>
+            <input
+              id="nombre"
+              name="nombre"
+              type="text"
+              value={formData.nombre}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          <div className={styles.inputWrapper}>
+            <label htmlFor="descripcion">
+              Descripción <span className={styles.requireSymbol}>*</span>
+            </label>
+            <textarea
+              id="descripcion"
+              name="descripcion"
+              value={formData.descripcion}
+              onChange={handleChange}
+              rows={6}
+              required
+            />
+          </div>
+
+          <div className={styles.numbers}>
+            <div className={styles.inputWrapper}>
+              <label htmlFor="numeroCamadas">
+                Número de Camadas{" "}
+                <span className={styles.requireSymbol}>*</span>
+              </label>
+              <input
+                id="numeroCamadas"
+                name="numeroCamadas"
+                type="number"
+                min="1"
+                value={formData.numeroCamadas || ""}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className={styles.inputWrapper}>
+              <label htmlFor="numeroEnvases">
+                Número de Envases{" "}
+                <span className={styles.requireSymbol}>*</span>
+              </label>
+              <input
+                id="numeroEnvases"
+                name="numeroEnvases"
+                type="number"
+                min="1"
+                value={formData.numeroEnvases || ""}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className={styles.inputWrapper}>
+              <label htmlFor="numeroGruesas">
+                Número de Gruesas{" "}
+                <span className={styles.requireSymbol}>*</span>
+              </label>
+              <input
+                id="numeroGruesas"
+                name="numeroGruesas"
+                type="text"
+                value={formData.numeroGruesas || ""}
+                readOnly
+                className={styles.readonlyInput}
+              />
+            </div>
+          </div>
+        </fieldset>
+
+        {error && <p className={styles.error}>{error}</p>}
+
+        <div className={styles.buttonWrapper}>
+          <button
+            type="submit"
+            className={styles.saveButton}
+            disabled={cargando}
+          >
+            {cargando ? "Registrando..." : "Guardar"}
+          </button>
+          <button
+            type="button"
+            className={styles.resetButton}
+            onClick={handleReset}
+            disabled={cargando}
+          >
+            Resetear
+          </button>
+        </div>
+      </section>
+    </form>
+  );
+};
+
+
+
+Este su GestionMoldes/RegistrarMolde/registrar-molde.module.css:
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 40px;
+  max-width: 700px;
+  width: 100%;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  margin: auto;
+}
+
+.formData {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.title {
+  color: var(--primary-text-color);
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-align: center;
+  margin: 0rem 0 1rem;
+}
+
+/* Campos */
+.numbers {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.fieldset {
+  border-radius: 10px;
+  padding: 1.5rem;
+  border: 1px solid #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.legend {
+  color: #333;
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 0 0.95rem;
+}
+
+.inputWrapper {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.inputWrapper label {
+  color: #333;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.requireSymbol {
+  color: #e74c3c;
+}
+
+.inputWrapper input,
+.inputWrapper textarea {
+  padding: 12px 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  font-family: inherit;
+  color: #333;
+  background-color: white;
+}
+
+.inputWrapper input:focus,
+.inputWrapper textarea:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.inputWrapper input:hover,
+.inputWrapper textarea:hover {
+  border-color: #3498db;
+}
+
+.inputWrapper textarea {
+  resize: none;
+}
+
+.readonlyInput {
+  background-color: #f3f4f6 !important;
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+/* Botones del formulario */
+.buttonWrapper {
+  display: flex;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.saveButton,
+.resetButton {
+  flex: 1;
+  padding: 14px;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.saveButton {
+  background: #22bb6e;
+  color: white;
+}
+
+.saveButton:hover:not(:disabled) {
+  background: #1ea863;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(34, 187, 110, 0.3);
+}
+
+.saveButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.resetButton {
+  background: #888c8f;
+  color: white;
+}
+
+.resetButton:hover:not(:disabled) {
+  background: #6b6c6e;
+  transform: translateY(-2px);
+}
+
+.resetButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.error {
+  color: #b42318;
+  font-weight: 600;
+  text-align: center;
+  padding: 0.5rem;
+}
+
+@media (max-width: 760px) {
+  .form {
+    padding: 1rem;
+  }
+  .numbers {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .numbers {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+Este es GestionMoldes/EditarMolde/index.tsx: 
+
+import { useEffect, useState, type FormEvent } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { HeaderForm } from "../../../components/HeaderForm";
+import { ENVASES_POR_GRUESA } from "../../../../constants";
+import styles from "./editar-molde.module.css";
+
+type Molde = {
+  idMolde: number;
+  nombre: string;
+  descripcion: string | null;
+  numeroCamadas: number;
+  numeroEnvases: number;
+  numeroGruesas: number;
+};
+
+type FormData = {
+  nombre: string;
+  descripcion: string;
+  numeroCamadas: number;
+  numeroEnvases: number;
+  numeroGruesas: number;
+};
+
+const API_MOLDES = "http://127.0.0.1:8000/api/gestion-moldes";
+
+export const EditarMolde = () => {
+  const { id } = useParams<{ id: string }>();
+
+  if (!id) {
+    return <p className={styles.error}>ID de molde inválido.</p>;
+  }
+
+  return <CargarMolde idMolde={id} />;
+};
+
+const CargarMolde = ({ idMolde }: { idMolde: string }) => {
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState<FormData>({
+    nombre: "",
+    descripcion: "",
+    numeroCamadas: 0,
+    numeroEnvases: 0,
+    numeroGruesas: 0,
+  });
+  const [cargando, setCargando] = useState(true);
+  const [error, setError] = useState("");
+  const [guardando, setGuardando] = useState(false);
+
+  useEffect(() => {
+    const cargarMolde = async () => {
+      setCargando(true);
+      setError("");
+      try {
+        const response = await fetch(`${API_MOLDES}/${idMolde}`);
+        if (!response.ok) {
+          const data = await response.json().catch(() => null);
+          throw new Error(
+            data?.detail ??
+              (response.status === 404
+                ? "El molde especificado no existe."
+                : `Error al cargar molde: ${response.status}`),
+          );
+        }
+        const molde = (await response.json()) as Molde;
+        setFormData({
+          nombre: molde.nombre,
+          descripcion: molde.descripcion || "",
+          numeroCamadas: Number(molde.numeroCamadas),
+          numeroEnvases: Number(molde.numeroEnvases),
+          numeroGruesas: Number(
+            (Number(molde.numeroEnvases) / ENVASES_POR_GRUESA).toFixed(2),
+          ),
+        });
+      } catch (loadError) {
+        setError(
+          loadError instanceof Error
+            ? loadError.message
+            : "Error al cargar molde.",
+        );
+      } finally {
+        setCargando(false);
+      }
+    };
+    void cargarMolde();
+  }, [idMolde]);
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value, type } = e.target;
+
+    if (name === "numeroEnvases") {
+      const envases = value === "" ? 0 : Number(value);
+      const gruesas = envases / ENVASES_POR_GRUESA;
+      setFormData((prev) => ({
+        ...prev,
+        numeroEnvases: envases,
+        numeroGruesas: Number(gruesas.toFixed(2)),
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: type === "number" ? (value === "" ? 0 : Number(value)) : value,
+      }));
+    }
+  };
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setError("");
+    setGuardando(true);
+
+    // Validaciones
+    if (!formData.nombre.trim()) {
+      setError("El nombre del molde es obligatorio.");
+      setGuardando(false);
+      return;
+    }
+    if (formData.numeroCamadas <= 0) {
+      setError("El número de camadas debe ser mayor a 0.");
+      setGuardando(false);
+      return;
+    }
+    if (formData.numeroEnvases <= 0) {
+      setError("El número de envases debe ser mayor a 0.");
+      setGuardando(false);
+      return;
+    }
+
+    // Preparar datos para enviar
+    const datosEnviar = {
+      nombre: formData.nombre,
+      descripcion: formData.descripcion,
+      numeroCamadas: formData.numeroCamadas,
+      numeroEnvases: formData.numeroEnvases,
+      numeroGruesas: formData.numeroEnvases / ENVASES_POR_GRUESA,
+    };
+
+    try {
+      const response = await fetch(`${API_MOLDES}/${idMolde}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(datosEnviar),
+      });
+
+      if (!response.ok) {
+        const data = await response.json().catch(() => null);
+        throw new Error(
+          data?.detail ?? `Error al actualizar molde: ${response.status}`,
+        );
+      }
+
+      navigate("/gestion-moldes");
+    } catch (submitError) {
+      setError(
+        submitError instanceof Error
+          ? submitError.message
+          : "Error al actualizar molde.",
+      );
+    } finally {
+      setGuardando(false);
+    }
+  };
+
+  const handleReset = () => {
+    const cargarMolde = async () => {
+      try {
+        const response = await fetch(`${API_MOLDES}/${idMolde}`);
+        if (response.ok) {
+          const molde = (await response.json()) as Molde;
+          setFormData({
+            nombre: molde.nombre,
+            descripcion: molde.descripcion || "",
+            numeroCamadas: Number(molde.numeroCamadas),
+            numeroEnvases: Number(molde.numeroEnvases),
+            numeroGruesas: Number(
+              (Number(molde.numeroEnvases) / ENVASES_POR_GRUESA).toFixed(2),
+            ),
+          });
+        }
+      } catch {
+        // Ignorar errores en reset
+      }
+    };
+    void cargarMolde();
+    setError("");
+  };
+
+  if (cargando) {
+    return <p className={styles.loading}>Cargando molde...</p>;
+  }
+
+  return (
+    <form className={`${styles.form} content`} onSubmit={handleSubmit}>
+      <HeaderForm />
+
+      <h3 className={styles.title}>Editar Molde #{idMolde}</h3>
+
+      <section className={styles.formData}>
+        <fieldset className={styles.fieldset}>
+          <legend className={styles.legend}>Datos del Molde</legend>
+
+          <div className={styles.inputWrapper}>
+            <label htmlFor="nombre">
+              Nombre del Molde <span className={styles.requireSymbol}>*</span>
+            </label>
+            <input
+              id="nombre"
+              name="nombre"
+              type="text"
+              value={formData.nombre}
+              onChange={handleChange}
+              placeholder="Ej: Molde A"
+              required
+            />
+          </div>
+
+          <div className={styles.inputWrapper}>
+            <label htmlFor="descripcion">
+              Descripción <span className={styles.requireSymbol}>*</span>
+            </label>
+            <textarea
+              id="descripcion"
+              name="descripcion"
+              value={formData.descripcion}
+              onChange={handleChange}
+              placeholder="Descripción del molde"
+              rows={6}
+              required
+            />
+          </div>
+
+          <div className={styles.numbers}>
+            <div className={styles.inputWrapper}>
+              <label htmlFor="numeroCamadas">
+                Número de Camadas{" "}
+                <span className={styles.requireSymbol}>*</span>
+              </label>
+              <input
+                id="numeroCamadas"
+                name="numeroCamadas"
+                type="number"
+                min="1"
+                value={formData.numeroCamadas || ""}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className={styles.inputWrapper}>
+              <label htmlFor="numeroEnvases">
+                Número de Envases{" "}
+                <span className={styles.requireSymbol}>*</span>
+              </label>
+              <input
+                id="numeroEnvases"
+                name="numeroEnvases"
+                type="number"
+                min="1"
+                value={formData.numeroEnvases || ""}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className={styles.inputWrapper}>
+              <label htmlFor="numeroGruesas">
+                Número de Gruesas{" "}
+                <span className={styles.requireSymbol}>*</span>
+              </label>
+              <input
+                id="numeroGruesas"
+                name="numeroGruesas"
+                type="text"
+                value={formData.numeroGruesas || ""}
+                readOnly
+                className={styles.readonlyInput}
+              />
+            </div>
+          </div>
+        </fieldset>
+
+        {error && <p className={styles.error}>{error}</p>}
+
+        <div className={styles.buttonWrapper}>
+          <button
+            type="submit"
+            className={styles.saveButton}
+            disabled={guardando}
+          >
+            {guardando ? "Actualizando..." : "Actualizar"}
+          </button>
+          <button
+            type="button"
+            className={styles.resetButton}
+            onClick={handleReset}
+            disabled={guardando}
+          >
+            Resetear
+          </button>
+        </div>
+      </section>
+    </form>
+  );
+};
+
+Y este su GestionMoldes/EditarMolde/editar-molde.module.css: .form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 40px;
+  max-width: 700px;
+  width: 100%;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  margin: auto;
+}
+
+.formData {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.title {
+  color: var(--primary-text-color);
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-align: center;
+  margin: 0rem 0 1rem;
+}
+
+/* Campos */
+.numbers {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.fieldset {
+  border-radius: 10px;
+  padding: 1.5rem;
+  border: 1px solid #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.legend {
+  color: #333;
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 0 0.95rem;
+}
+
+.inputWrapper {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.inputWrapper label {
+  color: #333;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.requireSymbol {
+  color: #e74c3c;
+}
+
+.inputWrapper input,
+.inputWrapper textarea {
+  padding: 12px 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  font-family: inherit;
+  color: #333;
+  background-color: white;
+}
+
+.inputWrapper input:focus,
+.inputWrapper textarea:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.inputWrapper input:hover,
+.inputWrapper textarea:hover {
+  border-color: #3498db;
+}
+
+.inputWrapper textarea {
+  resize: none;
+}
+
+.readonlyInput {
+  background-color: #f3f4f6 !important;
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+.loading {
+  text-align: center;
+  color: #6b7280;
+  padding: 2rem;
+}
+
+/* Botones del formulario */
+.buttonWrapper {
+  display: flex;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.saveButton,
+.resetButton {
+  flex: 1;
+  padding: 14px;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.saveButton {
+  background: #22bb6e;
+  color: white;
+}
+
+.saveButton:hover:not(:disabled) {
+  background: #1ea863;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(34, 187, 110, 0.3);
+}
+
+.saveButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.resetButton {
+  background: #888c8f;
+  color: white;
+}
+
+.resetButton:hover:not(:disabled) {
+  background: #6b6c6e;
+  transform: translateY(-2px);
+}
+
+.resetButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.error {
+  color: #b42318;
+  font-weight: 600;
+  text-align: center;
+  padding: 0.5rem;
+}
+
+@media (max-width: 760px) {
+  .form {
+    padding: 1rem;
+  }
+  .numbers {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .numbers {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+
+Así pues, estos eran los endpoints con los que trabajaba ese Módulo de GestionMoldes:
+
+MÓDULO: GESTIÓN DE MOLDES
+=========================
+
+
+Ruta 1: Registrar Molde
+Endpoint: http://127.0.0.1:8000/api/gestion-moldes
+Método: POST
+
+JSON (Envía el Frontend):
+{
+    "nombre": "Molde A",
+    "descripcion": "Descripción del molde",
+    "numeroCamadas": 4,
+    "numeroEnvases": 40,
+    "numeroGruesas": 0.28
+}
+
+JSON (Respuesta en caso de éxito):
+{
+    "status": "Registro insertado con éxito",
+    "id": 1
+}
+
+JSON (Respuesta en caso de error):
+{
+    "detail": "Error en la validación de los datos enviados"
+}
+
+
+---
+
+
+Ruta 2: Editar Molde
+Endpoint: http://127.0.0.1:8000/api/gestion-moldes/{id_molde}
+Método: PUT
+
+JSON (Envía el Frontend):
+{
+    "nombre": "Molde A Actualizado",
+    "descripcion": "Nueva descripción",
+    "numeroCamadas": 5,
+    "numeroEnvases": 50,
+    "numeroGruesas": 0.35
+}
+
+JSON (Respuesta en caso de éxito):
+{
+    "status": "Registro actualizado con éxito",
+    "id": 1
+}
+
+JSON (Respuesta en caso de error):
+{
+    "detail": "No se pudo actualizar porque el molde no fue encontrado."
+}
+
+
+---
+
+
+Ruta 3: Listado de Moldes (Vista Principal)
+Endpoint: http://127.0.0.1:8000/api/gestion-moldes
+Método: GET
+
+Estructura de los datos que recibirá:
+[
+    {
+        "idMolde": 1,
+        "nombre": "Molde A",
+        "descripcion": "Descripción del molde",
+        "numeroCamadas": 4,
+        "numeroEnvases": 40,
+        "numeroGruesas": 0.28
+    },
+    {
+        "idMolde": 2,
+        "nombre": "Molde B",
+        "descripcion": null,
+        "numeroCamadas": 6,
+        "numeroEnvases": 60,
+        "numeroGruesas": 0.42
+    }
+]
+
+
+---
+
+
+Ruta 4: Ver Molde por ID (Para Editar)
+Endpoint: http://127.0.0.1:8000/api/gestion-moldes/{id_molde}
+Método: GET
+
+Estructura de los datos que recibirá:
+{
+    "idMolde": 1,
+    "nombre": "Molde A",
+    "descripcion": "Descripción del molde",
+    "numeroCamadas": 4,
+    "numeroEnvases": 40,
+    "numeroGruesas": 0.28
+}
+
+JSON (Respuesta en caso de error):
+{
+    "detail": "El molde especificado no existe."
+}
+
+
+
+Eso si, si te fijas el módulo de GestionMoldes trabaja con un botón para exportar archivos excel que le genera el backend (usando un endpoint específico para eso). En nuestro caso pues el módulo de Metas no trabaja con dicha exportación, asi que no viene al caso.
+
+
+Ahora bien, el módulo de Metas trabajaría con los siguientes endpoints:
+
+
+Ruta 5: Listar las metas
+Endpoint: http://127.0.0.1:8000/api/rendimiento/metas
+Método: GET
+
+Estructura de los datos que recibirá:
+[
+    {"idMeta": 1, "anio": 2026, "mes": "enero", "deficiencia": "85", "estado": false},
+    {"idMeta": 2, "anio": 2026, "mes": "febrero", "deficiencia": "92", "estado": false},
+    {"idMeta": 3, "anio": 2026, "mes": "marzo", "deficiencia": "93", "estado": false},
+    {"idMeta": 4, "anio": 2026, "mes": "abril", "deficiencia": "87", "estado": false},
+    {"idMeta": 5, "anio": 2026, "mes": "mayo", "deficiencia": "75", "estado": false},
+    {"idMeta": 6, "anio": 2026, "mes": "junio", "deficiencia": "85", "estado": false},
+    {"idMeta": 7, "anio": 2026, "mes": "julio", "deficiencia": "89", "estado": false},
+    {"idMeta": 8, "anio": 2026, "mes": "agosto", "deficiencia": "93", "estado": false},
+    {"idMeta": 9, "anio": 2026, "mes": "septiembre", "deficiencia": "91", "estado": false},
+    {"idMeta": 10, "anio": 2026, "mes": "octubre", "deficiencia": "98", "estado": true}
+]
+
+JSON (Respuesta en caso de error):
+{
+    "detail": "No se puedieron listar las metas"
+}
+
+NOTA TÉCNICA: El backend debe ordenar los registros por anio y luego por mes antes de enviarselos al frontend
+
+
+
+--------------------------------
+
+
+
+Ruta 6: Agregar meta
+Endpoint: http://127.0.0.1:8000/api/rendimiento/metas
+Método: POST
+
+JSON (Envía el Frontend):
+{
+    "anio": 2026,
+    "mes": "octubre",
+    "deficiencia": "89",
+    "estado" : true         # Boolean 
+}
+
+JSON (Respuesta en caso de éxito):
+{
+    "status": "Meta registrada con éxito",
+    "id": 1
+}
+
+
+
+JSON (Respuesta en caso de error):
+{
+    "detail": "Error al registrar la meta"
+}
+
+JSON (Respuesta en caso de conflicto):
+{
+    "detail": "Ya existe una meta para ese año y mes."
+}
+
+
+
+--------------------------------
+
+
+
+Ruta 7: Ver Meta por ID (Para Editar)
+Endpoint: http://127.0.0.1:8000/api/rendimiento/{id_meta}
+Método: GET
+
+Estructura de los datos que recibirá:
+{
+    "idMeta": 1,
+    "anio": 2026,
+    "mes": "enero",
+    "deficiencia": 85,
+    "estado": true, # Boolean
+}
+
+JSON (Respuesta en caso de error):
+{
+    "detail": "La meta especificada no existe."
+}
+
+
+
+--------------------------------
+
+
+
+Ruta 8: Editar Meta
+Endpoint: http://127.0.0.1:8000/api/rendimiento/{id_meta}
+Método: PUT
+
+JSON (Envía el Frontend):
+{
+    "anio": 2026,
+    "mes": "enero",
+    "deficiencia": 93
+    "estado": true # boolean
+}
+
+JSON (Respuesta en caso de éxito):
+{
+    "status": "Meta actualizada con éxito",
+    "id": 1
+}
+
+JSON (Respuesta en caso de error):
+{
+    "detail": "No se pudo actualizar porque la meta no fue encontrada."
+}
+
+JSON (Respuesta en caso de conflicto):
+{
+    "detail": "Ya existe una meta para ese año y mes."
+}
+
+
+
+Entonces pues lo que necesito, es que me ayudes a crear el módulo de Metas, usando como guía el de GestionMoldes
+
+
+Por cierto, este es mi archivo de rutas, se llama AppRoutes.tsx: import { Routes, Route } from "react-router-dom";
+import { PrivateRoute } from "./PrivateRoute";
+import { PublicRoute } from "./PublicRoute";
+
+// Módulo - Inicio
+import { Home } from "../modules/Home";
+
+// Módulo - Rendimiento
+import { Rendimiento } from "../modules/Rendimiento";
+
+// Módulo - Inventario de Insumos
+import { InventarioInsumos } from "../modules/InventarioInsumos";
+import { RegistroInsumo } from "../modules/InventarioInsumos/RegistroInsumo";
+import { SalidaInsumo } from "../modules/InventarioInsumos/SalidaInsumo";
+import { VerInventarioInsumos } from "../modules/InventarioInsumos/VerInventarioInsumos";
+import { HistorialMovimientoInsumos } from "../modules/InventarioInsumos/HistorialMovimientoInsumos";
+import { GestionInsumos } from "../modules/InventarioInsumos/GestionInsumos";
+import { CrearInsumo } from "../modules/InventarioInsumos/GestionInsumos/CrearInsumo";
+import { EditarInsumo } from "../modules/InventarioInsumos/GestionInsumos/EditarInsumo";
+
+// Módulo - Inventario de Pantallas
+import { InventarioPantallas } from "../modules/InventarioPantallas";
+import { RegistroPantalla } from "../modules/InventarioPantallas/RegistroPantalla";
+import { SalidaPantalla } from "../modules/InventarioPantallas/SalidaPantalla";
+import { VerInventarioPantallas } from "../modules/InventarioPantallas/VerInventarioPantallas";
+import { HistorialMovimientoPantallas } from "../modules/InventarioPantallas/HistorialMovimientoPantallas";
+import { GestionPantallas } from "../modules/InventarioPantallas/GestionPantallas";
+import { CrearPantalla } from "../modules/InventarioPantallas/GestionPantallas/CrearPantalla";
+import { EditarPantalla } from "../modules/InventarioPantallas/GestionPantallas/EditarPantalla";
+
+// Módulo - Gestión Productiva
+import { GestionProductiva } from "../modules/GestionProductiva";
+import { RegistrarProduccion } from "../modules/GestionProductiva/RegistrarProduccion";
+import { EditarProduccion } from "../modules/GestionProductiva/EditarProduccion";
+
+// Módulo - Gestión de Moldes
+import { GestionMoldes } from "../modules/GestionMoldes";
+import { RegistrarMolde } from "../modules/GestionMoldes/RegistrarMolde";
+import { EditarMolde } from "../modules/GestionMoldes/EditarMolde";
+
+// Módulo - Gestión de Justificantes
+import { GestionJustificantes } from "../modules/GestionJustificantes";
+import { RegistrarJustificante } from "../modules/GestionJustificantes/RegistrarJustificante";
+import { EditarJustificante } from "../modules/GestionJustificantes/EditarJustificante";
+
+// Módulo - Gestión de Usuarios
+import { GestionUsuarios } from "../modules/GestionUsuarios";
+import { RegistrarUsuario } from "../modules/GestionUsuarios/RegistrarUsuario";
+import { EditarUsuario } from "../modules/GestionUsuarios/EditarUsuario";
+
+// Módulo - Iniciar Sesión
+import { SignIn } from "../modules/SignIn";
+
+// Página de No Autorizado
+import { Unauthorized } from "../modules/Unauthorized";
+
+export const AppRoutes = () => {
+  return (
+    <Routes>
+      {/*
+      
+          === RUTAS PÚBLICAS ===
+      
+      */}
+
+      {/* Módulo - Sign In */}
+      <Route
+        path="/sign-in"
+        element={
+          <PublicRoute>
+            <SignIn />
+          </PublicRoute>
+        }
+      />
+
+      {/* Módulo - Inicio */}
+      <Route path="/" element={<Home />} />
+
+      {/* Página de No Autorizado */}
+      <Route path="/unauthorized" element={<Unauthorized />} />
+
+      {/*
+      
+          === RUTAS PRIVADAS ===
+      
+      */}
+
+      {/* Módulo - Rendimiento - Requiere permiso rendimiento.ver */}
+      <Route
+        path="/rendimiento"
+        element={
+          <PrivateRoute
+            requiredPermissions={[{ modulo: "rendimiento", accion: "ver" }]}
+          >
+            <Rendimiento />
+          </PrivateRoute>
+        }
+      />
+
+      {/* 
+        Módulo - Inventario de Insumos - Requiere al menos un permiso de inventario_insumos
+      */}
+      <Route
+        path="/inventario-insumos"
+        element={
+          <PrivateRoute
+            requiredPermissions={[
+              { modulo: "inventario_insumos", accion: "ver_inventario" },
+            ]}
+            // Usamos requireAnyPermission para que permita si tiene AL MENOS UNO
+            requireAnyPermission={true}
+          >
+            <InventarioInsumos />
+          </PrivateRoute>
+        }
+      >
+        {/* Registro de Insumo */}
+        <Route
+          path="registro-insumo"
+          element={
+            <PrivateRoute
+              requiredPermissions={[
+                { modulo: "inventario_insumos", accion: "entrada_insumos" },
+              ]}
+            >
+              <RegistroInsumo />
+            </PrivateRoute>
+          }
+        ></Route>
+        {/* Salida de Insumo */}
+        <Route
+          path="salida-insumo"
+          element={
+            <PrivateRoute
+              requiredPermissions={[
+                { modulo: "inventario_insumos", accion: "salida_insumos" },
+              ]}
+            >
+              <SalidaInsumo />
+            </PrivateRoute>
+          }
+        />
+        {/* Historial de Movimiento */}
+        <Route
+          path="historial-movimiento"
+          element={
+            <PrivateRoute
+              requiredPermissions={[
+                {
+                  modulo: "inventario_insumos",
+                  accion: "historial_movimientos",
+                },
+              ]}
+            >
+              <HistorialMovimientoInsumos />
+            </PrivateRoute>
+          }
+        />
+        {/* Ver Inventario */}
+        <Route
+          path="ver-inventario"
+          element={
+            <PrivateRoute
+              requiredPermissions={[
+                { modulo: "inventario_insumos", accion: "ver_inventario" },
+              ]}
+            >
+              <VerInventarioInsumos />
+            </PrivateRoute>
+          }
+        />
+        {/* Gestión de Insumos */}
+        <Route
+          path="gestion-insumos"
+          element={
+            <PrivateRoute
+              requiredPermissions={[
+                { modulo: "inventario_insumos", accion: "gestion_insumos" },
+              ]}
+            >
+              <GestionInsumos />
+            </PrivateRoute>
+          }
+        >
+          {/* Crear Insumo */}
+          <Route
+            path="crear-insumo"
+            element={
+              <PrivateRoute
+                requiredPermissions={[
+                  { modulo: "inventario_insumos", accion: "gestion_insumos" },
+                ]}
+              >
+                <CrearInsumo />
+              </PrivateRoute>
+            }
+          />
+          {/* Editar Insumo */}
+          <Route
+            path="editar-insumo/:id"
+            element={
+              <PrivateRoute
+                requiredPermissions={[
+                  { modulo: "inventario_insumos", accion: "gestion_insumos" },
+                ]}
+              >
+                <EditarInsumo />
+              </PrivateRoute>
+            }
+          />
+        </Route>
+      </Route>
+
+      {/* 
+        Módulo - Inventario de Pantallas - Requiere al menos un permiso de inventario_pantallas
+      */}
+      <Route
+        path="/inventario-pantallas"
+        element={
+          <PrivateRoute
+            requiredPermissions={[
+              { modulo: "inventario_pantallas", accion: "ver_inventario" },
+            ]}
+            // Usamos requireAnyPermission para que permita si tiene AL MENOS UNO
+            requireAnyPermission={true}
+          >
+            <InventarioPantallas />
+          </PrivateRoute>
+        }
+      >
+        {/* Registro de Pantalla */}
+        <Route
+          path="registro-pantalla"
+          element={
+            <PrivateRoute
+              requiredPermissions={[
+                { modulo: "inventario_pantallas", accion: "entrada_pantallas" },
+              ]}
+            >
+              <RegistroPantalla />
+            </PrivateRoute>
+          }
+        ></Route>
+        {/* Salida de Pantalla */}
+        <Route
+          path="salida-pantalla"
+          element={
+            <PrivateRoute
+              requiredPermissions={[
+                { modulo: "inventario_pantallas", accion: "salida_pantallas" },
+              ]}
+            >
+              <SalidaPantalla />
+            </PrivateRoute>
+          }
+        />
+        {/* Historial de Movimiento */}
+        <Route
+          path="historial-movimiento"
+          element={
+            <PrivateRoute
+              requiredPermissions={[
+                {
+                  modulo: "inventario_pantallas",
+                  accion: "historial_movimientos",
+                },
+              ]}
+            >
+              <HistorialMovimientoPantallas />
+            </PrivateRoute>
+          }
+        />
+        {/* Ver Inventario */}
+        <Route
+          path="ver-inventario"
+          element={
+            <PrivateRoute
+              requiredPermissions={[
+                { modulo: "inventario_pantallas", accion: "ver_inventario" },
+              ]}
+            >
+              <VerInventarioPantallas />
+            </PrivateRoute>
+          }
+        />
+        {/* Gestión de Pantallas */}
+        <Route
+          path="gestion-pantallas"
+          element={
+            <PrivateRoute
+              requiredPermissions={[
+                { modulo: "inventario_pantallas", accion: "gestion_pantallas" },
+              ]}
+            >
+              <GestionPantallas />
+            </PrivateRoute>
+          }
+        >
+          {/* Crear Pantalla */}
+          <Route
+            path="crear-pantalla"
+            element={
+              <PrivateRoute
+                requiredPermissions={[
+                  {
+                    modulo: "inventario_pantallas",
+                    accion: "gestion_pantallas",
+                  },
+                ]}
+              >
+                <CrearPantalla />
+              </PrivateRoute>
+            }
+          />
+          {/* Editar Pantalla */}
+          <Route
+            path="editar-pantalla/:id"
+            element={
+              <PrivateRoute
+                requiredPermissions={[
+                  {
+                    modulo: "inventario_pantallas",
+                    accion: "gestion_pantallas",
+                  },
+                ]}
+              >
+                <EditarPantalla />
+              </PrivateRoute>
+            }
+          />
+        </Route>
+      </Route>
+
+      {/* 
+        Módulo - Gestión Productiva 
+        EL PADRE: Requiere AL MENOS UN permiso del módulo gestion_productiva
+      */}
+      <Route
+        path="/gestion-productiva"
+        element={
+          <PrivateRoute
+            requiredPermissions={[
+              { modulo: "gestion_productiva", accion: "ver_produccion" },
+            ]}
+            requireAnyPermission={true}
+          >
+            <GestionProductiva />
+          </PrivateRoute>
+        }
+      >
+        <Route
+          path="registrar-produccion"
+          element={
+            <PrivateRoute
+              requiredPermissions={[
+                {
+                  modulo: "gestion_productiva",
+                  accion: "registrar_produccion",
+                },
+              ]}
+            >
+              <RegistrarProduccion />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="editar-produccion/:id"
+          element={
+            <PrivateRoute
+              requiredPermissions={[
+                { modulo: "gestion_productiva", accion: "editar" },
+              ]}
+            >
+              <EditarProduccion />
+            </PrivateRoute>
+          }
+        />
+      </Route>
+
+      {/* 
+        Módulo - Gestión de Moldes
+        EL PADRE: Requiere el permiso gestion_moldes del módulo gestion_productiva
+      */}
+      <Route
+        path="/gestion-moldes"
+        element={
+          <PrivateRoute
+            requiredPermissions={[
+              { modulo: "gestion_productiva", accion: "gestion_moldes" },
+            ]}
+            requireAnyPermission={true}
+          >
+            <GestionMoldes />
+          </PrivateRoute>
+        }
+      >
+        <Route
+          path="registrar-molde"
+          element={
+            <PrivateRoute
+              requiredPermissions={[
+                { modulo: "gestion_productiva", accion: "gestion_moldes" },
+              ]}
+            >
+              <RegistrarMolde />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="editar-molde/:id"
+          element={
+            <PrivateRoute
+              requiredPermissions={[
+                { modulo: "gestion_productiva", accion: "gestion_moldes" },
+              ]}
+            >
+              <EditarMolde />
+            </PrivateRoute>
+          }
+        />
+      </Route>
+
+      {/* 
+        Módulo - Gestión de Justificantes
+        EL PADRE: Requiere el permiso gestion_justificantes del módulo gestion_productiva
+      */}
+      <Route
+        path="/gestion-justificantes"
+        element={
+          <PrivateRoute
+            requiredPermissions={[
+              { modulo: "gestion_productiva", accion: "gestion_justificantes" },
+            ]}
+            requireAnyPermission={true}
+          >
+            <GestionJustificantes />
+          </PrivateRoute>
+        }
+      >
+        <Route
+          path="registrar-justificante"
+          element={
+            <PrivateRoute
+              requiredPermissions={[
+                {
+                  modulo: "gestion_productiva",
+                  accion: "gestion_justificantes",
+                },
+              ]}
+            >
+              <RegistrarJustificante />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="editar-justificante/:id"
+          element={
+            <PrivateRoute
+              requiredPermissions={[
+                {
+                  modulo: "gestion_productiva",
+                  accion: "gestion_justificantes",
+                },
+              ]}
+            >
+              <EditarJustificante />
+            </PrivateRoute>
+          }
+        />
+      </Route>
+
+      {/* 
+        Módulo - Gestión de Usuarios
+        EL PADRE: Requiere el permiso ver_usuarios del módulo gestion_usuarios
+      */}
+      <Route
+        path="/gestion-usuarios"
+        element={
+          <PrivateRoute
+            requiredPermissions={[
+              { modulo: "gestion_usuarios", accion: "ver_usuarios" },
+            ]}
+            requireAnyPermission={true}
+          >
+            <GestionUsuarios />
+          </PrivateRoute>
+        }
+      >
+        <Route
+          path="registrar-usuario"
+          element={
+            <PrivateRoute
+              requiredPermissions={[
+                { modulo: "gestion_usuarios", accion: "crear_editar" },
+              ]}
+            >
+              <RegistrarUsuario />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="editar-usuario/:id"
+          element={
+            <PrivateRoute
+              requiredPermissions={[
+                { modulo: "gestion_usuarios", accion: "crear_editar" },
+              ]}
+            >
+              <EditarUsuario />
+            </PrivateRoute>
+          }
+        />
+      </Route>
+    </Routes>
+  );
+};
+
+Te lo paso por si lo necesitabas
+
+
+Una cosa, no 

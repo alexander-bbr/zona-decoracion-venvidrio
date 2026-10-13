@@ -1,11 +1,13 @@
 # backend/modules/rendimiento/router.py
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from datetime import date
+from typing import List
 
 from backend.database.conexion import get_db
-from . import services
+from . import services, schemas
+
 
 router = APIRouter(
     prefix="/api/rendimiento",
@@ -54,6 +56,22 @@ def obtener_perdidos(
     """
     return services.obtener_perdidos_por_fecha(db, desde, hasta)
 
+
+# 9. PANTALLAS FABRICADAS Y CONSUMIDAS POR FECHA
+@router.get("/pantallas")
+def obtener_pantallas(
+    desde: date,
+    hasta: date,
+    db: Session = Depends(get_db),
+    # _=Depends(require_permiso("rendimiento", "ver"))
+):
+    """
+    Retorna el total de pantallas fabricadas (entradas) y consumidas (salidas) agrupados por fecha.
+    """
+    return services.obtener_pantallas_por_fecha(db, desde, hasta)
+
+
+# 4. EFICIENCIA Y DEFICIENCIA POR FECHA
 @router.get("/eficiencia-deficiencia")
 def obtener_eficiencia_deficiencia(
     desde: date,
@@ -62,3 +80,59 @@ def obtener_eficiencia_deficiencia(
     # _=Depends(require_permiso("rendimiento", "ver"))
 ):
     return services.obtener_eficiencia_deficiencia_por_fecha(db, desde, hasta)
+
+# 5. LISTAR METAS
+@router.get("/metas", response_model=List[schemas.MetaResponde])
+def listar_metas(
+    db: Session = Depends(get_db),
+    # _=Depends(require_permiso("rendimiento", "ver"))
+):
+    try:
+        return services.obtener_lista_metas(db)
+    except Exception:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="No se puedieron listar las metas"
+        )
+
+
+# 6. AGREGAR META
+@router.post("/metas", status_code=status.HTTP_201_CREATED)
+def registrar_meta(
+    datos: schemas.MetaCrear,
+    db: Session = Depends(get_db),
+):
+    meta = services.registrar_meta(db, datos)
+    return {"status": "Meta registrada con éxito", "id": meta.id_meta}
+
+
+# 7. VER META POR ID (para editar)
+@router.get("/{id_meta}", response_model=schemas.MetaResponde)
+def obtener_meta(
+    id_meta: int,
+    db: Session = Depends(get_db),
+    # _=Depends(require_permiso("rendimiento", "ver"))
+):
+    meta = services.obtener_meta_por_id(db, id_meta)
+    if not meta:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="La meta especificada no existe."
+        )
+    return meta
+
+
+# 8. EDITAR META
+@router.put("/{id_meta}")
+def editar_meta(
+    id_meta: int,
+    datos: schemas.MetaCrear,
+    db: Session = Depends(get_db),
+):
+    meta_actualizada = services.editar_meta(db, id_meta, datos)
+    if not meta_actualizada:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="No se pudo actualizar porque la meta no fue encontrada."
+        )
+    return {"status": "Meta actualizada con éxito", "id": meta_actualizada.id_meta}

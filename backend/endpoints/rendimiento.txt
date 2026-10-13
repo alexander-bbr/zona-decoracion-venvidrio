@@ -60,15 +60,7 @@ Método: GET
 Parámetros de consulta: desde, hasta
 Ejemplo: http://127.0.0.1:8000/api/rendimiento/perdidos?desde=2026-09-01&hasta=2026-09-30
 
-Estructura de los datos que recibirá:
-{
-    "registrosPerdidos": [
-        {"fecha": "2026-09-08", "totalEnvasesPerdidos": 2300, "totalGruesasPerdidas": "5.30"},
-        {"fecha": "2026-09-09", "totalEnvasesPerdidos": 1100, "totalGruesasPerdidas": "2.10"}
-    ],
-    "totalEnvasesPerdidos": 3400,
-    "totalGruesasPerdidas": "7.40"
-}
+
 
 JSON (Respuesta en caso de error):
 {
@@ -120,16 +112,16 @@ Método: GET
 
 Estructura de los datos que recibirá:
 [
-    {"idMeta": 1, "anio": "2026", "mes": "enero", "deficiencia": "85", "estado": false},
-    {"idMeta": 2, "anio": "2026", "mes": "febrero", "deficiencia": "92", "estado": false},
-    {"idMeta": 3, "anio": "2026", "mes": "marzo", "deficiencia": "93", "estado": false},
-    {"idMeta": 4, "anio": "2026", "mes": "abril", "deficiencia": "87", "estado": false},
-    {"idMeta": 5, "anio": "2026", "mes": "mayo", "deficiencia": "75", "estado": false},
-    {"idMeta": 6, "anio": "2026", "mes": "junio", "deficiencia": "85", "estado": false},
-    {"idMeta": 7, "anio": "2026", "mes": "julio", "deficiencia": "89", "estado": false},
-    {"idMeta": 8, "anio": "2026", "mes": "agosto", "deficiencia": "93", "estado": false},
-    {"idMeta": 9, "anio": "2026", "mes": "septiembre", "deficiencia": "91", "estado": false},
-    {"idMeta": 10, "anio": "2026", "mes": "octubre", "deficiencia": "98", "estado": true}
+    {"idMeta": 1, "anio": 2026, "mes": "enero", "deficiencia": "85", "estado": false},
+    {"idMeta": 2, "anio": 2026, "mes": "febrero", "deficiencia": "92", "estado": false},
+    {"idMeta": 3, "anio": 2026, "mes": "marzo", "deficiencia": "93", "estado": false},
+    {"idMeta": 4, "anio": 2026, "mes": "abril", "deficiencia": "87", "estado": false},
+    {"idMeta": 5, "anio": 2026, "mes": "mayo", "deficiencia": "75", "estado": false},
+    {"idMeta": 6, "anio": 2026, "mes": "junio", "deficiencia": "85", "estado": false},
+    {"idMeta": 7, "anio": 2026, "mes": "julio", "deficiencia": "89", "estado": false},
+    {"idMeta": 8, "anio": 2026, "mes": "agosto", "deficiencia": "93", "estado": false},
+    {"idMeta": 9, "anio": 2026, "mes": "septiembre", "deficiencia": "91", "estado": false},
+    {"idMeta": 10, "anio": 2026, "mes": "octubre", "deficiencia": "98", "estado": true}
 ]
 
 JSON (Respuesta en caso de error):
@@ -151,7 +143,7 @@ Método: POST
 
 JSON (Envía el Frontend):
 {
-    "anio": "2026",
+    "anio": 2026,
     "mes": "octubre",
     "deficiencia": "89",
     "estado" : true         # Boolean 
@@ -163,9 +155,16 @@ JSON (Respuesta en caso de éxito):
     "id": 1
 }
 
+
+
 JSON (Respuesta en caso de error):
 {
     "detail": "Error al registrar la meta"
+}
+
+JSON (Respuesta en caso de conflicto):
+{
+    "detail": "Ya existe una meta para ese año y mes."
 }
 
 
@@ -181,7 +180,7 @@ Método: GET
 Estructura de los datos que recibirá:
 {
     "idMeta": 1,
-    "anio": "2026",
+    "anio": 2026,
     "mes": "enero",
     "deficiencia": 85,
     "estado": true, # Boolean
@@ -204,7 +203,7 @@ Método: PUT
 
 JSON (Envía el Frontend):
 {
-    "anio": "2026",
+    "anio": 2026,
     "mes": "enero",
     "deficiencia": 93
     "estado": true # boolean
@@ -219,4 +218,9 @@ JSON (Respuesta en caso de éxito):
 JSON (Respuesta en caso de error):
 {
     "detail": "No se pudo actualizar porque la meta no fue encontrada."
+}
+
+JSON (Respuesta en caso de conflicto):
+{
+    "detail": "Ya existe una meta para ese año y mes."
 }

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 11-10-2026 a las 22:01:32
+-- Tiempo de generación: 13-10-2026 a las 03:17:15
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -390,9 +390,9 @@ CREATE TABLE `inventario_pantallas` (
 --
 
 INSERT INTO `inventario_pantallas` (`id_pantalla`, `nombre`, `descripcion`, `tipo`, `cantidad_actual`, `estado`) VALUES
-(6, 'Pantalla Polar Light', 'Diseño para decoración de botella Polar Light', 'Malla 120T', 28, 1),
+(6, 'Pantalla Polar Light', 'Diseño para decoración de botella Polar Light', 'Malla 120T', 78, 1),
 (7, 'Pantalla Polarcita 222 ML', 'Diseño para decoración de botella Polarcita 222 ML', 'Malla 120T', 26, 1),
-(8, 'Pantalla Golden 350 ML', 'Diseño para decoración de botella Golden 350 ML', 'Malla 150T', 10, 1),
+(8, 'Pantalla Golden 350 ML', 'Diseño para decoración de botella Golden 350 ML', 'Malla 150T', 60, 1),
 (9, 'Pantalla Pepsi 350 ML', 'Diseño para decoración de botella Pepsi 350 ML', 'Malla 150T', 7, 1),
 (10, 'Pantalla Cerveza 330 RET', 'Diseño para decoración de botella Cerveza 330 RET', 'Malla 90T', 5, 1);
 
@@ -418,7 +418,9 @@ CREATE TABLE `inventario_pantallas_entrada` (
 
 INSERT INTO `inventario_pantallas_entrada` (`id_inventario_entrada`, `id_pantalla`, `fecha`, `encargado`, `turno`, `grupo`, `cantidad`) VALUES
 (1, 6, '2026-10-09 21:42:57', 'string', 'string', 'string', 50),
-(2, 7, '2026-10-09 21:43:09', 'string', 'string', 'string', 50);
+(2, 7, '2026-10-09 21:43:09', 'string', 'string', 'string', 50),
+(3, 6, '2026-10-12 19:16:37', '222', 'Turno 1', 'Grupo A', 50),
+(4, 8, '2026-10-12 19:16:58', '222', 'Turno 2', 'Grupo C', 50);
 
 -- --------------------------------------------------------
 
@@ -467,6 +469,36 @@ INSERT INTO `justificantes` (`id_justificante`, `etiqueta`, `descripcion`) VALUE
 (3, 'Falla mecánica de la máquina', 'Parada de producción ocasionada por avería o mal funcionamiento del equipo'),
 (4, 'Material defectuoso', 'Pérdida originada por lote de materia prima en mal estado o fuera de especificación'),
 (5, 'Error de operario', 'Pérdida atribuida a manipulación incorrecta del equipo o del proceso por parte del personal');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `metas_rendimiento`
+--
+
+CREATE TABLE `metas_rendimiento` (
+  `id_meta` int(11) NOT NULL,
+  `anio` int(11) NOT NULL,
+  `mes` varchar(20) NOT NULL,
+  `deficiencia` decimal(5,2) NOT NULL,
+  `estado` tinyint(1) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `metas_rendimiento`
+--
+
+INSERT INTO `metas_rendimiento` (`id_meta`, `anio`, `mes`, `deficiencia`, `estado`) VALUES
+(1, 2025, 'enero', 85.00, 0),
+(2, 2026, 'febrero', 92.00, 0),
+(3, 2026, 'marzo', 93.00, 0),
+(4, 2026, 'abril', 87.00, 0),
+(5, 2026, 'mayo', 75.00, 0),
+(6, 2026, 'junio', 85.00, 0),
+(7, 2026, 'julio', 89.00, 0),
+(8, 2026, 'agosto', 93.00, 0),
+(9, 2026, 'diciembre', 91.00, 0),
+(10, 2026, 'octubre', 98.00, 1);
 
 -- --------------------------------------------------------
 
@@ -710,6 +742,13 @@ ALTER TABLE `justificantes`
   ADD PRIMARY KEY (`id_justificante`);
 
 --
+-- Indices de la tabla `metas_rendimiento`
+--
+ALTER TABLE `metas_rendimiento`
+  ADD PRIMARY KEY (`id_meta`),
+  ADD UNIQUE KEY `uk_anio_mes` (`anio`,`mes`);
+
+--
 -- Indices de la tabla `moldes`
 --
 ALTER TABLE `moldes`
@@ -802,7 +841,7 @@ ALTER TABLE `inventario_pantallas`
 -- AUTO_INCREMENT de la tabla `inventario_pantallas_entrada`
 --
 ALTER TABLE `inventario_pantallas_entrada`
-  MODIFY `id_inventario_entrada` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_inventario_entrada` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `inventario_pantallas_salida`
@@ -815,6 +854,12 @@ ALTER TABLE `inventario_pantallas_salida`
 --
 ALTER TABLE `justificantes`
   MODIFY `id_justificante` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT de la tabla `metas_rendimiento`
+--
+ALTER TABLE `metas_rendimiento`
+  MODIFY `id_meta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `moldes`

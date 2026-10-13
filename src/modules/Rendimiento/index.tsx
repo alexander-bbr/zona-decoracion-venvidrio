@@ -12,6 +12,7 @@ import type {
   DecoradosResponse,
   PerdidosResponse,
   RendimientoResponse,
+  PantallasResponse,
   Meta,
   MetaActiva,
 } from "../../types";
@@ -27,6 +28,8 @@ const visibleMetricLabels: Record<keyof VisibleMetrics, string> = {
   envasesLisos: "Envases Lisos",
   envasesDecorados: "Envases Decorados",
   envasesPerdidos: "Envases Perdidos",
+  pantallasFabricadas: "Pantallas Fabricadas",
+  pantallasConsumidas: "Pantallas Consumidas",
   eficiencia: "Eficiencia (%)",
   deficiencia: "Deficiencia (%)",
   meta: "Meta (%)",
@@ -64,6 +67,8 @@ const EMPTY_TOTALES: Totales = {
   totalGruesasDecoradas: "0",
   totalEnvasesPerdidos: 0,
   totalGruesasPerdidas: "0",
+  totalPantallasFabricadas: 0,
+  totalPantallasConsumidas: 0,
   eficienciaGeneral: 0,
   deficienciaGeneral: 0,
 };
@@ -79,6 +84,8 @@ export const Rendimiento = () => {
     envasesLisos: true,
     envasesDecorados: true,
     envasesPerdidos: true,
+    pantallasFabricadas: true,
+    pantallasConsumidas: true,
     eficiencia: true,
     deficiencia: true,
     meta: true,
@@ -86,7 +93,6 @@ export const Rendimiento = () => {
 
   const [apiData, setApiData] = useState<DashboardDataItem[]>([]);
   const [totales, setTotales] = useState<Totales>(EMPTY_TOTALES);
-  //* Meta activa (solo puede haber una). null = no hay meta activa.
   const [metaActiva, setMetaActiva] = useState<MetaActiva | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -100,14 +106,21 @@ export const Rendimiento = () => {
       const query = `desde=${fromDate}&hasta=${toDate}`;
 
       try {
-        const [lisosRes, decoradosRes, perdidosRes, rendimientoRes, metasRes] =
-          await Promise.all([
-            fetch(`${baseUrl}/lisos?${query}`),
-            fetch(`${baseUrl}/decorados?${query}`),
-            fetch(`${baseUrl}/perdidos?${query}`),
-            fetch(`${baseUrl}/eficiencia-deficiencia?${query}`),
-            fetch(`${baseUrl}/metas`),
-          ]);
+        const [
+          lisosRes,
+          decoradosRes,
+          perdidosRes,
+          rendimientoRes,
+          pantallasRes,
+          metasRes,
+        ] = await Promise.all([
+          fetch(`${baseUrl}/lisos?${query}`),
+          fetch(`${baseUrl}/decorados?${query}`),
+          fetch(`${baseUrl}/perdidos?${query}`),
+          fetch(`${baseUrl}/eficiencia-deficiencia?${query}`),
+          fetch(`${baseUrl}/pantallas?${query}`),
+          fetch(`${baseUrl}/metas`),
+        ]);
 
         const parseSafe = async <T,>(res: Response): Promise<T | null> => {
           if (res.status === 404) return null;
@@ -117,12 +130,13 @@ export const Rendimiento = () => {
           return (await res.json()) as T;
         };
 
-        const [lisos, decorados, perdidos, rendimiento, metas] =
+        const [lisos, decorados, perdidos, rendimiento, pantallas, metas] =
           await Promise.all([
             parseSafe<LisosResponse>(lisosRes),
             parseSafe<DecoradosResponse>(decoradosRes),
             parseSafe<PerdidosResponse>(perdidosRes),
             parseSafe<RendimientoResponse>(rendimientoRes),
+            parseSafe<PantallasResponse>(pantallasRes),
             parseSafe<Meta[]>(metasRes),
           ]);
 
@@ -133,6 +147,8 @@ export const Rendimiento = () => {
           totalGruesasDecoradas: decorados?.totalGruesasDecoradas ?? "0",
           totalEnvasesPerdidos: perdidos?.totalEnvasesPerdidos ?? 0,
           totalGruesasPerdidas: perdidos?.totalGruesasPerdidas ?? "0",
+          totalPantallasFabricadas: pantallas?.totalFabricadas ?? 0,
+          totalPantallasConsumidas: pantallas?.totalConsumidas ?? 0,
           eficienciaGeneral: rendimiento?.eficienciaGeneral ?? 0,
           deficienciaGeneral: rendimiento?.deficienciaGeneral ?? 0,
         });
@@ -145,15 +161,22 @@ export const Rendimiento = () => {
 
         const map = new Map<string, DashboardDataItem>();
 
+        //* Helper para inicializar un item con todos los campos en 0
+        const initItem = (fecha: string): DashboardDataItem => ({
+          date: fecha,
+          envasesLisos: 0,
+          envasesDecorados: 0,
+          envasesPerdidos: 0,
+          pantallasFabricadas: 0,
+          pantallasConsumidas: 0,
+          eficiencia: 0,
+          deficiencia: 0,
+        });
+
         lisos?.registrosLisos.forEach((r) => {
-          map.set(r.fecha, {
-            date: r.fecha,
-            envasesLisos: r.totalEnvasesLisos,
-            envasesDecorados: 0,
-            envasesPerdidos: 0,
-            eficiencia: 0,
-            deficiencia: 0,
-          });
+          const item = initItem(r.fecha);
+          item.envasesLisos = r.totalEnvasesLisos;
+          map.set(r.fecha, item);
         });
 
         decorados?.registrosDecorados.forEach((r) => {
@@ -161,14 +184,9 @@ export const Rendimiento = () => {
           if (existing) {
             existing.envasesDecorados = r.totalEnvasesDecorados;
           } else {
-            map.set(r.fecha, {
-              date: r.fecha,
-              envasesLisos: 0,
-              envasesDecorados: r.totalEnvasesDecorados,
-              envasesPerdidos: 0,
-              eficiencia: 0,
-              deficiencia: 0,
-            });
+            const item = initItem(r.fecha);
+            item.envasesDecorados = r.totalEnvasesDecorados;
+            map.set(r.fecha, item);
           }
         });
 
@@ -177,14 +195,22 @@ export const Rendimiento = () => {
           if (existing) {
             existing.envasesPerdidos = r.totalEnvasesPerdidos;
           } else {
-            map.set(r.fecha, {
-              date: r.fecha,
-              envasesLisos: 0,
-              envasesDecorados: 0,
-              envasesPerdidos: r.totalEnvasesPerdidos,
-              eficiencia: 0,
-              deficiencia: 0,
-            });
+            const item = initItem(r.fecha);
+            item.envasesPerdidos = r.totalEnvasesPerdidos;
+            map.set(r.fecha, item);
+          }
+        });
+
+        pantallas?.registrosPantallas.forEach((r) => {
+          const existing = map.get(r.fecha);
+          if (existing) {
+            existing.pantallasFabricadas = r.totalFabricadas;
+            existing.pantallasConsumidas = r.totalConsumidas;
+          } else {
+            const item = initItem(r.fecha);
+            item.pantallasFabricadas = r.totalFabricadas;
+            item.pantallasConsumidas = r.totalConsumidas;
+            map.set(r.fecha, item);
           }
         });
 
@@ -196,14 +222,10 @@ export const Rendimiento = () => {
             existing.eficiencia = eficiencia;
             existing.deficiencia = deficiencia;
           } else {
-            map.set(r.fecha, {
-              date: r.fecha,
-              envasesLisos: 0,
-              envasesDecorados: 0,
-              envasesPerdidos: 0,
-              eficiencia,
-              deficiencia,
-            });
+            const item = initItem(r.fecha);
+            item.eficiencia = eficiencia;
+            item.deficiencia = deficiencia;
+            map.set(r.fecha, item);
           }
         });
 
@@ -417,6 +439,26 @@ export const Rendimiento = () => {
                       <span className={styles.totalGruesas}>
                         ({totales.totalGruesasPerdidas} gruesas)
                       </span>
+                    </p>
+                    <p className={styles.totalItem}>
+                      <span className={styles.totalLabel}>
+                        Pantallas Fabricadas:
+                      </span>{" "}
+                      <strong>
+                        {totales.totalPantallasFabricadas.toLocaleString(
+                          "es-VE",
+                        )}
+                      </strong>
+                    </p>
+                    <p className={styles.totalItem}>
+                      <span className={styles.totalLabel}>
+                        Pantallas Consumidas:
+                      </span>{" "}
+                      <strong>
+                        {totales.totalPantallasConsumidas.toLocaleString(
+                          "es-VE",
+                        )}
+                      </strong>
                     </p>
                     <p className={styles.totalItem}>
                       <span className={styles.totalLabel}>

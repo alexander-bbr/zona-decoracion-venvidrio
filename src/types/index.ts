@@ -3,6 +3,8 @@ export type DashboardDataItem = {
   envasesLisos: number;
   envasesDecorados: number;
   envasesPerdidos: number;
+  pantallasFabricadas: number;
+  pantallasConsumidas: number;
   eficiencia: number;
   deficiencia: number;
 };
@@ -11,6 +13,8 @@ export type VisibleMetrics = {
   envasesLisos: boolean;
   envasesDecorados: boolean;
   envasesPerdidos: boolean;
+  pantallasFabricadas: boolean;
+  pantallasConsumidas: boolean;
   eficiencia: boolean;
   deficiencia: boolean;
   meta: boolean;
@@ -43,6 +47,12 @@ export type RendimientoRegistro = {
   deficiencia: string;
 };
 
+export type PantallasRegistro = {
+  fecha: string;
+  totalFabricadas: number;
+  totalConsumidas: number;
+};
+
 export type LisosResponse = {
   registrosLisos: LisosRegistro[];
   totalEnvasesLisos: number;
@@ -67,6 +77,12 @@ export type RendimientoResponse = {
   deficienciaGeneral: number;
 };
 
+export type PantallasResponse = {
+  registrosPantallas: PantallasRegistro[];
+  totalFabricadas: number;
+  totalConsumidas: number;
+};
+
 //* Meta individual (para el listado y para la línea de referencia)
 export type Meta = {
   idMeta: number;
@@ -76,6 +92,7 @@ export type Meta = {
   estado: boolean;
 };
 
+//* Meta activa lista para pasarla al gráfico
 export type MetaActiva = {
   valor: number;
   mes: string;
@@ -88,6 +105,8 @@ export type Totales = {
   totalGruesasDecoradas: string;
   totalEnvasesPerdidos: number;
   totalGruesasPerdidas: string;
+  totalPantallasFabricadas: number;
+  totalPantallasConsumidas: number;
   eficienciaGeneral: number;
   deficienciaGeneral: number;
 };

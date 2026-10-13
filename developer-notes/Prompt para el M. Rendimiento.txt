@@ -1,1 +1,0 @@
-Okey todo funciona. Pero hay un detalle, y es que mi amigo me está pasando este nuevo endpoint

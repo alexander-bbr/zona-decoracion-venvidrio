@@ -3,7 +3,6 @@
 ## Rendimiento
 
   - Hacer el submódulo del profesor.
-  - Arreglar el link del submódulo de Metas.
 
 
 

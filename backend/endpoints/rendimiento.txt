@@ -68,12 +68,36 @@ JSON (Respuesta en caso de error):
 }
 
 
+Ruta 4: Pantallas Fabricadas y Consumidas por Fecha
+Endpoint: http://127.0.0.1:8000/api/rendimiento/pantallas
+Método: GET
+
+Parámetros de consulta: desde, hasta
+Ejemplo: http://127.0.0.1:8000/api/rendimiento/pantallas?desde=2026-09-01&hasta=2026-09-30
+
+Estructura de los datos que recibirá:
+{
+    "registrosPantallas": [
+        {"fecha": "2026-09-08", "totalFabricadas": 120, "totalConsumidas": 80},
+        {"fecha": "2026-09-09", "totalFabricadas": 200, "totalConsumidas": 150}
+    ],
+    "totalFabricadas": 320,
+    "totalConsumidas": 230
+}
+
+JSON (Respuesta en caso de error):
+{
+    "detail": "No se encontraron registros en el rango de fechas indicado."
+}
+
+NOTA TÉCNICA: Las fechas de desde y hasta tienen que enviarse en formato año-mes-dia
+
 
 --------------------------------
 
 
 
-Ruta 4: Rendimiento por Fecha
+Ruta 5: Rendimiento por Fecha
 Endpoint: http://127.0.0.1:8000/api/rendimiento/eficiencia-deficiencia
 Método: GET
 
@@ -106,7 +130,7 @@ NOTA TÉCNICA: En los endpoints de Ruta 1,2,3 y 4, las fechas de desde y hasta, 
 
 
 
-Ruta 5: Listar las metas
+Ruta 6: Listar las metas
 Endpoint: http://127.0.0.1:8000/api/rendimiento/metas
 Método: GET
 
@@ -137,7 +161,7 @@ NOTA TÉCNICA: El backend debe ordenar los registros por anio y luego por mes an
 
 
 
-Ruta 6: Agregar meta
+Ruta 7: Agregar meta
 Endpoint: http://127.0.0.1:8000/api/rendimiento/metas
 Método: POST
 
@@ -173,7 +197,7 @@ JSON (Respuesta en caso de conflicto):
 
 
 
-Ruta 7: Ver Meta por ID (Para Editar)
+Ruta 8: Ver Meta por ID (Para Editar)
 Endpoint: http://127.0.0.1:8000/api/rendimiento/{id_meta}
 Método: GET
 
@@ -197,7 +221,7 @@ JSON (Respuesta en caso de error):
 
 
 
-Ruta 8: Editar Meta
+Ruta 9: Editar Meta
 Endpoint: http://127.0.0.1:8000/api/rendimiento/{id_meta}
 Método: PUT
 

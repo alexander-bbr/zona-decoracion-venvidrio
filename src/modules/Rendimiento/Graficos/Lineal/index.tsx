@@ -21,6 +21,8 @@ const COLORS = {
   envasesLisos: "#3562d3",
   envasesDecorados: "#0a9c7d",
   envasesPerdidos: "#f26c4f",
+  pantallasFabricadas: "#0ea5e9",
+  pantallasConsumidas: "#f59e0b",
   eficiencia: "#7c3aed",
   deficiencia: "#d946ef",
   meta: "#e11d48",
@@ -61,7 +63,7 @@ export const Lineal = ({ data, visibleMetrics, metaActiva }: LinealProps) => {
         >
           <CartesianGrid stroke="rgba(0,0,0,0.06)" strokeDasharray="4 4" />
           <XAxis dataKey="date" tick={{ fill: "#5a6777", fontSize: 12 }} />
-          {/* Eje izquierdo: envases */}
+          {/* Eje izquierdo: envases y pantallas */}
           <YAxis yAxisId="left" tick={{ fill: "#5a6777", fontSize: 12 }} />
           {/* Eje derecho: porcentajes (0-100) */}
           <YAxis
@@ -136,6 +138,28 @@ export const Lineal = ({ data, visibleMetrics, metaActiva }: LinealProps) => {
               dataKey="envasesPerdidos"
               name="Envases Perdidos"
               stroke={COLORS.envasesPerdidos}
+              strokeWidth={3}
+              dot={false}
+            />
+          )}
+          {visibleMetrics.pantallasFabricadas && (
+            <Line
+              yAxisId="left"
+              type="monotone"
+              dataKey="pantallasFabricadas"
+              name="Pantallas Fabricadas"
+              stroke={COLORS.pantallasFabricadas}
+              strokeWidth={3}
+              dot={false}
+            />
+          )}
+          {visibleMetrics.pantallasConsumidas && (
+            <Line
+              yAxisId="left"
+              type="monotone"
+              dataKey="pantallasConsumidas"
+              name="Pantallas Consumidas"
+              stroke={COLORS.pantallasConsumidas}
               strokeWidth={3}
               dot={false}
             />

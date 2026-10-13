@@ -6,12 +6,14 @@ import {
   YAxis,
   Tooltip,
   Legend,
+  ReferenceLine,
   ResponsiveContainer,
 } from "recharts";
 import type {
   DashboardDataItem,
   VisibleMetrics,
   Totales,
+  MetaActiva,
 } from "../../../../types";
 import styles from "./barras.module.css";
 
@@ -21,15 +23,35 @@ const COLORS = {
   envasesPerdidos: "#f26c4f",
   eficiencia: "#7c3aed",
   deficiencia: "#d946ef",
+  meta: "#e11d48",
 };
+
+//* Formatea un porcentaje: 85.0 -> "85", 85.5 -> "85.5", "85.50" -> "85.5"
+const formatearPorcentaje = (
+  valor: number | string | null | undefined,
+): string => {
+  if (valor === null || valor === undefined || valor === "") return "0";
+  const num = typeof valor === "number" ? valor : Number(valor);
+  if (isNaN(num)) return "0";
+  return Number.isInteger(num)
+    ? String(num)
+    : num.toFixed(2).replace(/\.?0+$/, "");
+};
+
+//* Capitaliza la primera letra: "octubre" -> "Octubre"
+const capitalizar = (texto: string): string =>
+  texto.charAt(0).toUpperCase() + texto.slice(1).toLowerCase();
 
 type BarrasProps = {
   data: DashboardDataItem[];
   visibleMetrics: VisibleMetrics;
   totales: Totales;
+  metaActiva: MetaActiva | null;
 };
 
-export const Barras = ({ data, visibleMetrics }: BarrasProps) => {
+export const Barras = ({ data, visibleMetrics, metaActiva }: BarrasProps) => {
+  const mostrarMeta = visibleMetrics.meta && metaActiva !== null;
+
   return (
     <div className={styles.chartWrapper}>
       <ResponsiveContainer width="100%" height={360}>
@@ -64,6 +86,27 @@ export const Barras = ({ data, visibleMetrics }: BarrasProps) => {
             height={60}
             wrapperStyle={{ paddingBottom: "20px" }}
           />
+
+          {/* Línea de referencia: Meta activa */}
+          {mostrarMeta && metaActiva !== null && (
+            <ReferenceLine
+              yAxisId="right"
+              y={metaActiva.valor}
+              stroke={COLORS.meta}
+              strokeDasharray="6 4"
+              strokeWidth={2}
+              label={{
+                value: `Meta de Deficiencia (${capitalizar(
+                  metaActiva.mes,
+                )}): ${formatearPorcentaje(metaActiva.valor)}%`,
+                position: "insideTopRight",
+                fill: COLORS.meta,
+                fontSize: 12,
+                fontWeight: 600,
+              }}
+            />
+          )}
+
           {visibleMetrics.envasesLisos && (
             <Bar
               yAxisId="left"

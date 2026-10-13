@@ -12,6 +12,8 @@ import type {
   DecoradosResponse,
   PerdidosResponse,
   RendimientoResponse,
+  Meta,
+  MetaActiva,
 } from "../../types";
 import styles from "./rendimiento.module.css";
 
@@ -27,6 +29,19 @@ const visibleMetricLabels: Record<keyof VisibleMetrics, string> = {
   envasesPerdidos: "Envases Perdidos",
   eficiencia: "Eficiencia (%)",
   deficiencia: "Deficiencia (%)",
+  meta: "Meta (%)",
+};
+
+//* Formatea un porcentaje: 85.0 -> "85", 85.5 -> "85.5", "85.50" -> "85.5"
+const formatearPorcentaje = (
+  valor: number | string | null | undefined,
+): string => {
+  if (valor === null || valor === undefined || valor === "") return "0";
+  const num = typeof valor === "number" ? valor : Number(valor);
+  if (isNaN(num)) return "0";
+  return Number.isInteger(num)
+    ? String(num)
+    : num.toFixed(2).replace(/\.?0+$/, "");
 };
 
 //* Helpers para fechas por defecto (zona horaria Venezuela)
@@ -66,10 +81,13 @@ export const Rendimiento = () => {
     envasesPerdidos: true,
     eficiencia: true,
     deficiencia: true,
+    meta: true,
   });
 
   const [apiData, setApiData] = useState<DashboardDataItem[]>([]);
   const [totales, setTotales] = useState<Totales>(EMPTY_TOTALES);
+  //* Meta activa (solo puede haber una). null = no hay meta activa.
+  const [metaActiva, setMetaActiva] = useState<MetaActiva | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -82,12 +100,13 @@ export const Rendimiento = () => {
       const query = `desde=${fromDate}&hasta=${toDate}`;
 
       try {
-        const [lisosRes, decoradosRes, perdidosRes, rendimientoRes] =
+        const [lisosRes, decoradosRes, perdidosRes, rendimientoRes, metasRes] =
           await Promise.all([
             fetch(`${baseUrl}/lisos?${query}`),
             fetch(`${baseUrl}/decorados?${query}`),
             fetch(`${baseUrl}/perdidos?${query}`),
             fetch(`${baseUrl}/eficiencia-deficiencia?${query}`),
+            fetch(`${baseUrl}/metas`),
           ]);
 
         const parseSafe = async <T,>(res: Response): Promise<T | null> => {
@@ -98,12 +117,14 @@ export const Rendimiento = () => {
           return (await res.json()) as T;
         };
 
-        const [lisos, decorados, perdidos, rendimiento] = await Promise.all([
-          parseSafe<LisosResponse>(lisosRes),
-          parseSafe<DecoradosResponse>(decoradosRes),
-          parseSafe<PerdidosResponse>(perdidosRes),
-          parseSafe<RendimientoResponse>(rendimientoRes),
-        ]);
+        const [lisos, decorados, perdidos, rendimiento, metas] =
+          await Promise.all([
+            parseSafe<LisosResponse>(lisosRes),
+            parseSafe<DecoradosResponse>(decoradosRes),
+            parseSafe<PerdidosResponse>(perdidosRes),
+            parseSafe<RendimientoResponse>(rendimientoRes),
+            parseSafe<Meta[]>(metasRes),
+          ]);
 
         setTotales({
           totalEnvasesLisos: lisos?.totalEnvasesLisos ?? 0,
@@ -115,6 +136,12 @@ export const Rendimiento = () => {
           eficienciaGeneral: rendimiento?.eficienciaGeneral ?? 0,
           deficienciaGeneral: rendimiento?.deficienciaGeneral ?? 0,
         });
+
+        //* Buscamos la meta activa (solo debería haber una) y guardamos valor + mes
+        const meta = metas?.find((m) => m.estado === true);
+        setMetaActiva(
+          meta ? { valor: Number(meta.deficiencia), mes: meta.mes } : null,
+        );
 
         const map = new Map<string, DashboardDataItem>();
 
@@ -186,6 +213,7 @@ export const Rendimiento = () => {
         setError(e instanceof Error ? e.message : "Error al cargar los datos");
         setApiData([]);
         setTotales(EMPTY_TOTALES);
+        setMetaActiva(null);
       } finally {
         setIsLoading(false);
       }
@@ -212,11 +240,7 @@ export const Rendimiento = () => {
   const ChartComponent =
     chartType === "lineal" ? Lineal : chartType === "barras" ? Barras : Torta;
 
-  //* ¿Estamos en la raíz /rendimiento?
   const isRoot = location.pathname === "/rendimiento";
-
-  //* Solo mostramos el subnav en /rendimiento/metas (no en subrutas más profundas,
-  //* porque ahí el subnav lo maneja el propio componente Metas)
   const showSubNav = location.pathname === "/rendimiento/metas";
 
   return (
@@ -228,9 +252,8 @@ export const Rendimiento = () => {
         </p>
       </header>
 
-      {/* Subnav SOLO cuando estamos exactamente en /rendimiento/metas */}
       {showSubNav && (
-        <nav className={`${styles.subNav}`} id="subNav">
+        <nav className={styles.subNav} id="subNav">
           <NavLink
             to="/rendimiento"
             className={({ isActive }) =>
@@ -308,12 +331,23 @@ export const Rendimiento = () => {
               >
                 {Object.keys(visibleMetricLabels).map((metric) => {
                   const key = metric as keyof VisibleMetrics;
+                  //* Deshabilitamos el checkbox de la meta si no hay meta activa
+                  const disabled = key === "meta" && metaActiva === null;
                   return (
-                    <label className={styles.checkboxItem} key={metric}>
+                    <label
+                      className={styles.checkboxItem}
+                      key={metric}
+                      title={
+                        disabled
+                          ? "No hay ninguna meta activa registrada"
+                          : undefined
+                      }
+                    >
                       <input
                         type="checkbox"
                         checked={visibleMetrics[key]}
                         onChange={() => toggleMetric(key)}
+                        disabled={disabled}
                       />
                       {visibleMetricLabels[key]}
                     </label>
@@ -337,6 +371,7 @@ export const Rendimiento = () => {
                     data={chartData}
                     visibleMetrics={visibleMetrics}
                     totales={totales}
+                    metaActiva={metaActiva}
                   />
 
                   {/* Totales del período */}
@@ -376,13 +411,17 @@ export const Rendimiento = () => {
                       <span className={styles.totalLabel}>
                         Eficiencia General:
                       </span>{" "}
-                      <strong>{totales.eficienciaGeneral}%</strong>
+                      <strong>
+                        {formatearPorcentaje(totales.eficienciaGeneral)}%
+                      </strong>
                     </p>
                     <p className={styles.totalItem}>
                       <span className={styles.totalLabel}>
                         Deficiencia General:
                       </span>{" "}
-                      <strong>{totales.deficienciaGeneral}%</strong>
+                      <strong>
+                        {formatearPorcentaje(totales.deficienciaGeneral)}%
+                      </strong>
                     </p>
                   </div>
                 </>
@@ -395,7 +434,7 @@ export const Rendimiento = () => {
           </section>
 
           {/* Link al submódulo de Metas */}
-          <section className={`${styles.modulesLink}`}>
+          <section className={styles.modulesLink}>
             <NavLink to="/rendimiento/metas" className={styles.moduleLinkCard}>
               <span className={styles.moduleLinkTitle}>Metas</span>
               <span className={styles.moduleLinkDesc}>

@@ -10,6 +10,7 @@ import type {
   DashboardDataItem,
   VisibleMetrics,
   Totales,
+  MetaActiva,
 } from "../../../../types";
 import styles from "./torta.module.css";
 
@@ -24,6 +25,7 @@ type TortaProps = {
   data: DashboardDataItem[];
   visibleMetrics: VisibleMetrics;
   totales: Totales;
+  metaActiva: MetaActiva | null;
 };
 
 export const Torta = ({ visibleMetrics, totales }: TortaProps) => {

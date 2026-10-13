@@ -185,10 +185,9 @@ export const RegistrarMeta = () => {
                 type="number"
                 min="0"
                 max="100"
-                step="1"
+                step="0.01"
                 value={formData.deficiencia}
                 onChange={handleChange}
-                placeholder="Ej: 85"
                 required
               />
             </div>

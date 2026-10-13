@@ -13,6 +13,7 @@ export type VisibleMetrics = {
   envasesPerdidos: boolean;
   eficiencia: boolean;
   deficiencia: boolean;
+  meta: boolean;
 };
 
 export type ChartType = "lineal" | "barras" | "torta";
@@ -64,6 +65,20 @@ export type RendimientoResponse = {
   rendimiento: RendimientoRegistro[];
   eficienciaGeneral: number;
   deficienciaGeneral: number;
+};
+
+//* Meta individual (para el listado y para la línea de referencia)
+export type Meta = {
+  idMeta: number;
+  anio: number;
+  mes: string;
+  deficiencia: string;
+  estado: boolean;
+};
+
+export type MetaActiva = {
+  valor: number;
+  mes: string;
 };
 
 export type Totales = {

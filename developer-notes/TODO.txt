@@ -4,7 +4,7 @@
 
   - Preguntarle a Daniel si le parece bien que en el gráfico de Torta no aparezca el valor de eficiencia y deficiencia
   - Hacer el submódulo del profesor.
-  - Hacer el submódulo de las metas.
+  - Agregar un icon al link del submódulo de Metas.
   - Incluir las metas en el gráfico (puede ser solo en el lineal y de barras).
 
 

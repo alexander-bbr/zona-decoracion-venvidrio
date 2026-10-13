@@ -1,0 +1,5 @@
+Okey bueno, lo que necesito es lo siguiente, y es que en el gráfico de Barras y el de lineal (En el de Torta no), tienen que aparecer las Metas. O sea, para ello se usa el endpoint de listar las metas.
+
+Ahora, imagina que en los inputs de fecha desde y fecha hasta, el usuario introdujo: 01/9/2026 y 28/10/2026. O sea el rango toca dos meses, Septiembre y Octubre.
+
+Bueno, tiene que haber algo que me marque la meta en el gráfico, algo así como una línea horizontal por cada meta (sigueindo el ejemplo, de Septiembre y Octubre), de forma tal que el usuario vea, valga la redundancia, una meta, como un tope en la gráfica. Asi podrá observar (o bueno, realmente como referencia), si alcanzó o no lo meta. no sé si me puedes orientar para lograr esto, espero que no sea muy difícil

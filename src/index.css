@@ -66,6 +66,10 @@ body {
   animation: fadeIn 0.3s ease-in-out;
   margin-bottom: 10rem !important;
 }
+/* Darle una animación al proceso pero sin margen*/
+.content-only-animation {
+  animation: fadeIn 0.3s ease-in-out;
+}
 
 #footer {
   position: relative;

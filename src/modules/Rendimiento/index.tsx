@@ -247,7 +247,7 @@ export const Rendimiento = () => {
 
       {isRoot ? (
         <>
-          <section className={`${styles.dashboard} content`}>
+          <section className={`${styles.dashboard} content-only-animation`}>
             {/* === PANEL DE CONTROL === */}
             <section className={styles.controls}>
               {/* Fecha Desde */}
@@ -395,7 +395,7 @@ export const Rendimiento = () => {
           </section>
 
           {/* Link al submódulo de Metas */}
-          <section className={`${styles.modulesLink} content`}>
+          <section className={`${styles.modulesLink}`}>
             <NavLink to="/rendimiento/metas" className={styles.moduleLinkCard}>
               <span className={styles.moduleLinkTitle}>Metas</span>
               <span className={styles.moduleLinkDesc}>

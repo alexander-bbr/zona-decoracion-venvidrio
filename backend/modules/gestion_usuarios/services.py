@@ -54,7 +54,7 @@ def editar_usuario_completo(db: Session, id_usuario: int, datos: UsuarioEditar):
             setattr(usuario, campo, valor)
 
         # Solo actualizamos la contraseña si vino en el request
-        if datos.contrasena is not None:
+        if datos.contrasena is not None and datos.contrasena.strip() != "":
             usuario.contrasena = hashear_contrasena(datos.contrasena)
 
         # Eliminamos los permisos anteriores del usuario
@@ -72,7 +72,6 @@ def editar_usuario_completo(db: Session, id_usuario: int, datos: UsuarioEditar):
         return {"status": "error", "message": str(e)}
 
 
-# 3. Obtener usuario para editar (trae sus datos + sus permisos actuales)
 # 3. Obtener usuario para editar (trae sus datos + sus permisos actuales)
 def obtener_usuario_completo(db: Session, id_usuario: int):
     usuario = db.query(Usuario).filter(Usuario.id_usuario == id_usuario).first()

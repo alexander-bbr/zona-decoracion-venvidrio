@@ -51,3 +51,17 @@
 .unauthorized a:hover {
   text-decoration: underline;
 }
+
+@media (width <= 768px) {
+  .unauthorized {
+    width: 85%;
+    min-width: 0;
+  }
+}
+
+@media (width <= 480px) {
+  .unauthorized {
+    width: 100%;
+    min-width: 0;
+  }
+}

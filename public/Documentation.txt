@@ -1,4 +1,0 @@
-# Sobre el sistema de Notificaciones
-
-- Se envía un correo electrónico cuando la cantidad actual de un insumo, es igual o menor a la cantidad mínima de revisión.
-- Se envía un correo electrónico cuando la Deficiencia productiva es mayor o igual al 12% (desde el código en backend).

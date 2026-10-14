@@ -15,3 +15,15 @@
   font-weight: 600;
   color: var(--fourth-text-color);
 }
+
+@media (width <= 768px) {
+  .companyNameData {
+    display: none;
+  }
+}
+
+@media (width <= 480px) {
+  .companyNameData {
+    display: none;
+  }
+}

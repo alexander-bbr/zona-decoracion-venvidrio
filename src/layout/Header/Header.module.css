@@ -97,3 +97,33 @@
   font-size: 0.8rem;
   color: var(--fourth-text-color);
 }
+
+@media (width <= 480px) {
+  .header {
+    padding: 0.8rem 0.5rem;
+    gap: 0rem;
+  }
+
+  .infoWrapper {
+    margin-left: -1rem;
+    justify-content: center;
+  }
+
+  .softwareData {
+    gap: 0.5rem;
+  }
+  .isotipo {
+    padding-top: 0.3rem;
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+  .softwareNameWrapper {
+    gap: 0.2rem;
+  }
+  .softwareName {
+    font-size: 1rem;
+  }
+  .softwareDescription {
+    font-size: 0.7rem;
+  }
+}

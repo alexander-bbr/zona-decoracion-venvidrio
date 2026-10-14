@@ -17,8 +17,8 @@
 
 .home {
   margin: auto;
-  min-width: 500px;
-  width: 60%;
+  min-width: 550px;
+  width: 55%;
   padding: 40px;
   border-radius: 16px;
   background: var(--third-text-color);
@@ -74,4 +74,18 @@
 
 .home a:hover {
   text-decoration: underline;
+}
+
+@media (width <= 768px) {
+  .home {
+    width: 85%;
+    min-width: 0;
+  }
+}
+
+@media (width <= 480px) {
+  .home {
+    width: 100%;
+    min-width: 0;
+  }
 }

@@ -17,6 +17,8 @@
   --secondary-text-color: #545d66;
   --third-text-color: #ffffff;
   --fourth-text-color: #ffffffd7;
+
+  /* Variables generales */
   --header-height: 6rem;
 }
 
@@ -84,5 +86,12 @@ body {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@media (width <= 480px) {
+  :root {
+    /* Variables generales */
+    --header-height: 4rem;
   }
 }

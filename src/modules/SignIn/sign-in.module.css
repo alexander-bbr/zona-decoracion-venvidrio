@@ -125,3 +125,35 @@
   border-top: 1px solid var(--secondary-color);
   font-size: 0.7rem;
 }
+
+@media (width <= 480px) {
+  .signIn {
+    width: 90%;
+    margin: 3rem auto 10rem;
+    padding: 1rem 2rem;
+  }
+
+  /* === HEADER === */
+  .signInHeader {
+    gap: 1rem;
+  }
+  .signInHeaderLogo {
+    width: 52px;
+    height: 52px;
+  }
+
+  .nameCompany {
+    font-size: 1rem;
+  }
+  .rifCompany {
+    font-size: 0.7rem;
+    margin-top: 2px;
+  }
+
+  /* === TITLE === */
+  .signInTitle {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 1.5rem 0;
+  }
+}

@@ -261,3 +261,46 @@ li a.activeLink::before,
 .logoutButton:hover {
   background: #565656;
 }
+
+@media (width <= 480px) {
+  .sidebar {
+    width: 65%;
+    padding: 1rem 0.5rem 2rem;
+  }
+
+  /* Información del Usuario */
+  .userInfo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 1.1rem;
+  }
+
+  .userInfo p:first-of-type {
+    margin: 0.6rem 0 0.1rem;
+    font-size: 0.9rem;
+  }
+
+  li a {
+    padding: 0.6rem 1rem;
+    font-size: 0.8rem;
+  }
+
+  .parentLink {
+    padding: 0.6rem 1rem;
+    font-size: 0.8rem;
+  }
+
+  .treeLink {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.85rem;
+  }
+
+  /* BOTÓN DE CIERRE DE SESIÓN */
+  .logoutButton {
+    width: auto;
+    padding: 0.6rem 1.2rem;
+    font-size: 0.85rem;
+  }
+}

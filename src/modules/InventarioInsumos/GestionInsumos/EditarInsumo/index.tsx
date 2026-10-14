@@ -140,6 +140,7 @@ const CargarInsumo = ({ idInsumo }: { idInsumo: string }) => {
         );
       }
 
+      alert("¡Insumo editado exitosamente!");
       navigate("/inventario-insumos/gestion-insumos");
     } catch (submitError) {
       setError(

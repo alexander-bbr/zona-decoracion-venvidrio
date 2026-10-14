@@ -127,6 +127,7 @@ export const RegistroInsumo = () => {
         );
       }
 
+      alert("¡Insumo registrado exitosamente!");
       navigate("/inventario-insumos");
     } catch (submitError) {
       setError(

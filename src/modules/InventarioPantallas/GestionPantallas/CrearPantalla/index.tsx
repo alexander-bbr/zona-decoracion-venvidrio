@@ -78,6 +78,7 @@ export const CrearPantalla = () => {
         );
       }
 
+      alert("¡Pantalla creada exitosamente!");
       navigate("/inventario-pantallas/gestion-pantallas");
     } catch (submitError) {
       setError(

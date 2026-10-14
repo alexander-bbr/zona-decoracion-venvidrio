@@ -142,6 +142,7 @@ export const SalidaInsumo = () => {
         );
       }
 
+      alert("¡Salida de insumo registrada exitosamente!");
       navigate("/inventario-insumos");
     } catch (submitError) {
       setError(

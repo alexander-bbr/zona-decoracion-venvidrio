@@ -130,6 +130,7 @@ export const RegistroPantalla = () => {
         );
       }
 
+      alert("¡Pantalla registrada exitosamente!");
       navigate("/inventario-pantallas");
     } catch (submitError) {
       setError(

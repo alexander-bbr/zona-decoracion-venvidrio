@@ -132,6 +132,7 @@ const CargarPantalla = ({ idPantalla }: { idPantalla: string }) => {
         );
       }
 
+      alert("¡Pantalla editada exitosamente!");
       navigate("/inventario-pantallas/gestion-pantallas");
     } catch (submitError) {
       setError(

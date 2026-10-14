@@ -84,6 +84,7 @@ export const CrearInsumo = () => {
         );
       }
 
+      alert("¡Insumo creado exitosamente!");
       navigate("/inventario-insumos/gestion-insumos");
     } catch (submitError) {
       setError(

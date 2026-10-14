@@ -145,6 +145,7 @@ export const SalidaPantalla = () => {
         );
       }
 
+      alert("¡Salida de pantalla registrada exitosamente!");
       navigate("/inventario-pantallas");
     } catch (submitError) {
       setError(

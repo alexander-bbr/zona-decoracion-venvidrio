@@ -645,6 +645,7 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
           data?.detail ?? `Error al actualizar producción: ${response.status}`,
         );
       }
+      alert("¡Producción editada exitosamente!");
       navigate("/gestion-productiva");
     } catch (submitError) {
       setError(

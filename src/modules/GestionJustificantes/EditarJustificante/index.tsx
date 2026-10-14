@@ -106,6 +106,7 @@ const CargarJustificante = ({ idJustificante }: { idJustificante: string }) => {
         );
       }
 
+      alert("¡Justificante editado exitosamente!");
       navigate("/gestion-justificantes");
     } catch (submitError) {
       setError(

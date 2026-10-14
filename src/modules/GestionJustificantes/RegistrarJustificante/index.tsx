@@ -55,6 +55,7 @@ export const RegistrarJustificante = () => {
         );
       }
 
+      alert("¡Justificante registrado exitosamente!");
       navigate("/gestion-justificantes");
     } catch (submitError) {
       setError(

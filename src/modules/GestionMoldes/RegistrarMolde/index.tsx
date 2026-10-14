@@ -89,6 +89,7 @@ export const RegistrarMolde = () => {
         );
       }
 
+      alert("¡Molde registrado exitosamente!");
       navigate("/gestion-moldes");
     } catch (submitError) {
       setError(

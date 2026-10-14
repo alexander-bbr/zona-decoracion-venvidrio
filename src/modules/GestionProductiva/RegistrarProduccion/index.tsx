@@ -447,6 +447,7 @@ export const RegistrarProduccion = () => {
           data?.detail ?? `Error al registrar producción: ${response.status}`,
         );
       }
+      alert("¡Producción regitrada exitosamente!");
       navigate("/gestion-productiva");
     } catch (submitError) {
       setError(

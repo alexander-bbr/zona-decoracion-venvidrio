@@ -150,6 +150,7 @@ const CargarMolde = ({ idMolde }: { idMolde: string }) => {
         );
       }
 
+      alert("¡Molde editado exitosamente!");
       navigate("/gestion-moldes");
     } catch (submitError) {
       setError(

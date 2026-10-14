@@ -52,21 +52,20 @@ def verificar_stock_insumo(articulo: str, cantidad_actual: float, cantidad_minim
 
 
 def verificar_deficiencia_produccion(
-    id_cabecera:         int,
-    fecha:               str,
-    turno:               int,
-    grupo:               str,
-    tecnico:             str,
-    deficiencia:         float,
-    total_gruesas:       float,
-    justificantes:       list,  #[{"molde": "nombre", "justificaciones": ["etiqueta - descripcion"]}]
+    id_cabecera:    int,
+    fecha:          str,
+    turno:          int,
+    grupo:          str,
+    tecnico:        str,
+    deficiencia:    float,
+    total_gruesas:  float,
+    justificantes:  list,
+    meta_deficiencia: float,
+    meta_periodo:   str,
 ):
-    UMBRAL = 12.0
-
-    if deficiencia < UMBRAL:
+    if deficiencia < meta_deficiencia:
         return
 
-    #ARMAR DETALLE DE JUSTIFICANTES POR MOLDE
     detalle_justificantes = ""
     for item in justificantes:
         detalle_justificantes += f"\n  Molde: {item['molde']}\n"
@@ -76,17 +75,22 @@ def verificar_deficiencia_produccion(
     _enviar_correo(
         asunto=f"🚨 ALERTA DE PÉRDIDA EN PRODUCCIÓN — Turno {turno} | {fecha}",
         cuerpo=(
-            f"Se ha detectado una deficiencia productiva igual o superior al {UMBRAL}%.\n\n"
+            f"Se ha detectado una deficiencia productiva igual o superior a la meta establecida.\n\n"
+            f"{'='*20}\n"
+            f"META ACTIVA\n"
+            f"Período:          {meta_periodo}\n"
+            f"Límite:            {meta_deficiencia}%\n\n"
             f"{'='*20}\n"
             f"DATOS DEL TURNO\n"
-            f"Registro N°:       {id_cabecera}\n"
+            f"Registro N°:      {id_cabecera}\n"
             f"Fecha:             {fecha}\n"
             f"Turno:             {turno}\n"
             f"Grupo:             {grupo}\n"
-            f"Técnico:           {tecnico}\n\n"
+            f"Técnico:          {tecnico}\n\n"
             f"{'='*20}\n"
             f"MÉTRICAS DE PÉRDIDA\n"
-            f"Deficiencia:       {round(deficiencia, 2)}%\n"
+            f"Total gruesas recibidas por maquinas decoradoras:     {round(total_gruesas, 2)}\n"
+            f"Deficiencia de Producción:       {round(deficiencia, 2)}%\n"        
             f"{'='*20}\n"
             f"JUSTIFICANTES POR MOLDE\n"
             f"{detalle_justificantes}"

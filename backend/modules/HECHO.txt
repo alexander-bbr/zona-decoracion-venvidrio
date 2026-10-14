@@ -1,4 +1,0 @@
-- ordenar pantallas por nombre y descripcion
-- agregar campo contraseñá vacio al momento de editar usuario 
-- asignar campos de metas de rendimiento 
-- buscar ofices para mv

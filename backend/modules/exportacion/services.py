@@ -256,13 +256,13 @@ def exportar_movimientos_pantallas(db: Session, fecha_desde: date, fecha_hasta: 
 
 #GENERA EL ARCHIVO EXCEL DEL LISTADO DE PANTALLAS
 def exportar_pantallas(db: Session) -> bytes:
-    datos = sorted(obtener_lista_pantallas(db), key=lambda x: x["id_pantalla"])
+    datos = sorted(obtener_lista_pantallas(db), key=lambda x: (x["tipo"].lower(), x["nombre"].lower()))
 
     if not datos:
         raise HTTPException(status_code=404, detail="No se encontraron pantallas registradas.")
 
-    columnas = ["nombre", "descripcion", "tipo", "cantidad_actual"]
-    cabeceras = ["Nombre", "Descripción", "Tipo", "Cantidad Actual"]
+    columnas = ["tipo", "nombre", "descripcion", "cantidad_actual"]
+    cabeceras = ["Tipo", "Nombre", "Descripción", "Cantidad Actual"]
 
     libro, hoja = crear_libro("Pantallas")
     escribir_cabecera(hoja, cabeceras)

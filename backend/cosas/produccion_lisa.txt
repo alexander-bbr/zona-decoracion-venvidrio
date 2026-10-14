@@ -1,4 +1,0 @@
-#registro de produccion lisa, y registrar un nuevo modelo
-#mostrar el inventario con los modelos activos
-#salida de produccion lisa, se llama a la tabla de inventario para l select motrar los modelos y la cantidad
-#historial salida/entrada 

@@ -33,6 +33,7 @@ type FormData = {
   correo: string;
   rol: string;
   activoUsuario: boolean;
+  contrasena: string;
   idsPermisos: number[];
 };
 
@@ -61,6 +62,7 @@ const CargarUsuario = ({ idUsuario }: { idUsuario: string }) => {
     correo: "",
     rol: "",
     activoUsuario: true,
+    contrasena: "",
     idsPermisos: [],
   });
   const [catalogoPermisos, setCatalogoPermisos] = useState<PermisoCatalogo[]>(
@@ -70,6 +72,7 @@ const CargarUsuario = ({ idUsuario }: { idUsuario: string }) => {
   const [cargandoPermisos, setCargandoPermisos] = useState(true);
   const [error, setError] = useState("");
   const [guardando, setGuardando] = useState(false);
+  const [mostrarPassword, setMostrarPassword] = useState(false);
 
   // Cargar catálogo de permisos
   useEffect(() => {
@@ -120,6 +123,7 @@ const CargarUsuario = ({ idUsuario }: { idUsuario: string }) => {
           correo: usuarioDetail.usuario.correo,
           rol: usuarioDetail.usuario.rol,
           activoUsuario: usuarioDetail.usuario.activo_usuario,
+          contrasena: "", // La contraseña se deja vacía para que sea opcional
           idsPermisos: usuarioDetail.permisos.map((p) => p.id_permisom),
         });
       } catch (loadError) {
@@ -257,21 +261,34 @@ const CargarUsuario = ({ idUsuario }: { idUsuario: string }) => {
       return;
     }
 
+    // Validación de contraseña (opcional en edición, pero si se ingresa debe tener mínimo 8)
+    if (formData.contrasena && formData.contrasena.length < 8) {
+      setError("La contraseña debe tener al menos 8 caracteres.");
+      setGuardando(false);
+      return;
+    }
+
     try {
+      // Construir el payload: contrasena como null si está vacía
+      const payload = {
+        cedula: formData.cedula,
+        carnetUsuario: formData.carnetUsuario,
+        nombres: formData.nombres,
+        apellidos: formData.apellidos,
+        telefono: formData.telefono,
+        correo: formData.correo,
+        rol: formData.rol.toLowerCase(),
+        activoUsuario: formData.activoUsuario,
+        idsPermisos: formData.idsPermisos,
+        // Si el campo está vacío, enviamos null. Si tiene valor, enviamos la contraseña.
+        contrasena:
+          formData.contrasena.trim() === "" ? null : formData.contrasena,
+      };
+
       const response = await fetch(`${API_USUARIOS}/${idUsuario}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          cedula: formData.cedula,
-          carnetUsuario: formData.carnetUsuario,
-          nombres: formData.nombres,
-          apellidos: formData.apellidos,
-          telefono: formData.telefono,
-          correo: formData.correo,
-          rol: formData.rol.toLowerCase(),
-          activoUsuario: formData.activoUsuario,
-          idsPermisos: formData.idsPermisos,
-        }),
+        body: JSON.stringify(payload),
       });
 
       const data = await response.json();
@@ -280,6 +297,7 @@ const CargarUsuario = ({ idUsuario }: { idUsuario: string }) => {
         throw new Error(data.detail || "Error al actualizar usuario.");
       }
 
+      alert("¡Usuario editado exitosamente!");
       navigate("/gestion-usuarios");
     } catch (submitError) {
       setError(
@@ -308,6 +326,7 @@ const CargarUsuario = ({ idUsuario }: { idUsuario: string }) => {
             correo: usuarioDetail.usuario.correo,
             rol: usuarioDetail.usuario.rol,
             activoUsuario: usuarioDetail.usuario.activo_usuario,
+            contrasena: "",
             idsPermisos: usuarioDetail.permisos.map((p) => p.id_permisom),
           });
         }
@@ -452,6 +471,37 @@ const CargarUsuario = ({ idUsuario }: { idUsuario: string }) => {
                 {formData.activoUsuario ? "Activo" : "Inactivo"}
               </label>
             </div>
+          </div>
+        </fieldset>
+
+        <fieldset className={styles.fieldset}>
+          <legend className={styles.legend}>Seguridad</legend>
+          <div className={styles.inputWrapper}>
+            <label htmlFor="contrasena">
+              Nueva Contraseña{" "}
+              <small className={styles.optionalHint}>(opcional)</small>
+            </label>
+            <div className={styles.passwordWrapper}>
+              <input
+                id="contrasena"
+                name="contrasena"
+                type={mostrarPassword ? "text" : "password"}
+                value={formData.contrasena}
+                onChange={handleChange}
+                minLength={8}
+              />
+              <button
+                type="button"
+                onClick={() => setMostrarPassword(!mostrarPassword)}
+                className={styles.togglePassword}
+              >
+                {mostrarPassword ? "Ocultar" : "Mostrar"}
+              </button>
+            </div>
+            <small className={styles.advice}>
+              Déjalo vacío si no deseas cambiar la contraseña. Mínimo 8
+              caracteres si se ingresa.
+            </small>
           </div>
         </fieldset>
 

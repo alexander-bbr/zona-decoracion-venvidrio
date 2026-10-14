@@ -1,6 +1,3 @@
-# El main.py es el cerebro ejecutable de todo el sistema
-
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -75,8 +72,3 @@ app.include_router(justificantes_router)
 
 # Registramos las rutas del módulo de exportación
 app.include_router(exportacion_router)
-
-# Ruta base de prueba
-@app.get("/")
-def ruta_raiz():
-    return {"mensaje": "¡El servidor de la Zona de Decoración está funcionando correctamente!"}

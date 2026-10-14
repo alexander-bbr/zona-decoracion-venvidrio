@@ -55,7 +55,7 @@ def registrar_salida(db: Session, datos):
 
 
 def obtener_lista_pantallas(db: Session):
-    pantallas = db.query(Pantalla).filter(Pantalla.estado == True).order_by(Pantalla.id_pantalla.asc()).all()
+    pantallas = db.query(Pantalla).filter(Pantalla.estado == True).order_by(Pantalla.tipo.asc(), Pantalla.nombre.asc()).all()
 
     return [
         {

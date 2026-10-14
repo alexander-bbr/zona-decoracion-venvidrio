@@ -11,25 +11,12 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned ;
 
 
 2. INSTALACION DE LIBRERIAS DEL BACKEND (PYTHON)
-Instalar herramientas de Base de Datos y lectura de archivo .env:
-pip install sqlalchemy pymysql python-dotenv
-
-Instalar herramientas del Servidor API y validaciones de datos:
-pip install fastapi pydantic uvicorn
-
-# Instalar argon2-cffi (passlib lo detecta automáticamente como motor)
-pip install passlib argon2-cffi
-
-libreria JWT y multipart(para procesar formulario de inicio de sesión de OAuth2/Swagge)
-pip install python-jose[cryptography]
-pip install python-multipart
-
-Exportar la lista de librerías instaladas a un archivo de texto (opcional para compartir):
 pip install -r requirements.txt
 
+para actualizar el archivo requirements.txt:
 pip freeze > requirements.txt
 
-3. COMANDOS DE VERIFICACION Y EJECUCION DEL BACKEND
+3. COMANDOS DE EJECUCION DEL BACKEND
 Encender el servidor backend de FastAPI con auto-recarga automática:
 uvicorn backend.main:app --reload
 o
@@ -41,16 +28,14 @@ python -m uvicorn backend.main:app --reload
 Instalar los módulos de JavaScript (se hace una sola vez para generar la carpeta node_modules):
 npm install
 
-COMANDO PARA USAR UNA VERSION NPM COMPATIBLE
-npm install vite@5 @vitejs/plugin-react@4 --save-dev
-
 Encender el servidor de desarrollo del Frontend (Vite):
 npm run dev
+
+COMANDO PARA USAR UNA VERSION NPM COMPATIBLE EN CASO DE NO CORRER "npm run dev"
+npm install vite@5 @vitejs/plugin-react@4 --save-dev
 
 ---
 ## RESUMEN DE USO DIARIO:
 Terminal 1 (Backend): Activar entorno virtual -> uvicorn backend.main:app --reload
 Terminal 2 (Frontend): npm run dev
 
-Verificar la conexión limpia a MySQL (XAMPP):
-python backend/database/conexion.py

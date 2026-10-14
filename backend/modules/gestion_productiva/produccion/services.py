@@ -9,6 +9,7 @@ from .models import (
     ProduccionJustificante,
     Molde
 )
+from backend.modules.rendimiento.models import MetaRendimiento
 from backend.utils.notificaciones.alertas import verificar_deficiencia_produccion
 from backend.modules.gestion_productiva.gestion_justificantes.models import Justificante
 from sqlalchemy.exc import IntegrityError
@@ -197,6 +198,16 @@ def crear_registro_produccion(db: Session, datos):
         db.commit()
         db.refresh(nueva_cabecera)
 
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(
+            status_code=400,
+            detail="Error: Ya existe un registro duplicado o un justificante repetido para este molde."
+        )
+
+    # NOTIFICACIÓN DE DEFICIENCIA
+    meta_activa = db.query(MetaRendimiento).filter(MetaRendimiento.estado == True).first()
+    if meta_activa and float(datos.resultado.deficiencia_productiva) >= float(meta_activa.deficiencia):
         justificantes_notif = []
         for item in datos.justificantes:
             etiquetas = []
@@ -206,37 +217,27 @@ def crear_registro_produccion(db: Session, datos):
                     etiquetas.append(f"{justificante.etiqueta} - {justificante.descripcion}")
             molde = db.query(Molde).filter(Molde.id_molde == item.modelo_molde).first()
             nombre_molde = f"{molde.nombre} - {molde.descripcion}" if molde else str(item.modelo_molde)
-
-            justificantes_notif.append({
-                "molde": nombre_molde,
-                "justificaciones": etiquetas
-            })
-
+            justificantes_notif.append({"molde": nombre_molde, "justificaciones": etiquetas})
 
         verificar_deficiencia_produccion(
-            id_cabecera  = nueva_cabecera.id_cabecera,
-            fecha        = str(datos.fecha),
-            turno        = datos.turno,
-            grupo        = datos.grupo,
-            tecnico      = datos.tecnico,
-            deficiencia  = float(datos.resultado.deficiencia_productiva),
-            total_gruesas = float(datos.total_gruesas),
-            justificantes = justificantes_notif
+            id_cabecera      = nueva_cabecera.id_cabecera,
+            fecha            = str(datos.fecha),
+            turno            = datos.turno,
+            grupo            = datos.grupo,
+            tecnico          = datos.tecnico,
+            deficiencia      = float(datos.resultado.deficiencia_productiva),
+            total_gruesas    = float(datos.total_gruesas),
+            justificantes    = justificantes_notif,
+            meta_deficiencia = float(meta_activa.deficiencia),
+            meta_periodo     = f"{meta_activa.mes.capitalize()} {meta_activa.anio}"
         )
 
+    return {
+        "status": "Registro insertado con éxito",
+        "id": nueva_cabecera.id_cabecera
+    }
 
-        #devolver solo el status y el ID
-        return {
-            "status": "Registro insertado con éxito",
-            "id": nueva_cabecera.id_cabecera
-        }
 
-    except IntegrityError as e:
-        db.rollback()
-        raise HTTPException(
-            status_code=400,
-            detail="Error: Ya existe un registro duplicado o un justificante repetido para este molde."
-        )
 
 
 
@@ -347,6 +348,16 @@ def actualizar_registro_produccion(db: Session, id_cabecera: int, datos):
 
         db.commit()
 
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(
+            status_code=400,
+            detail="Error: Ya existe un registro duplicado o un justificante repetido para este molde."
+        )
+
+    # NOTIFICACIÓN DE DEFICIENCIA
+    meta_activa = db.query(MetaRendimiento).filter(MetaRendimiento.estado == True).first()
+    if meta_activa and float(datos.resultado.deficiencia_productiva) >= float(meta_activa.deficiencia):
         justificantes_notif = []
         for item in datos.justificantes:
             etiquetas = []
@@ -356,31 +367,22 @@ def actualizar_registro_produccion(db: Session, id_cabecera: int, datos):
                     etiquetas.append(f"{justificante.etiqueta} - {justificante.descripcion}")
             molde = db.query(Molde).filter(Molde.id_molde == item.modelo_molde).first()
             nombre_molde = f"{molde.nombre} - {molde.descripcion}" if molde else str(item.modelo_molde)
-
-            justificantes_notif.append({
-                "molde": nombre_molde,
-                "justificaciones": etiquetas
-            })
+            justificantes_notif.append({"molde": nombre_molde, "justificaciones": etiquetas})
 
         verificar_deficiencia_produccion(
-            id_cabecera  = id_cabecera,
-            fecha        = str(datos.fecha),
-            turno        = datos.turno,
-            grupo        = datos.grupo,
-            tecnico      = datos.tecnico,
-            deficiencia  = float(datos.resultado.deficiencia_productiva),
-            total_gruesas = float(datos.total_gruesas),
-            justificantes = justificantes_notif
+            id_cabecera      = id_cabecera,
+            fecha            = str(datos.fecha),
+            turno            = datos.turno,
+            grupo            = datos.grupo,
+            tecnico          = datos.tecnico,
+            deficiencia      = float(datos.resultado.deficiencia_productiva),
+            total_gruesas    = float(datos.total_gruesas),
+            justificantes    = justificantes_notif,
+            meta_deficiencia = float(meta_activa.deficiencia),
+            meta_periodo     = f"{meta_activa.mes.capitalize()} {meta_activa.anio}"
         )
 
-        return {
-            "status": "Registro actualizado con éxito",
-            "id": id_cabecera
-        }
-
-    except IntegrityError as e:
-        db.rollback()
-        raise HTTPException(
-            status_code=400,
-            detail="Error: No se pudo actualizar el registro debido a un conflicto de datos o restricciones en la base de datos."
-        )
+    return {
+        "status": "Registro actualizado con éxito",
+        "id": id_cabecera
+    }

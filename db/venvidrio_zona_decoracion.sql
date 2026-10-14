@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 13-10-2026 a las 03:17:15
+-- Tiempo de generación: 14-10-2026 a las 05:58:17
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -78,7 +78,8 @@ INSERT INTO `gestion_productiva_cabecera` (`id_cabecera`, `fecha`, `turno`, `tec
 (318, '2026-09-27', 1, 'Jose Faria', 200000, 0, 0, 0, 200000, 1388.89, 'A', '2 Turnos'),
 (319, '2026-09-28', 2, 'Jose Faria', 98000, 0, 0, 0, 98000, 680.56, 'A', '2 Turnos'),
 (320, '2026-09-29', 2, 'Miguel Bethancourt', 225000, 0, 0, 0, 225000, 1562.50, 'B', '3 Turnos'),
-(321, '2026-09-30', 1, 'Daniel Pérez', 100000, 0, 0, 0, 100000, 694.44, 'A', '2 Turnos');
+(321, '2026-09-30', 1, 'Daniel Pérez', 100000, 0, 0, 0, 100000, 694.44, 'A', '2 Turnos'),
+(322, '2026-10-13', 1, 'Daniel Pérez', 2, 0, 0, 0, 2, 0.01, 'A', '2 Turnos');
 
 -- --------------------------------------------------------
 
@@ -148,7 +149,8 @@ INSERT INTO `gestion_productiva_entrada` (`id_entrada`, `id_cabecera`, `maquina`
 (410, 319, 1, 5, 98000, '00:00'),
 (411, 320, 1, 4, 75000, '10:57'),
 (412, 320, 1, 5, 150000, '22:57'),
-(413, 321, 1, 6, 100000, '22:59');
+(419, 321, 1, 6, 100000, '22:59'),
+(420, 322, 1, 6, 2, '00:00');
 
 -- --------------------------------------------------------
 
@@ -204,7 +206,8 @@ INSERT INTO `gestion_productiva_resultado` (`id_resultado`, `id_cabecera`, `tota
 (315, 318, 0.00, 0, 1357.64, 195500, 4500, 31.25, 97.75, 2.25, ''),
 (316, 319, 367.89, 52976, 656.94, 94600, 3400, 23.61, 96.53, 3.47, ''),
 (317, 320, 394.17, 56760, 1445.28, 208120, 16880, 117.22, 92.50, 7.50, ''),
-(318, 321, 122.22, 17600, 611.11, 88000, 12000, 83.33, 88.00, 12.00, '');
+(318, 321, 122.22, 17600, 48.89, 7040, 92960, 645.56, 7.04, 92.96, ''),
+(319, 322, 0.00, 0, 122.22, 17600, 0, 0.00, 100.00, 0.00, '');
 
 -- --------------------------------------------------------
 
@@ -268,7 +271,8 @@ INSERT INTO `gestion_productiva_salida` (`id_eficiencia`, `modelo_molde`, `id_ca
 (752, 5, 319, 39, 14, 112, 52976, 367.89, 25, 200, 94600, 656.94),
 (753, 4, 320, 20, 2, 16, 7568, 52.56, 18, 144, 68112, 473.00),
 (754, 5, 320, 50, 13, 104, 49192, 341.61, 37, 296, 140008, 972.28),
-(755, 6, 321, 30, 5, 40, 17600, 122.22, 25, 200, 88000, 611.11);
+(761, 6, 321, 7, 5, 40, 17600, 122.22, 2, 16, 7040, 48.89),
+(762, 6, 322, 5, 0, 0, 0, 0.00, 5, 40, 17600, 122.22);
 
 -- --------------------------------------------------------
 
@@ -301,15 +305,15 @@ INSERT INTO `inventario_insumos` (`id_insumo`, `tipo`, `articulo`, `unidad`, `ca
 (8, 'Malla', 'Malla 180', 'Rollo', 100.00, 50.00, 1),
 (9, 'Malla', 'Malla 160', 'Rollo', 100.00, 50.00, 1),
 (10, 'Malla', 'Malla 325', 'Rollo', 100.00, 50.00, 1),
-(11, 'Goma', 'Goma - Decoracion', 'Und', 100.00, 50.00, 1),
-(12, 'Emulsion', 'Emulsion Foteco', 'Unidad (4Kg)', 100.00, 50.00, 1),
-(13, 'Emulsion', 'Emulsion Ferro', 'Unidad (10Kg)', 100.00, 50.00, 1),
+(11, 'Goma', 'Goma - Decoracion', 'N/A', 100.00, 50.00, 1),
+(12, 'Emulsion', 'Emulsion Foteco', '(4Kg)', 100.00, 50.00, 1),
+(13, 'Emulsion', 'Emulsion Ferro', '(10Kg)', 100.00, 50.00, 1),
 (14, 'Lecitina', 'Lecitina de Soya', 'Pipa', 100.00, 50.00, 1),
 (15, 'Pega', 'Pega Hercules (Amarilla)', 'Galon', 100.00, 50.00, 1),
-(16, 'Tirro', 'Tirro 1\"', 'Unidad', 100.00, 50.00, 1),
-(17, 'Tirro', 'Tirro 2\"', 'Unidad', 100.00, 50.00, 1),
-(18, 'cinta', 'Cinta Plástica de 2\"', 'Unidad', 100.00, 50.00, 1),
-(19, 'Dicromato', 'Dicromato de Potacio', 'Unidad', 100.00, 50.00, 1),
+(16, 'Tirro', 'Tirro 1\"', 'N/A', 100.00, 50.00, 1),
+(17, 'Tirro', 'Tirro 2\"', 'N/A', 100.00, 50.00, 1),
+(18, 'cinta', 'Cinta Plástica de 2\"', 'N/A', 100.00, 50.00, 1),
+(19, 'Dicromato', 'Dicromato de Potacio', 'N/A', 100.00, 50.00, 1),
 (20, 'Fleje', 'Fleje 1718', 'Rollo', 100.00, 50.00, 1),
 (21, 'Stretch', 'Stretch-23-micras', 'Kilogramo', 100.00, 50.00, 1),
 (22, 'Cap-Sheet', 'Cap-Sheet', 'Kilogramo', 100.00, 50.00, 1),
@@ -390,11 +394,11 @@ CREATE TABLE `inventario_pantallas` (
 --
 
 INSERT INTO `inventario_pantallas` (`id_pantalla`, `nombre`, `descripcion`, `tipo`, `cantidad_actual`, `estado`) VALUES
-(6, 'Pantalla Polar Light', 'Diseño para decoración de botella Polar Light', 'Malla 120T', 78, 1),
-(7, 'Pantalla Polarcita 222 ML', 'Diseño para decoración de botella Polarcita 222 ML', 'Malla 120T', 26, 1),
-(8, 'Pantalla Golden 350 ML', 'Diseño para decoración de botella Golden 350 ML', 'Malla 150T', 60, 1),
-(9, 'Pantalla Pepsi 350 ML', 'Diseño para decoración de botella Pepsi 350 ML', 'Malla 150T', 7, 1),
-(10, 'Pantalla Cerveza 330 RET', 'Diseño para decoración de botella Cerveza 330 RET', 'Malla 90T', 5, 1);
+(6, 'Pantalla Polar Light', 'Diseño para decoración de botella Polar Light', 'Malla 120T', 0, 1),
+(7, 'Pantalla Polarcita 222 ML', 'Diseño para decoración de botella Polarcita 222 ML', 'Malla 120T', 0, 1),
+(8, 'Pantalla Golden 350 ML', 'Diseño para decoración de botella Golden 350 ML', 'Malla 150T', 0, 1),
+(9, 'Pantalla Pepsi 350 ML', 'Diseño para decoración de botella Pepsi 350 ML', 'Malla 150T', 0, 1),
+(10, 'Pantalla Cerveza 330 RET', 'Diseño para decoración de botella Cerveza 330 RET', 'Malla 90T', 0, 1);
 
 -- --------------------------------------------------------
 
@@ -497,8 +501,8 @@ INSERT INTO `metas_rendimiento` (`id_meta`, `anio`, `mes`, `deficiencia`, `estad
 (6, 2026, 'junio', 85.00, 0),
 (7, 2026, 'julio', 89.00, 0),
 (8, 2026, 'agosto', 93.00, 0),
-(9, 2026, 'diciembre', 91.00, 0),
-(10, 2026, 'octubre', 98.00, 1);
+(9, 2026, 'diciembre', 91.00, 1),
+(10, 2026, 'octubre', 5.00, 0);
 
 -- --------------------------------------------------------
 
@@ -579,24 +583,24 @@ CREATE TABLE `permisos_usuarios` (
 --
 
 INSERT INTO `permisos_usuarios` (`id_permisou`, `id_usuario`, `id_permisom`) VALUES
-(366, 13, 5),
-(367, 13, 6),
-(368, 13, 4),
-(369, 13, 1),
-(370, 13, 2),
-(371, 13, 3),
-(372, 13, 29),
-(373, 13, 7),
-(374, 13, 11),
-(375, 13, 12),
-(376, 13, 13),
-(377, 13, 14),
-(378, 13, 28),
-(379, 13, 34),
-(380, 13, 33),
-(381, 13, 32),
-(382, 13, 31),
-(383, 13, 30);
+(402, 13, 5),
+(403, 13, 6),
+(404, 13, 4),
+(405, 13, 1),
+(406, 13, 2),
+(407, 13, 3),
+(408, 13, 29),
+(409, 13, 7),
+(410, 13, 11),
+(411, 13, 12),
+(412, 13, 13),
+(413, 13, 14),
+(414, 13, 28),
+(415, 13, 34),
+(416, 13, 33),
+(417, 13, 32),
+(418, 13, 31),
+(419, 13, 30);
 
 -- --------------------------------------------------------
 
@@ -660,7 +664,7 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id_usuario`, `cedula`, `carnet_usuario`, `contrasena`, `nombres`, `apellidos`, `telefono`, `correo`, `rol`, `activo_usuario`, `creado_en`) VALUES
-(13, '30670857', '111', '$argon2id$v=19$m=65536,t=3,p=4$I75+GpsINIENlVdAILewdQ$NDL/xQgGzRsBPUx9aQmNxPttrjKan56br5pQleN38CQ', 'Daniel', 'Perez', '04167383181', 'd30670857@gmail.com', 'administrador', 1, '2026-10-11 19:30:27');
+(13, '30670857', '111', '$argon2id$v=19$m=65536,t=3,p=4$K11V5SRJv/wH0jCpKA7GiQ$6kW0sndZAMDQB4Tj0DomXTlmOOm4Tf/yu1gBvHLeQ9k', 'Daniel', 'Perez', '04167383181', 'd30670857@gmail.com', 'administrador', 1, '2026-10-11 19:30:27');
 
 --
 -- Índices para tablas volcadas
@@ -793,25 +797,25 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `gestion_productiva_cabecera`
 --
 ALTER TABLE `gestion_productiva_cabecera`
-  MODIFY `id_cabecera` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=322;
+  MODIFY `id_cabecera` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=323;
 
 --
 -- AUTO_INCREMENT de la tabla `gestion_productiva_entrada`
 --
 ALTER TABLE `gestion_productiva_entrada`
-  MODIFY `id_entrada` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=414;
+  MODIFY `id_entrada` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=421;
 
 --
 -- AUTO_INCREMENT de la tabla `gestion_productiva_resultado`
 --
 ALTER TABLE `gestion_productiva_resultado`
-  MODIFY `id_resultado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=319;
+  MODIFY `id_resultado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=320;
 
 --
 -- AUTO_INCREMENT de la tabla `gestion_productiva_salida`
 --
 ALTER TABLE `gestion_productiva_salida`
-  MODIFY `id_eficiencia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=756;
+  MODIFY `id_eficiencia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=763;
 
 --
 -- AUTO_INCREMENT de la tabla `inventario_insumos`
@@ -877,7 +881,7 @@ ALTER TABLE `permisos_modulos`
 -- AUTO_INCREMENT de la tabla `permisos_usuarios`
 --
 ALTER TABLE `permisos_usuarios`
-  MODIFY `id_permisou` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=384;
+  MODIFY `id_permisou` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=420;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`

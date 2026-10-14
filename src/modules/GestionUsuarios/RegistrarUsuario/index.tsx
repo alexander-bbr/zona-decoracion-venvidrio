@@ -211,6 +211,7 @@ export const RegistrarUsuario = () => {
         throw new Error(data.detail || "Error al registrar usuario.");
       }
 
+      alert("¡Usuario registrado exitosamente!");
       navigate("/gestion-usuarios");
     } catch (submitError) {
       setError(

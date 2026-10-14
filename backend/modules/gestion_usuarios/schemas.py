@@ -31,6 +31,7 @@ class UsuarioCrear(BaseModel):
 class UsuarioEditar(BaseModel):
     cedula: str = Field(alias="cedula")
     carnet_usuario: str = Field(alias="carnetUsuario")
+    contrasena: Optional[str] = Field(default=None, alias="contrasena")
     nombres: str = Field(alias="nombres")
     apellidos: str = Field(alias="apellidos")
     telefono: Optional[str] = Field(default=None, alias="telefono")

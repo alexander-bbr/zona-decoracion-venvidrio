@@ -57,7 +57,7 @@ def obtener_perdidos(
     return services.obtener_perdidos_por_fecha(db, desde, hasta)
 
 
-# 9. PANTALLAS FABRICADAS Y CONSUMIDAS POR FECHA
+# 4. PANTALLAS FABRICADAS Y CONSUMIDAS POR FECHA
 @router.get("/pantallas")
 def obtener_pantallas(
     desde: date,
@@ -71,7 +71,7 @@ def obtener_pantallas(
     return services.obtener_pantallas_por_fecha(db, desde, hasta)
 
 
-# 4. EFICIENCIA Y DEFICIENCIA POR FECHA
+# 5. EFICIENCIA Y DEFICIENCIA POR FECHA
 @router.get("/eficiencia-deficiencia")
 def obtener_eficiencia_deficiencia(
     desde: date,
@@ -81,7 +81,7 @@ def obtener_eficiencia_deficiencia(
 ):
     return services.obtener_eficiencia_deficiencia_por_fecha(db, desde, hasta)
 
-# 5. LISTAR METAS
+# 6. LISTAR METAS
 @router.get("/metas", response_model=List[schemas.MetaResponde])
 def listar_metas(
     db: Session = Depends(get_db),
@@ -96,7 +96,7 @@ def listar_metas(
         )
 
 
-# 6. AGREGAR META
+# 7. AGREGAR META
 @router.post("/metas", status_code=status.HTTP_201_CREATED)
 def registrar_meta(
     datos: schemas.MetaCrear,
@@ -106,7 +106,7 @@ def registrar_meta(
     return {"status": "Meta registrada con éxito", "id": meta.id_meta}
 
 
-# 7. VER META POR ID (para editar)
+# 8. VER META POR ID (para editar)
 @router.get("/{id_meta}", response_model=schemas.MetaResponde)
 def obtener_meta(
     id_meta: int,
@@ -122,7 +122,7 @@ def obtener_meta(
     return meta
 
 
-# 8. EDITAR META
+# 9. EDITAR META
 @router.put("/{id_meta}")
 def editar_meta(
     id_meta: int,

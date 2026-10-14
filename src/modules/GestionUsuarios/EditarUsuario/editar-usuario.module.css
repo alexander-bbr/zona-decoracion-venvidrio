@@ -60,6 +60,13 @@
   color: #e74c3c;
 }
 
+.optionalHint {
+  color: #6c757d;
+  font-weight: 400;
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
 .inputWrapper input,
 .inputWrapper select,
 .inputWrapper textarea {
@@ -110,6 +117,37 @@
   font-weight: 500 !important;
   color: #333 !important;
   cursor: pointer;
+}
+
+/* Password */
+.passwordWrapper {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.passwordWrapper input {
+  flex: 1;
+}
+
+.togglePassword {
+  padding: 0 1rem;
+  background: #e0e0e0;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #333;
+  transition: background 0.3s ease;
+  white-space: nowrap;
+}
+
+.togglePassword:hover {
+  background: #d0d0d0;
+}
+
+.advice {
+  color: #6c757d;
+  font-size: 0.85rem;
 }
 
 .loading {

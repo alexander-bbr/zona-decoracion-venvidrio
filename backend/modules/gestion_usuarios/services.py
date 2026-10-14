@@ -48,10 +48,14 @@ def editar_usuario_completo(db: Session, id_usuario: int, datos: UsuarioEditar):
         return {"status": "error", "message": "Usuario no encontrado"}
 
     try:
-        # Actualizamos la información personal (incluye el estado activo/inactivo)
-        datos_dict = datos.dict(by_alias=False, exclude={"ids_permisos"})
+        # Excluimos ids_permisos Y contrasena del dict general
+        datos_dict = datos.dict(by_alias=False, exclude={"ids_permisos", "contrasena"})
         for campo, valor in datos_dict.items():
             setattr(usuario, campo, valor)
+
+        # Solo actualizamos la contraseña si vino en el request
+        if datos.contrasena is not None:
+            usuario.contrasena = hashear_contrasena(datos.contrasena)
 
         # Eliminamos los permisos anteriores del usuario
         db.query(PermisoUsuario).filter(PermisoUsuario.id_usuario == id_usuario).delete()
@@ -69,12 +73,12 @@ def editar_usuario_completo(db: Session, id_usuario: int, datos: UsuarioEditar):
 
 
 # 3. Obtener usuario para editar (trae sus datos + sus permisos actuales)
+# 3. Obtener usuario para editar (trae sus datos + sus permisos actuales)
 def obtener_usuario_completo(db: Session, id_usuario: int):
     usuario = db.query(Usuario).filter(Usuario.id_usuario == id_usuario).first()
     if not usuario:
         return {"status": "error", "message": "Usuario no encontrado"}
     
-    # Hacemos la consulta para traer el detalle de los permisos que tiene asignados
     permisos = (
         db.query(PermisoModulo)
         .join(PermisoUsuario, PermisoUsuario.id_permisom == PermisoModulo.id_permisom)
@@ -84,10 +88,19 @@ def obtener_usuario_completo(db: Session, id_usuario: int):
 
     return {
         "status": "success",
-        "usuario": usuario,
+        "usuario": {
+            "id_usuario":     usuario.id_usuario,
+            "cedula":         usuario.cedula,
+            "carnet_usuario": usuario.carnet_usuario,
+            "nombres":        usuario.nombres,
+            "apellidos":      usuario.apellidos,
+            "telefono":       usuario.telefono,
+            "correo":         usuario.correo,
+            "rol":            usuario.rol,
+            "activo_usuario": usuario.activo_usuario
+        },
         "permisos": permisos
     }
-
 
 # 4. Listar todos los usuarios
 def listar_usuarios(db: Session):

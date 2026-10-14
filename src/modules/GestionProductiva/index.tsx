@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, NavLink, useLocation, Outlet } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
 import styles from "./gestion-productiva.module.css";
 
 type RegistroProduccionLista = {
@@ -21,6 +22,7 @@ const API_EXPORTAR_PRODUCCION =
 export const GestionProductiva = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { hasPermission } = useAuth();
   const [pagina, setPagina] = useState(1);
   const [registros, setRegistros] = useState<RegistroProduccionLista[]>([]);
   const [totalRegistros, setTotalRegistros] = useState(0);
@@ -33,6 +35,13 @@ export const GestionProductiva = () => {
   const [fechaHasta, setFechaHasta] = useState("");
   const [descargando, setDescargando] = useState(false);
   const [errorDescarga, setErrorDescarga] = useState("");
+
+  // Verificar permisos
+  const puedeRegistrar = hasPermission(
+    "gestion_productiva",
+    "registrar_produccion",
+  );
+  const puedeEditar = hasPermission("gestion_productiva", "editar");
 
   const registrosPorPagina = 50;
   const inicio = (pagina - 1) * registrosPorPagina;
@@ -106,7 +115,6 @@ export const GestionProductiva = () => {
 
   // === LÓGICA DE EXPORTACIÓN ===
   const abrirModalExportar = () => {
-    // Establecer valores por defecto: hoy y hoy
     const hoy = new Date().toISOString().split("T")[0];
     setFechaDesde(hoy);
     setFechaHasta(hoy);
@@ -120,7 +128,6 @@ export const GestionProductiva = () => {
   };
 
   const handleDescargarExcel = async () => {
-    // Validaciones
     if (!fechaDesde || !fechaHasta) {
       setErrorDescarga("Debes seleccionar ambas fechas.");
       return;
@@ -147,7 +154,6 @@ export const GestionProductiva = () => {
       });
 
       if (!response.ok) {
-        // Intentar leer el error como JSON
         let mensajeError = `Error al generar el Excel: ${response.status}`;
         try {
           const data = await response.json();
@@ -158,12 +164,11 @@ export const GestionProductiva = () => {
                 : JSON.stringify(data.detail);
           }
         } catch {
-          // La respuesta no era JSON, dejamos el mensaje genérico
+          // La respuesta no era JSON
         }
         throw new Error(mensajeError);
       }
 
-      // Obtener el nombre del archivo desde Content-Disposition (si existe)
       const contentDisposition = response.headers.get("Content-Disposition");
       let nombreArchivo = "Historial de Producción.xlsx";
       if (contentDisposition) {
@@ -173,7 +178,6 @@ export const GestionProductiva = () => {
         }
       }
 
-      // Convertir la respuesta a Blob y descargar
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement("a");
@@ -184,7 +188,6 @@ export const GestionProductiva = () => {
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
 
-      // Cerrar el modal al terminar exitosamente
       cerrarModalExportar();
     } catch (downloadError) {
       setErrorDescarga(
@@ -197,9 +200,25 @@ export const GestionProductiva = () => {
     }
   };
 
+  // === HANDLERS CON VERIFICACIÓN DE PERMISOS ===
+  const handleRegistrarClick = () => {
+    if (!puedeRegistrar) {
+      alert("No tienes permiso para registrar producción");
+      return;
+    }
+    navigate("registrar-produccion");
+  };
+
+  const handleEditarClick = (id: number) => {
+    if (!puedeEditar) {
+      alert("No tienes permiso para editar registros de producción");
+      return;
+    }
+    navigate(`editar-produccion/${id}`);
+  };
+
   const isRoot = location.pathname === "/gestion-productiva";
 
-  /* Obtener el título para cada acción */
   const getTitle = () => {
     const path = location.pathname;
 
@@ -246,12 +265,14 @@ export const GestionProductiva = () => {
               >
                 ↓ Descargar
               </button>
-              <button
-                className={styles.registerButton}
-                onClick={() => navigate("registrar-produccion")}
-              >
-                + Registrar Producción
-              </button>
+              {puedeRegistrar && (
+                <button
+                  className={styles.registerButton}
+                  onClick={handleRegistrarClick}
+                >
+                  + Registrar Producción
+                </button>
+              )}
             </div>
           </section>
 
@@ -277,9 +298,11 @@ export const GestionProductiva = () => {
                   {registrosPagina.map((registro) => (
                     <tr
                       key={registro.idCabecera}
-                      onClick={() =>
-                        navigate(`editar-produccion/${registro.idCabecera}`)
-                      }
+                      onClick={() => handleEditarClick(registro.idCabecera)}
+                      style={{
+                        cursor: puedeEditar ? "pointer" : "default",
+                        opacity: puedeEditar ? 1 : 0.8,
+                      }}
                     >
                       <td>
                         <strong>{registro.idCabecera}</strong>

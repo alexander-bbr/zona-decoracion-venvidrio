@@ -36,6 +36,9 @@ type MaquinaProduccion = {
   entradas: EntradaMaquina[];
 };
 
+// Etiquetas personalizadas para cada máquina
+const ETIQUETAS_MAQUINAS = ["D3", "D4", "D11", "D12"];
+
 const formatNumber = (value: number) =>
   value.toLocaleString("es-VE", { maximumFractionDigits: 2 });
 
@@ -63,6 +66,15 @@ export const RegistrarProduccion = () => {
   const [observaciones, setObservaciones] = useState("");
   const [error, setError] = useState("");
   const [guardando, setGuardando] = useState(false);
+
+  // Fecha máxima permitida: hoy (en hora local, no UTC)
+  const hoy = (() => {
+    const d = new Date();
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  })();
 
   useEffect(() => {
     const cargarMoldes = async () => {
@@ -562,6 +574,7 @@ export const RegistrarProduccion = () => {
               value={fecha}
               onChange={(event) => setFecha(event.target.value)}
               disabled={!tipoTurno}
+              max={hoy}
               required
             />
           </div>
@@ -589,7 +602,7 @@ export const RegistrarProduccion = () => {
           {maquinas.map((maquina, maquinaIndex) => (
             <div key={maquinaIndex} className={styles.maquinaContainer}>
               <h4 className={styles.maquinaTitle}>
-                Máquina {maquinaIndex + 1}
+                Máquina {maquinaIndex + 1} ({ETIQUETAS_MAQUINAS[maquinaIndex]})
               </h4>
               {maquina.entradas.map((entrada, entradaIndex) => (
                 <div key={entradaIndex} className={styles.entradaMaquina}>

@@ -238,6 +238,11 @@ textarea {
   color: #3563a3;
 }
 
+.modelTotal {
+  width: fit-content;
+  margin: 1.8rem auto 2rem;
+}
+
 /* Resumen */
 .summaryGrid {
   display: grid;

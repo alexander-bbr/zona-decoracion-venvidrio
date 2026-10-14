@@ -240,8 +240,8 @@ textarea {
 }
 
 .modelTotal {
-  max-width: 280px;
-  margin-top: 1.5rem;
+  width: fit-content;
+  margin: 1.8rem auto 2rem;
 }
 
 /* Resumen */

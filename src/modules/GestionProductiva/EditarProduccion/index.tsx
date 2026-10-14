@@ -89,6 +89,9 @@ type ModeloForm = {
 
 type Resumen = { camadas: number; envases: number; gruesas: number };
 
+// Etiquetas personalizadas para cada máquina
+const ETIQUETAS_MAQUINAS = ["D3", "D4", "D11", "D12"];
+
 const formatNumber = (value: number) =>
   value.toLocaleString("es-VE", { maximumFractionDigits: 2 });
 
@@ -141,6 +144,15 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
   const [cargandoMoldes, setCargandoMoldes] = useState(true);
   const [justificantes, setJustificantes] = useState<Justificante[]>([]);
   const [cargandoJustificantes, setCargandoJustificantes] = useState(true);
+
+  // Fecha máxima permitida: hoy (en hora local, no UTC)
+  const hoy = (() => {
+    const d = new Date();
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  })();
 
   // Datos de Identificación
   const tipoTurnoInicial: "2" | "3" = (() => {
@@ -750,6 +762,7 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
               type="date"
               value={fecha}
               onChange={(event) => setFecha(event.target.value)}
+              max={hoy}
               required
             />
           </div>
@@ -776,7 +789,7 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
           {maquinas.map((maquina, maquinaIndex) => (
             <div key={maquinaIndex} className={styles.maquinaContainer}>
               <h4 className={styles.maquinaTitle}>
-                Máquina {maquinaIndex + 1}
+                Máquina {maquinaIndex + 1} ({ETIQUETAS_MAQUINAS[maquinaIndex]})
               </h4>
               {maquina.entradas.map((entrada, entradaIndex) => (
                 <div key={entradaIndex} className={styles.entradaMaquina}>

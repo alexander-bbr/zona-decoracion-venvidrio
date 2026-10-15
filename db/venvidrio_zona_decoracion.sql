@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 14-10-2026 a las 13:29:18
+-- Tiempo de generación: 15-10-2026 a las 03:03:42
 -- Versión del servidor: 10.4.32-MariaDB
--- Versión de PHP: 8.2.12
+-- Versión de PHP: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -79,7 +79,7 @@ INSERT INTO `gestion_productiva_cabecera` (`id_cabecera`, `fecha`, `turno`, `tec
 (28, '2026-09-28', 2, 'Jose Faria', 98000, 0, 0, 0, 98000, 680.56, 'A', '2 Turnos'),
 (29, '2026-09-29', 2, 'Miguel Bethancourt', 225000, 0, 0, 0, 225000, 1562.50, 'B', '3 Turnos'),
 (30, '2026-09-30', 1, 'Daniel Pérez', 100000, 0, 0, 0, 100000, 694.44, 'A', '2 Turnos'),
-(31, '2026-10-13', 1, 'Daniel Pérez', 2, 0, 0, 0, 2, 0.01, 'A', '2 Turnos');
+(31, '2026-10-13', 1, 'Daniel Pérez', 100000, 0, 0, 0, 100000, 694.44, 'A', '2 Turnos');
 
 -- --------------------------------------------------------
 
@@ -150,7 +150,7 @@ INSERT INTO `gestion_productiva_entrada` (`id_entrada`, `id_cabecera`, `maquina`
 (411, 29, 1, 4, 75000, '10:57'),
 (412, 29, 1, 5, 150000, '22:57'),
 (419, 30, 1, 6, 100000, '22:59'),
-(421, 31, 1, 6, 2, '00:00');
+(422, 31, 1, 6, 100000, '00:00');
 
 -- --------------------------------------------------------
 
@@ -207,7 +207,7 @@ INSERT INTO `gestion_productiva_resultado` (`id_resultado`, `id_cabecera`, `tota
 (316, 28, 367.89, 52976, 656.94, 94600, 3400, 23.61, 96.53, 3.47, ''),
 (317, 29, 394.17, 56760, 1445.28, 208120, 16880, 117.22, 92.50, 7.50, ''),
 (318, 30, 122.22, 17600, 48.89, 7040, 92960, 645.56, 7.04, 92.96, ''),
-(319, 31, 0.00, 0, 122.22, 17600, 0, 0.00, 100.00, 0.00, '\n\n\n');
+(319, 31, 0.00, 0, 611.11, 88000, 12000, 83.33, 88.00, 12.00, '\n\n\n');
 
 -- --------------------------------------------------------
 
@@ -272,7 +272,7 @@ INSERT INTO `gestion_productiva_salida` (`id_eficiencia`, `modelo_molde`, `id_ca
 (753, 4, 29, 20, 2, 16, 7568, 52.56, 18, 144, 68112, 473.00),
 (754, 5, 29, 50, 13, 104, 49192, 341.61, 37, 296, 140008, 972.28),
 (761, 6, 30, 7, 5, 40, 17600, 122.22, 2, 16, 7040, 48.89),
-(763, 6, 31, 5, 0, 0, 0, 0.00, 5, 40, 17600, 122.22);
+(764, 6, 31, 25, 0, 0, 0, 0.00, 25, 200, 88000, 611.11);
 
 -- --------------------------------------------------------
 
@@ -501,8 +501,8 @@ INSERT INTO `metas_rendimiento` (`id_meta`, `anio`, `mes`, `deficiencia`, `estad
 (6, 2026, 'junio', 85.00, 0),
 (7, 2026, 'julio', 89.00, 0),
 (8, 2026, 'agosto', 93.00, 0),
-(9, 2026, 'diciembre', 91.00, 1),
-(10, 2026, 'octubre', 5.00, 0);
+(9, 2026, 'diciembre', 91.00, 0),
+(10, 2026, 'octubre', 5.00, 1);
 
 -- --------------------------------------------------------
 
@@ -583,24 +583,60 @@ CREATE TABLE `permisos_usuarios` (
 --
 
 INSERT INTO `permisos_usuarios` (`id_permisou`, `id_usuario`, `id_permisom`) VALUES
-(564, 13, 1),
-(565, 13, 2),
-(566, 13, 3),
-(567, 13, 4),
-(568, 13, 5),
-(569, 13, 6),
-(570, 13, 7),
-(571, 13, 8),
-(572, 13, 9),
-(573, 13, 10),
-(574, 13, 11),
-(575, 13, 12),
-(576, 13, 13),
-(577, 13, 14),
-(578, 13, 15),
-(579, 13, 16),
-(580, 13, 17),
-(581, 13, 18);
+(582, 14, 1),
+(583, 14, 2),
+(584, 14, 3),
+(585, 14, 7),
+(586, 14, 13),
+(587, 14, 4),
+(588, 14, 5),
+(589, 14, 6),
+(590, 14, 8),
+(591, 14, 9),
+(592, 14, 10),
+(593, 14, 11),
+(594, 14, 12),
+(595, 14, 17),
+(596, 14, 18),
+(597, 14, 16),
+(598, 14, 15),
+(599, 14, 14),
+(600, 13, 1),
+(601, 13, 2),
+(602, 13, 3),
+(603, 13, 4),
+(604, 13, 5),
+(605, 13, 6),
+(606, 13, 7),
+(607, 13, 8),
+(608, 13, 9),
+(609, 13, 10),
+(610, 13, 11),
+(611, 13, 12),
+(612, 13, 13),
+(613, 13, 14),
+(614, 13, 15),
+(615, 13, 16),
+(616, 13, 17),
+(617, 13, 18),
+(618, 15, 1),
+(619, 15, 2),
+(620, 15, 3),
+(621, 15, 7),
+(622, 15, 13),
+(623, 15, 4),
+(624, 15, 6),
+(625, 15, 5),
+(626, 15, 8),
+(627, 15, 9),
+(628, 15, 10),
+(629, 15, 11),
+(630, 15, 12),
+(631, 15, 18),
+(632, 15, 17),
+(633, 15, 16),
+(634, 15, 15),
+(635, 15, 14);
 
 -- --------------------------------------------------------
 
@@ -664,7 +700,9 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id_usuario`, `cedula`, `carnet_usuario`, `contrasena`, `nombres`, `apellidos`, `telefono`, `correo`, `rol`, `activo_usuario`, `creado_en`) VALUES
-(13, '30670857', '111', '$argon2id$v=19$m=65536,t=3,p=4$Q3u6fMBXG8gEHQIhfGUojg$Drm1LW+20g2J02h0dyKaQEoNoYJ8+oNb1zDS19NnQuI', 'Daniel', 'Perez', '04167383181', 'd30670857@gmail.com', 'administrador', 1, '2026-10-11 19:30:27');
+(13, '30670857', '111', '$argon2id$v=19$m=65536,t=3,p=4$Q3u6fMBXG8gEHQIhfGUojg$Drm1LW+20g2J02h0dyKaQEoNoYJ8+oNb1zDS19NnQuI', 'Daniel', 'Pérez', '0416-7383181', 'd30670857@gmail.com', 'administrador', 1, '2026-10-11 19:30:27'),
+(14, '30717851', '000', '$argon2id$v=19$m=65536,t=3,p=4$EG9VXsuX6ZmdPfjaqLKd9Q$rvtNOpbjuPPhxR48apaUOhnI6Ym2nHwHAO0RtUbyP/I', 'Miguel Alexander', 'Bethancourt Briceño', '0412-1986816', 'mbethancourt2005@gmail.com', 'administrador', 1, '2026-10-15 00:53:49'),
+(15, '30670913', '222', '$argon2id$v=19$m=65536,t=3,p=4$vrLiylImoJTZKoppqKdAyg$b92HN8kaEU/SuWdIQFUAw3urGiVsaTVVfGwjw5HR050', 'Fabio David', 'Romero Vera', '0416-3660482', 'fabioromero@gmail.com', 'administrador', 1, '2026-10-15 01:01:35');
 
 --
 -- Índices para tablas volcadas
@@ -803,7 +841,7 @@ ALTER TABLE `gestion_productiva_cabecera`
 -- AUTO_INCREMENT de la tabla `gestion_productiva_entrada`
 --
 ALTER TABLE `gestion_productiva_entrada`
-  MODIFY `id_entrada` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=422;
+  MODIFY `id_entrada` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=423;
 
 --
 -- AUTO_INCREMENT de la tabla `gestion_productiva_resultado`
@@ -815,7 +853,7 @@ ALTER TABLE `gestion_productiva_resultado`
 -- AUTO_INCREMENT de la tabla `gestion_productiva_salida`
 --
 ALTER TABLE `gestion_productiva_salida`
-  MODIFY `id_eficiencia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=764;
+  MODIFY `id_eficiencia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=765;
 
 --
 -- AUTO_INCREMENT de la tabla `inventario_insumos`
@@ -881,13 +919,13 @@ ALTER TABLE `permisos_modulos`
 -- AUTO_INCREMENT de la tabla `permisos_usuarios`
 --
 ALTER TABLE `permisos_usuarios`
-  MODIFY `id_permisou` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=582;
+  MODIFY `id_permisou` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=636;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- Restricciones para tablas volcadas

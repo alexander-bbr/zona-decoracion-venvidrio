@@ -13,6 +13,7 @@ dist
 dist-ssr
 venv
 *.local
+__pycache__/
 
 # Editor
 .vscode
@@ -29,7 +30,7 @@ venv
 .env
 
 # Notas de Desarrollo
-Formatos de procesos finales 2025/
+developer-notes/
 
 # Python
 __pycache__/

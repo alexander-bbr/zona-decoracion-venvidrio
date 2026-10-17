@@ -13,7 +13,6 @@ dist
 dist-ssr
 venv
 *.local
-__pycache__/
 
 # Editor
 .vscode

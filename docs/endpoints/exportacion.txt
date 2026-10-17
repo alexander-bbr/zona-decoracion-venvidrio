@@ -21,6 +21,36 @@ Respuesta en caso de error:
     "detail": "No se encontraron registros en el rango de fechas indicado."
 }
 
+NOTA TÉCNICA: Este endpoint es diferente a los demás, aquí a demás del rango de fechas, es posible que se le pase un valor adicional en el cuerpo, que es el de critero. Es UN SOLO criterio, no varios a la vez.
+
+Estos criterios pueden ser los siguientes:
+
+- tecnico = DANIEL PÉREZ (string - SIEMPRE se debe mandar en mayúsculas)
+- turno = 1 (number)
+- totalGruesas = 694.03 (decimal)
+- totalGruesasLisas = 15.08 (decimal)
+- totalGruesasDecoradas = 610.3 (decimal)
+- eficiencia = 87,23 (decimal)
+- item = THXI (string)
+
+Ejemplo: 
+
+JSON (Envía el Frontend):
+{
+    "totalGruesasLisas": 15.08,
+    "fechaDesde": "2024-01-01",
+    "fechaHasta": "2024-12-31"
+}
+
+Ejemplo 2:
+
+JSON (Envía el Frontend):
+{
+    "tecnico": "DANIEL PÉREZ",
+    "fechaDesde": "2024-01-01",
+    "fechaHasta": "2024-12-31"
+}
+
 
 
 ---

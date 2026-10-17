@@ -7,12 +7,14 @@ Endpoint: http://127.0.0.1:8000/api/gestion-moldes
 Método: POST
 
 JSON (Envía el Frontend):
-{
+{   
+    "item" : "THXI",
     "nombre": "Molde A",
     "descripcion": "Descripción del molde",
     "numeroCamadas": 4,
     "numeroEnvases": 40,
     "numeroGruesas": 0.28
+    "estado": true # boolean
 }
 
 JSON (Respuesta en caso de éxito):
@@ -26,6 +28,12 @@ JSON (Respuesta en caso de error):
     "detail": "Error en la validación de los datos enviados"
 }
 
+JSON (Respuesta en caso de error):
+{
+    "detail": "Ya existe un molde con ese item."
+}
+
+NOTA TÉCNICA: Se puede editar el item, pero se verifica en el backend si no existe ya un molde con el mismo item
 
 ---
 
@@ -35,12 +43,14 @@ Endpoint: http://127.0.0.1:8000/api/gestion-moldes/{id_molde}
 Método: PUT
 
 JSON (Envía el Frontend):
-{
+{   
+    "item" : "THXI",
     "nombre": "Molde A Actualizado",
     "descripcion": "Nueva descripción",
     "numeroCamadas": 5,
     "numeroEnvases": 50,
     "numeroGruesas": 0.35
+    "estado": true # boolean
 }
 
 JSON (Respuesta en caso de éxito):
@@ -54,6 +64,12 @@ JSON (Respuesta en caso de error):
     "detail": "No se pudo actualizar porque el molde no fue encontrado."
 }
 
+JSON (Respuesta en caso de error):
+{
+    "detail": "Ya existe un molde con ese item."
+}
+
+NOTA TÉCNICA: Se puede editar el item, pero se verifica en el backend si no existe ya un molde con el mismo item
 
 ---
 
@@ -65,20 +81,22 @@ Método: GET
 Estructura de los datos que recibirá:
 [
     {
-        "idMolde": 1,
+        "item": "THXI",
         "nombre": "Molde A",
         "descripcion": "Descripción del molde",
         "numeroCamadas": 4,
         "numeroEnvases": 40,
         "numeroGruesas": 0.28
+        "estado": true # boolean
     },
     {
-        "idMolde": 2,
+        "item": "THXL",
         "nombre": "Molde B",
         "descripcion": null,
         "numeroCamadas": 6,
         "numeroEnvases": 60,
         "numeroGruesas": 0.42
+        "estado": true # boolean
     }
 ]
 
@@ -86,18 +104,19 @@ Estructura de los datos que recibirá:
 ---
 
 
-Ruta 4: Ver Molde por ID (Para Editar)
-Endpoint: http://127.0.0.1:8000/api/gestion-moldes/{id_molde}
+Ruta 4: Ver Molde por item (Para Editar)
+Endpoint: http://127.0.0.1:8000/api/gestion-moldes/{item_molde}
 Método: GET
 
 Estructura de los datos que recibirá:
 {
-    "idMolde": 1,
+    "item": "THXI",
     "nombre": "Molde A",
     "descripcion": "Descripción del molde",
     "numeroCamadas": 4,
     "numeroEnvases": 40,
     "numeroGruesas": 0.28
+    "estado": true # boolean
 }
 
 JSON (Respuesta en caso de error):

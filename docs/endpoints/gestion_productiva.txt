@@ -130,7 +130,7 @@ JSON (Respuesta en caso de error):
   "detail": "Error: Ya existe un registro duplicado o un justificante repetido para este molde."
 }
 
-
+NOTA TÉCNICA: El frontend ahora SIEMPRE debe mandar el valor de técnico en mayúsculas (Ejemplo: DANIEL PÉREZ)
 
 
 
@@ -275,7 +275,7 @@ JSON (Respuesta en caso de error):
 }
 
 
-
+NOTA TÉCNICA: El frontend ahora SIEMPRE debe mandar el valor de técnico en mayúsculas (Ejemplo: DANIEL PÉREZ)
 
 
 ----------------------------------------------------------------------------------------
@@ -337,6 +337,38 @@ URL como PARÁMETROS DE CONSULTA (Query Parameters).
 
 - Fórmula general para calcular el skip en el frontend según el número de página:
   skip = (numero_de_pagina - 1) * 50
+
+
+NOTA TÉCNICA DOS:
+
+- Ahora existe un apartado para el filtrado en el frontend, o sea, además del paginado explicado anteriormente. También puede existir la posibilidad de filtrar:
+
+Para ello, se pueden pasar 3 cosas: el criterio (y su valor correspondiente), fecha desde y fecha hasta.
+
+Ejemplo (paginado por defecto): http://127.0.0.1:8000/produccion?skip=0&limit=50&*clave*=*valor*&desde=2026-09-01&hasta=2026-09-30
+Ejemplo más claro: http://127.0.0.1:8000/produccion?skip=0&limit=50&turno=2&desde=2026-09-01&hasta=2026-09-30
+
+Ejemplo (con paginado de intervalo): http://127.0.0.1:8000/produccion?skip=51&limit=100&*clave*=*valor*&desde=2026-09-01&hasta=2026-09-30
+Ejemplo más claro: http://127.0.0.1:8000/produccion?skip=0&limit=50&tecnico=%DANIEL%PÉREZ&desde=2026-09-01&hasta=2026-09-30
+
+
+Estos son los parámetros de criterios:
+
+- tecnico = DANIEL PÉREZ (string - SIEMPRE se debe mandar en mayúsculas)
+- turno = 1 (number)
+- totalGruesas = 694.03 (decimal)
+- totalGruesasLisas = 15.08 (decimal)
+- totalGruesasDecoradas = 610.3 (decimal)
+- eficiencia = 87,23 (decimal)
+- item = THXI (string)
+
+SOLO se puede mandar un criterio, no varios a la vez.
+
+PERO, dichos criterios son opcionales, más el de fecha desde y fecha hasta si son obligatorios al momento de filtrar.
+
+Ejemplo: http://127.0.0.1:8000/produccion?skip=51&limit=100&desde=2026-09-01&hasta=2026-09-30
+
+Es decir, se hace la peticion para mostrar los registros que cumplan con el periodo de fechas, porque siempre se tiene que filtrar como mínimo por rango de fechas, lo del criterio en este ejemplo era opcional.
 
 
 
@@ -489,14 +521,17 @@ Método: GET
 Estructura de los datos que recibirá:
 [
     {
-        "idMolde": 1,
+        "item": "THXI", # Anteriormente idMolde y de tipo numérico
         "nombre": "string",
         "descripcion": "string",
         "numeroCamadas": 0,
         "numeroEnvases": 0,
         "numeroGruesas": 0.00
+        "estado": true # boolean (este valor es nuevo)
     }
 ]
+
+NOTA: En la vista principal, debo usar este endpoint para crear el criterio de un select de item
 
 
 -------------------------------------------------------------------------------------------

@@ -445,7 +445,7 @@ export const AppRoutes = () => {
           }
         />
         <Route
-          path="editar-molde/:id"
+          path="editar-molde/:item"
           element={
             <PrivateRoute
               requiredPermissions={[

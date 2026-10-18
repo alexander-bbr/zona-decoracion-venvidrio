@@ -3,12 +3,13 @@ import { useNavigate, NavLink, useLocation, Outlet } from "react-router-dom";
 import styles from "./gestion-moldes.module.css";
 
 type Molde = {
-  idMolde: number;
+  item: string;
   nombre: string;
   descripcion: string | null;
   numeroCamadas: number;
   numeroEnvases: number;
   numeroGruesas: number;
+  estado: boolean;
 };
 
 const API_MOLDES = "http://127.0.0.1:8000/api/gestion-moldes";
@@ -34,14 +35,14 @@ export const GestionMoldes = () => {
       const data = await response.json();
       const moldesNormalizados: Molde[] = data.map((molde: Molde) => ({
         ...molde,
-        idMolde: Number(molde.idMolde),
         numeroCamadas: Number(molde.numeroCamadas),
         numeroEnvases: Number(molde.numeroEnvases),
         numeroGruesas: Number(molde.numeroGruesas),
+        estado: Boolean(molde.estado),
       }));
-      // Ordenar los moldes por ID de forma ascendente
-      const moldesOrdenados = moldesNormalizados.sort(
-        (a, b) => a.idMolde - b.idMolde,
+      // Ordenar los moldes por item de forma ascendente
+      const moldesOrdenados = moldesNormalizados.sort((a, b) =>
+        a.item.localeCompare(b.item),
       );
       setMoldes(moldesOrdenados);
     } catch (loadError) {
@@ -195,27 +196,39 @@ export const GestionMoldes = () => {
                 <table className={styles.table}>
                   <thead>
                     <tr>
+                      <th>Item</th>
                       <th>Nombre</th>
                       <th>Descripción</th>
                       <th>Camadas</th>
                       <th>Envases</th>
                       <th>Gruesas</th>
+                      <th>Estado</th>
                     </tr>
                   </thead>
                   <tbody>
                     {moldes.map((molde) => (
                       <tr
-                        key={molde.idMolde}
-                        onClick={() =>
-                          navigate(`editar-molde/${molde.idMolde}`)
-                        }
+                        key={molde.item}
+                        onClick={() => navigate(`editar-molde/${molde.item}`)}
                         className={styles.clickableRow}
                       >
+                        <td>{molde.item}</td>
                         <td>{molde.nombre}</td>
                         <td>{molde.descripcion || "—"}</td>
                         <td>{molde.numeroCamadas}</td>
                         <td>{molde.numeroEnvases}</td>
                         <td>{molde.numeroGruesas}</td>
+                        <td>
+                          <span
+                            className={
+                              molde.estado
+                                ? styles.estadoActivo
+                                : styles.estadoInactivo
+                            }
+                          >
+                            {molde.estado ? "Activo" : "Inactivo"}
+                          </span>
+                        </td>
                       </tr>
                     ))}
                   </tbody>

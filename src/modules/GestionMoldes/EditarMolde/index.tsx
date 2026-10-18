@@ -5,53 +5,62 @@ import { ENVASES_POR_GRUESA } from "../../../../constants";
 import styles from "./editar-molde.module.css";
 
 type Molde = {
-  idMolde: number;
+  item: string;
   nombre: string;
   descripcion: string | null;
   numeroCamadas: number;
   numeroEnvases: number;
   numeroGruesas: number;
+  estado: boolean;
 };
 
 type FormData = {
+  item: string;
   nombre: string;
   descripcion: string;
   numeroCamadas: number;
   numeroEnvases: number;
   numeroGruesas: number;
+  estado: boolean;
 };
 
 const API_MOLDES = "http://127.0.0.1:8000/api/gestion-moldes";
 
 export const EditarMolde = () => {
-  const { id } = useParams<{ id: string }>();
+  const { item } = useParams<{ item: string }>();
 
-  if (!id) {
-    return <p className={styles.error}>ID de molde inválido.</p>;
+  if (!item) {
+    return <p className={styles.error}>Item de molde inválido.</p>;
   }
 
-  return <CargarMolde idMolde={id} />;
+  return <CargarMolde itemMolde={item} />;
 };
 
-const CargarMolde = ({ idMolde }: { idMolde: string }) => {
+const CargarMolde = ({ itemMolde }: { itemMolde: string }) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState<FormData>({
+    item: "",
     nombre: "",
     descripcion: "",
     numeroCamadas: 0,
     numeroEnvases: 0,
     numeroGruesas: 0,
+    estado: true,
   });
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState("");
   const [guardando, setGuardando] = useState(false);
+  // Guardamos el item original para saber si el usuario lo cambió
+  const [itemOriginal, setItemOriginal] = useState("");
 
   useEffect(() => {
     const cargarMolde = async () => {
       setCargando(true);
       setError("");
       try {
-        const response = await fetch(`${API_MOLDES}/${idMolde}`);
+        const response = await fetch(
+          `${API_MOLDES}/${encodeURIComponent(itemMolde)}`,
+        );
         if (!response.ok) {
           const data = await response.json().catch(() => null);
           throw new Error(
@@ -63,6 +72,7 @@ const CargarMolde = ({ idMolde }: { idMolde: string }) => {
         }
         const molde = (await response.json()) as Molde;
         setFormData({
+          item: molde.item,
           nombre: molde.nombre,
           descripcion: molde.descripcion || "",
           numeroCamadas: Number(molde.numeroCamadas),
@@ -70,7 +80,9 @@ const CargarMolde = ({ idMolde }: { idMolde: string }) => {
           numeroGruesas: Number(
             (Number(molde.numeroEnvases) / ENVASES_POR_GRUESA).toFixed(2),
           ),
+          estado: Boolean(molde.estado),
         });
+        setItemOriginal(molde.item);
       } catch (loadError) {
         setError(
           loadError instanceof Error
@@ -82,7 +94,7 @@ const CargarMolde = ({ idMolde }: { idMolde: string }) => {
       }
     };
     void cargarMolde();
-  }, [idMolde]);
+  }, [itemMolde]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -105,12 +117,21 @@ const CargarMolde = ({ idMolde }: { idMolde: string }) => {
     }
   };
 
+  const handleEstadoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData((prev) => ({ ...prev, estado: e.target.checked }));
+  };
+
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError("");
     setGuardando(true);
 
     // Validaciones
+    if (!formData.item.trim()) {
+      setError("El item del molde es obligatorio.");
+      setGuardando(false);
+      return;
+    }
     if (!formData.nombre.trim()) {
       setError("El nombre del molde es obligatorio.");
       setGuardando(false);
@@ -129,19 +150,24 @@ const CargarMolde = ({ idMolde }: { idMolde: string }) => {
 
     // Preparar datos para enviar
     const datosEnviar = {
+      item: formData.item.trim(),
       nombre: formData.nombre,
       descripcion: formData.descripcion,
       numeroCamadas: formData.numeroCamadas,
       numeroEnvases: formData.numeroEnvases,
       numeroGruesas: formData.numeroEnvases / ENVASES_POR_GRUESA,
+      estado: formData.estado,
     };
 
     try {
-      const response = await fetch(`${API_MOLDES}/${idMolde}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(datosEnviar),
-      });
+      const response = await fetch(
+        `${API_MOLDES}/${encodeURIComponent(itemOriginal)}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(datosEnviar),
+        },
+      );
 
       if (!response.ok) {
         const data = await response.json().catch(() => null);
@@ -166,10 +192,13 @@ const CargarMolde = ({ idMolde }: { idMolde: string }) => {
   const handleReset = () => {
     const cargarMolde = async () => {
       try {
-        const response = await fetch(`${API_MOLDES}/${idMolde}`);
+        const response = await fetch(
+          `${API_MOLDES}/${encodeURIComponent(itemOriginal)}`,
+        );
         if (response.ok) {
           const molde = (await response.json()) as Molde;
           setFormData({
+            item: molde.item,
             nombre: molde.nombre,
             descripcion: molde.descripcion || "",
             numeroCamadas: Number(molde.numeroCamadas),
@@ -177,6 +206,7 @@ const CargarMolde = ({ idMolde }: { idMolde: string }) => {
             numeroGruesas: Number(
               (Number(molde.numeroEnvases) / ENVASES_POR_GRUESA).toFixed(2),
             ),
+            estado: Boolean(molde.estado),
           });
         }
       } catch {
@@ -195,11 +225,26 @@ const CargarMolde = ({ idMolde }: { idMolde: string }) => {
     <form className={`${styles.form} content`} onSubmit={handleSubmit}>
       <HeaderForm />
 
-      <h3 className={styles.title}>Editar Molde #{idMolde}</h3>
+      <h3 className={styles.title}>Editar Molde {itemOriginal}</h3>
 
       <section className={styles.formData}>
         <fieldset className={styles.fieldset}>
           <legend className={styles.legend}>Datos del Molde</legend>
+
+          <div className={styles.inputWrapper}>
+            <label htmlFor="item">
+              Item <span className={styles.requireSymbol}>*</span>
+            </label>
+            <input
+              id="item"
+              name="item"
+              type="text"
+              value={formData.item}
+              onChange={handleChange}
+              placeholder="Ej: THXI"
+              required
+            />
+          </div>
 
           <div className={styles.inputWrapper}>
             <label htmlFor="nombre">
@@ -278,6 +323,17 @@ const CargarMolde = ({ idMolde }: { idMolde: string }) => {
                 className={styles.readonlyInput}
               />
             </div>
+          </div>
+
+          <div className={styles.checkboxWrapper}>
+            <input
+              id="estado"
+              name="estado"
+              type="checkbox"
+              checked={formData.estado}
+              onChange={handleEstadoChange}
+            />
+            <label htmlFor="estado">Molde Activo</label>
           </div>
         </fieldset>
 

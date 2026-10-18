@@ -5,11 +5,13 @@ import { ENVASES_POR_GRUESA } from "../../../../constants";
 import styles from "./registrar-molde.module.css";
 
 type FormData = {
+  item: string;
   nombre: string;
   descripcion: string;
   numeroCamadas: number;
   numeroEnvases: number;
   numeroGruesas: number;
+  estado: boolean;
 };
 
 const API_MOLDES = "http://127.0.0.1:8000/api/gestion-moldes";
@@ -17,11 +19,13 @@ const API_MOLDES = "http://127.0.0.1:8000/api/gestion-moldes";
 export const RegistrarMolde = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState<FormData>({
+    item: "",
     nombre: "",
     descripcion: "",
     numeroCamadas: 0,
     numeroEnvases: 0,
     numeroGruesas: 0,
+    estado: true,
   });
   const [error, setError] = useState("");
   const [cargando, setCargando] = useState(false);
@@ -47,12 +51,21 @@ export const RegistrarMolde = () => {
     }
   };
 
+  const handleEstadoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData((prev) => ({ ...prev, estado: e.target.checked }));
+  };
+
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError("");
     setCargando(true);
 
     // Validaciones
+    if (!formData.item.trim()) {
+      setError("El item del molde es obligatorio.");
+      setCargando(false);
+      return;
+    }
     if (!formData.nombre.trim()) {
       setError("El nombre del molde es obligatorio.");
       setCargando(false);
@@ -71,8 +84,13 @@ export const RegistrarMolde = () => {
 
     // Preparar datos para enviar (incluyendo numeroGruesas calculado)
     const datosEnviar = {
-      ...formData,
+      item: formData.item.trim(),
+      nombre: formData.nombre,
+      descripcion: formData.descripcion,
+      numeroCamadas: formData.numeroCamadas,
+      numeroEnvases: formData.numeroEnvases,
       numeroGruesas: formData.numeroEnvases / ENVASES_POR_GRUESA,
+      estado: formData.estado,
     };
 
     try {
@@ -104,11 +122,13 @@ export const RegistrarMolde = () => {
 
   const handleReset = () => {
     setFormData({
+      item: "",
       nombre: "",
       descripcion: "",
       numeroCamadas: 0,
       numeroEnvases: 0,
       numeroGruesas: 0,
+      estado: true,
     });
     setError("");
   };
@@ -122,6 +142,21 @@ export const RegistrarMolde = () => {
       <section className={styles.formData}>
         <fieldset className={styles.fieldset}>
           <legend className={styles.legend}>Datos del Molde</legend>
+
+          <div className={styles.inputWrapper}>
+            <label htmlFor="item">
+              Item <span className={styles.requireSymbol}>*</span>
+            </label>
+            <input
+              id="item"
+              name="item"
+              type="text"
+              value={formData.item}
+              onChange={handleChange}
+              placeholder="Ej: THXI"
+              required
+            />
+          </div>
 
           <div className={styles.inputWrapper}>
             <label htmlFor="nombre">
@@ -198,6 +233,17 @@ export const RegistrarMolde = () => {
                 className={styles.readonlyInput}
               />
             </div>
+          </div>
+
+          <div className={styles.checkboxWrapper}>
+            <input
+              id="estado"
+              name="estado"
+              type="checkbox"
+              checked={formData.estado}
+              onChange={handleEstadoChange}
+            />
+            <label htmlFor="estado">Molde Activo</label>
           </div>
         </fieldset>
 

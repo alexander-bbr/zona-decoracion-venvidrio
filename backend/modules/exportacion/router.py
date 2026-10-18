@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from io import BytesIO
 
 from backend.database.conexion import get_db
-from backend.modules.exportacion.schemas import FiltroFechas
+from backend.modules.exportacion.schemas import FiltroFechas, FiltroProduccion
 from backend.modules.exportacion.services import (
     exportar_gestion_productiva,
     exportar_movimientos_inventario,
@@ -13,15 +13,21 @@ from backend.modules.exportacion.services import (
     exportar_justificantes,
     exportar_insumos,
     exportar_movimientos_pantallas,
-    exportar_pantallas
+    exportar_pantallas,
+    exportar_rendimiento_moldes_service 
 )
 
 router = APIRouter(prefix="/api/exportacion", tags=["Exportación"])
 
 
 @router.post("/gestion-productiva")
-def exportar_historial_gestion_productiva(filtro: FiltroFechas, db: Session = Depends(get_db)):
-    archivo = exportar_gestion_productiva(db, filtro.fechaDesde, filtro.fechaHasta)
+def exportar_historial_gestion_productiva(filtro: FiltroProduccion, db: Session = Depends(get_db)):
+    archivo = exportar_gestion_productiva(
+        db, filtro.fechaDesde, filtro.fechaHasta,
+        filtro.tecnico, filtro.turno, filtro.totalGruesas,
+        filtro.totalGruesasLisas, filtro.totalGruesasDecoradas,
+        filtro.eficiencia, filtro.item
+    )
     return StreamingResponse(
         BytesIO(archivo),
         media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -85,4 +91,14 @@ def exportar_listado_pantallas(db: Session = Depends(get_db)):
         BytesIO(archivo),
         media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         headers={"Content-Disposition": "attachment; filename=listado_pantallas.xlsx"}
+    )
+
+
+@router.post("/rendimiento-moldes")
+def exportar_rendimiento_moldes(filtro: FiltroFechas, db: Session = Depends(get_db)):
+    archivo = exportar_rendimiento_moldes_service(db, filtro.fechaDesde, filtro.fechaHasta)
+    return StreamingResponse(
+        BytesIO(archivo),
+        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        headers={"Content-Disposition": "attachment; filename=rendimiento_moldes.xlsx"}
     )

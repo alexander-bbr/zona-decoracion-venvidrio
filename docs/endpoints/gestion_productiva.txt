@@ -11,26 +11,26 @@ JSON (Envía el Frontend):
   "tecnico": "Carlos Mendoza",
   "maquina1": [
     {
-      "idMolde": 1,
+      "item": "THXI",
       "cantEnvases": 500,
       "horaEntrada": "07:00"
     },
     {
-      "idMolde": 2,
+      "item": "THXI",
       "cantEnvases": 200,
       "horaEntrada": "11:30"
     }
   ],
   "maquina2": [
     {
-      "idMolde": 4,
+      "item": "THXI",
       "cantEnvases": 350,
       "horaEntrada": "08:15"
     }
   ],
   "maquina3": [
     {
-      "idMolde": 5,
+      "item": "THXI",
       "cantEnvases": 100,
       "horaEntrada": "09:00"
     }
@@ -44,7 +44,7 @@ JSON (Envía el Frontend):
   "totalGruesas": "7.99",
   "salidas": [
     {
-      "modeloMolde": 1,
+      "item": "THXI",
       "totalPaletasMolde": 2,
       "cantPaletasLisas": 1,
       "cantCamadasLisas": 5,
@@ -56,7 +56,7 @@ JSON (Envía el Frontend):
       "cantGruesasDecoradas": "1.73"
     },
     {
-      "modeloMolde": 2,
+      "item": "THXI",
       "totalPaletasMolde": 1,
       "cantPaletasLisas": 1,
       "cantCamadasLisas": 7,
@@ -68,7 +68,7 @@ JSON (Envía el Frontend):
       "cantGruesasDecoradas": "0.00"
     },
     {
-      "modeloMolde": 4,
+      "item": "THXI",
       "totalPaletasMolde": 1,
       "cantPaletasLisas": 1,
       "cantCamadasLisas": 4,
@@ -80,7 +80,7 @@ JSON (Envía el Frontend):
       "cantGruesasDecoradas": "0.00"
     },
     {
-      "modeloMolde": 5,
+      "item": "THXI",
       "totalPaletasMolde": 1,
       "cantPaletasLisas": 1,
       "cantCamadasLisas": 2,
@@ -93,23 +93,23 @@ JSON (Envía el Frontend):
     }
   ],
   "resultado": {
-    "totalEnvasesLisos": "1800",                # NUEVO
+    "totalEnvasesLisos": "1800",                
     "totalGruesasLisas": "6.24",
-    "totalEnvasesDecorados": "4800",            # NUEVO
+    "totalEnvasesDecorados": "4800",            
     "totalGruesasDecoradas": "1.73",
-    "totalEnvasesPerdidos": "2300",             # NUEVO
-    "totalGruesasPerdidas": "5.3",              # NUEVO
+    "totalEnvasesPerdidos": "2300",             
+    "totalGruesasPerdidas": "5.3",              
     "eficienciaProductiva": "98.50",
     "deficienciaProductiva": "1.50",
     "observaciones": "Prueba de guardado omitiendo el ID 3 en moldes y justificantes."
   },
   "justificantes": [
     {
-      "modeloMolde": 1,
+      "item": "THXI",
       "justificaciones": [1, 2]
     },
     {
-      "modeloMolde": 2,
+      "item": "THXI",
       "justificaciones": [4, 5]
     }
   ]
@@ -149,26 +149,26 @@ JSON (Envía el Frontend):
   "tecnico": "Carlos Mendoza",
   "maquina1": [
     {
-      "idMolde": 1,
+      "item": "THXI",
       "cantEnvases": 500,
       "horaEntrada": "07:00"
     },
     {
-      "idMolde": 2,
+      "item": "THXI",
       "cantEnvases": 200,
       "horaEntrada": "11:30"
     }
   ],
   "maquina2": [
     {
-      "idMolde": 4,
+      "item": "THXI",
       "cantEnvases": 350,
       "horaEntrada": "08:15"
     }
   ],
   "maquina3": [
     {
-      "idMolde": 5,
+      "item": "THXI",
       "cantEnvases": 100,
       "horaEntrada": "09:00"
     }
@@ -182,7 +182,7 @@ JSON (Envía el Frontend):
   "totalGruesas": "7.99",
   "salidas": [
     {
-      "modeloMolde": 1,
+      "item": "THXI",
       "totalPaletasMolde": 2,
       "cantPaletasLisas": 1,
       "cantCamadasLisas": 5,
@@ -194,7 +194,7 @@ JSON (Envía el Frontend):
       "cantGruesasDecoradas": "1.73"
     },
     {
-      "modeloMolde": 2,
+      "item": "THXI",
       "totalPaletasMolde": 1,
       "cantPaletasLisas": 1,
       "cantCamadasLisas": 7,
@@ -206,7 +206,7 @@ JSON (Envía el Frontend):
       "cantGruesasDecoradas": "0.00"
     },
     {
-      "modeloMolde": 4,
+      "item": "THXI",
       "totalPaletasMolde": 1,
       "cantPaletasLisas": 1,
       "cantCamadasLisas": 4,
@@ -218,7 +218,7 @@ JSON (Envía el Frontend):
       "cantGruesasDecoradas": "0.00"
     },
     {
-      "modeloMolde": 5,
+      "item": "THXI",
       "totalPaletasMolde": 1,
       "cantPaletasLisas": 1,
       "cantCamadasLisas": 2,
@@ -231,23 +231,23 @@ JSON (Envía el Frontend):
     }
   ],
   "resultado": {
-    "totalEnvasesLisos": "1800",                # NUEVO
+    "totalEnvasesLisos": "1800",                
     "totalGruesasLisas": "6.24",
-    "totalEnvasesDecorados": "4800",            # NUEVO
+    "totalEnvasesDecorados": "4800",            
     "totalGruesasDecoradas": "1.73",
-    "totalEnvasesPerdidos": "2300",             # NUEVO
-    "totalGruesasPerdidas": "5.3",              # NUEVO
+    "totalEnvasesPerdidos": "2300",             
+    "totalGruesasPerdidas": "5.3",              
     "eficienciaProductiva": "98.50",
     "deficienciaProductiva": "1.50",
     "observaciones": "Prueba de guardado omitiendo el ID 3 en moldes y justificantes."
   },
   "justificantes": [
     {
-      "modeloMolde": 1,
+      "item": "THXI",
       "justificaciones": [1, 2]
     },
     {
-      "modeloMolde": 2,
+      "item": "THXI",
       "justificaciones": [4, 5]
     }
   ]
@@ -390,26 +390,26 @@ Estructura de los datos que recibirá:
   "tecnico": "Carlos Mendoza",
   "maquina1": [
     {
-      "idMolde": 1,
+      "item": "THXI",
       "cantEnvases": 500,
       "horaEntrada": "07:00"
     },
     {
-      "idMolde": 2,
+      "item": "THXI",
       "cantEnvases": 200,
       "horaEntrada": "11:30"
     }
   ],
   "maquina2": [
     {
-      "idMolde": 4,
+      "item": "THXI",
       "cantEnvases": 350,
       "horaEntrada": "08:15"
     }
   ],
   "maquina3": [
     {
-      "idMolde": 5,
+      "item": "THXI",
       "cantEnvases": 100,
       "horaEntrada": "09:00"
     }
@@ -423,7 +423,7 @@ Estructura de los datos que recibirá:
   "totalGruesas": "7.99",
   "salidas": [
     {
-      "modeloMolde": 1,
+      "item": "THXI",
       "totalPaletasMolde": 2,
       "cantPaletasLisas": 1,
       "cantCamadasLisas": 5,
@@ -436,7 +436,7 @@ Estructura de los datos que recibirá:
       "idEficiencia": 553
     },
     {
-      "modeloMolde": 2,
+      "item": "THXI",
       "totalPaletasMolde": 1,
       "cantPaletasLisas": 1,
       "cantCamadasLisas": 7,
@@ -449,7 +449,7 @@ Estructura de los datos que recibirá:
       "idEficiencia": 554
     },
     {
-      "modeloMolde": 4,
+      "item": "THXI",
       "totalPaletasMolde": 1,
       "cantPaletasLisas": 1,
       "cantCamadasLisas": 4,
@@ -462,7 +462,7 @@ Estructura de los datos que recibirá:
       "idEficiencia": 555
     },
     {
-      "modeloMolde": 5,
+      "item": "THXI",
       "totalPaletasMolde": 1,
       "cantPaletasLisas": 1,
       "cantCamadasLisas": 2,
@@ -476,26 +476,26 @@ Estructura de los datos que recibirá:
     }
   ],
   "resultado": {
-    "totalEnvasesLisos": "1800",                # NUEVO
+    "totalEnvasesLisos": "1800",                
     "totalGruesasLisas": "6.24",
-    "totalEnvasesDecorados": "4800",            # NUEVO
+    "totalEnvasesDecorados": "4800",            
     "totalGruesasDecoradas": "1.73",
-    "totalEnvasesPerdidos": "2300",             # NUEVO
-    "totalGruesasPerdidas": "5.3",              # NUEVO
+    "totalEnvasesPerdidos": "2300",             
+    "totalGruesasPerdidas": "5.3",              
     "eficienciaProductiva": "98.50",
     "deficienciaProductiva": "1.50",
     "observaciones": "Prueba de guardado omitiendo el ID 3 en moldes y justificantes."
   },
   "justificantes": [
     {
-      "modeloMolde": 1,
+      "item": "THXI",
       "justificaciones": [
         1,
         2
       ]
     },
     {
-      "modeloMolde": 2,
+      "item": "THXI",
       "justificaciones": [
         4,
         5
@@ -521,13 +521,12 @@ Método: GET
 Estructura de los datos que recibirá:
 [
     {
-        "item": "THXI", # Anteriormente idMolde y de tipo numérico
+        "item": "THXI", # Anteriormente item y e tipo numérico
         "nombre": "string",
         "descripcion": "string",
         "numeroCamadas": 0,
         "numeroEnvases": 0,
         "numeroGruesas": 0.00
-        "estado": true # boolean (este valor es nuevo)
     }
 ]
 
@@ -545,6 +544,6 @@ Estructura de los datos que recibirá:
     {
         "idJustificante": 1,
         "etiqueta": "Desperfecto en el decorado",
-        "descripcion": "Desperfecto en los envases producto de un mal decorado de la máquina",
+        "descripcion": "Desperfecto en los envases producto de un mal decorado de la máquina"
     }
 ]

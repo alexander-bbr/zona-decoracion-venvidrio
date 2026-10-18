@@ -1,4 +1,8 @@
 # backend/modules/gestion_productiva/produccion/services.py
+from typing import Optional
+from datetime import date
+from decimal import Decimal
+from sqlalchemy import or_
 
 from sqlalchemy.orm import Session
 from .models import (
@@ -16,12 +20,12 @@ from sqlalchemy.exc import IntegrityError
 from fastapi import HTTPException
 
 def obtener_lista_moldes(db: Session):
-    moldes = db.query(Molde).order_by(Molde.id_molde.desc()).all()
+    moldes = db.query(Molde).filter(Molde.estado == True).order_by(Molde.item.asc()).all()
 
     resultado = []
     for molde in moldes:
         resultado.append({
-            "id_molde": molde.id_molde,
+            "item": molde.item,
             "nombre": molde.nombre,
             "descripcion": molde.descripcion,
             "numero_camadas": molde.numero_camadas,
@@ -46,10 +50,18 @@ def obtener_lista_justificantes(db: Session):
     return resultado
 
 
-def obtener_registros_produccion(db: Session, skip: int = 0, limit: int = 50):
-    registros = db.query(
+def obtener_registros_produccion(
+    db: Session, skip: int = 0, limit: int = 50,
+    desde: Optional[date] = None, hasta: Optional[date] = None,
+    tecnico: Optional[str] = None, turno: Optional[int] = None,
+    totalGruesas: Optional[Decimal] = None, totalGruesasLisas: Optional[Decimal] = None,
+    totalGruesasDecoradas: Optional[Decimal] = None, eficiencia: Optional[Decimal] = None,
+    item: Optional[str] = None
+):
+    query = db.query(
         GestionProductivaCabecera.id_cabecera,
         GestionProductivaCabecera.fecha,
+        GestionProductivaCabecera.tipo_turno,
         GestionProductivaCabecera.turno,
         GestionProductivaCabecera.grupo,
         GestionProductivaCabecera.tecnico,
@@ -62,7 +74,36 @@ def obtener_registros_produccion(db: Session, skip: int = 0, limit: int = 50):
         GestionProductivaResultado,
         GestionProductivaCabecera.id_cabecera == GestionProductivaResultado.id_cabecera,
         isouter=True
-    ).order_by(
+    )
+
+    if item:
+        query = query.outerjoin(
+            GestionProductivaEntrada, GestionProductivaCabecera.id_cabecera == GestionProductivaEntrada.id_cabecera
+        ).outerjoin(
+            GestionProductivaSalida, GestionProductivaCabecera.id_cabecera == GestionProductivaSalida.id_cabecera
+        ).filter(or_(
+            GestionProductivaEntrada.id_molde.ilike(f"%{item}%"),
+            GestionProductivaSalida.modelo_molde.ilike(f"%{item}%")
+        ))
+
+    if desde:
+        query = query.filter(GestionProductivaCabecera.fecha >= desde)
+    if hasta:
+        query = query.filter(GestionProductivaCabecera.fecha <= hasta)
+    if tecnico:
+        query = query.filter(GestionProductivaCabecera.tecnico.ilike(f"%{tecnico}%"))
+    if turno:
+        query = query.filter(GestionProductivaCabecera.turno == turno)
+    if totalGruesas is not None:
+        query = query.filter(GestionProductivaCabecera.total_gruesas <= totalGruesas)
+    if totalGruesasLisas is not None:
+        query = query.filter(GestionProductivaResultado.total_gruesas_lisas <= totalGruesasLisas)
+    if totalGruesasDecoradas is not None:
+        query = query.filter(GestionProductivaResultado.total_gruesas_decoradas <= totalGruesasDecoradas)
+    if eficiencia is not None:
+        query = query.filter(GestionProductivaResultado.eficiencia_productiva <= eficiencia)
+
+    registros = query.distinct().order_by(
         GestionProductivaCabecera.id_cabecera.desc()
     ).offset(skip).limit(limit).all()
 
@@ -71,6 +112,7 @@ def obtener_registros_produccion(db: Session, skip: int = 0, limit: int = 50):
         resultado.append({
             "id_cabecera": reg.id_cabecera,
             "fecha": reg.fecha,
+            "tipo_turno": reg.tipo_turno,
             "turno": reg.turno,
             "grupo": reg.grupo,
             "tecnico": reg.tecnico,
@@ -80,7 +122,6 @@ def obtener_registros_produccion(db: Session, skip: int = 0, limit: int = 50):
             "eficiencia_productiva": reg.eficiencia_productiva,
             "deficiencia_productiva": reg.deficiencia_productiva
         })
-
     return resultado
 
 
@@ -124,7 +165,7 @@ def crear_registro_produccion(db: Session, datos):
             tipo_turno=datos.tipo_turno,
             turno=datos.turno,
             grupo=datos.grupo,
-            tecnico=datos.tecnico,
+            tecnico=datos.tecnico.upper(),
             cant_envases_d1=datos.cant_envases_d1,
             cant_envases_d2=datos.cant_envases_d2,
             cant_envases_d3=datos.cant_envases_d3,
@@ -215,7 +256,7 @@ def crear_registro_produccion(db: Session, datos):
                 justificante = db.query(Justificante).filter(Justificante.id_justificante == id_j).first()
                 if justificante:
                     etiquetas.append(f"{justificante.etiqueta} - {justificante.descripcion}")
-            molde = db.query(Molde).filter(Molde.id_molde == item.modelo_molde).first()
+            molde = db.query(Molde).filter(Molde.item == item.modelo_molde).first()
             nombre_molde = f"{molde.nombre} - {molde.descripcion}" if molde else str(item.modelo_molde)
             justificantes_notif.append({"molde": nombre_molde, "justificaciones": etiquetas})
 
@@ -255,7 +296,7 @@ def actualizar_registro_produccion(db: Session, id_cabecera: int, datos):
         cabecera_actual.tipo_turno = datos.tipo_turno
         cabecera_actual.turno = datos.turno
         cabecera_actual.grupo = datos.grupo
-        cabecera_actual.tecnico = datos.tecnico
+        cabecera_actual.tecnico = datos.tecnico.upper()
         cabecera_actual.cant_envases_d1 = datos.cant_envases_d1
         cabecera_actual.cant_envases_d2 = datos.cant_envases_d2
         cabecera_actual.cant_envases_d3 = datos.cant_envases_d3
@@ -365,7 +406,7 @@ def actualizar_registro_produccion(db: Session, id_cabecera: int, datos):
                 justificante = db.query(Justificante).filter(Justificante.id_justificante == id_j).first()
                 if justificante:
                     etiquetas.append(f"{justificante.etiqueta} - {justificante.descripcion}")
-            molde = db.query(Molde).filter(Molde.id_molde == item.modelo_molde).first()
+            molde = db.query(Molde).filter(Molde.item == item.modelo_molde).first()
             nombre_molde = f"{molde.nombre} - {molde.descripcion}" if molde else str(item.modelo_molde)
             justificantes_notif.append({"molde": nombre_molde, "justificaciones": etiquetas})
 

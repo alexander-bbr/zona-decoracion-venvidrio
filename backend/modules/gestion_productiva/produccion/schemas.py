@@ -8,7 +8,7 @@ from decimal import Decimal
 
 # ESQUEMA PARA MOLDES (Vista completa para el select)
 class MoldeResponde(BaseModel):
-    id_molde: int = Field(alias="idMolde")
+    item: str = Field(alias="item")  
     nombre: str = Field(alias="nombre")
     descripcion: Optional[str] = Field(default=None, alias="descripcion")
     numero_camadas: int = Field(alias="numeroCamadas")
@@ -33,9 +33,9 @@ class JustificanteResponde(BaseModel):
 
 # ESQUEMAS PARA GESTION_PRODUCTIVA_ENTRADA (Detalle por máquina y molde)
 class EntradaDetalleBase(BaseModel):
-    id_molde: int = Field(alias="idMolde")
+    id_molde: str = Field(alias="item")  
     cant_envases: int = Field(alias="cantEnvases")
-    hora_entrada: Optional[str] = Field(default=None, alias="horaEntrada")  # NUEVO
+    hora_entrada: Optional[str] = Field(default=None, alias="horaEntrada")
 
     class Config:
         allow_population_by_field_name = True
@@ -52,8 +52,8 @@ class EntradaDetalleResponde(EntradaDetalleBase):
 
 # ESQUEMAS PARA EFICIENCIA PRODUCTIVA SALIDA (Detalle de modelos)
 class SalidaBase(BaseModel):
-    modelo_molde: int = Field(alias="modeloMolde")
-    total_paletas_molde: int = Field(default=0, alias="totalPaletasMolde")  # RENOMBRADO
+    modelo_molde: str = Field(alias="item")  # El frontend enviará "item": "V-000..."
+    total_paletas_molde: int = Field(default=0, alias="totalPaletasMolde")
 
     cant_paletas_lisas: int = Field(default=0, alias="cantPaletasLisas")
     cant_camadas_lisas: int = Field(default=0, alias="cantCamadasLisas")
@@ -81,15 +81,15 @@ class SalidaResponde(SalidaBase):
 
 # ESQUEMA PARA JUSTIFICANTES POR MOLDE
 class JustificantePorMoldeCrear(BaseModel):
-    modelo_molde: int = Field(alias="modeloMolde")              # NUEVO
-    justificaciones: List[int] = Field(alias="justificaciones") # NUEVO
+    modelo_molde: str = Field(alias="item") 
+    justificaciones: List[int] = Field(alias="justificaciones")
 
     class Config:
         allow_population_by_field_name = True
 
 class JustificantePorMoldeResponde(BaseModel):
-    modelo_molde: int = Field(alias="modeloMolde")              # NUEVO
-    justificaciones: List[int] = Field(alias="justificaciones") # NUEVO
+    modelo_molde: str = Field(alias="item") 
+    justificaciones: List[int] = Field(alias="justificaciones")
 
     class Config:
         allow_population_by_field_name = True

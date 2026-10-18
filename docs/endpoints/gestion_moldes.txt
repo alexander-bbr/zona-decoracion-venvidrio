@@ -13,14 +13,14 @@ JSON (Envía el Frontend):
     "descripcion": "Descripción del molde",
     "numeroCamadas": 4,
     "numeroEnvases": 40,
-    "numeroGruesas": 0.28
+    "numeroGruesas": 0.28,
     "estado": true # boolean
 }
 
 JSON (Respuesta en caso de éxito):
 {
     "status": "Registro insertado con éxito",
-    "id": 1
+    "item" : "THXI"
 }
 
 JSON (Respuesta en caso de error):
@@ -39,7 +39,7 @@ NOTA TÉCNICA: Se puede editar el item, pero se verifica en el backend si no exi
 
 
 Ruta 2: Editar Molde
-Endpoint: http://127.0.0.1:8000/api/gestion-moldes/{id_molde}
+Endpoint: http://127.0.0.1:8000/api/gestion-moldes/{item}
 Método: PUT
 
 JSON (Envía el Frontend):
@@ -49,14 +49,14 @@ JSON (Envía el Frontend):
     "descripcion": "Nueva descripción",
     "numeroCamadas": 5,
     "numeroEnvases": 50,
-    "numeroGruesas": 0.35
+    "numeroGruesas": 0.35,
     "estado": true # boolean
 }
 
 JSON (Respuesta en caso de éxito):
 {
     "status": "Registro actualizado con éxito",
-    "id": 1
+    "item" : "THXI"
 }
 
 JSON (Respuesta en caso de error):
@@ -86,7 +86,7 @@ Estructura de los datos que recibirá:
         "descripcion": "Descripción del molde",
         "numeroCamadas": 4,
         "numeroEnvases": 40,
-        "numeroGruesas": 0.28
+        "numeroGruesas": 0.28,
         "estado": true # boolean
     },
     {
@@ -95,7 +95,7 @@ Estructura de los datos que recibirá:
         "descripcion": null,
         "numeroCamadas": 6,
         "numeroEnvases": 60,
-        "numeroGruesas": 0.42
+        "numeroGruesas": 0.42,
         "estado": true # boolean
     }
 ]
@@ -115,7 +115,7 @@ Estructura de los datos que recibirá:
     "descripcion": "Descripción del molde",
     "numeroCamadas": 4,
     "numeroEnvases": 40,
-    "numeroGruesas": 0.28
+    "numeroGruesas": 0.28,
     "estado": true # boolean
 }
 

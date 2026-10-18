@@ -1,16 +1,19 @@
 # backend/modules/rendimiento/services.py
 
 from sqlalchemy.orm import Session
-from sqlalchemy import func
+from sqlalchemy import func, or_
 from sqlalchemy.exc import IntegrityError
 from fastapi import HTTPException, status
 from decimal import Decimal
 from datetime import date
 
 from .models import MetaRendimiento
+from backend.modules.gestion_productiva.gestion_moldes.models import Molde
 from backend.modules.gestion_productiva.produccion.models import (
     GestionProductivaCabecera,
-    GestionProductivaResultado
+    GestionProductivaResultado,
+    GestionProductivaEntrada,
+    GestionProductivaSalida
 )
 
 
@@ -310,3 +313,85 @@ def editar_meta(db: Session, id_meta: int, datos):
         )
     db.refresh(meta_actual)
     return meta_actual
+
+
+def obtener_rendimiento_moldes(db: Session, desde: date, hasta: date):
+    entradas_sub = db.query(
+        GestionProductivaEntrada.id_molde.label("item"),
+        func.sum(GestionProductivaEntrada.cant_envases).label("total_envases")
+    ).join(
+        GestionProductivaCabecera, GestionProductivaEntrada.id_cabecera == GestionProductivaCabecera.id_cabecera
+    ).filter(
+        GestionProductivaCabecera.fecha >= desde,
+        GestionProductivaCabecera.fecha <= hasta
+    ).group_by(GestionProductivaEntrada.id_molde).subquery()
+
+    salidas_sub = db.query(
+        GestionProductivaSalida.modelo_molde.label("item"),
+        func.sum(GestionProductivaSalida.cant_gruesas_lisas).label("total_lisas"),
+        func.sum(GestionProductivaSalida.cant_gruesas_decoradas).label("total_decoradas")
+    ).join(
+        GestionProductivaCabecera, GestionProductivaSalida.id_cabecera == GestionProductivaCabecera.id_cabecera
+    ).filter(
+        GestionProductivaCabecera.fecha >= desde,
+        GestionProductivaCabecera.fecha <= hasta
+    ).group_by(GestionProductivaSalida.modelo_molde).subquery()
+
+    resultados = db.query(
+        Molde,
+        entradas_sub.c.total_envases,
+        salidas_sub.c.total_lisas,
+        salidas_sub.c.total_decoradas
+    ).outerjoin(
+        entradas_sub, Molde.item == entradas_sub.c.item
+    ).outerjoin(
+        salidas_sub, Molde.item == salidas_sub.c.item
+    ).filter(
+        or_(
+            Molde.estado == True,
+            entradas_sub.c.total_envases > 0,
+            salidas_sub.c.total_decoradas > 0
+        )
+    ).order_by(Molde.item.asc()).all()
+
+    data = []
+    for molde, total_envases, total_lisas, total_decoradas in resultados:
+        envases = float(total_envases or 0)
+        
+        entradas_gruesas = round(envases / 144.0, 2)
+        gruesas_lisas = round(float(total_lisas or 0), 2)
+        gruesas_decoradas = round(float(total_decoradas or 0), 2)
+        
+        gruesas_defectuosas = round(entradas_gruesas - gruesas_decoradas, 2)
+        if gruesas_defectuosas < 0:
+            gruesas_defectuosas = 0.00
+
+         #Cálculos con tope del 100%
+        if entradas_gruesas > 0:
+            eficiencia = round((gruesas_decoradas / entradas_gruesas) * 100, 2)
+            if eficiencia > 100.00:
+                eficiencia = 100.00  # Si las salidas superan las entradas, la eficiencia máxima es 100%
+            
+            deficiencia = round(100.00 - eficiencia, 2)
+        else:
+            eficiencia = 0.00
+            deficiencia = 0.00
+            
+        # Si por algún motivo las decoradas son más que las entradas, las defectuosas son 0
+        gruesas_defectuosas = round(entradas_gruesas - gruesas_decoradas, 2)
+        if gruesas_defectuosas < 0:
+            gruesas_defectuosas = 0.00
+
+        data.append({
+            "item": molde.item,
+            "nombre": molde.nombre,
+            "descripcion": molde.descripcion,
+            "gruesas_lisas": gruesas_lisas,         
+            "entradas_gruesas": entradas_gruesas,   
+            "gruesas_decoradas": gruesas_decoradas,
+            "gruesas_defectuosas": gruesas_defectuosas,
+            "eficiencia": eficiencia,
+            "deficiencia": deficiencia
+        })
+
+    return data

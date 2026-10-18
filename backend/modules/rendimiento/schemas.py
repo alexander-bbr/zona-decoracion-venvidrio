@@ -25,3 +25,18 @@ class MetaResponde(BaseModel):
     class Config:
         orm_mode = True
         allow_population_by_field_name = True
+
+
+class RendimientoMoldeResponde(BaseModel):
+    item: str = Field(alias="item")
+    nombre: str = Field(alias="nombre")
+    descripcion: Optional[str] = Field(default=None, alias="descripcion")
+    entradas_gruesas: float = Field(alias="entradasGruesas")
+    gruesas_lisas: float = Field(alias="gruesasLisas")
+    gruesas_decoradas: float = Field(alias="gruesasDecoradas")
+    gruesas_defectuosas: float = Field(alias="gruesasDefectuosas")
+    eficiencia: float = Field(alias="eficiencia")
+    deficiencia: float = Field(alias="deficiencia")
+
+    class Config:
+        allow_population_by_field_name = True

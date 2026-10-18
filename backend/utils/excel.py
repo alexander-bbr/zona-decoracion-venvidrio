@@ -1,4 +1,5 @@
 # backend/utils/excel.py
+import math
 from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.utils import get_column_letter
@@ -41,36 +42,81 @@ class EstilosExcel:
     )
 
 
-def escribir_cabecera(hoja, columnas: list[str]):
-    #COLUMNAS ES UNA LISTA DE STRINGS CON LOS TITULOS
-    #SE AGREGA N° COMO PRIMERA COLUMNA AUTOMATICAMENTE
+def escribir_cabecera(hoja, columnas: list[str], titulo: str = None, fila_inicio: int = 1):
+    if titulo:
+        hoja.merge_cells(start_row=fila_inicio, start_column=1, end_row=fila_inicio, end_column=len(columnas) + 1)
+        celda_titulo = hoja.cell(row=fila_inicio, column=1, value=titulo)
+        celda_titulo.font = Font(name="Arial", bold=True, size=14, color="1F4E79")
+        celda_titulo.alignment = Alignment(horizontal="center", vertical="center")
+        hoja.row_dimensions[fila_inicio].height = 25
+        fila_inicio += 1
+
     todas = ["N°"] + columnas
-    for indice, titulo in enumerate(todas, start=1):
-        celda = hoja.cell(row=1, column=indice, value=titulo)
+    for indice, titulo_col in enumerate(todas, start=1):
+        celda = hoja.cell(row=fila_inicio, column=indice, value=titulo_col)
         celda.font      = EstilosExcel.fuente_cabecera
         celda.fill      = EstilosExcel.relleno_cabecera
         celda.alignment = EstilosExcel.alineacion_centro
         celda.border    = EstilosExcel.borde_fino
 
         letra = get_column_letter(indice)
-        hoja.column_dimensions[letra].width = max(len(titulo) + 6, 14)
+        if indice == 1:
+            hoja.column_dimensions[letra].width = 10
+        else:
+            hoja.column_dimensions[letra].width = max(len(titulo_col) + 6, 14)
 
+def escribir_filas(hoja, filas: list[dict], columnas: list[str], fila_inicio: int = 2):
+    max_lineas_global = 1
 
-def escribir_filas(hoja, filas: list[dict], columnas: list[str]):
-    #FILAS ES UNA LISTA DE DICTS, COLUMNAS DEFINE EL ORDEN DE LAS CLAVES
-    #LA PRIMERA COLUMNA ES SIEMPRE EL NUMERO CORRELATIVO
-    for fila_num, fila in enumerate(filas, start=2):
-        numero = hoja.cell(row=fila_num, column=1, value=fila_num - 1)
+    for i, fila in enumerate(filas):
+        fila_num = fila_inicio + i
+        valor_n = i + 1
+
+        letra_num = get_column_letter(1)
+        largo_num = len(str(valor_n))
+        ancho_actual_num = hoja.column_dimensions[letra_num].width or 10
+        hoja.column_dimensions[letra_num].width = max(ancho_actual_num, largo_num + 4)
+
+        numero = hoja.cell(row=fila_num, column=1, value=valor_n)
         numero.font      = EstilosExcel.fuente_datos
         numero.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
         numero.border    = EstilosExcel.borde_fino
 
+        max_lineas_fila = 1
+
         for col_num, clave in enumerate(columnas, start=2):
-            celda = hoja.cell(row=fila_num, column=col_num, value=fila.get(clave))
+            valor = fila.get(clave)
+            celda = hoja.cell(row=fila_num, column=col_num, value=valor)
             celda.font      = EstilosExcel.fuente_datos
             celda.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
             celda.border    = EstilosExcel.borde_fino
             
+            if isinstance(valor, (int, float)):
+                celda.number_format = '#,##0.00'
+            
+            letra = get_column_letter(col_num)
+            texto = str(valor) if valor is not None else ""
+            
+            largo_texto = len(texto)
+            ancho_actual = hoja.column_dimensions[letra].width or 14
+            nuevo_ancho = max(ancho_actual, largo_texto + 4)
+            hoja.column_dimensions[letra].width = min(nuevo_ancho, 60)
+
+            ancho_final = hoja.column_dimensions[letra].width
+            lineas_n = texto.count('\n') + 1
+            lineas_wrap = math.ceil(largo_texto / ancho_final) if ancho_final > 0 else 1
+            lineas_celda = max(lineas_n, lineas_wrap)
+            
+            if lineas_celda > max_lineas_fila:
+                max_lineas_fila = lineas_celda
+
+        if max_lineas_fila > max_lineas_global:
+            max_lineas_global = max_lineas_fila
+
+    alto_uniforme = max_lineas_global * 15
+
+    for i in range(fila_inicio, fila_inicio + len(filas)):
+        hoja.row_dimensions[i].height = alto_uniforme
 
 
 def crear_libro(nombre_hoja: str):
@@ -87,3 +133,39 @@ def libro_a_bytes(libro: Workbook) -> bytes:
     libro.save(buffer)
     buffer.seek(0)
     return buffer.getvalue()
+
+
+
+def escribir_totales(hoja, columnas: list[str], cantidad_filas: int, fila_inicio: int = 2):
+    if cantidad_filas == 0:
+        return
+
+    fila_total = fila_inicio + cantidad_filas
+    fila_rango_inicio = fila_inicio
+    fila_rango_fin = fila_inicio + cantidad_filas - 1
+
+    for col_num, clave in enumerate(columnas, start=2):
+        letra = get_column_letter(col_num)
+        valor = ""
+        formato = "General"
+
+        if "Eficiencia" in clave or "Deficiencia" in clave:
+            valor = f"=AVERAGE({letra}{fila_rango_inicio}:{letra}{fila_rango_fin})"
+            formato = '#,##0.00"%"'
+        elif clave not in ["Fecha", "Turno", "Grupo", "Técnico", "Moldes", "Nombre", "Descripción", "Item"]:
+            valor = f"=SUM({letra}{fila_rango_inicio}:{letra}{fila_rango_fin})"
+            formato = "#,##0.00"
+        elif col_num == 2:
+            valor = "TOTALES"
+
+        celda = hoja.cell(row=fila_total, column=col_num, value=valor)
+        celda.font      = Font(name="Arial", bold=True, color="FFFFFF", size=12)
+        celda.fill      = EstilosExcel.relleno_cabecera 
+        celda.alignment = Alignment(horizontal="center", vertical="center")
+        celda.border    = EstilosExcel.borde_fino
+        celda.number_format = formato
+
+    celda_num = hoja.cell(row=fila_total, column=1)
+    celda_num.fill = EstilosExcel.relleno_cabecera
+    celda_num.border = EstilosExcel.borde_fino
+    hoja.row_dimensions[fila_total].height = 25

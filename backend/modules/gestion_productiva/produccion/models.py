@@ -43,7 +43,7 @@ class GestionProductivaEntrada(Base):
     id_entrada = Column(Integer, primary_key=True, autoincrement=True)
     id_cabecera = Column(Integer, ForeignKey("gestion_productiva_cabecera.id_cabecera", ondelete="CASCADE"), nullable=False)
     maquina = Column(Integer, nullable=False)        # 1, 2, 3 o 4
-    id_molde = Column(Integer, ForeignKey("moldes.id_molde"), nullable=False)
+    id_molde = Column(String(20), ForeignKey("moldes.item", onupdate="CASCADE"), nullable=False)
     cant_envases = Column(Integer, nullable=False)
     hora_entrada = Column(String(10), nullable=True) # NUEVO
 
@@ -58,7 +58,7 @@ class GestionProductivaSalida(Base):
     __tablename__ = "gestion_productiva_salida"
 
     id_eficiencia = Column(Integer, primary_key=True, autoincrement=True)
-    modelo_molde = Column(Integer, ForeignKey("moldes.id_molde"), nullable=False)
+    modelo_molde = Column(String(20), ForeignKey("moldes.item", ondelete="CASCADE", onupdate="CASCADE"), nullable=False)
     id_cabecera = Column(Integer, ForeignKey("gestion_productiva_cabecera.id_cabecera", ondelete="CASCADE"), nullable=False)
 
     total_paletas_molde = Column(Integer, default=0) # RENOMBRADO (antes: total_paletas)
@@ -106,7 +106,7 @@ class ProduccionJustificante(Base):
     __tablename__ = "produccion_justificantes"
 
     id_cabecera = Column(Integer, ForeignKey("gestion_productiva_cabecera.id_cabecera", ondelete="CASCADE"), primary_key=True)
-    modelo_molde = Column(Integer, ForeignKey("moldes.id_molde"), primary_key=True)
+    modelo_molde = Column(String(20), ForeignKey("moldes.item", onupdate="CASCADE"), nullable=False)
     id_justificante = Column(Integer, ForeignKey("justificantes.id_justificante", ondelete="CASCADE"), primary_key=True)
 
     # Relaciones

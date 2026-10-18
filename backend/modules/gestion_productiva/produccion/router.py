@@ -1,8 +1,10 @@
 # backend/modules/gestion_productiva/produccion/router.py
+from typing import List, Optional
+from datetime import date
+from decimal import Decimal
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from typing import List
 
 from backend.database.conexion import get_db
 from backend.modules.gestion_usuarios.dependencies import require_permiso
@@ -43,13 +45,23 @@ def listar_justificantes_para_select(
 def listar_produccion(
     skip: int = 0,
     limit: int = 50,
+    desde: Optional[date] = None,
+    hasta: Optional[date] = None,
+    tecnico: Optional[str] = None,
+    turno: Optional[int] = None,
+    totalGruesas: Optional[Decimal] = None,
+    totalGruesasLisas: Optional[Decimal] = None,
+    totalGruesasDecoradas: Optional[Decimal] = None,
+    eficiencia: Optional[Decimal] = None,
+    item: Optional[str] = None,
     db: Session = Depends(get_db),
-    # _=Depends(require_permiso("gestion_productiva", "ver_produccion"))
 ):
-    """
-    Retorna la lista de movimientos recientes de producción paginados.
-    """
-    return services.obtener_registros_produccion(db, skip=skip, limit=limit)
+    return services.obtener_registros_produccion(
+        db=db, skip=skip, limit=limit, desde=desde, hasta=hasta,
+        tecnico=tecnico, turno=turno, totalGruesas=totalGruesas,
+        totalGruesasLisas=totalGruesasLisas, totalGruesasDecoradas=totalGruesasDecoradas,
+        eficiencia=eficiencia, item=item
+    )
 
 
 # 4. CREAR NUEVO REGISTRO DE PRODUCCIÓN

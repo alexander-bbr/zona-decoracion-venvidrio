@@ -106,7 +106,17 @@ def registrar_meta(
     return {"status": "Meta registrada con éxito", "id": meta.id_meta}
 
 
-# 8. VER META POR ID (para editar)
+#8. OBTENER RENDIMIENTO DE MOLDES
+@router.get("/moldes", response_model=List[schemas.RendimientoMoldeResponde])
+def obtener_rendimiento_moldes(
+    desde: date,
+    hasta: date,
+    db: Session = Depends(get_db),
+):
+    return services.obtener_rendimiento_moldes(db, desde, hasta)
+
+
+# 9. VER META POR ID (para editar)
 @router.get("/{id_meta}", response_model=schemas.MetaResponde)
 def obtener_meta(
     id_meta: int,
@@ -122,7 +132,7 @@ def obtener_meta(
     return meta
 
 
-# 9. EDITAR META
+# 10. EDITAR META
 @router.put("/{id_meta}")
 def editar_meta(
     id_meta: int,

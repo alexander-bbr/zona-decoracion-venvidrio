@@ -9,7 +9,7 @@ Método: POST
 JSON (Envía el Frontend):
 {
     "etiqueta": "Desperfecto en el Decorado",
-    "descripcion": "Desperfecto en los envases producto de un mal decorado de la máquina"
+    "descripcion": "Desperfecto en los envases producto de un mal decorado de la máquina",
     "estado": true # boolean
 }
 
@@ -35,7 +35,7 @@ Método: PUT
 JSON (Envía el Frontend):
 {
     "etiqueta": "Desperfecto en el Decorado",
-    "descripcion": "Desperfecto en los envases producto de un mal decorado de la máquina"
+    "descripcion": "Desperfecto en los envases producto de un mal decorado de la máquina",
     "estado": true # boolean
 }
 
@@ -63,13 +63,13 @@ Estructura de los datos que recibirá:
     {
         "idJustificante": 1,
         "etiqueta": "Desperfecto en el Decorado",
-        "descripcion": "Desperfecto en los envases producto de un mal decorado de la máquina"
+        "descripcion": "Desperfecto en los envases producto de un mal decorado de la máquina",
         "estado": true # boolean
     },
     {
         "idJustificante": 2,
         "etiqueta": "Rotura por malcocido del envase",
-        "descripcion": null
+        "descripcion": null,
         "estado": true # boolean
     }
 ]
@@ -86,7 +86,7 @@ Estructura de los datos que recibirá:
 {
     "idJustificante": 1,
     "etiqueta": "Desperfecto en el Decorado",
-    "descripcion": "Desperfecto en los envases producto de un mal decorado de la máquina"
+    "descripcion": "Desperfecto en los envases producto de un mal decorado de la máquina",
     "estado": true # boolean
 }
 

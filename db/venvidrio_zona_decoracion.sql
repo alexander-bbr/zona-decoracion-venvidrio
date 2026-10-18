@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 15-10-2026 a las 03:03:42
+-- Tiempo de generación: 18-10-2026 a las 05:29:04
 -- Versión del servidor: 10.4.32-MariaDB
--- Versión de PHP: 8.0.30
+-- Versión de PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -49,37 +49,37 @@ CREATE TABLE `gestion_productiva_cabecera` (
 --
 
 INSERT INTO `gestion_productiva_cabecera` (`id_cabecera`, `fecha`, `turno`, `tecnico`, `cant_envases_d1`, `cant_envases_d2`, `cant_envases_d3`, `cant_envases_d4`, `total_envases`, `total_gruesas`, `grupo`, `tipo_turno`) VALUES
-(1, '2026-09-01', 1, 'Miguel Bethancourt', 50000, 10000, 0, 0, 60000, 416.67, 'A', '2 Turnos'),
-(2, '2026-09-02', 1, 'Daniel Pérez', 50000, 55600, 0, 0, 105600, 733.33, 'A', '2 Turnos'),
-(3, '2026-09-03', 1, 'Daniel Pérez', 15000, 10000, 0, 0, 25000, 173.61, 'A', '3 Turnos'),
-(4, '2026-09-04', 2, 'Miguel Bethancourt', 15000, 20000, 0, 0, 35000, 243.06, 'B', '3 Turnos'),
-(5, '2026-09-05', 3, 'Fabio Romero', 30000, 15000, 0, 0, 45000, 312.50, 'C', '3 Turnos'),
-(6, '2026-09-06', 3, 'Fabio Romero', 15000, 10000, 0, 0, 25000, 173.61, 'B', '3 Turnos'),
-(7, '2026-09-07', 1, 'Miguel Bethancourt', 30000, 10000, 0, 0, 40000, 277.78, 'B', '2 Turnos'),
-(8, '2026-09-08', 1, 'Daniel Pérez', 9000, 5000, 0, 0, 14000, 97.22, 'A', '2 Turnos'),
-(9, '2026-09-09', 2, 'Daniel Pérez', 10000, 10000, 0, 0, 20000, 138.89, 'B', '3 Turnos'),
-(10, '2026-09-10', 1, 'Miguel Bethancourt', 50000, 25000, 0, 0, 75000, 520.83, 'A', '2 Turnos'),
-(11, '2026-09-11', 1, 'Jose Faria', 20000, 20000, 0, 0, 40000, 277.78, 'A', '2 Turnos'),
-(12, '2026-09-12', 1, 'Jose Faria', 50000, 50000, 0, 0, 100000, 694.44, 'B', '2 Turnos'),
-(13, '2026-09-13', 3, 'Jose Faria', 25000, 15000, 0, 0, 40000, 277.78, 'D', '3 Turnos'),
-(14, '2026-09-14', 2, 'Jose Faria', 10000, 0, 0, 0, 10000, 69.44, 'B', '2 Turnos'),
-(15, '2026-09-15', 1, 'Fabio Romero', 90000, 10000, 0, 0, 100000, 694.44, 'B', '2 Turnos'),
-(16, '2026-09-16', 1, 'Miguel Bethancourt', 47500, 13000, 0, 0, 60500, 420.14, 'B', '3 Turnos'),
-(17, '2026-09-17', 3, 'Daniel Pérez', 25000, 25000, 0, 0, 50000, 347.22, 'D', '3 Turnos'),
-(18, '2026-09-18', 3, 'Daniel Pérez', 29050, 18000, 0, 0, 47050, 326.74, 'C', '3 Turnos'),
-(19, '2026-09-19', 1, 'Fabio Romero', 32000, 8000, 0, 0, 40000, 277.78, 'C', '2 Turnos'),
-(20, '2026-09-20', 1, 'Miguel Bethancourt', 105600, 0, 0, 0, 105600, 733.33, 'A', '2 Turnos'),
-(21, '2026-09-21', 1, 'Jose Faria', 98000, 0, 0, 0, 98000, 680.56, 'B', '2 Turnos'),
-(22, '2026-09-22', 1, 'Miguel Bethancourt', 105000, 0, 0, 0, 105000, 729.17, 'A', '2 Turnos'),
-(23, '2026-09-23', 1, 'Miguel Bethancourt', 58000, 0, 0, 0, 58000, 402.78, 'A', '2 Turnos'),
-(24, '2026-09-24', 1, 'Fabio Romero', 10000, 0, 0, 0, 10000, 69.44, 'B', '2 Turnos'),
-(25, '2026-09-25', 1, 'Fabio Romero', 67000, 0, 0, 0, 67000, 465.28, 'A', '2 Turnos'),
-(26, '2026-09-26', 2, 'Fabio Romero', 27000, 0, 0, 0, 27000, 187.50, 'D', '3 Turnos'),
-(27, '2026-09-27', 1, 'Jose Faria', 200000, 0, 0, 0, 200000, 1388.89, 'A', '2 Turnos'),
-(28, '2026-09-28', 2, 'Jose Faria', 98000, 0, 0, 0, 98000, 680.56, 'A', '2 Turnos'),
-(29, '2026-09-29', 2, 'Miguel Bethancourt', 225000, 0, 0, 0, 225000, 1562.50, 'B', '3 Turnos'),
-(30, '2026-09-30', 1, 'Daniel Pérez', 100000, 0, 0, 0, 100000, 694.44, 'A', '2 Turnos'),
-(31, '2026-10-13', 1, 'Daniel Pérez', 100000, 0, 0, 0, 100000, 694.44, 'A', '2 Turnos');
+(1, '2026-09-01', 1, 'MIGUEL BETHANCOURT', 50000, 10000, 0, 0, 60000, 416.67, 'A', '2 Turnos'),
+(2, '2026-09-02', 1, 'DANIEL PÉREZ', 50000, 55600, 0, 0, 105600, 733.33, 'A', '2 Turnos'),
+(3, '2026-09-03', 1, 'DANIEL PÉREZ', 15000, 10000, 0, 0, 25000, 173.61, 'A', '3 Turnos'),
+(4, '2026-09-04', 2, 'MIGUEL BETHANCOURT', 15000, 20000, 0, 0, 35000, 243.06, 'B', '3 Turnos'),
+(5, '2026-09-05', 3, 'FABIO ROMERO', 30000, 15000, 0, 0, 45000, 312.50, 'C', '3 Turnos'),
+(6, '2026-09-06', 3, 'FABIO ROMERO', 15000, 10000, 0, 0, 25000, 173.61, 'B', '3 Turnos'),
+(7, '2026-09-07', 1, 'MIGUEL BETHANCOURT', 30000, 10000, 0, 0, 40000, 277.78, 'B', '2 Turnos'),
+(8, '2026-09-08', 1, 'DANIEL PÉREZ', 9000, 5000, 0, 0, 14000, 97.22, 'A', '2 Turnos'),
+(9, '2026-09-09', 2, 'DANIEL PÉREZ', 10000, 10000, 0, 0, 20000, 138.89, 'B', '3 Turnos'),
+(10, '2026-09-10', 1, 'MIGUEL BETHANCOURT', 50000, 25000, 0, 0, 75000, 520.83, 'A', '2 Turnos'),
+(11, '2026-09-11', 1, 'JOSE FARIA', 20000, 20000, 0, 0, 40000, 277.78, 'A', '2 Turnos'),
+(12, '2026-09-12', 1, 'JOSE FARIA', 50000, 50000, 0, 0, 100000, 694.44, 'B', '2 Turnos'),
+(13, '2026-09-13', 3, 'JOSE FARIA', 25000, 15000, 0, 0, 40000, 277.78, 'D', '3 Turnos'),
+(14, '2026-09-14', 2, 'JOSE FARIA', 10000, 0, 0, 0, 10000, 69.44, 'B', '2 Turnos'),
+(15, '2026-09-15', 1, 'FABIO ROMERO', 90000, 10000, 0, 0, 100000, 694.44, 'B', '2 Turnos'),
+(16, '2026-09-16', 1, 'MIGUEL BETHANCOURT', 47500, 13000, 0, 0, 60500, 420.14, 'B', '3 Turnos'),
+(17, '2026-09-17', 3, 'DANIEL PÉREZ', 25000, 25000, 0, 0, 50000, 347.22, 'D', '3 Turnos'),
+(18, '2026-09-18', 3, 'DANIEL PÉREZ', 29050, 18000, 0, 0, 47050, 326.74, 'C', '3 Turnos'),
+(19, '2026-09-19', 1, 'FABIO ROMERO', 32000, 8000, 0, 0, 40000, 277.78, 'C', '2 Turnos'),
+(20, '2026-09-20', 1, 'MIGUEL BETHANCOURT', 105600, 0, 0, 0, 105600, 733.33, 'A', '2 Turnos'),
+(21, '2026-09-21', 1, 'JOSE FARIA', 98000, 0, 0, 0, 98000, 680.56, 'B', '2 Turnos'),
+(22, '2026-09-22', 1, 'MIGUEL BETHANCOURT', 105000, 0, 0, 0, 105000, 729.17, 'A', '2 Turnos'),
+(23, '2026-09-23', 1, 'MIGUEL BETHANCOURT', 58000, 0, 0, 0, 58000, 402.78, 'A', '2 Turnos'),
+(24, '2026-09-24', 1, 'FABIO ROMERO', 10000, 0, 0, 0, 10000, 69.44, 'B', '2 Turnos'),
+(25, '2026-09-25', 1, 'FABIO ROMERO', 67000, 0, 0, 0, 67000, 465.28, 'A', '2 Turnos'),
+(26, '2026-09-26', 2, 'FABIO ROMERO', 27000, 0, 0, 0, 27000, 187.50, 'D', '3 Turnos'),
+(27, '2026-09-27', 1, 'JOSE FARIA', 200000, 0, 0, 0, 200000, 1388.89, 'A', '2 Turnos'),
+(28, '2026-09-28', 2, 'JOSE FARIA', 98000, 0, 0, 0, 98000, 680.56, 'A', '2 Turnos'),
+(29, '2026-09-29', 2, 'MIGUEL BETHANCOURT', 225000, 0, 0, 0, 225000, 1562.50, 'B', '3 Turnos'),
+(30, '2026-09-30', 1, 'DANIEL PÉREZ', 100000, 0, 0, 0, 100000, 694.44, 'A', '2 Turnos'),
+(31, '2026-10-13', 1, 'DANIEL PÉREZ', 10000, 0, 0, 0, 10000, 69.44, 'A', '2 Turnos');
 
 -- --------------------------------------------------------
 
@@ -91,16 +91,87 @@ CREATE TABLE `gestion_productiva_entrada` (
   `id_entrada` int(11) NOT NULL,
   `id_cabecera` int(11) NOT NULL,
   `maquina` int(11) NOT NULL,
-  `id_molde` int(11) NOT NULL,
   `cant_envases` int(11) NOT NULL,
-  `hora_entrada` varchar(10) DEFAULT NULL
+  `hora_entrada` varchar(10) DEFAULT NULL,
+  `id_molde` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `gestion_productiva_entrada`
 --
 
-INSERT INTO `gestion_productiva_entrada` (`id_entrada`, `id_cabecera`, `maquina`, `id_molde`, `cant_envases`, `hora_entrada`) VALUES
+INSERT INTO `gestion_productiva_entrada` (`id_entrada`, `id_cabecera`, `maquina`, `cant_envases`, `hora_entrada`, `id_molde`) VALUES
+(338, 1, 1, 50000, '00:00', 'V-0003575'),
+(339, 1, 2, 10000, '00:00', 'V-0004514'),
+(358, 3, 1, 15000, '00:00', 'V-0003575'),
+(359, 3, 2, 10000, '00:00', 'V-0003575'),
+(360, 4, 1, 15000, '00:00', 'V-0004514'),
+(361, 4, 2, 20000, '00:00', 'V-0003575'),
+(364, 6, 1, 15000, '16:54', 'V-0003805'),
+(365, 6, 2, 10000, '18:54', 'V-0003805'),
+(366, 7, 1, 30000, '15:14', 'V-0003575'),
+(367, 7, 2, 10000, '18:15', 'V-0003829'),
+(370, 9, 1, 10000, '20:33', 'V-0003829'),
+(371, 9, 2, 10000, '18:33', 'V-0003575'),
+(372, 10, 1, 50000, '09:11', 'V-0003575'),
+(373, 10, 2, 25000, '09:14', 'V-0004514'),
+(374, 11, 1, 20000, '10:19', 'V-0003575'),
+(375, 11, 2, 20000, '10:19', 'V-0003575'),
+(378, 5, 1, 30000, '00:00', 'V-0003829'),
+(379, 5, 2, 15000, '00:00', 'V-0004051'),
+(380, 2, 1, 50000, '19:09', 'V-0003575'),
+(381, 2, 2, 55600, '19:09', 'V-0003575'),
+(382, 8, 1, 9000, '18:18', 'V-0004514'),
+(383, 8, 2, 5000, '19:18', 'V-0004514'),
+(384, 13, 1, 25000, '22:34', 'V-0003805'),
+(385, 13, 2, 15000, '22:34', 'V-0003805'),
+(386, 14, 1, 10000, '10:36', 'V-0003829'),
+(387, 15, 1, 90000, '10:37', 'V-0003575'),
+(388, 15, 2, 10000, '10:37', 'V-0003575'),
+(389, 12, 1, 50000, '10:31', 'V-0004051'),
+(390, 12, 2, 50000, '10:31', 'V-0004051'),
+(391, 16, 1, 47500, '10:38', 'V-0003575'),
+(392, 16, 2, 13000, '10:38', 'V-0003575'),
+(395, 17, 1, 25000, '22:40', 'V-0004051'),
+(396, 17, 2, 25000, '22:40', 'V-0004051'),
+(397, 18, 1, 29050, '10:42', 'V-0003575'),
+(398, 18, 2, 18000, '10:42', 'V-0003575'),
+(399, 19, 1, 32000, '10:42', 'V-0003575'),
+(400, 19, 2, 8000, '10:43', 'V-0003575'),
+(401, 20, 1, 105600, '00:00', 'V-0003575'),
+(403, 21, 1, 98000, '12:45', 'V-0003575'),
+(404, 22, 1, 105000, '00:00', 'V-0003829'),
+(405, 23, 1, 58000, '10:50', 'V-0003575'),
+(406, 24, 1, 10000, '00:00', 'V-0003805'),
+(407, 25, 1, 67000, '00:00', 'V-0003575'),
+(408, 26, 1, 27000, '22:54', 'V-0003575'),
+(409, 27, 1, 200000, '00:00', 'V-0003805'),
+(410, 28, 1, 98000, '00:00', 'V-0004514'),
+(411, 29, 1, 75000, '10:57', 'V-0003829'),
+(412, 29, 1, 150000, '22:57', 'V-0004514'),
+(419, 30, 1, 100000, '22:59', 'V-0003575'),
+(425, 31, 1, 10000, '00:00', 'V-0003575');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `gestion_productiva_entrada_backup`
+--
+
+CREATE TABLE `gestion_productiva_entrada_backup` (
+  `id_entrada` int(11) NOT NULL DEFAULT 0,
+  `id_cabecera` int(11) NOT NULL,
+  `maquina` int(11) NOT NULL,
+  `id_molde` int(11) NOT NULL,
+  `cant_envases` int(11) NOT NULL,
+  `hora_entrada` varchar(10) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `gestion_productiva_entrada_backup`
+--
+
+INSERT INTO `gestion_productiva_entrada_backup` (`id_entrada`, `id_cabecera`, `maquina`, `id_molde`, `cant_envases`, `hora_entrada`) VALUES
 (338, 1, 1, 6, 50000, '00:00'),
 (339, 1, 2, 5, 10000, '00:00'),
 (358, 3, 1, 6, 15000, '00:00'),
@@ -150,7 +221,7 @@ INSERT INTO `gestion_productiva_entrada` (`id_entrada`, `id_cabecera`, `maquina`
 (411, 29, 1, 4, 75000, '10:57'),
 (412, 29, 1, 5, 150000, '22:57'),
 (419, 30, 1, 6, 100000, '22:59'),
-(422, 31, 1, 6, 100000, '00:00');
+(425, 31, 1, 6, 10000, '00:00');
 
 -- --------------------------------------------------------
 
@@ -207,7 +278,7 @@ INSERT INTO `gestion_productiva_resultado` (`id_resultado`, `id_cabecera`, `tota
 (316, 28, 367.89, 52976, 656.94, 94600, 3400, 23.61, 96.53, 3.47, ''),
 (317, 29, 394.17, 56760, 1445.28, 208120, 16880, 117.22, 92.50, 7.50, ''),
 (318, 30, 122.22, 17600, 48.89, 7040, 92960, 645.56, 7.04, 92.96, ''),
-(319, 31, 0.00, 0, 611.11, 88000, 12000, 83.33, 88.00, 12.00, '\n\n\n');
+(319, 31, 146.67, 21120, 48.89, 7040, 2960, 20.56, 70.40, 29.60, '\n\n\n');
 
 -- --------------------------------------------------------
 
@@ -217,6 +288,71 @@ INSERT INTO `gestion_productiva_resultado` (`id_resultado`, `id_cabecera`, `tota
 
 CREATE TABLE `gestion_productiva_salida` (
   `id_eficiencia` int(11) NOT NULL,
+  `id_cabecera` int(11) NOT NULL,
+  `total_paletas_molde` int(11) DEFAULT 0,
+  `cant_paletas_lisas` int(11) DEFAULT NULL,
+  `cant_camadas_lisas` int(11) DEFAULT NULL,
+  `cant_envases_lisas` int(11) DEFAULT NULL,
+  `cant_gruesas_lisas` decimal(10,2) DEFAULT 0.00,
+  `cant_paletas_decoradas` int(11) DEFAULT NULL,
+  `cant_camadas_decoradas` int(11) DEFAULT NULL,
+  `cant_envases_decoradas` int(11) DEFAULT NULL,
+  `cant_gruesas_decoradas` decimal(10,2) DEFAULT 0.00,
+  `modelo_molde` varchar(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `gestion_productiva_salida`
+--
+
+INSERT INTO `gestion_productiva_salida` (`id_eficiencia`, `id_cabecera`, `total_paletas_molde`, `cant_paletas_lisas`, `cant_camadas_lisas`, `cant_envases_lisas`, `cant_gruesas_lisas`, `cant_paletas_decoradas`, `cant_camadas_decoradas`, `cant_envases_decoradas`, `cant_gruesas_decoradas`, `modelo_molde`) VALUES
+(700, 1, 12, 2, 16, 7040, 48.89, 10, 80, 35200, 244.44, 'V-0003575'),
+(701, 1, 4, 0, 0, 0, 0.00, 4, 32, 15136, 105.11, 'V-0004514'),
+(715, 3, 12, 5, 40, 17600, 122.22, 7, 56, 24640, 171.11, 'V-0003575'),
+(716, 4, 11, 3, 24, 11352, 78.83, 8, 64, 30272, 210.22, 'V-0004514'),
+(717, 4, 1, 0, 0, 0, 0.00, 1, 8, 3520, 24.44, 'V-0003575'),
+(720, 6, 5, 1, 10, 5750, 39.93, 4, 40, 23000, 159.72, 'V-0003805'),
+(721, 7, 4, 0, 0, 0, 0.00, 4, 32, 14080, 97.78, 'V-0003575'),
+(722, 7, 6, 0, 0, 0, 0.00, 6, 48, 22704, 157.67, 'V-0003829'),
+(724, 9, 4, 0, 0, 0, 0.00, 4, 32, 15136, 105.11, 'V-0003829'),
+(725, 9, 1, 0, 0, 0, 0.00, 1, 8, 3520, 24.44, 'V-0003575'),
+(726, 10, 13, 0, 0, 0, 0.00, 13, 104, 45760, 317.78, 'V-0003575'),
+(727, 10, 6, 0, 0, 0, 0.00, 6, 48, 22704, 157.67, 'V-0004514'),
+(728, 11, 10, 0, 0, 0, 0.00, 10, 80, 35200, 244.44, 'V-0003575'),
+(730, 5, 6, 1, 8, 3784, 26.28, 5, 40, 18920, 131.39, 'V-0003829'),
+(731, 5, 5, 1, 10, 5750, 39.93, 4, 40, 23000, 159.72, 'V-0004051'),
+(732, 2, 30, 1, 8, 3520, 24.44, 29, 232, 102080, 708.89, 'V-0003575'),
+(733, 8, 3, 0, 0, 0, 0.00, 3, 24, 11352, 78.83, 'V-0004514'),
+(734, 13, 5, 0, 0, 0, 0.00, 5, 50, 28750, 199.65, 'V-0003805'),
+(735, 14, 2, 0, 0, 0, 0.00, 2, 16, 7568, 52.56, 'V-0003829'),
+(736, 15, 35, 10, 80, 35200, 244.44, 25, 200, 88000, 611.11, 'V-0003575'),
+(737, 12, 18, 3, 30, 17250, 119.79, 15, 150, 86250, 598.96, 'V-0004051'),
+(738, 16, 19, 2, 16, 7040, 48.89, 17, 136, 59840, 415.56, 'V-0003575'),
+(740, 17, 25, 17, 170, 97750, 678.82, 8, 80, 46000, 319.44, 'V-0004051'),
+(741, 18, 13, 0, 0, 0, 0.00, 13, 104, 45760, 317.78, 'V-0003575'),
+(742, 19, 11, 0, 0, 0, 0.00, 11, 88, 38720, 268.89, 'V-0003575'),
+(743, 20, 30, 0, 0, 0, 0.00, 30, 240, 105600, 733.33, 'V-0003575'),
+(745, 21, 25, 0, 0, 0, 0.00, 25, 200, 88000, 611.11, 'V-0003575'),
+(746, 22, 33, 8, 64, 30272, 210.22, 25, 200, 94600, 656.94, 'V-0003829'),
+(747, 23, 4, 0, 0, 0, 0.00, 4, 32, 14080, 97.78, 'V-0003575'),
+(748, 24, 2, 1, 10, 5750, 39.93, 1, 10, 5750, 39.93, 'V-0003805'),
+(749, 25, 18, 3, 24, 10560, 73.33, 15, 120, 52800, 366.67, 'V-0003575'),
+(750, 26, 8, 1, 8, 3520, 24.44, 7, 56, 24640, 171.11, 'V-0003575'),
+(751, 27, 34, 0, 0, 0, 0.00, 34, 340, 195500, 1357.64, 'V-0003805'),
+(752, 28, 39, 14, 112, 52976, 367.89, 25, 200, 94600, 656.94, 'V-0004514'),
+(753, 29, 20, 2, 16, 7568, 52.56, 18, 144, 68112, 473.00, 'V-0003829'),
+(754, 29, 50, 13, 104, 49192, 341.61, 37, 296, 140008, 972.28, 'V-0004514'),
+(761, 30, 7, 5, 40, 17600, 122.22, 2, 16, 7040, 48.89, 'V-0003575'),
+(766, 31, 8, 6, 48, 21120, 146.67, 2, 16, 7040, 48.89, 'V-0003575');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `gestion_productiva_salida_backup`
+--
+
+CREATE TABLE `gestion_productiva_salida_backup` (
+  `id_eficiencia` int(11) NOT NULL DEFAULT 0,
   `modelo_molde` int(11) NOT NULL,
   `id_cabecera` int(11) NOT NULL,
   `total_paletas_molde` int(11) DEFAULT 0,
@@ -231,10 +367,10 @@ CREATE TABLE `gestion_productiva_salida` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `gestion_productiva_salida`
+-- Volcado de datos para la tabla `gestion_productiva_salida_backup`
 --
 
-INSERT INTO `gestion_productiva_salida` (`id_eficiencia`, `modelo_molde`, `id_cabecera`, `total_paletas_molde`, `cant_paletas_lisas`, `cant_camadas_lisas`, `cant_envases_lisas`, `cant_gruesas_lisas`, `cant_paletas_decoradas`, `cant_camadas_decoradas`, `cant_envases_decoradas`, `cant_gruesas_decoradas`) VALUES
+INSERT INTO `gestion_productiva_salida_backup` (`id_eficiencia`, `modelo_molde`, `id_cabecera`, `total_paletas_molde`, `cant_paletas_lisas`, `cant_camadas_lisas`, `cant_envases_lisas`, `cant_gruesas_lisas`, `cant_paletas_decoradas`, `cant_camadas_decoradas`, `cant_envases_decoradas`, `cant_gruesas_decoradas`) VALUES
 (700, 6, 1, 12, 2, 16, 7040, 48.89, 10, 80, 35200, 244.44),
 (701, 5, 1, 4, 0, 0, 0, 0.00, 4, 32, 15136, 105.11),
 (715, 6, 3, 12, 5, 40, 17600, 122.22, 7, 56, 24640, 171.11),
@@ -272,7 +408,7 @@ INSERT INTO `gestion_productiva_salida` (`id_eficiencia`, `modelo_molde`, `id_ca
 (753, 4, 29, 20, 2, 16, 7568, 52.56, 18, 144, 68112, 473.00),
 (754, 5, 29, 50, 13, 104, 49192, 341.61, 37, 296, 140008, 972.28),
 (761, 6, 30, 7, 5, 40, 17600, 122.22, 2, 16, 7040, 48.89),
-(764, 6, 31, 25, 0, 0, 0, 0.00, 25, 200, 88000, 611.11);
+(766, 6, 31, 8, 6, 48, 21120, 146.67, 2, 16, 7040, 48.89);
 
 -- --------------------------------------------------------
 
@@ -460,19 +596,20 @@ INSERT INTO `inventario_pantallas_salida` (`id_inventario_salida`, `id_pantalla`
 CREATE TABLE `justificantes` (
   `id_justificante` int(11) NOT NULL,
   `etiqueta` varchar(150) NOT NULL,
-  `descripcion` varchar(255) DEFAULT NULL
+  `descripcion` varchar(255) DEFAULT NULL,
+  `estado` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `justificantes`
 --
 
-INSERT INTO `justificantes` (`id_justificante`, `etiqueta`, `descripcion`) VALUES
-(1, 'Desperfecto en el decorado', 'Pérdida por mal decorado de la máquina, envases con imperfecciones visuales'),
-(2, 'Rotura por mal cocido', 'Envases quebrados debido a una cocción deficiente en el proceso de fabricación'),
-(3, 'Falla mecánica de la máquina', 'Parada de producción ocasionada por avería o mal funcionamiento del equipo'),
-(4, 'Material defectuoso', 'Pérdida originada por lote de materia prima en mal estado o fuera de especificación'),
-(5, 'Error de operario', 'Pérdida atribuida a manipulación incorrecta del equipo o del proceso por parte del personal');
+INSERT INTO `justificantes` (`id_justificante`, `etiqueta`, `descripcion`, `estado`) VALUES
+(1, 'Desperfecto en el decorado', 'Pérdida por mal decorado de la máquina, envases con imperfecciones visuales', 1),
+(2, 'Rotura por mal cocido', 'Envases quebrados debido a una cocción deficiente en el proceso de fabricación', 1),
+(3, 'Falla mecánica de la máquina', 'Parada de producción ocasionada por avería o mal funcionamiento del equipo', 1),
+(4, 'Material defectuoso', 'Pérdida originada por lote de materia prima en mal estado o fuera de especificación', 1),
+(5, 'Error de operario', 'Pérdida atribuida a manipulación incorrecta del equipo o del proceso por parte del personal', 1);
 
 -- --------------------------------------------------------
 
@@ -501,8 +638,8 @@ INSERT INTO `metas_rendimiento` (`id_meta`, `anio`, `mes`, `deficiencia`, `estad
 (6, 2026, 'junio', 85.00, 0),
 (7, 2026, 'julio', 89.00, 0),
 (8, 2026, 'agosto', 93.00, 0),
-(9, 2026, 'diciembre', 91.00, 0),
-(10, 2026, 'octubre', 5.00, 1);
+(9, 2026, 'diciembre', 91.00, 1),
+(10, 2026, 'octubre', 5.00, 0);
 
 -- --------------------------------------------------------
 
@@ -511,19 +648,47 @@ INSERT INTO `metas_rendimiento` (`id_meta`, `anio`, `mes`, `deficiencia`, `estad
 --
 
 CREATE TABLE `moldes` (
-  `id_molde` int(11) NOT NULL,
-  `Nombre` varchar(150) NOT NULL,
-  `Descripcion` varchar(255) DEFAULT NULL,
+  `item` varchar(20) NOT NULL,
+  `nombre` varchar(150) NOT NULL,
+  `descripcion` varchar(255) DEFAULT NULL,
   `numero_camadas` int(11) NOT NULL,
   `numero_envases` int(11) NOT NULL,
-  `numero_gruesas` decimal(10,2) NOT NULL
+  `numero_gruesas` decimal(10,2) NOT NULL,
+  `estado` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `moldes`
 --
 
-INSERT INTO `moldes` (`id_molde`, `Nombre`, `Descripcion`, `numero_camadas`, `numero_envases`, `numero_gruesas`) VALUES
+INSERT INTO `moldes` (`item`, `nombre`, `descripcion`, `numero_camadas`, `numero_envases`, `numero_gruesas`, `estado`) VALUES
+('string', 'string', 'string', 0, 0, 0.00, 1),
+('V-0003575', 'GX01335', 'CERVEZA 330,0 RET.', 8888, 3520, 24.44, 1),
+('V-0003805', 'GX01944', 'POLAR LIGHT', 10, 5750, 39.93, 1),
+('V-0003829', 'GV02156', 'GOLDEN 350 ML', 8, 3784, 26.28, 1),
+('V-0004051', 'GX01944', 'POLARCITA 222 ML', 10, 5750, 39.93, 1),
+('V-0004514', 'GV02156', 'PEPSI 350 ML', 8, 3784, 26.28, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `moldes_backup`
+--
+
+CREATE TABLE `moldes_backup` (
+  `id_molde` int(11) NOT NULL DEFAULT 0,
+  `nombre` varchar(150) NOT NULL,
+  `descripcion` varchar(255) DEFAULT NULL,
+  `numero_camadas` int(11) NOT NULL,
+  `numero_envases` int(11) NOT NULL,
+  `numero_gruesas` decimal(10,2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `moldes_backup`
+--
+
+INSERT INTO `moldes_backup` (`id_molde`, `nombre`, `descripcion`, `numero_camadas`, `numero_envases`, `numero_gruesas`) VALUES
 (1, 'GX01944', 'POLAR LIGHT', 10, 5750, 39.93),
 (2, 'GX01944', 'POLARCITA 222 ML', 10, 5750, 39.93),
 (4, 'GV02156', 'GOLDEN 350 ML', 8, 3784, 26.28),
@@ -583,60 +748,24 @@ CREATE TABLE `permisos_usuarios` (
 --
 
 INSERT INTO `permisos_usuarios` (`id_permisou`, `id_usuario`, `id_permisom`) VALUES
-(582, 14, 1),
-(583, 14, 2),
-(584, 14, 3),
-(585, 14, 7),
-(586, 14, 13),
-(587, 14, 4),
-(588, 14, 5),
-(589, 14, 6),
-(590, 14, 8),
-(591, 14, 9),
-(592, 14, 10),
-(593, 14, 11),
-(594, 14, 12),
-(595, 14, 17),
-(596, 14, 18),
-(597, 14, 16),
-(598, 14, 15),
-(599, 14, 14),
-(600, 13, 1),
-(601, 13, 2),
-(602, 13, 3),
-(603, 13, 4),
-(604, 13, 5),
-(605, 13, 6),
-(606, 13, 7),
-(607, 13, 8),
-(608, 13, 9),
-(609, 13, 10),
-(610, 13, 11),
-(611, 13, 12),
-(612, 13, 13),
-(613, 13, 14),
-(614, 13, 15),
-(615, 13, 16),
-(616, 13, 17),
-(617, 13, 18),
-(618, 15, 1),
-(619, 15, 2),
-(620, 15, 3),
-(621, 15, 7),
-(622, 15, 13),
-(623, 15, 4),
-(624, 15, 6),
-(625, 15, 5),
-(626, 15, 8),
-(627, 15, 9),
-(628, 15, 10),
-(629, 15, 11),
-(630, 15, 12),
-(631, 15, 18),
-(632, 15, 17),
-(633, 15, 16),
-(634, 15, 15),
-(635, 15, 14);
+(564, 13, 1),
+(565, 13, 2),
+(566, 13, 3),
+(567, 13, 4),
+(568, 13, 5),
+(569, 13, 6),
+(570, 13, 7),
+(571, 13, 8),
+(572, 13, 9),
+(573, 13, 10),
+(574, 13, 11),
+(575, 13, 12),
+(576, 13, 13),
+(577, 13, 14),
+(578, 13, 15),
+(579, 13, 16),
+(580, 13, 17),
+(581, 13, 18);
 
 -- --------------------------------------------------------
 
@@ -646,15 +775,52 @@ INSERT INTO `permisos_usuarios` (`id_permisou`, `id_usuario`, `id_permisom`) VAL
 
 CREATE TABLE `produccion_justificantes` (
   `id_cabecera` int(11) NOT NULL,
-  `modelo_molde` int(11) NOT NULL,
-  `id_justificante` int(11) NOT NULL
+  `id_justificante` int(11) NOT NULL,
+  `modelo_molde` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `produccion_justificantes`
 --
 
-INSERT INTO `produccion_justificantes` (`id_cabecera`, `modelo_molde`, `id_justificante`) VALUES
+INSERT INTO `produccion_justificantes` (`id_cabecera`, `id_justificante`, `modelo_molde`) VALUES
+(1, 4, 'V-0003575'),
+(2, 5, 'V-0003575'),
+(10, 1, 'V-0003575'),
+(10, 5, 'V-0004514'),
+(11, 3, 'V-0003575'),
+(12, 2, 'V-0004051'),
+(13, 1, 'V-0003805'),
+(14, 4, 'V-0003829'),
+(15, 2, 'V-0003575'),
+(16, 3, 'V-0003575'),
+(17, 1, 'V-0004051'),
+(21, 3, 'V-0003575'),
+(23, 1, 'V-0003575'),
+(23, 2, 'V-0003575'),
+(23, 3, 'V-0003575'),
+(23, 4, 'V-0003575'),
+(25, 5, 'V-0003575'),
+(27, 1, 'V-0003805'),
+(30, 3, 'V-0003575');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `produccion_justificantes_backup`
+--
+
+CREATE TABLE `produccion_justificantes_backup` (
+  `id_cabecera` int(11) NOT NULL,
+  `modelo_molde` int(11) NOT NULL,
+  `id_justificante` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `produccion_justificantes_backup`
+--
+
+INSERT INTO `produccion_justificantes_backup` (`id_cabecera`, `modelo_molde`, `id_justificante`) VALUES
 (1, 6, 4),
 (2, 6, 5),
 (10, 5, 5),
@@ -700,9 +866,7 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id_usuario`, `cedula`, `carnet_usuario`, `contrasena`, `nombres`, `apellidos`, `telefono`, `correo`, `rol`, `activo_usuario`, `creado_en`) VALUES
-(13, '30670857', '111', '$argon2id$v=19$m=65536,t=3,p=4$Q3u6fMBXG8gEHQIhfGUojg$Drm1LW+20g2J02h0dyKaQEoNoYJ8+oNb1zDS19NnQuI', 'Daniel', 'Pérez', '0416-7383181', 'd30670857@gmail.com', 'administrador', 1, '2026-10-11 19:30:27'),
-(14, '30717851', '000', '$argon2id$v=19$m=65536,t=3,p=4$EG9VXsuX6ZmdPfjaqLKd9Q$rvtNOpbjuPPhxR48apaUOhnI6Ym2nHwHAO0RtUbyP/I', 'Miguel Alexander', 'Bethancourt Briceño', '0412-1986816', 'mbethancourt2005@gmail.com', 'administrador', 1, '2026-10-15 00:53:49'),
-(15, '30670913', '222', '$argon2id$v=19$m=65536,t=3,p=4$vrLiylImoJTZKoppqKdAyg$b92HN8kaEU/SuWdIQFUAw3urGiVsaTVVfGwjw5HR050', 'Fabio David', 'Romero Vera', '0416-3660482', 'fabioromero@gmail.com', 'administrador', 1, '2026-10-15 01:01:35');
+(13, '30670857', '111', '$argon2id$v=19$m=65536,t=3,p=4$Q3u6fMBXG8gEHQIhfGUojg$Drm1LW+20g2J02h0dyKaQEoNoYJ8+oNb1zDS19NnQuI', 'Daniel', 'Perez', '04167383181', 'd30670857@gmail.com', 'administrador', 1, '2026-10-11 19:30:27');
 
 --
 -- Índices para tablas volcadas
@@ -720,7 +884,7 @@ ALTER TABLE `gestion_productiva_cabecera`
 ALTER TABLE `gestion_productiva_entrada`
   ADD PRIMARY KEY (`id_entrada`),
   ADD KEY `id_produccion` (`id_cabecera`),
-  ADD KEY `id_molde` (`id_molde`);
+  ADD KEY `fk_entrada_molde` (`id_molde`);
 
 --
 -- Indices de la tabla `gestion_productiva_resultado`
@@ -734,8 +898,8 @@ ALTER TABLE `gestion_productiva_resultado`
 --
 ALTER TABLE `gestion_productiva_salida`
   ADD PRIMARY KEY (`id_eficiencia`),
-  ADD KEY `fk_salida_molde` (`modelo_molde`),
-  ADD KEY `fk_salida_produccion` (`id_cabecera`);
+  ADD KEY `fk_salida_produccion` (`id_cabecera`),
+  ADD KEY `fk_salida_molde` (`modelo_molde`);
 
 --
 -- Indices de la tabla `inventario_insumos`
@@ -794,7 +958,7 @@ ALTER TABLE `metas_rendimiento`
 -- Indices de la tabla `moldes`
 --
 ALTER TABLE `moldes`
-  ADD PRIMARY KEY (`id_molde`);
+  ADD PRIMARY KEY (`item`);
 
 --
 -- Indices de la tabla `permisos_modulos`
@@ -815,8 +979,8 @@ ALTER TABLE `permisos_usuarios`
 --
 ALTER TABLE `produccion_justificantes`
   ADD UNIQUE KEY `id_cabecera` (`id_cabecera`,`modelo_molde`,`id_justificante`),
-  ADD KEY `modelo_molde` (`modelo_molde`),
-  ADD KEY `id_justificante` (`id_justificante`);
+  ADD KEY `id_justificante` (`id_justificante`),
+  ADD KEY `fk_justificantes_molde` (`modelo_molde`);
 
 --
 -- Indices de la tabla `usuarios`
@@ -841,7 +1005,7 @@ ALTER TABLE `gestion_productiva_cabecera`
 -- AUTO_INCREMENT de la tabla `gestion_productiva_entrada`
 --
 ALTER TABLE `gestion_productiva_entrada`
-  MODIFY `id_entrada` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=423;
+  MODIFY `id_entrada` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=426;
 
 --
 -- AUTO_INCREMENT de la tabla `gestion_productiva_resultado`
@@ -853,7 +1017,7 @@ ALTER TABLE `gestion_productiva_resultado`
 -- AUTO_INCREMENT de la tabla `gestion_productiva_salida`
 --
 ALTER TABLE `gestion_productiva_salida`
-  MODIFY `id_eficiencia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=765;
+  MODIFY `id_eficiencia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=767;
 
 --
 -- AUTO_INCREMENT de la tabla `inventario_insumos`
@@ -904,12 +1068,6 @@ ALTER TABLE `metas_rendimiento`
   MODIFY `id_meta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
--- AUTO_INCREMENT de la tabla `moldes`
---
-ALTER TABLE `moldes`
-  MODIFY `id_molde` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
-
---
 -- AUTO_INCREMENT de la tabla `permisos_modulos`
 --
 ALTER TABLE `permisos_modulos`
@@ -919,13 +1077,13 @@ ALTER TABLE `permisos_modulos`
 -- AUTO_INCREMENT de la tabla `permisos_usuarios`
 --
 ALTER TABLE `permisos_usuarios`
-  MODIFY `id_permisou` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=636;
+  MODIFY `id_permisou` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=582;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- Restricciones para tablas volcadas
@@ -935,8 +1093,8 @@ ALTER TABLE `usuarios`
 -- Filtros para la tabla `gestion_productiva_entrada`
 --
 ALTER TABLE `gestion_productiva_entrada`
-  ADD CONSTRAINT `gestion_productiva_entrada_ibfk_1` FOREIGN KEY (`id_cabecera`) REFERENCES `gestion_productiva_cabecera` (`id_cabecera`) ON DELETE CASCADE,
-  ADD CONSTRAINT `gestion_productiva_entrada_ibfk_2` FOREIGN KEY (`id_molde`) REFERENCES `moldes` (`id_molde`);
+  ADD CONSTRAINT `fk_entrada_molde` FOREIGN KEY (`id_molde`) REFERENCES `moldes` (`item`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `gestion_productiva_entrada_ibfk_1` FOREIGN KEY (`id_cabecera`) REFERENCES `gestion_productiva_cabecera` (`id_cabecera`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `gestion_productiva_resultado`
@@ -948,7 +1106,7 @@ ALTER TABLE `gestion_productiva_resultado`
 -- Filtros para la tabla `gestion_productiva_salida`
 --
 ALTER TABLE `gestion_productiva_salida`
-  ADD CONSTRAINT `fk_salida_molde` FOREIGN KEY (`modelo_molde`) REFERENCES `moldes` (`id_molde`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_salida_molde` FOREIGN KEY (`modelo_molde`) REFERENCES `moldes` (`item`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_salida_produccion` FOREIGN KEY (`id_cabecera`) REFERENCES `gestion_productiva_cabecera` (`id_cabecera`) ON DELETE CASCADE;
 
 --
@@ -988,8 +1146,8 @@ arios_ibfk_2` FOREIGN KEY (`id_permisom`) REFERENCES `permisos_modulos` (`id_per
 -- Filtros para la tabla `produccion_justificantes`
 --
 ALTER TABLE `produccion_justificantes`
+  ADD CONSTRAINT `fk_justificantes_molde` FOREIGN KEY (`modelo_molde`) REFERENCES `moldes` (`item`) ON UPDATE CASCADE,
   ADD CONSTRAINT `produccion_justificantes_ibfk_1` FOREIGN KEY (`id_cabecera`) REFERENCES `gestion_productiva_cabecera` (`id_cabecera`) ON DELETE CASCADE,
-  ADD CONSTRAINT `produccion_justificantes_ibfk_2` FOREIGN KEY (`modelo_molde`) REFERENCES `moldes` (`id_molde`),
   ADD CONSTRAINT `produccion_justificantes_ibfk_3` FOREIGN KEY (`id_justificante`) REFERENCES `justificantes` (`id_justificante`) ON DELETE CASCADE;
 COMMIT;
 

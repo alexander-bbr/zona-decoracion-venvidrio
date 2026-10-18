@@ -30,18 +30,26 @@ def registrar_molde(
     db: Session = Depends(get_db),
     #_=Depends(require_permiso("gestion_productiva", "gestion_moldes"))
 ):
+    # Validación de duplicado
+    existe = services.obtener_molde_por_item(db, datos.item)
+    if existe:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Ya existe un molde con ese item."
+        )
+
     molde = services.registrar_molde(db, datos)
-    return {"status": "Registro insertado con éxito", "id": molde.id_molde}
+    return {"status": "Registro insertado con éxito", "item": molde.item}
 
 
-# 3. OBTENER MOLDE POR ID (Para editar)
-@router.get("/{id_molde}", response_model=schemas.MoldeResponde)
+# 3. OBTENER MOLDE POR ITEM (Para editar)
+@router.get("/{item}", response_model=schemas.MoldeResponde)
 def obtener_molde(
-    id_molde: int,
+    item: str,
     db: Session = Depends(get_db),
     #_=Depends(require_permiso("gestion_productiva", "gestion_moldes"))
 ):
-    molde = services.obtener_molde_por_id(db, id_molde)
+    molde = services.obtener_molde_por_item(db, item)
     if not molde:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -51,17 +59,26 @@ def obtener_molde(
 
 
 # 4. EDITAR MOLDE
-@router.put("/{id_molde}")
+@router.put("/{item}")
 def editar_molde(
-    id_molde: int,
+    item: str,
     datos: schemas.MoldeCrear,
     db: Session = Depends(get_db),
     #_=Depends(require_permiso("gestion_productiva", "gestion_moldes"))
 ):
-    molde_actualizado = services.editar_molde(db, id_molde, datos)
+    # Validación de duplicado (solo si el usuario está cambiando el item)
+    if datos.item != item:
+        existe = services.obtener_molde_por_item(db, datos.item)
+        if existe:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Ya existe un molde con ese item."
+            )
+
+    molde_actualizado = services.editar_molde(db, item, datos)
     if not molde_actualizado:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="No se pudo actualizar porque el molde no fue encontrado."
         )
-    return {"status": "Registro actualizado con éxito", "id": molde_actualizado.id_molde}
+    return {"status": "Registro actualizado con éxito", "item": molde_actualizado.item}

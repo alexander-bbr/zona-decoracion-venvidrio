@@ -7,11 +7,13 @@ type Justificante = {
   idJustificante: number;
   etiqueta: string;
   descripcion: string | null;
+  estado: boolean;
 };
 
 type FormData = {
   etiqueta: string;
   descripcion: string;
+  estado: boolean;
 };
 
 const API_JUSTIFICANTES = "http://127.0.0.1:8000/api/gestion-justificantes";
@@ -31,6 +33,7 @@ const CargarJustificante = ({ idJustificante }: { idJustificante: string }) => {
   const [formData, setFormData] = useState<FormData>({
     etiqueta: "",
     descripcion: "",
+    estado: true,
   });
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState("");
@@ -55,6 +58,7 @@ const CargarJustificante = ({ idJustificante }: { idJustificante: string }) => {
         setFormData({
           etiqueta: justificante.etiqueta,
           descripcion: justificante.descripcion || "",
+          estado: Boolean(justificante.estado),
         });
       } catch (loadError) {
         setError(
@@ -72,11 +76,20 @@ const CargarJustificante = ({ idJustificante }: { idJustificante: string }) => {
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    const { name, value, type } = e.target;
+
+    if (type === "checkbox") {
+      const checked = (e.target as HTMLInputElement).checked;
+      setFormData((prev) => ({
+        ...prev,
+        [name]: checked,
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
   };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -106,7 +119,6 @@ const CargarJustificante = ({ idJustificante }: { idJustificante: string }) => {
         );
       }
 
-      alert("¡Justificante editado exitosamente!");
       navigate("/gestion-justificantes");
     } catch (submitError) {
       setError(
@@ -127,6 +139,7 @@ const CargarJustificante = ({ idJustificante }: { idJustificante: string }) => {
         setFormData({
           etiqueta: justificante.etiqueta,
           descripcion: justificante.descripcion || "",
+          estado: Boolean(justificante.estado),
         });
       }
     } catch {
@@ -177,6 +190,20 @@ const CargarJustificante = ({ idJustificante }: { idJustificante: string }) => {
               rows={6}
               required
             />
+          </div>
+
+          <div className={styles.checkboxWrapper}>
+            <label htmlFor="estado" className={styles.checkboxLabel}>
+              <input
+                id="estado"
+                name="estado"
+                type="checkbox"
+                checked={formData.estado}
+                onChange={handleChange}
+                className={styles.checkbox}
+              />
+              <span>Justificante Activo</span>
+            </label>
           </div>
         </fieldset>
 

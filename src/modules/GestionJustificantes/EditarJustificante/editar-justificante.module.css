@@ -86,6 +86,32 @@
   resize: none;
 }
 
+.checkboxWrapper {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: #333;
+  user-select: none;
+}
+
+.checkbox {
+  width: 20px !important;
+  height: 20px;
+  cursor: pointer;
+  accent-color: #3498db;
+  padding: 0 !important;
+  border: 2px solid #e0e0e0 !important;
+}
+
 .loading {
   text-align: center;
   color: #6b7280;

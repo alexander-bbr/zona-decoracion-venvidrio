@@ -6,6 +6,7 @@ import styles from "./registrar-justificante.module.css";
 type FormData = {
   etiqueta: string;
   descripcion: string;
+  estado: boolean;
 };
 
 const API_JUSTIFICANTES = "http://127.0.0.1:8000/api/gestion-justificantes";
@@ -15,6 +16,7 @@ export const RegistrarJustificante = () => {
   const [formData, setFormData] = useState<FormData>({
     etiqueta: "",
     descripcion: "",
+    estado: true,
   });
   const [error, setError] = useState("");
   const [cargando, setCargando] = useState(false);
@@ -22,11 +24,20 @@ export const RegistrarJustificante = () => {
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    const { name, value, type } = e.target;
+
+    if (type === "checkbox") {
+      const checked = (e.target as HTMLInputElement).checked;
+      setFormData((prev) => ({
+        ...prev,
+        [name]: checked,
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
   };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -55,7 +66,6 @@ export const RegistrarJustificante = () => {
         );
       }
 
-      alert("¡Justificante registrado exitosamente!");
       navigate("/gestion-justificantes");
     } catch (submitError) {
       setError(
@@ -72,6 +82,7 @@ export const RegistrarJustificante = () => {
     setFormData({
       etiqueta: "",
       descripcion: "",
+      estado: true,
     });
     setError("");
   };
@@ -114,6 +125,20 @@ export const RegistrarJustificante = () => {
               rows={6}
               required
             />
+          </div>
+
+          <div className={styles.checkboxWrapper}>
+            <label htmlFor="estado" className={styles.checkboxLabel}>
+              <input
+                id="estado"
+                name="estado"
+                type="checkbox"
+                checked={formData.estado}
+                onChange={handleChange}
+                className={styles.checkbox}
+              />
+              <span>Justificante Activo</span>
+            </label>
           </div>
         </fieldset>
 

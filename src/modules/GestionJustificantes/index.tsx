@@ -6,6 +6,7 @@ type Justificante = {
   idJustificante: number;
   etiqueta: string;
   descripcion: string | null;
+  estado: boolean;
 };
 
 const API_JUSTIFICANTES = "http://127.0.0.1:8000/api/gestion-justificantes";
@@ -34,6 +35,7 @@ export const GestionJustificantes = () => {
         (justificante: Justificante) => ({
           ...justificante,
           idJustificante: Number(justificante.idJustificante),
+          estado: Boolean(justificante.estado),
         }),
       );
       // Ordenar los justificantes por ID de forma ascendente
@@ -199,6 +201,7 @@ export const GestionJustificantes = () => {
                     <tr>
                       <th>Etiqueta</th>
                       <th>Descripción</th>
+                      <th>Estado</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -214,6 +217,17 @@ export const GestionJustificantes = () => {
                       >
                         <td>{justificante.etiqueta}</td>
                         <td>{justificante.descripcion || "—"}</td>
+                        <td>
+                          <span
+                            className={
+                              justificante.estado
+                                ? styles.estadoActivo
+                                : styles.estadoInactivo
+                            }
+                          >
+                            {justificante.estado ? "Activo" : "Inactivo"}
+                          </span>
+                        </td>
                       </tr>
                     ))}
                   </tbody>

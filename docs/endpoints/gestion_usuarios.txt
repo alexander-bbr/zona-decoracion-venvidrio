@@ -1,4 +1,5 @@
-# GESTION DE USUARIOS
+MÓDULO: GESTIÓN DE USUARIOS
+=========================
 
 Ruta 1: Crear Usuario
 Endpoint: http://127.0.0.1:8000/api/usuarios

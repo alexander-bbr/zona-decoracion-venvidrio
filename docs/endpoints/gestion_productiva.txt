@@ -1,3 +1,7 @@
+MÓDULO: GESTIÓN PRODUCTIVA
+=========================
+
+
 Ruta 1: Registro de Producción
 Endpoint: http://127.0.0.1:8000/produccion
 Método: POST
@@ -528,7 +532,7 @@ Método: GET
 Estructura de los datos que recibirá:
 [
     {
-        "item": "THXI", # Anteriormente item y e tipo numérico
+        "item": "THXI",
         "nombre": "string",
         "descripcion": "string",
         "numeroCamadas": 0,

@@ -33,7 +33,7 @@ JSON (Respuesta en caso de error):
     "detail": "Ya existe un molde con ese item."
 }
 
-NOTA TÉCNICA: Se puede editar el item, pero se verifica en el backend si no existe ya un molde con el mismo item
+NOTA TÉCNICA: Se verifica en el backend si no existe ya un molde con el mismo item
 
 ---
 

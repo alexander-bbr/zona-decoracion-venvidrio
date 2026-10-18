@@ -5,7 +5,7 @@ import { ENVASES_POR_GRUESA } from "../../../../constants";
 import styles from "./registrar-produccion.module.css";
 
 type ModeloForm = {
-  idMolde: number;
+  item: string;
   nombre: string;
   paletasDecoradas: number;
   produccionLisa: number;
@@ -13,7 +13,7 @@ type ModeloForm = {
 };
 
 type Molde = {
-  idMolde: number;
+  item: string;
   nombre: string;
   descripcion: string;
   numeroCamadas: number;
@@ -27,7 +27,7 @@ type Justificante = {
 };
 
 type EntradaMaquina = {
-  idMolde: number;
+  item: string;
   cantEnvases: number;
   horaEntrada: string;
 };
@@ -41,6 +41,31 @@ const ETIQUETAS_MAQUINAS = ["D3", "D4", "D11", "D12"];
 
 const formatNumber = (value: number) =>
   value.toLocaleString("es-VE", { maximumFractionDigits: 2 });
+
+/**
+ * Extrae un mensaje legible del campo `detail` que devuelve el backend.
+ * - Si es string, lo devuelve tal cual.
+ * - Si es un array (validación de Pydantic), junta los mensajes.
+ * - Si no hay, devuelve el fallback.
+ */
+const obtenerMensajeDeError = (data: unknown, fallback: string): string => {
+  if (!data || typeof data !== "object") return fallback;
+  const detail = (data as { detail?: unknown }).detail;
+  if (detail === undefined) return fallback;
+  if (typeof detail === "string") return detail;
+  if (Array.isArray(detail)) {
+    return detail
+      .map((err: unknown) => {
+        if (!err || typeof err !== "object") return String(err);
+        const e = err as { loc?: unknown; msg?: unknown };
+        const loc = Array.isArray(e.loc) ? e.loc.join(" → ") : "";
+        const msg = typeof e.msg === "string" ? e.msg : JSON.stringify(e.msg);
+        return loc ? `${loc}: ${msg}` : msg;
+      })
+      .join(" | ");
+  }
+  return JSON.stringify(detail);
+};
 
 export const RegistrarProduccion = () => {
   const navigate = useNavigate();
@@ -57,10 +82,10 @@ export const RegistrarProduccion = () => {
   const [tecnico, setTecnico] = useState("");
 
   const [maquinas, setMaquinas] = useState<MaquinaProduccion[]>([
-    { entradas: [{ idMolde: 0, cantEnvases: 0, horaEntrada: "" }] },
-    { entradas: [{ idMolde: 0, cantEnvases: 0, horaEntrada: "" }] },
-    { entradas: [{ idMolde: 0, cantEnvases: 0, horaEntrada: "" }] },
-    { entradas: [{ idMolde: 0, cantEnvases: 0, horaEntrada: "" }] },
+    { entradas: [{ item: "", cantEnvases: 0, horaEntrada: "" }] },
+    { entradas: [{ item: "", cantEnvases: 0, horaEntrada: "" }] },
+    { entradas: [{ item: "", cantEnvases: 0, horaEntrada: "" }] },
+    { entradas: [{ item: "", cantEnvases: 0, horaEntrada: "" }] },
   ]);
   const [modelosForm, setModelosForm] = useState<ModeloForm[]>([]);
   const [observaciones, setObservaciones] = useState("");
@@ -130,7 +155,7 @@ export const RegistrarProduccion = () => {
   // Actualizar modelosForm cuando cambian las máquinas
   useEffect(() => {
     const moldesUsados = new Map<
-      number,
+      string,
       {
         nombre: string;
         paletasDecoradas: number;
@@ -141,10 +166,10 @@ export const RegistrarProduccion = () => {
 
     maquinas.forEach((maquina) => {
       maquina.entradas.forEach((entrada) => {
-        if (entrada.idMolde > 0) {
-          const molde = moldes.find((m) => m.idMolde === entrada.idMolde);
-          if (molde && !moldesUsados.has(entrada.idMolde)) {
-            moldesUsados.set(entrada.idMolde, {
+        if (entrada.item) {
+          const molde = moldes.find((m) => m.item === entrada.item);
+          if (molde && !moldesUsados.has(entrada.item)) {
+            moldesUsados.set(entrada.item, {
               nombre: molde.nombre,
               paletasDecoradas: 0,
               produccionLisa: 0,
@@ -156,8 +181,8 @@ export const RegistrarProduccion = () => {
     });
 
     const nuevosModelos = Array.from(moldesUsados.entries()).map(
-      ([idMolde, data]) => ({
-        idMolde,
+      ([item, data]) => ({
+        item,
         nombre: data.nombre,
         paletasDecoradas: data.paletasDecoradas,
         produccionLisa: data.produccionLisa,
@@ -176,7 +201,7 @@ export const RegistrarProduccion = () => {
               ...maquina,
               entradas: [
                 ...maquina.entradas,
-                { idMolde: 0, cantEnvases: 0, horaEntrada: "" },
+                { item: "", cantEnvases: 0, horaEntrada: "" },
               ],
             }
           : maquina,
@@ -292,10 +317,10 @@ export const RegistrarProduccion = () => {
     setFecha("");
     setTecnico("");
     setMaquinas([
-      { entradas: [{ idMolde: 0, cantEnvases: 0, horaEntrada: "" }] },
-      { entradas: [{ idMolde: 0, cantEnvases: 0, horaEntrada: "" }] },
-      { entradas: [{ idMolde: 0, cantEnvases: 0, horaEntrada: "" }] },
-      { entradas: [{ idMolde: 0, cantEnvases: 0, horaEntrada: "" }] },
+      { entradas: [{ item: "", cantEnvases: 0, horaEntrada: "" }] },
+      { entradas: [{ item: "", cantEnvases: 0, horaEntrada: "" }] },
+      { entradas: [{ item: "", cantEnvases: 0, horaEntrada: "" }] },
+      { entradas: [{ item: "", cantEnvases: 0, horaEntrada: "" }] },
     ]);
     setModelosForm([]);
     setObservaciones("");
@@ -321,9 +346,9 @@ export const RegistrarProduccion = () => {
 
     const maquinasParaEnviar = maquinas.map((maquina) =>
       maquina.entradas
-        .filter((entrada) => entrada.idMolde > 0 && entrada.cantEnvases > 0)
+        .filter((entrada) => entrada.item && entrada.cantEnvases > 0)
         .map((entrada) => ({
-          idMolde: entrada.idMolde,
+          item: entrada.item,
           cantEnvases: entrada.cantEnvases,
           horaEntrada: entrada.horaEntrada || "00:00",
         })),
@@ -331,10 +356,11 @@ export const RegistrarProduccion = () => {
 
     const [maquina1, maquina2, maquina3, maquina4] = maquinasParaEnviar;
 
+    // Construir salidas con el campo "item"
     const salidas = modelosForm.flatMap((modelo) => {
-      const molde = moldes.find((item) => item.idMolde === modelo.idMolde);
+      const molde = moldes.find((m) => m.item === modelo.item);
       if (!molde) {
-        console.warn("No se encontró molde para el modelo:", modelo.idMolde);
+        console.warn("No se encontró molde para el modelo:", modelo.item);
         return [];
       }
       const camadasDecoradas = modelo.paletasDecoradas * molde.numeroCamadas;
@@ -347,7 +373,7 @@ export const RegistrarProduccion = () => {
 
       return [
         {
-          modeloMolde: molde.idMolde,
+          item: molde.item,
           totalPaletasMolde: modelo.paletasDecoradas + modelo.produccionLisa,
           cantPaletasLisas: modelo.produccionLisa,
           cantCamadasLisas: camadasLisas,
@@ -368,21 +394,22 @@ export const RegistrarProduccion = () => {
       return;
     }
 
+    // Construir justificantes con el campo "item"
     const justificantesPorMolde = modelosForm
       .filter(
         (modelo) => modelo.justificantes && modelo.justificantes.length > 0,
       )
       .map((modelo) => ({
-        modeloMolde: modelo.idMolde,
+        item: modelo.item,
         justificaciones: modelo.justificantes.filter((id) => id > 0),
       }))
-      .filter((item) => item.justificaciones.length > 0);
+      .filter((justificante) => justificante.justificaciones.length > 0);
 
     const gruesasMaquinas = totalEnvasesMaquinas / ENVASES_POR_GRUESA;
 
     const resumenProduccion = modelosForm.reduce(
       (resumen, modelo) => {
-        const molde = moldes.find((item) => item.idMolde === modelo.idMolde);
+        const molde = moldes.find((m) => m.item === modelo.item);
         if (molde) {
           resumen.envasesDecorados +=
             modelo.paletasDecoradas * molde.numeroEnvases;
@@ -413,7 +440,7 @@ export const RegistrarProduccion = () => {
           tipoTurno: tipoTurno === "2" ? "2 Turnos" : "3 Turnos",
           turno: Number(turno),
           grupo,
-          tecnico,
+          tecnico: tecnico.toUpperCase(),
           maquina1,
           maquina2,
           maquina3,
@@ -444,10 +471,13 @@ export const RegistrarProduccion = () => {
       if (!response.ok) {
         const data = await response.json().catch(() => null);
         throw new Error(
-          data?.detail ?? `Error al registrar producción: ${response.status}`,
+          obtenerMensajeDeError(
+            data,
+            `Error al registrar producción: ${response.status}`,
+          ),
         );
       }
-      alert("¡Producción regitrada exitosamente!");
+      alert("¡Producción registrada exitosamente!");
       navigate("/gestion-productiva");
     } catch (submitError) {
       setError(
@@ -462,7 +492,7 @@ export const RegistrarProduccion = () => {
 
   const resumenProduccion = modelosForm.reduce(
     (resumen, modelo) => {
-      const molde = moldes.find((item) => item.idMolde === modelo.idMolde);
+      const molde = moldes.find((m) => m.item === modelo.item);
       if (molde) {
         resumen.envasesDecorados +=
           modelo.paletasDecoradas * molde.numeroEnvases;
@@ -615,21 +645,21 @@ export const RegistrarProduccion = () => {
                     </label>
                     <select
                       id={`maquina-${maquinaIndex}-molde-${entradaIndex}`}
-                      value={entrada.idMolde}
+                      value={entrada.item}
                       onChange={(event) =>
                         actualizarEntradaMaquina(
                           maquinaIndex,
                           entradaIndex,
-                          "idMolde",
-                          Number(event.target.value),
+                          "item",
+                          event.target.value,
                         )
                       }
                       disabled={cargandoMoldes}
                     >
-                      <option value={0}>...</option>
+                      <option value="">...</option>
                       {moldes.map((molde) => (
-                        <option key={molde.idMolde} value={molde.idMolde}>
-                          {molde.nombre}
+                        <option key={molde.item} value={molde.item}>
+                          {molde.item} --&gt; {molde.nombre}
                         </option>
                       ))}
                     </select>
@@ -872,11 +902,11 @@ export const RegistrarProduccion = () => {
             </h4>
             <div className={styles.paletasPorMoldeGrid}>
               {modelosForm.map((modelo, index) => {
-                const molde = moldes.find((m) => m.idMolde === modelo.idMolde);
+                const molde = moldes.find((m) => m.item === modelo.item);
                 return molde ? (
                   <div key={index} className={styles.paletasPorMoldeItem}>
                     <span className={styles.paletasPorMoldeLabel}>
-                      Molde {molde.nombre}:
+                      Molde {molde.item} --&gt; {molde.nombre}:
                     </span>
                     <span className={styles.paletasPorMoldeValue}>
                       {modelo.paletasDecoradas + modelo.produccionLisa}
@@ -993,7 +1023,7 @@ const ModeloProduccion = ({
   eliminarJustificante,
   actualizarJustificante,
 }: ModeloProduccionProps) => {
-  const definicion = moldes.find((item) => item.idMolde === modelo.idMolde);
+  const definicion = moldes.find((m) => m.item === modelo.item);
   const resumen = (paletas: number) => ({
     camadas: paletas * (definicion?.numeroCamadas ?? 0),
     envases: paletas * (definicion?.numeroEnvases ?? 0),
@@ -1012,7 +1042,7 @@ const ModeloProduccion = ({
           <input
             type="text"
             readOnly
-            value={definicion?.nombre ?? modelo.idMolde}
+            value={definicion?.item ?? modelo.item}
             disabled={cargandoMoldes || moldes.length === 0}
           />
         </div>

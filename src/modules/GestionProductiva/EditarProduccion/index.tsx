@@ -5,7 +5,7 @@ import { ENVASES_POR_GRUESA } from "../../../../constants";
 import styles from "./editar-produccion.module.css";
 
 type Molde = {
-  idMolde: number;
+  item: string;
   nombre: string;
   descripcion: string;
   numeroCamadas: number;
@@ -19,7 +19,7 @@ type Justificante = {
 };
 
 type EntradaMaquina = {
-  idMolde: number;
+  item: string;
   cantEnvases: number;
   horaEntrada: string;
 };
@@ -29,7 +29,7 @@ type MaquinaProduccion = {
 };
 
 type SalidaApi = {
-  modeloMolde: number;
+  item: string;
   totalPaletasMolde: number;
   cantPaletasLisas: number;
   cantCamadasLisas: number;
@@ -43,7 +43,7 @@ type SalidaApi = {
 };
 
 type JustificantePorMoldeApi = {
-  modeloMolde: number;
+  item: string;
   justificaciones: number[];
 };
 
@@ -80,7 +80,7 @@ type RegistroDetalleApi = {
 };
 
 type ModeloForm = {
-  idMolde: number;
+  item: string;
   nombre: string;
   paletasDecoradas: number;
   produccionLisa: number;
@@ -94,6 +94,31 @@ const ETIQUETAS_MAQUINAS = ["D3", "D4", "D11", "D12"];
 
 const formatNumber = (value: number) =>
   value.toLocaleString("es-VE", { maximumFractionDigits: 2 });
+
+/**
+ * Extrae un mensaje legible del campo `detail` que devuelve el backend.
+ * - Si es string, lo devuelve tal cual.
+ * - Si es un array (validación de Pydantic), junta los mensajes.
+ * - Si no hay, devuelve el fallback.
+ */
+const obtenerMensajeDeError = (data: unknown, fallback: string): string => {
+  if (!data || typeof data !== "object") return fallback;
+  const detail = (data as { detail?: unknown }).detail;
+  if (detail === undefined) return fallback;
+  if (typeof detail === "string") return detail;
+  if (Array.isArray(detail)) {
+    return detail
+      .map((err: unknown) => {
+        if (!err || typeof err !== "object") return String(err);
+        const e = err as { loc?: unknown; msg?: unknown };
+        const loc = Array.isArray(e.loc) ? e.loc.join(" → ") : "";
+        const msg = typeof e.msg === "string" ? e.msg : JSON.stringify(e.msg);
+        return loc ? `${loc}: ${msg}` : msg;
+      })
+      .join(" | ");
+  }
+  return JSON.stringify(detail);
+};
 
 export const EditarProduccion = () => {
   const { id: idRegistro } = useParams<{ id: string }>();
@@ -174,22 +199,22 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
     {
       entradas: registro.maquina1?.length
         ? registro.maquina1
-        : [{ idMolde: 0, cantEnvases: 0, horaEntrada: "" }],
+        : [{ item: "", cantEnvases: 0, horaEntrada: "" }],
     },
     {
       entradas: registro.maquina2?.length
         ? registro.maquina2
-        : [{ idMolde: 0, cantEnvases: 0, horaEntrada: "" }],
+        : [{ item: "", cantEnvases: 0, horaEntrada: "" }],
     },
     {
       entradas: registro.maquina3?.length
         ? registro.maquina3
-        : [{ idMolde: 0, cantEnvases: 0, horaEntrada: "" }],
+        : [{ item: "", cantEnvases: 0, horaEntrada: "" }],
     },
     {
       entradas: registro.maquina4?.length
         ? registro.maquina4
-        : [{ idMolde: 0, cantEnvases: 0, horaEntrada: "" }],
+        : [{ item: "", cantEnvases: 0, horaEntrada: "" }],
     },
   ]);
 
@@ -220,16 +245,15 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
         const modelosIniciales: ModeloForm[] = registro.salidas.map(
           (salida) => {
             const moldeEncontrado = moldesCargados.find(
-              (m) => m.idMolde === salida.modeloMolde,
+              (m) => m.item === salida.item,
             );
             const justificantesMolde =
-              registro.justificantes?.find(
-                (j) => j.modeloMolde === salida.modeloMolde,
-              )?.justificaciones || [];
+              registro.justificantes?.find((j) => j.item === salida.item)
+                ?.justificaciones || [];
 
             return {
-              idMolde: salida.modeloMolde,
-              nombre: moldeEncontrado?.nombre || String(salida.modeloMolde),
+              item: salida.item,
+              nombre: moldeEncontrado?.nombre || salida.item,
               paletasDecoradas: Number(salida.cantPaletasDecoradas),
               produccionLisa: Number(salida.cantPaletasLisas),
               justificantes: justificantesMolde,
@@ -277,7 +301,7 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
   // Actualizar modelosForm cuando cambian las máquinas
   useEffect(() => {
     const moldesUsados = new Map<
-      number,
+      string,
       {
         nombre: string;
         paletasDecoradas: number;
@@ -288,13 +312,13 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
 
     maquinas.forEach((maquina) => {
       maquina.entradas.forEach((entrada) => {
-        if (entrada.idMolde > 0) {
-          const molde = moldes.find((m) => m.idMolde === entrada.idMolde);
-          if (molde && !moldesUsados.has(entrada.idMolde)) {
+        if (entrada.item) {
+          const molde = moldes.find((m) => m.item === entrada.item);
+          if (molde && !moldesUsados.has(entrada.item)) {
             const modeloExistente = modelosForm.find(
-              (m) => m.idMolde === entrada.idMolde,
+              (m) => m.item === entrada.item,
             );
-            moldesUsados.set(entrada.idMolde, {
+            moldesUsados.set(entrada.item, {
               nombre: molde.nombre,
               paletasDecoradas: modeloExistente?.paletasDecoradas || 0,
               produccionLisa: modeloExistente?.produccionLisa || 0,
@@ -306,10 +330,10 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
     });
 
     modelosForm.forEach((modelo) => {
-      if (!moldesUsados.has(modelo.idMolde)) {
-        const molde = moldes.find((m) => m.idMolde === modelo.idMolde);
+      if (!moldesUsados.has(modelo.item)) {
+        const molde = moldes.find((m) => m.item === modelo.item);
         if (molde) {
-          moldesUsados.set(modelo.idMolde, {
+          moldesUsados.set(modelo.item, {
             nombre: molde.nombre,
             paletasDecoradas: modelo.paletasDecoradas,
             produccionLisa: modelo.produccionLisa,
@@ -320,8 +344,8 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
     });
 
     const nuevosModelos = Array.from(moldesUsados.entries()).map(
-      ([idMolde, data]) => ({
-        idMolde,
+      ([item, data]) => ({
+        item,
         nombre: data.nombre,
         paletasDecoradas: data.paletasDecoradas,
         produccionLisa: data.produccionLisa,
@@ -340,7 +364,7 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
               ...maquina,
               entradas: [
                 ...maquina.entradas,
-                { idMolde: 0, cantEnvases: 0, horaEntrada: "" },
+                { item: "", cantEnvases: 0, horaEntrada: "" },
               ],
             }
           : maquina,
@@ -460,36 +484,33 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
       {
         entradas: registro.maquina1?.length
           ? registro.maquina1
-          : [{ idMolde: 0, cantEnvases: 0, horaEntrada: "" }],
+          : [{ item: "", cantEnvases: 0, horaEntrada: "" }],
       },
       {
         entradas: registro.maquina2?.length
           ? registro.maquina2
-          : [{ idMolde: 0, cantEnvases: 0, horaEntrada: "" }],
+          : [{ item: "", cantEnvases: 0, horaEntrada: "" }],
       },
       {
         entradas: registro.maquina3?.length
           ? registro.maquina3
-          : [{ idMolde: 0, cantEnvases: 0, horaEntrada: "" }],
+          : [{ item: "", cantEnvases: 0, horaEntrada: "" }],
       },
       {
         entradas: registro.maquina4?.length
           ? registro.maquina4
-          : [{ idMolde: 0, cantEnvases: 0, horaEntrada: "" }],
+          : [{ item: "", cantEnvases: 0, horaEntrada: "" }],
       },
     ]);
     const modelosIniciales: ModeloForm[] = registro.salidas.map((salida) => {
-      const moldeEncontrado = moldes.find(
-        (m) => m.idMolde === salida.modeloMolde,
-      );
+      const moldeEncontrado = moldes.find((m) => m.item === salida.item);
       const justificantesMolde =
-        registro.justificantes?.find(
-          (j) => j.modeloMolde === salida.modeloMolde,
-        )?.justificaciones || [];
+        registro.justificantes?.find((j) => j.item === salida.item)
+          ?.justificaciones || [];
 
       return {
-        idMolde: salida.modeloMolde,
-        nombre: moldeEncontrado?.nombre || String(salida.modeloMolde),
+        item: salida.item,
+        nombre: moldeEncontrado?.nombre || salida.item,
         paletasDecoradas: Number(salida.cantPaletasDecoradas),
         produccionLisa: Number(salida.cantPaletasLisas),
         justificantes: justificantesMolde,
@@ -519,9 +540,9 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
 
     const maquinasParaEnviar = maquinas.map((maquina) =>
       maquina.entradas
-        .filter((entrada) => entrada.idMolde > 0 && entrada.cantEnvases > 0)
+        .filter((entrada) => entrada.item && entrada.cantEnvases > 0)
         .map((entrada) => ({
-          idMolde: entrada.idMolde,
+          item: entrada.item,
           cantEnvases: entrada.cantEnvases,
           horaEntrada: entrada.horaEntrada || "00:00",
         })),
@@ -529,10 +550,11 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
 
     const [maquina1, maquina2, maquina3, maquina4] = maquinasParaEnviar;
 
+    // Construir salidas con el campo "item"
     const salidas = modelosForm.flatMap((modelo) => {
-      const molde = moldes.find((item) => item.idMolde === modelo.idMolde);
+      const molde = moldes.find((m) => m.item === modelo.item);
       if (!molde) {
-        console.warn("No se encontró molde para el modelo:", modelo.idMolde);
+        console.warn("No se encontró molde para el modelo:", modelo.item);
         return [];
       }
 
@@ -543,7 +565,7 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
       const envasesLisas = modelo.produccionLisa * molde.numeroEnvases;
       return [
         {
-          modeloMolde: molde.idMolde,
+          item: molde.item,
           totalPaletasMolde: modelo.paletasDecoradas + modelo.produccionLisa,
           cantPaletasLisas: modelo.produccionLisa,
           cantCamadasLisas: modelo.produccionLisa * molde.numeroCamadas,
@@ -564,21 +586,22 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
       return;
     }
 
+    // Construir justificantes con el campo "item"
     const justificantesPorMolde = modelosForm
       .filter(
         (modelo) => modelo.justificantes && modelo.justificantes.length > 0,
       )
       .map((modelo) => ({
-        modeloMolde: modelo.idMolde,
+        item: modelo.item,
         justificaciones: modelo.justificantes.filter((id) => id > 0),
       }))
-      .filter((item) => item.justificaciones.length > 0);
+      .filter((justificante) => justificante.justificaciones.length > 0);
 
     const gruesasMaquinas = totalEnvasesMaquinas / ENVASES_POR_GRUESA;
 
     const resumenProduccion = modelosForm.reduce(
       (resumen, modelo) => {
-        const molde = moldes.find((item) => item.idMolde === modelo.idMolde);
+        const molde = moldes.find((m) => m.item === modelo.item);
         if (molde) {
           resumen.envasesDecorados +=
             modelo.paletasDecoradas * molde.numeroEnvases;
@@ -610,7 +633,7 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
             tipoTurno: tipoTurno === "2" ? "2 Turnos" : "3 Turnos",
             turno: Number(turno),
             grupo,
-            tecnico,
+            tecnico: tecnico.toUpperCase(),
             maquina1,
             maquina2,
             maquina3,
@@ -642,7 +665,10 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
       if (!response.ok) {
         const data = await response.json().catch(() => null);
         throw new Error(
-          data?.detail ?? `Error al actualizar producción: ${response.status}`,
+          obtenerMensajeDeError(
+            data,
+            `Error al actualizar producción: ${response.status}`,
+          ),
         );
       }
       alert("¡Producción editada exitosamente!");
@@ -660,7 +686,7 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
 
   const resumenProduccion = modelosForm.reduce(
     (resumen, modelo) => {
-      const molde = moldes.find((item) => item.idMolde === modelo.idMolde);
+      const molde = moldes.find((m) => m.item === modelo.item);
       if (molde) {
         resumen.envasesDecorados +=
           modelo.paletasDecoradas * molde.numeroEnvases;
@@ -802,21 +828,21 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
                     </label>
                     <select
                       id={`maquina-${maquinaIndex}-molde-${entradaIndex}`}
-                      value={entrada.idMolde}
+                      value={entrada.item}
                       onChange={(event) =>
                         actualizarEntradaMaquina(
                           maquinaIndex,
                           entradaIndex,
-                          "idMolde",
-                          Number(event.target.value),
+                          "item",
+                          event.target.value,
                         )
                       }
                       disabled={cargandoMoldes}
                     >
-                      <option value={0}>...</option>
+                      <option value="">...</option>
                       {moldes.map((molde) => (
-                        <option key={molde.idMolde} value={molde.idMolde}>
-                          {molde.nombre}
+                        <option key={molde.item} value={molde.item}>
+                          {molde.item} --&gt; {molde.nombre}
                         </option>
                       ))}
                     </select>
@@ -997,11 +1023,11 @@ const FormularioEdicion = ({ registro }: { registro: RegistroDetalleApi }) => {
             </h4>
             <div className={styles.paletasPorMoldeGrid}>
               {modelosForm.map((modelo, index) => {
-                const molde = moldes.find((m) => m.idMolde === modelo.idMolde);
+                const molde = moldes.find((m) => m.item === modelo.item);
                 return molde ? (
                   <div key={index} className={styles.paletasPorMoldeItem}>
                     <span className={styles.paletasPorMoldeLabel}>
-                      Molde {molde.nombre}:
+                      Molde {molde.item} --&gt; {molde.nombre}:
                     </span>
                     <span className={styles.paletasPorMoldeValue}>
                       {modelo.paletasDecoradas + modelo.produccionLisa}
@@ -1122,7 +1148,7 @@ const ModeloProduccion = ({
   eliminarJustificante,
   actualizarJustificante,
 }: ModeloProps) => {
-  const molde = moldes.find((item) => item.idMolde === modelo.idMolde);
+  const molde = moldes.find((m) => m.item === modelo.item);
 
   const resumen = (paletas: number): Resumen => ({
     camadas: paletas * (molde?.numeroCamadas ?? 0),
@@ -1142,7 +1168,7 @@ const ModeloProduccion = ({
           <input
             type="text"
             readOnly
-            value={molde?.nombre ?? modelo.idMolde}
+            value={molde?.item ?? modelo.item}
             disabled={cargandoMoldes || moldes.length === 0}
           />
         </div>

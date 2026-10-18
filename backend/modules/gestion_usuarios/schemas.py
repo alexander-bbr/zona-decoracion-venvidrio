@@ -1,7 +1,6 @@
 # backend/modules/gestion_usuarios/schemas.py
 from pydantic import BaseModel, Field, validator
 from typing import Optional, List
-from datetime import datetime
 
 
 # ESQUEMAS PARA USUARIO
@@ -59,7 +58,6 @@ class UsuarioResponde(BaseModel):
     correo: str
     rol: str
     activo_usuario: bool
-    creado_en: datetime
 
     class Config:
         orm_mode = True

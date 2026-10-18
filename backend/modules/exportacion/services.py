@@ -238,6 +238,7 @@ def exportar_gestion_productiva(
 
     libro, hoja = crear_libro("Gestión Productiva")
     
+    
     # Título en la fila 1, cabeceras en la 2
     escribir_cabecera(hoja, columnas, titulo=titulo, fila_inicio=1)
     

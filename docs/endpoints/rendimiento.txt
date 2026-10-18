@@ -248,3 +248,58 @@ JSON (Respuesta en caso de conflicto):
 {
     "detail": "Ya existe una meta para ese año y mes."
 }
+
+
+
+----------------------------------------------
+
+
+Ruta 10: Rendimiento por Molde
+Endpoint: http://127.0.0.1:8000/api/rendimiento/moldes
+Método: GET
+
+NOTA TÉCNICA DE PARÁMETROS:
+Al ser un método GET, los datos NO van en el cuerpo (body). Se envían en la URL como parámetros de consulta.
+Ambos parámetros son obligatorios y deben tener formato de fecha válido (YYYY-MM-DD).
+
+Ejemplo de URL: 
+http://127.0.0.1:8000/api/rendimiento/moldes?desde=2026-09-01&hasta=2026-09-30
+
+Estructura de los datos que recibirá:
+[
+    {
+        "item": "V-0003575",
+        "nombre": "GX01335",
+        "descripcion": "CERVEZA 330,0 RET.",
+        "gruesasLisas": 219.99,
+        "entradasGruesas": 3441.67,
+        "gruesasDecoradas": 2297.78,
+        "gruesasDefectuosas": 1143.89,
+        "eficiencia": 66.76,
+        "deficiencia": 33.24
+    },
+    {
+        "item": "V-0003805",
+        "nombre": "GX01944",
+        "descripcion": "POLAR LIGHT",
+        "gruesasLisas": 39.93,
+        "entradasGruesas": 1458.33,
+        "gruesasDecoradas": 1397.57,
+        "gruesasDefectuosas": 60.76,
+        "eficiencia": 95.83,
+        "deficiencia": 4.17
+    }
+]
+
+JSON (Respuesta en caso de error):
+{
+    "detail": "Error en la validación de los datos enviados" 
+} 
+(Este error aparece si la fecha es inválida, ej. un 31 de septiembre, o si falta algún parámetro).
+
+NOTA TÉCNICA DE CÁLCULOS:
+    - Las "entradasGruesas" se calculan sumando los envases que entraron de ese molde en el rango de fechas y dividiendo entre 144.
+    - Los porcentajes se calculan usando ÚNICAMENTE las entradas y las gruesas decoradas.
+    - Las "gruesasLisas" solo se muestran como dato informativo y no afectan los porcentajes de eficiencia y deficiencia.
+    - Si un molde no tuvo producción en el rango pero sigue activo, aparecerá en la lista con todos sus valores en 0.
+    - Si las salidas decoradas llegaran a superar a las entradas (error de registro), la eficiencia se topa en 100% y la deficiencia baja a 0%.

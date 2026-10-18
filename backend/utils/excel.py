@@ -1,5 +1,6 @@
 # backend/utils/excel.py
 import math
+from decimal import Decimal
 from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.utils import get_column_letter
@@ -12,7 +13,7 @@ class EstilosExcel:
         name="Arial",
         bold=True,
         color="FFFFFF",
-        size=11
+        size=12
     )
 
     #RELLENO AZUL OSCURO PARA CABECERA
@@ -52,6 +53,8 @@ def escribir_cabecera(hoja, columnas: list[str], titulo: str = None, fila_inicio
         fila_inicio += 1
 
     todas = ["N°"] + columnas
+    max_lineas = 1
+
     for indice, titulo_col in enumerate(todas, start=1):
         celda = hoja.cell(row=fila_inicio, column=indice, value=titulo_col)
         celda.font      = EstilosExcel.fuente_cabecera
@@ -60,10 +63,23 @@ def escribir_cabecera(hoja, columnas: list[str], titulo: str = None, fila_inicio
         celda.border    = EstilosExcel.borde_fino
 
         letra = get_column_letter(indice)
+        
         if indice == 1:
             hoja.column_dimensions[letra].width = 10
+            ancho = 10
         else:
             hoja.column_dimensions[letra].width = max(len(titulo_col) + 6, 14)
+            ancho = hoja.column_dimensions[letra].width
+
+        # Calculamos si el titulo es muy largo para el ancho de la columna
+        largo_titulo = len(str(titulo_col))
+        lineas = math.ceil(largo_titulo / ancho)
+        if lineas > max_lineas:
+            max_lineas = lineas
+
+    # Ajustamos el alto de la fila de la cabecera (mínimo 24)
+    alto_cabecera = max(max_lineas * 15, 24)
+    hoja.row_dimensions[fila_inicio].height = alto_cabecera
 
 def escribir_filas(hoja, filas: list[dict], columnas: list[str], fila_inicio: int = 2):
     max_lineas_global = 1
@@ -91,7 +107,7 @@ def escribir_filas(hoja, filas: list[dict], columnas: list[str], fila_inicio: in
             celda.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
             celda.border    = EstilosExcel.borde_fino
             
-            if isinstance(valor, (int, float)):
+            if isinstance(valor, (int, float, Decimal)):
                 celda.number_format = '#,##0.00'
             
             letra = get_column_letter(col_num)
@@ -113,11 +129,11 @@ def escribir_filas(hoja, filas: list[dict], columnas: list[str], fila_inicio: in
         if max_lineas_fila > max_lineas_global:
             max_lineas_global = max_lineas_fila
 
-    alto_uniforme = max_lineas_global * 15
+    # Alto mínimo de 24 para que las filas de datos no se vean delgadas
+    alto_uniforme = max(max_lineas_global * 15, 24)
 
     for i in range(fila_inicio, fila_inicio + len(filas)):
         hoja.row_dimensions[i].height = alto_uniforme
-
 
 def crear_libro(nombre_hoja: str):
     #CREA EL WORKBOOK Y RENOMBRA LA HOJA ACTIVA

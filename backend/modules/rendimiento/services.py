@@ -157,8 +157,12 @@ def obtener_eficiencia_deficiencia_por_fecha(db: Session, desde: str, hasta: str
         total_decorados_rango += reg.total_envases_decorados
         total_perdidos_rango += reg.total_envases_perdidos
 
-        eficiencia = round((reg.total_envases_decorados / reg.total_envases) * 100, 2)
-        deficiencia = round((reg.total_envases_perdidos / reg.total_envases) * 100, 2)
+        if reg.total_envases > 0:
+            eficiencia = round((reg.total_envases_decorados / reg.total_envases) * 100, 2)
+            deficiencia = round((reg.total_envases_perdidos / reg.total_envases) * 100, 2)
+        else:
+            eficiencia = 0.00
+            deficiencia = 0.00
 
         rendimiento.append({
             "fecha": str(reg.fecha),
@@ -166,8 +170,12 @@ def obtener_eficiencia_deficiencia_por_fecha(db: Session, desde: str, hasta: str
             "deficiencia": deficiencia
         })
 
-    eficiencia_general = round((total_decorados_rango / total_envases_rango) * 100, 2)
-    deficiencia_general = round((total_perdidos_rango / total_envases_rango) * 100, 2)
+    if total_envases_rango > 0:
+        eficiencia_general = round((total_decorados_rango / total_envases_rango) * 100, 2)
+        deficiencia_general = round((total_perdidos_rango / total_envases_rango) * 100, 2)
+    else:
+        eficiencia_general = 0.00
+        deficiencia_general = 0.00
 
     return {
         "rendimiento": rendimiento,
@@ -377,10 +385,6 @@ def obtener_rendimiento_moldes(db: Session, desde: date, hasta: date):
             eficiencia = 0.00
             deficiencia = 0.00
             
-        # Si por algún motivo las decoradas son más que las entradas, las defectuosas son 0
-        gruesas_defectuosas = round(entradas_gruesas - gruesas_decoradas, 2)
-        if gruesas_defectuosas < 0:
-            gruesas_defectuosas = 0.00
 
         data.append({
             "item": molde.item,

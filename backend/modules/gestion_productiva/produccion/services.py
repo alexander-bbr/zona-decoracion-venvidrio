@@ -159,6 +159,14 @@ def obtener_produccion_por_id(db: Session, id_cabecera: int):
 
 def crear_registro_produccion(db: Session, datos):
     try:
+
+        if datos.resultado.total_gruesas_decoradas > datos.total_gruesas:
+            raise HTTPException(
+                status_code=400,
+                detail="Error: La cantidad de gruesas decoradas supera la cantidad ingresada en las maquinas decoradoras."
+            )
+
+        
         # 1. Crear la cabecera del turno
         nueva_cabecera = GestionProductivaCabecera(
             fecha=datos.fecha,
@@ -280,8 +288,6 @@ def crear_registro_produccion(db: Session, datos):
 
 
 
-
-
 def actualizar_registro_produccion(db: Session, id_cabecera: int, datos):
     cabecera_actual = db.query(GestionProductivaCabecera)\
                         .filter(GestionProductivaCabecera.id_cabecera == id_cabecera)\
@@ -291,6 +297,14 @@ def actualizar_registro_produccion(db: Session, id_cabecera: int, datos):
         return None
 
     try:
+
+        if datos.resultado.total_gruesas_decoradas > datos.total_gruesas:
+            raise HTTPException(
+                status_code=400,
+                detail="Error: La cantidad de gruesas decoradas supera la cantidad ingresada en las maquinas decoradoras."
+            )
+
+    
         # 1. Actualizar cabecera
         cabecera_actual.fecha = datos.fecha
         cabecera_actual.tipo_turno = datos.tipo_turno

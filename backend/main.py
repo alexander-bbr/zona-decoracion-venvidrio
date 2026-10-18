@@ -40,7 +40,7 @@ app = FastAPI(
 # pueda hacer peticiones sin que el navegador lo bloquee.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["http://localhost:5173", "http://0.0.0.X:puerto"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

@@ -19,8 +19,6 @@ DB_HOST = os.getenv('DB_HOST')
 DB_PORT = os.getenv('DB_PORT', '3306')
 DB_NAME = os.getenv('DB_NAME')
 
-# DEBUG: Imprimir variables para asegurar que cargan
-print(f"DEBUG: Intentando conectar a {DB_HOST} con usuario {DB_USER} en BD {DB_NAME}")
 
 # 2. CONSTRUIR LA RUTA: SQLAlchemy necesita una "URL" específica para saber a dónde ir.
 # El formato es: mysql+pymysql://usuario:contraseña@servidor:puerto/nombre_base_datos

@@ -130,6 +130,10 @@ JSON (Respuesta en caso de error):
   "detail": "Error: Ya existe un registro duplicado o un justificante repetido para este molde."
 }
 
+{
+  "detail": "Error: La cantidad de gruesas decoradas supera la cantidad ingresada en las maquinas decoradoras."
+}
+
 NOTA TÉCNICA: El frontend ahora SIEMPRE debe mandar el valor de técnico en mayúsculas (Ejemplo: DANIEL PÉREZ)
 
 
@@ -274,6 +278,9 @@ JSON (Respuesta en caso de error):
   "detail": "No se pudo actualizar porque el registro no fue encontrado"
 }
 
+{
+  "detail": "Error: La cantidad de gruesas decoradas supera la cantidad ingresada en las maquinas decoradoras."
+}
 
 NOTA TÉCNICA: El frontend ahora SIEMPRE debe mandar el valor de técnico en mayúsculas (Ejemplo: DANIEL PÉREZ)
 

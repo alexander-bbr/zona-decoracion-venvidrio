@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 18-10-2026 a las 05:29:04
+-- Tiempo de generación: 18-10-2026 a las 21:06:39
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -155,77 +155,6 @@ INSERT INTO `gestion_productiva_entrada` (`id_entrada`, `id_cabecera`, `maquina`
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `gestion_productiva_entrada_backup`
---
-
-CREATE TABLE `gestion_productiva_entrada_backup` (
-  `id_entrada` int(11) NOT NULL DEFAULT 0,
-  `id_cabecera` int(11) NOT NULL,
-  `maquina` int(11) NOT NULL,
-  `id_molde` int(11) NOT NULL,
-  `cant_envases` int(11) NOT NULL,
-  `hora_entrada` varchar(10) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `gestion_productiva_entrada_backup`
---
-
-INSERT INTO `gestion_productiva_entrada_backup` (`id_entrada`, `id_cabecera`, `maquina`, `id_molde`, `cant_envases`, `hora_entrada`) VALUES
-(338, 1, 1, 6, 50000, '00:00'),
-(339, 1, 2, 5, 10000, '00:00'),
-(358, 3, 1, 6, 15000, '00:00'),
-(359, 3, 2, 6, 10000, '00:00'),
-(360, 4, 1, 5, 15000, '00:00'),
-(361, 4, 2, 6, 20000, '00:00'),
-(364, 6, 1, 1, 15000, '16:54'),
-(365, 6, 2, 1, 10000, '18:54'),
-(366, 7, 1, 6, 30000, '15:14'),
-(367, 7, 2, 4, 10000, '18:15'),
-(370, 9, 1, 4, 10000, '20:33'),
-(371, 9, 2, 6, 10000, '18:33'),
-(372, 10, 1, 6, 50000, '09:11'),
-(373, 10, 2, 5, 25000, '09:14'),
-(374, 11, 1, 6, 20000, '10:19'),
-(375, 11, 2, 6, 20000, '10:19'),
-(378, 5, 1, 4, 30000, '00:00'),
-(379, 5, 2, 2, 15000, '00:00'),
-(380, 2, 1, 6, 50000, '19:09'),
-(381, 2, 2, 6, 55600, '19:09'),
-(382, 8, 1, 5, 9000, '18:18'),
-(383, 8, 2, 5, 5000, '19:18'),
-(384, 13, 1, 1, 25000, '22:34'),
-(385, 13, 2, 1, 15000, '22:34'),
-(386, 14, 1, 4, 10000, '10:36'),
-(387, 15, 1, 6, 90000, '10:37'),
-(388, 15, 2, 6, 10000, '10:37'),
-(389, 12, 1, 2, 50000, '10:31'),
-(390, 12, 2, 2, 50000, '10:31'),
-(391, 16, 1, 6, 47500, '10:38'),
-(392, 16, 2, 6, 13000, '10:38'),
-(395, 17, 1, 2, 25000, '22:40'),
-(396, 17, 2, 2, 25000, '22:40'),
-(397, 18, 1, 6, 29050, '10:42'),
-(398, 18, 2, 6, 18000, '10:42'),
-(399, 19, 1, 6, 32000, '10:42'),
-(400, 19, 2, 6, 8000, '10:43'),
-(401, 20, 1, 6, 105600, '00:00'),
-(403, 21, 1, 6, 98000, '12:45'),
-(404, 22, 1, 4, 105000, '00:00'),
-(405, 23, 1, 6, 58000, '10:50'),
-(406, 24, 1, 1, 10000, '00:00'),
-(407, 25, 1, 6, 67000, '00:00'),
-(408, 26, 1, 6, 27000, '22:54'),
-(409, 27, 1, 1, 200000, '00:00'),
-(410, 28, 1, 5, 98000, '00:00'),
-(411, 29, 1, 4, 75000, '10:57'),
-(412, 29, 1, 5, 150000, '22:57'),
-(419, 30, 1, 6, 100000, '22:59'),
-(425, 31, 1, 6, 10000, '00:00');
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `gestion_productiva_resultado`
 --
 
@@ -348,71 +277,6 @@ INSERT INTO `gestion_productiva_salida` (`id_eficiencia`, `id_cabecera`, `total_
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `gestion_productiva_salida_backup`
---
-
-CREATE TABLE `gestion_productiva_salida_backup` (
-  `id_eficiencia` int(11) NOT NULL DEFAULT 0,
-  `modelo_molde` int(11) NOT NULL,
-  `id_cabecera` int(11) NOT NULL,
-  `total_paletas_molde` int(11) DEFAULT 0,
-  `cant_paletas_lisas` int(11) DEFAULT NULL,
-  `cant_camadas_lisas` int(11) DEFAULT NULL,
-  `cant_envases_lisas` int(11) DEFAULT NULL,
-  `cant_gruesas_lisas` decimal(10,2) DEFAULT 0.00,
-  `cant_paletas_decoradas` int(11) DEFAULT NULL,
-  `cant_camadas_decoradas` int(11) DEFAULT NULL,
-  `cant_envases_decoradas` int(11) DEFAULT NULL,
-  `cant_gruesas_decoradas` decimal(10,2) DEFAULT 0.00
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `gestion_productiva_salida_backup`
---
-
-INSERT INTO `gestion_productiva_salida_backup` (`id_eficiencia`, `modelo_molde`, `id_cabecera`, `total_paletas_molde`, `cant_paletas_lisas`, `cant_camadas_lisas`, `cant_envases_lisas`, `cant_gruesas_lisas`, `cant_paletas_decoradas`, `cant_camadas_decoradas`, `cant_envases_decoradas`, `cant_gruesas_decoradas`) VALUES
-(700, 6, 1, 12, 2, 16, 7040, 48.89, 10, 80, 35200, 244.44),
-(701, 5, 1, 4, 0, 0, 0, 0.00, 4, 32, 15136, 105.11),
-(715, 6, 3, 12, 5, 40, 17600, 122.22, 7, 56, 24640, 171.11),
-(716, 5, 4, 11, 3, 24, 11352, 78.83, 8, 64, 30272, 210.22),
-(717, 6, 4, 1, 0, 0, 0, 0.00, 1, 8, 3520, 24.44),
-(720, 1, 6, 5, 1, 10, 5750, 39.93, 4, 40, 23000, 159.72),
-(721, 6, 7, 4, 0, 0, 0, 0.00, 4, 32, 14080, 97.78),
-(722, 4, 7, 6, 0, 0, 0, 0.00, 6, 48, 22704, 157.67),
-(724, 4, 9, 4, 0, 0, 0, 0.00, 4, 32, 15136, 105.11),
-(725, 6, 9, 1, 0, 0, 0, 0.00, 1, 8, 3520, 24.44),
-(726, 6, 10, 13, 0, 0, 0, 0.00, 13, 104, 45760, 317.78),
-(727, 5, 10, 6, 0, 0, 0, 0.00, 6, 48, 22704, 157.67),
-(728, 6, 11, 10, 0, 0, 0, 0.00, 10, 80, 35200, 244.44),
-(730, 4, 5, 6, 1, 8, 3784, 26.28, 5, 40, 18920, 131.39),
-(731, 2, 5, 5, 1, 10, 5750, 39.93, 4, 40, 23000, 159.72),
-(732, 6, 2, 30, 1, 8, 3520, 24.44, 29, 232, 102080, 708.89),
-(733, 5, 8, 3, 0, 0, 0, 0.00, 3, 24, 11352, 78.83),
-(734, 1, 13, 5, 0, 0, 0, 0.00, 5, 50, 28750, 199.65),
-(735, 4, 14, 2, 0, 0, 0, 0.00, 2, 16, 7568, 52.56),
-(736, 6, 15, 35, 10, 80, 35200, 244.44, 25, 200, 88000, 611.11),
-(737, 2, 12, 18, 3, 30, 17250, 119.79, 15, 150, 86250, 598.96),
-(738, 6, 16, 19, 2, 16, 7040, 48.89, 17, 136, 59840, 415.56),
-(740, 2, 17, 25, 17, 170, 97750, 678.82, 8, 80, 46000, 319.44),
-(741, 6, 18, 13, 0, 0, 0, 0.00, 13, 104, 45760, 317.78),
-(742, 6, 19, 11, 0, 0, 0, 0.00, 11, 88, 38720, 268.89),
-(743, 6, 20, 30, 0, 0, 0, 0.00, 30, 240, 105600, 733.33),
-(745, 6, 21, 25, 0, 0, 0, 0.00, 25, 200, 88000, 611.11),
-(746, 4, 22, 33, 8, 64, 30272, 210.22, 25, 200, 94600, 656.94),
-(747, 6, 23, 4, 0, 0, 0, 0.00, 4, 32, 14080, 97.78),
-(748, 1, 24, 2, 1, 10, 5750, 39.93, 1, 10, 5750, 39.93),
-(749, 6, 25, 18, 3, 24, 10560, 73.33, 15, 120, 52800, 366.67),
-(750, 6, 26, 8, 1, 8, 3520, 24.44, 7, 56, 24640, 171.11),
-(751, 1, 27, 34, 0, 0, 0, 0.00, 34, 340, 195500, 1357.64),
-(752, 5, 28, 39, 14, 112, 52976, 367.89, 25, 200, 94600, 656.94),
-(753, 4, 29, 20, 2, 16, 7568, 52.56, 18, 144, 68112, 473.00),
-(754, 5, 29, 50, 13, 104, 49192, 341.61, 37, 296, 140008, 972.28),
-(761, 6, 30, 7, 5, 40, 17600, 122.22, 2, 16, 7040, 48.89),
-(766, 6, 31, 8, 6, 48, 21120, 146.67, 2, 16, 7040, 48.89);
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `inventario_insumos`
 --
 
@@ -482,7 +346,8 @@ INSERT INTO `inventario_insumos_entrada` (`id_inventario_entrada`, `id_insumo`, 
 (2, 2, '2026-09-13 14:15:49', 'string', 'string', 'string', 50.80),
 (3, 1, '2026-09-14 15:22:31', '222', 'Turno 1', 'Grupo A', 150.55),
 (4, 22, '2026-09-25 18:30:30', '222', 'Turno 1', 'Grupo A', 1.00),
-(5, 22, '2026-09-25 18:31:44', '222', 'Turno 1', 'Grupo A', 50.00);
+(5, 22, '2026-09-25 18:31:44', '222', 'Turno 1', 'Grupo A', 50.00),
+(6, 22, '2026-10-18 14:33:26', '222', 'Turno 1', 'Grupo A', 60.00);
 
 -- --------------------------------------------------------
 
@@ -508,7 +373,8 @@ INSERT INTO `inventario_insumos_salida` (`id_inventario_salida`, `id_insumo`, `f
 (1, 1, '2026-09-13 13:51:40', 'string', 'string', 'string', 1.05),
 (2, 2, '2026-09-13 14:16:20', 'string', 'string', 'string', 10.86),
 (3, 1, '2026-09-14 15:24:57', '222', 'Turno 2', 'Grupo A', 34.00),
-(4, 22, '2026-09-25 18:32:16', '222', 'Turno 1', 'Grupo A', 2.00);
+(4, 22, '2026-09-25 18:32:16', '222', 'Turno 1', 'Grupo A', 2.00),
+(5, 22, '2026-10-18 14:32:08', '222', 'Turno 1', 'Grupo A', 60.00);
 
 -- --------------------------------------------------------
 
@@ -672,32 +538,6 @@ INSERT INTO `moldes` (`item`, `nombre`, `descripcion`, `numero_camadas`, `numero
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `moldes_backup`
---
-
-CREATE TABLE `moldes_backup` (
-  `id_molde` int(11) NOT NULL DEFAULT 0,
-  `nombre` varchar(150) NOT NULL,
-  `descripcion` varchar(255) DEFAULT NULL,
-  `numero_camadas` int(11) NOT NULL,
-  `numero_envases` int(11) NOT NULL,
-  `numero_gruesas` decimal(10,2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `moldes_backup`
---
-
-INSERT INTO `moldes_backup` (`id_molde`, `nombre`, `descripcion`, `numero_camadas`, `numero_envases`, `numero_gruesas`) VALUES
-(1, 'GX01944', 'POLAR LIGHT', 10, 5750, 39.93),
-(2, 'GX01944', 'POLARCITA 222 ML', 10, 5750, 39.93),
-(4, 'GV02156', 'GOLDEN 350 ML', 8, 3784, 26.28),
-(5, 'GV02156', 'PEPSI 350 ML', 8, 3784, 26.28),
-(6, 'GX01335', 'CERVEZA 330,0 RET.', 8, 3520, 24.44);
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `permisos_modulos`
 --
 
@@ -748,24 +588,24 @@ CREATE TABLE `permisos_usuarios` (
 --
 
 INSERT INTO `permisos_usuarios` (`id_permisou`, `id_usuario`, `id_permisom`) VALUES
-(564, 13, 1),
-(565, 13, 2),
-(566, 13, 3),
-(567, 13, 4),
-(568, 13, 5),
-(569, 13, 6),
-(570, 13, 7),
-(571, 13, 8),
-(572, 13, 9),
-(573, 13, 10),
-(574, 13, 11),
-(575, 13, 12),
-(576, 13, 13),
-(577, 13, 14),
-(578, 13, 15),
-(579, 13, 16),
-(580, 13, 17),
-(581, 13, 18);
+(582, 13, 1),
+(583, 13, 2),
+(584, 13, 3),
+(585, 13, 4),
+(586, 13, 5),
+(587, 13, 6),
+(588, 13, 7),
+(589, 13, 8),
+(590, 13, 9),
+(591, 13, 10),
+(592, 13, 11),
+(593, 13, 12),
+(594, 13, 13),
+(595, 13, 14),
+(596, 13, 15),
+(597, 13, 16),
+(598, 13, 17),
+(599, 13, 18);
 
 -- --------------------------------------------------------
 
@@ -803,43 +643,6 @@ INSERT INTO `produccion_justificantes` (`id_cabecera`, `id_justificante`, `model
 (25, 5, 'V-0003575'),
 (27, 1, 'V-0003805'),
 (30, 3, 'V-0003575');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `produccion_justificantes_backup`
---
-
-CREATE TABLE `produccion_justificantes_backup` (
-  `id_cabecera` int(11) NOT NULL,
-  `modelo_molde` int(11) NOT NULL,
-  `id_justificante` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `produccion_justificantes_backup`
---
-
-INSERT INTO `produccion_justificantes_backup` (`id_cabecera`, `modelo_molde`, `id_justificante`) VALUES
-(1, 6, 4),
-(2, 6, 5),
-(10, 5, 5),
-(10, 6, 1),
-(11, 6, 3),
-(12, 2, 2),
-(13, 1, 1),
-(14, 4, 4),
-(15, 6, 2),
-(16, 6, 3),
-(17, 2, 1),
-(21, 6, 3),
-(23, 6, 1),
-(23, 6, 2),
-(23, 6, 3),
-(23, 6, 4),
-(25, 6, 5),
-(27, 1, 1),
-(30, 6, 3);
 
 -- --------------------------------------------------------
 
@@ -912,14 +715,16 @@ ALTER TABLE `inventario_insumos`
 --
 ALTER TABLE `inventario_insumos_entrada`
   ADD PRIMARY KEY (`id_inventario_entrada`),
-  ADD KEY `id_insumo` (`id_insumo`);
+  ADD KEY `id_insumo` (`id_insumo`),
+  ADD KEY `idx_fecha` (`fecha`);
 
 --
 -- Indices de la tabla `inventario_insumos_salida`
 --
 ALTER TABLE `inventario_insumos_salida`
   ADD PRIMARY KEY (`id_inventario_salida`),
-  ADD KEY `id_insumo` (`id_insumo`);
+  ADD KEY `id_insumo` (`id_insumo`),
+  ADD KEY `idx_fecha` (`fecha`);
 
 --
 -- Indices de la tabla `inventario_pantallas`
@@ -932,14 +737,16 @@ ALTER TABLE `inventario_pantallas`
 --
 ALTER TABLE `inventario_pantallas_entrada`
   ADD PRIMARY KEY (`id_inventario_entrada`),
-  ADD KEY `id_pantalla` (`id_pantalla`);
+  ADD KEY `id_pantalla` (`id_pantalla`),
+  ADD KEY `idx_fecha` (`fecha`);
 
 --
 -- Indices de la tabla `inventario_pantallas_salida`
 --
 ALTER TABLE `inventario_pantallas_salida`
   ADD PRIMARY KEY (`id_inventario_salida`),
-  ADD KEY `id_pantalla` (`id_pantalla`);
+  ADD KEY `id_pantalla` (`id_pantalla`),
+  ADD KEY `idx_fecha` (`fecha`);
 
 --
 -- Indices de la tabla `justificantes`
@@ -1029,13 +836,13 @@ ALTER TABLE `inventario_insumos`
 -- AUTO_INCREMENT de la tabla `inventario_insumos_entrada`
 --
 ALTER TABLE `inventario_insumos_entrada`
-  MODIFY `id_inventario_entrada` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_inventario_entrada` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `inventario_insumos_salida`
 --
 ALTER TABLE `inventario_insumos_salida`
-  MODIFY `id_inventario_salida` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_inventario_salida` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `inventario_pantallas`
@@ -1077,7 +884,7 @@ ALTER TABLE `permisos_modulos`
 -- AUTO_INCREMENT de la tabla `permisos_usuarios`
 --
 ALTER TABLE `permisos_usuarios`
-  MODIFY `id_permisou` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=582;
+  MODIFY `id_permisou` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=600;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`

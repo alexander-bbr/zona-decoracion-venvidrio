@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-DESTINATARIO = "d30670857@gmail.com, migueljtu@gmail.com"
+DESTINATARIOS = [d.strip() for d in os.environ.get("EMAIL_DESTINATARIOS", "").split(",")]
 
 
 def _enviar_correo(asunto: str, cuerpo: str):
@@ -17,7 +17,7 @@ def _enviar_correo(asunto: str, cuerpo: str):
     msg = EmailMessage()
     msg["Subject"] = asunto
     msg["From"]    = remitente
-    msg["To"]      = DESTINATARIO
+    msg["To"] = ", ".join(DESTINATARIOS)
     msg.set_content(cuerpo)
 
     try:

@@ -153,8 +153,10 @@ export const AnalisisMoldes = () => {
 
   return (
     <section className={`${styles.analisisMoldes} content`}>
-      {/* === FILTRO DE FECHAS + BOTÓN DE EXPORTACIÓN === */}
-      <section className={styles.filters}>
+      <section className={styles.controlPanel}>
+        <h2 className={styles.title}>Rendimiento por Molde</h2>
+
+        {/* Filtros */}
         <div className={styles.filterWrapper}>
           <label htmlFor="fromDate" className={styles.filterLabel}>
             Fecha Desde
@@ -195,64 +197,59 @@ export const AnalisisMoldes = () => {
         </div>
       </section>
 
-      {/* === CONTENIDO === */}
-      <section className={styles.contentPanel}>
-        <h2 className={styles.title}>Rendimiento por Molde</h2>
+      {errorDescarga && <p className={styles.error}>{errorDescarga}</p>}
 
-        {errorDescarga && <p className={styles.error}>{errorDescarga}</p>}
-
-        {cargando && <p className={styles.loading}>Cargando moldes...</p>}
-        {!cargando && error && <p className={styles.error}>{error}</p>}
-        {!cargando && !error && !hayDatos && (
-          <p className={styles.emptyMessage}>
-            No hay información de moldes para el período seleccionado.
-          </p>
-        )}
-        {!cargando && !error && hayDatos && (
-          <div className={styles.tableContainer}>
-            <table className={styles.table}>
-              <thead>
-                <tr>
-                  <th>Item</th>
-                  <th>Nombre</th>
-                  <th>Descripción</th>
-                  <th>Gruesas Lisas</th>
-                  <th>Entradas (Gruesas)</th>
-                  <th>Gruesas Decoradas</th>
-                  <th>Gruesas Defectuosas</th>
-                  <th>Eficiencia</th>
-                  <th>Deficiencia</th>
+      {cargando && <p className={styles.loading}>Cargando moldes...</p>}
+      {!cargando && error && <p className={styles.error}>{error}</p>}
+      {!cargando && !error && !hayDatos && (
+        <p className={styles.emptyMessage}>
+          No hay información de moldes para el período seleccionado.
+        </p>
+      )}
+      {!cargando && !error && hayDatos && (
+        <div className={styles.tableContainer}>
+          <table className={styles.table}>
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Gruesas Lisas</th>
+                <th>Entradas (Gruesas)</th>
+                <th>Gruesas Decoradas</th>
+                <th>Gruesas Defectuosas</th>
+                <th>Eficiencia</th>
+                <th>Deficiencia</th>
+              </tr>
+            </thead>
+            <tbody>
+              {moldes.map((molde) => (
+                <tr key={molde.item}>
+                  <td>{molde.item}</td>
+                  <td>{molde.nombre}</td>
+                  <td className={styles.descripcion}>
+                    {molde.descripcion || "—"}
+                  </td>
+                  <td>{formatearNumero(molde.gruesasLisas)}</td>
+                  <td>{formatearNumero(molde.entradasGruesas)}</td>
+                  <td>{formatearNumero(molde.gruesasDecoradas)}</td>
+                  <td>{formatearNumero(molde.gruesasDefectuosas)}</td>
+                  <td>
+                    <span className={styles.badgeGood}>
+                      {formatearPorcentaje(molde.eficiencia)}%
+                    </span>
+                  </td>
+                  <td>
+                    <span className={styles.badgeBad}>
+                      {formatearPorcentaje(molde.deficiencia)}%
+                    </span>
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {moldes.map((molde) => (
-                  <tr key={molde.item}>
-                    <td>{molde.item}</td>
-                    <td>{molde.nombre}</td>
-                    <td className={styles.descripcion}>
-                      {molde.descripcion || "—"}
-                    </td>
-                    <td>{formatearNumero(molde.gruesasLisas)}</td>
-                    <td>{formatearNumero(molde.entradasGruesas)}</td>
-                    <td>{formatearNumero(molde.gruesasDecoradas)}</td>
-                    <td>{formatearNumero(molde.gruesasDefectuosas)}</td>
-                    <td>
-                      <span className={styles.badgeGood}>
-                        {formatearPorcentaje(molde.eficiencia)}%
-                      </span>
-                    </td>
-                    <td>
-                      <span className={styles.badgeBad}>
-                        {formatearPorcentaje(molde.deficiencia)}%
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </section>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </section>
   );
 };

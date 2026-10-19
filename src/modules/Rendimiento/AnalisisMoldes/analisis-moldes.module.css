@@ -1,21 +1,24 @@
 .analisisMoldes {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  width: 100%;
+  padding: 20px;
+  margin: 0 auto;
+  background-color: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
-/* === FILTRO DE FECHAS + BOTÓN DE EXPORTACIÓN === */
-.filters {
+/* === PANEL DE CONTROL === */
+.controlPanel {
   display: flex;
-  flex-wrap: wrap;
-  gap: 1.5rem;
-  justify-content: center;
-  align-items: flex-end;
-  padding: 1.5rem 1rem;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem;
+  margin: 0rem 0 1.5rem;
+}
+
+.title {
+  color: var(--primary-text-color);
+  font-size: 1.5rem;
 }
 
 .filterWrapper {
@@ -53,7 +56,6 @@
   color: #fff;
   cursor: pointer;
   font-weight: 600;
-  font-size: 0.95rem;
   transition: background 0.3s ease;
 }
 
@@ -64,22 +66,6 @@
 .downloadButton:disabled {
   opacity: 0.7;
   cursor: not-allowed;
-}
-
-/* === CONTENIDO === */
-.contentPanel {
-  padding: 1.5rem;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-}
-
-.title {
-  color: var(--primary-text-color);
-  font-size: 1.5rem;
-  font-weight: 600;
-  text-align: center;
-  margin: 0 0 1.5rem;
 }
 
 .tableContainer {
@@ -162,7 +148,7 @@
 }
 
 @media (max-width: 600px) {
-  .filters {
+  .controlPanel {
     flex-direction: column;
     align-items: stretch;
   }

@@ -85,12 +85,15 @@
 /* Wrapper para los botones de enlace */
 .linkButtons {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 1rem;
 }
 
 /* Botón de enlace al Módulo de Metas */
-.objectivesModule {
+.objectivesModule,
+.moldAnalysis {
   display: block;
   flex-grow: 0;
 
@@ -98,16 +101,24 @@
   text-decoration: none;
   border: 0;
   border-radius: 6px;
-  padding: 0.55rem 1rem;
-  background: var(--primary-color);
+  padding: 0.55rem 0.9rem;
   color: #fff;
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   font-weight: 600;
   transition: background 0.3s ease;
 }
+.objectivesModule {
+  background: var(--primary-color);
+}
 .objectivesModule:hover {
   background: #2563eb;
+}
+.moldAnalysis {
+  background: purple;
+}
+.moldAnalysis:hover {
+  background: rgb(82, 4, 82);
 }
 
 /* Configuración del Dashboard */

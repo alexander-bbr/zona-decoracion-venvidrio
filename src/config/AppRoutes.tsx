@@ -10,6 +10,7 @@ import { Rendimiento } from "../modules/Rendimiento";
 import { Metas } from "../modules/Rendimiento/Metas";
 import { RegistrarMeta } from "../modules/Rendimiento/Metas/RegistrarMeta";
 import { EditarMeta } from "../modules/Rendimiento/Metas/EditarMeta";
+import { AnalisisMoldes } from "../modules/Rendimiento/AnalisisMoldes";
 
 // Módulo - Inventario de Insumos
 import { InventarioInsumos } from "../modules/InventarioInsumos";
@@ -99,6 +100,18 @@ export const AppRoutes = () => {
           </PrivateRoute>
         }
       >
+        {/* Submódulo - Análisis de Moldes */}
+        <Route
+          path="analis-moldes"
+          element={
+            <PrivateRoute
+              requiredPermissions={[{ modulo: "rendimiento", accion: "ver" }]}
+            >
+              <AnalisisMoldes />
+            </PrivateRoute>
+          }
+        ></Route>
+
         {/* Submódulo - Metas */}
         <Route
           path="metas"

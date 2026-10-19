@@ -1,0 +1,181 @@
+.analisisMoldes {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 100%;
+}
+
+/* === FILTRO DE FECHAS + BOTÓN DE EXPORTACIÓN === */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: center;
+  align-items: flex-end;
+  padding: 1.5rem 1rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.filterWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 200px;
+}
+
+.filterLabel {
+  text-align: center;
+  font-size: 0.95rem;
+  color: var(--secondary-text-color);
+}
+
+.dateInput {
+  border: 1px solid rgba(52, 73, 94, 0.14);
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-size: 0.95rem;
+  color: var(--primary-text-color);
+  background: white;
+}
+
+.downloadWrapper {
+  display: flex;
+  align-items: center;
+}
+
+.downloadButton {
+  border: 0;
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  background: #22bb6e;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: background 0.3s ease;
+}
+
+.downloadButton:hover:not(:disabled) {
+  background: #1ea863;
+}
+
+.downloadButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* === CONTENIDO === */
+.contentPanel {
+  padding: 1.5rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.title {
+  color: var(--primary-text-color);
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-align: center;
+  margin: 0 0 1.5rem;
+}
+
+.tableContainer {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 900px;
+}
+
+.table th {
+  padding: 0.8rem 1rem;
+  background: #5181b1;
+  color: #fff;
+  text-align: center;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #e5e7eb;
+  color: #374151;
+  text-align: center;
+  font-size: 0.92rem;
+  white-space: nowrap;
+}
+
+.table tbody tr:hover {
+  background: #eef5fc;
+}
+
+.descripcion {
+  text-align: left !important;
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* === BADGES === */
+.badgeGood,
+.badgeBad {
+  display: inline-block;
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.badgeGood {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.badgeBad {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.loading {
+  text-align: center;
+  color: #6b7280;
+  padding: 2rem;
+}
+
+.error {
+  color: #b42318;
+  font-weight: 600;
+  text-align: center;
+  padding: 1rem;
+}
+
+.emptyMessage {
+  text-align: center;
+  color: #6b7280;
+  padding: 3rem;
+  font-size: 1.05rem;
+}
+
+@media (max-width: 600px) {
+  .filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .filterWrapper {
+    width: 100%;
+  }
+  .dateInput {
+    width: 100%;
+  }
+  .downloadWrapper {
+    width: 100%;
+  }
+  .downloadButton {
+    width: 100%;
+  }
+}

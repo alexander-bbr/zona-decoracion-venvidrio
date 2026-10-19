@@ -110,3 +110,15 @@ export type Totales = {
   eficienciaGeneral: number;
   deficienciaGeneral: number;
 };
+
+export type MoldeRendimiento = {
+  item: string;
+  nombre: string;
+  descripcion: string;
+  gruesasLisas: number;
+  entradasGruesas: number;
+  gruesasDecoradas: number;
+  gruesasDefectuosas: number;
+  eficiencia: number;
+  deficiencia: number;
+};

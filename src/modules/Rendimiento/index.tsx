@@ -263,7 +263,10 @@ export const Rendimiento = () => {
     chartType === "lineal" ? Lineal : chartType === "barras" ? Barras : Torta;
 
   const isRoot = location.pathname === "/rendimiento";
-  const showSubNav = location.pathname === "/rendimiento/metas";
+  //* Mostrar subnav tanto los submódulos de Metas y Análisis de Moldes
+  const showSubNav =
+    location.pathname === "/rendimiento/metas" ||
+    location.pathname === "/rendimiento/analis-moldes";
 
   return (
     <section className="container content">
@@ -286,7 +289,11 @@ export const Rendimiento = () => {
           >
             ← Volver
           </NavLink>
-          <span className={styles.subNavTitle}>Metas</span>
+          <span className={styles.subNavTitle}>
+            {location.pathname === "/rendimiento/analis-moldes"
+              ? "Análisis de Moldes"
+              : "Metas"}
+          </span>
         </nav>
       )}
 
@@ -351,6 +358,12 @@ export const Rendimiento = () => {
 
                 {/* Botones de Enlace */}
                 <div className={styles.linkButtons}>
+                  <NavLink
+                    to="/rendimiento/analis-moldes"
+                    className={styles.moldAnalysis}
+                  >
+                    Análisis de Moldes
+                  </NavLink>
                   <NavLink
                     to="/rendimiento/metas"
                     className={styles.objectivesModule}

@@ -182,3 +182,27 @@ Respuesta en caso de error:
 {
     "detail": "No se encontraron pantallas registradas."
 }
+
+
+
+---
+
+
+
+Ruta 8: Exportar Rendimiento por Molde
+Endpoint: http://127.0.0.1:8000/api/exportacion/rendimiento-moldes
+Método: POST
+
+JSON (Envía el Frontend):
+{
+    "fechaDesde": "2024-01-01",
+    "fechaHasta": "2024-12-31"
+}
+
+Respuesta en caso de éxito:
+Archivo .xlsx descargable con el rendimiento (entradas en gruesas, gruesas lisas, decoradas, defectuosas, eficiencia y deficiencia) por cada molde en el rango de fechas indicado.
+
+Respuesta en caso de error:
+{
+    "detail": "No se encontraron moldes con producción o activos en el rango de fechas indicado."
+}

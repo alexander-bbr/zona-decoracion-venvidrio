@@ -510,7 +510,7 @@ export const GestionProductiva = () => {
                 className={styles.filterToggleButton}
                 onClick={() => setMostrarFiltros((v) => !v)}
               >
-                {mostrarFiltros ? "▲ Ocultar filtros" : "▼ Mostrar filtros"}
+                {mostrarFiltros ? "▲ Filtros" : "▼ Filtros"}
               </button>
               <button
                 className={styles.downloadButton}

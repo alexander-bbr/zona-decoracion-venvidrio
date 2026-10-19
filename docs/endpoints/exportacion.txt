@@ -37,18 +37,18 @@ Ejemplo:
 
 JSON (Envía el Frontend):
 {
-    "totalGruesasLisas": 15.08,
     "fechaDesde": "2024-01-01",
     "fechaHasta": "2024-12-31"
+    "totalGruesasLisas": 15.08,
 }
 
 Ejemplo 2:
 
 JSON (Envía el Frontend):
 {
-    "tecnico": "DANIEL PÉREZ",
     "fechaDesde": "2024-01-01",
     "fechaHasta": "2024-12-31"
+    "tecnico": "DANIEL PÉREZ",
 }
 
 

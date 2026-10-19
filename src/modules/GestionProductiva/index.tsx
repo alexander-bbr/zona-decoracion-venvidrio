@@ -101,7 +101,6 @@ export const GestionProductiva = () => {
   const [fechaHasta, setFechaHasta] = useState("");
   const [criterio, setCriterio] = useState<Criterio>("");
   const [valorCriterio, setValorCriterio] = useState("");
-  /* Averigua si hice algo bien con mis cambios, ya que esta variable deice que está asignada pero su valor no se está utilizando */
   const [filtrosAplicados, setFiltrosAplicados] =
     useState<FiltrosAplicados | null>(null);
 
@@ -109,6 +108,8 @@ export const GestionProductiva = () => {
   const [mostrarModal, setMostrarModal] = useState(false);
   const [fechaDesdeExport, setFechaDesdeExport] = useState("");
   const [fechaHastaExport, setFechaHastaExport] = useState("");
+  const [criterioExport, setCriterioExport] = useState<Criterio>("");
+  const [valorCriterioExport, setValorCriterioExport] = useState("");
   const [descargando, setDescargando] = useState(false);
   const [errorDescarga, setErrorDescarga] = useState("");
 
@@ -134,7 +135,7 @@ export const GestionProductiva = () => {
     return `${year}-${month}-${day}`;
   })();
 
-  // ===== Cargar moldes para el select del criterio "item" =====
+  // ===== Cargar moldes para los selects de criterio "item" =====
   useEffect(() => {
     const cargarMoldes = async () => {
       try {
@@ -165,11 +166,9 @@ export const GestionProductiva = () => {
         params.set("limit", String(registrosPorPagina));
 
         if (filtros) {
-          // Fechas obligatorias cuando hay filtro
           params.set("desde", filtros.desde);
           params.set("hasta", filtros.hasta);
 
-          // Criterio opcional
           if (filtros.criterio && filtros.valor) {
             let valorFinal = filtros.valor;
             if (filtros.criterio === "tecnico") {
@@ -204,7 +203,6 @@ export const GestionProductiva = () => {
 
         registrosCargados.push(...registrosNormalizados);
 
-        // Como el backend devuelve array sin total, paramos si vino menos del límite
         if (registrosNormalizados.length < registrosPorPagina) {
           break;
         }
@@ -293,13 +291,24 @@ export const GestionProductiva = () => {
 
   // ===== Exportación =====
   const abrirModalExportar = () => {
-    const d = new Date();
-    const year = d.getFullYear();
-    const month = String(d.getMonth() + 1).padStart(2, "0");
-    const day = String(d.getDate()).padStart(2, "0");
-    const hoyStr = `${year}-${month}-${day}`;
-    setFechaDesdeExport(hoyStr);
-    setFechaHastaExport(hoyStr);
+    // Pre-llenar con los filtros aplicados (si los hay)
+    if (filtrosAplicados) {
+      setFechaDesdeExport(filtrosAplicados.desde);
+      setFechaHastaExport(filtrosAplicados.hasta);
+      setCriterioExport(filtrosAplicados.criterio);
+      setValorCriterioExport(filtrosAplicados.valor);
+    } else {
+      // Por defecto: hoy y hoy, sin criterio
+      const d = new Date();
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      const hoyStr = `${year}-${month}-${day}`;
+      setFechaDesdeExport(hoyStr);
+      setFechaHastaExport(hoyStr);
+      setCriterioExport("");
+      setValorCriterioExport("");
+    }
     setErrorDescarga("");
     setMostrarModal(true);
   };
@@ -310,6 +319,7 @@ export const GestionProductiva = () => {
   };
 
   const handleDescargarExcel = async () => {
+    // Validaciones
     if (!fechaDesdeExport || !fechaHastaExport) {
       setErrorDescarga("Debes seleccionar ambas fechas.");
       return;
@@ -322,17 +332,35 @@ export const GestionProductiva = () => {
       return;
     }
 
+    if (criterioExport && !valorCriterioExport.trim()) {
+      setErrorDescarga(
+        "Debes ingresar un valor para el criterio seleccionado.",
+      );
+      return;
+    }
+
     setDescargando(true);
     setErrorDescarga("");
 
     try {
+      // Construir el body dinámicamente
+      const body: Record<string, string> = {
+        fechaDesde: fechaDesdeExport,
+        fechaHasta: fechaHastaExport,
+      };
+
+      if (criterioExport && valorCriterioExport) {
+        let valorFinal = valorCriterioExport;
+        if (criterioExport === "tecnico") {
+          valorFinal = valorFinal.toUpperCase();
+        }
+        body[criterioExport] = valorFinal;
+      }
+
       const response = await fetch(API_EXPORTAR_PRODUCCION, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          fechaDesde: fechaDesdeExport,
-          fechaHasta: fechaHastaExport,
-        }),
+        body: JSON.stringify(body),
       });
 
       if (!response.ok) {
@@ -408,36 +436,39 @@ export const GestionProductiva = () => {
     return "";
   };
 
-  // ===== Render dinámico del input según criterio =====
-  const renderInputCriterio = () => {
-    if (!criterio) {
+  // ===== Render dinámico del input de valor según criterio =====
+  // Recibe el criterio y el valor actual, y los callbacks para actualizarlos
+  const renderInputCriterio = (
+    criterioActual: Criterio,
+    valorActual: string,
+    setValor: (v: string) => void,
+    placeholderDisabled: string,
+  ) => {
+    if (!criterioActual) {
       return (
         <input
           type="text"
-          placeholder="Selecciona un criterio primero"
+          placeholder={placeholderDisabled}
           disabled
           value=""
         />
       );
     }
 
-    if (criterio === "tecnico") {
+    if (criterioActual === "tecnico") {
       return (
         <input
           type="text"
           placeholder="Ej: DANIEL PÉREZ"
-          value={valorCriterio}
-          onChange={(e) => setValorCriterio(e.target.value.toUpperCase())}
+          value={valorActual}
+          onChange={(e) => setValor(e.target.value.toUpperCase())}
         />
       );
     }
 
-    if (criterio === "turno") {
+    if (criterioActual === "turno") {
       return (
-        <select
-          value={valorCriterio}
-          onChange={(e) => setValorCriterio(e.target.value)}
-        >
+        <select value={valorActual} onChange={(e) => setValor(e.target.value)}>
           <option value="">...</option>
           <option value="1">1</option>
           <option value="2">2</option>
@@ -446,12 +477,9 @@ export const GestionProductiva = () => {
       );
     }
 
-    if (criterio === "item") {
+    if (criterioActual === "item") {
       return (
-        <select
-          value={valorCriterio}
-          onChange={(e) => setValorCriterio(e.target.value)}
-        >
+        <select value={valorActual} onChange={(e) => setValor(e.target.value)}>
           <option value="">...</option>
           {moldes.map((molde) => (
             <option key={molde.item} value={molde.item}>
@@ -469,8 +497,8 @@ export const GestionProductiva = () => {
         step="0.01"
         min="0"
         placeholder="Valor numérico"
-        value={valorCriterio}
-        onChange={(e) => setValorCriterio(e.target.value)}
+        value={valorActual}
+        onChange={(e) => setValor(e.target.value)}
       />
     );
   };
@@ -578,7 +606,12 @@ export const GestionProductiva = () => {
                 </div>
                 <div className={styles.filtroInput}>
                   <label htmlFor="filtroValor">Valor</label>
-                  {renderInputCriterio()}
+                  {renderInputCriterio(
+                    criterio,
+                    valorCriterio,
+                    setValorCriterio,
+                    "Selecciona un criterio primero",
+                  )}
                 </div>
               </div>
               <div className={styles.filtrosActions}>
@@ -600,7 +633,7 @@ export const GestionProductiva = () => {
             </div>
           )}
 
-          {/* Mensajes de Estado para el filtrado */}
+          {/* Mensajes de Estado */}
           {cargando && <p>Cargando registros de producción...</p>}
           {error && <p className={styles.error}>{error}</p>}
           {!cargando && !error && registros.length === 0 && (
@@ -708,31 +741,64 @@ export const GestionProductiva = () => {
             </div>
 
             <p className={styles.modalDescription}>
-              Selecciona el rango de fechas para exportar los registros de
-              producción.
+              Ajusta el rango de fechas y el criterio para exportar los
+              registros de producción.
             </p>
 
             <div className={styles.modalBody}>
               <div className={styles.modalInputWrapper}>
-                <label htmlFor="fechaDesdeExport">Desde</label>
+                <label htmlFor="fechaDesdeExport">
+                  Desde <span className={styles.requireSymbol}>*</span>
+                </label>
                 <input
                   id="fechaDesdeExport"
                   type="date"
                   value={fechaDesdeExport}
                   onChange={(e) => setFechaDesdeExport(e.target.value)}
-                  max={fechaHastaExport || undefined}
+                  max={hoy}
                 />
               </div>
 
               <div className={styles.modalInputWrapper}>
-                <label htmlFor="fechaHastaExport">Hasta</label>
+                <label htmlFor="fechaHastaExport">
+                  Hasta <span className={styles.requireSymbol}>*</span>
+                </label>
                 <input
                   id="fechaHastaExport"
                   type="date"
                   value={fechaHastaExport}
                   onChange={(e) => setFechaHastaExport(e.target.value)}
-                  min={fechaDesdeExport || undefined}
+                  max={hoy}
                 />
+              </div>
+
+              <div className={styles.modalInputWrapper}>
+                <label htmlFor="criterioExport">Criterio</label>
+                <select
+                  id="criterioExport"
+                  value={criterioExport}
+                  onChange={(e) => {
+                    setCriterioExport(e.target.value as Criterio);
+                    setValorCriterioExport("");
+                  }}
+                >
+                  <option value="">Sin criterio (solo fechas)</option>
+                  {CRITERIOS.map((c) => (
+                    <option key={c.value} value={c.value}>
+                      {c.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className={styles.modalInputWrapper}>
+                <label htmlFor="valorCriterioExport">Valor</label>
+                {renderInputCriterio(
+                  criterioExport,
+                  valorCriterioExport,
+                  setValorCriterioExport,
+                  "Selecciona un criterio primero",
+                )}
               </div>
             </div>
 

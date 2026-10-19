@@ -291,14 +291,12 @@ export const GestionProductiva = () => {
 
   // ===== Exportación =====
   const abrirModalExportar = () => {
-    // Pre-llenar con los filtros aplicados (si los hay)
     if (filtrosAplicados) {
       setFechaDesdeExport(filtrosAplicados.desde);
       setFechaHastaExport(filtrosAplicados.hasta);
       setCriterioExport(filtrosAplicados.criterio);
       setValorCriterioExport(filtrosAplicados.valor);
     } else {
-      // Por defecto: hoy y hoy, sin criterio
       const d = new Date();
       const year = d.getFullYear();
       const month = String(d.getMonth() + 1).padStart(2, "0");
@@ -319,7 +317,6 @@ export const GestionProductiva = () => {
   };
 
   const handleDescargarExcel = async () => {
-    // Validaciones
     if (!fechaDesdeExport || !fechaHastaExport) {
       setErrorDescarga("Debes seleccionar ambas fechas.");
       return;
@@ -343,7 +340,6 @@ export const GestionProductiva = () => {
     setErrorDescarga("");
 
     try {
-      // Construir el body dinámicamente
       const body: Record<string, string> = {
         fechaDesde: fechaDesdeExport,
         fechaHasta: fechaHastaExport,
@@ -437,7 +433,6 @@ export const GestionProductiva = () => {
   };
 
   // ===== Render dinámico del input de valor según criterio =====
-  // Recibe el criterio y el valor actual, y los callbacks para actualizarlos
   const renderInputCriterio = (
     criterioActual: Criterio,
     valorActual: string,
@@ -649,6 +644,7 @@ export const GestionProductiva = () => {
                     <th>Nro. Registro</th>
                     <th>Fecha</th>
                     <th>Turno</th>
+                    <th>Grupo</th>
                     <th>Técnico</th>
                     <th>Total Gruesas</th>
                     <th>Gruesas Lisas</th>
@@ -672,6 +668,7 @@ export const GestionProductiva = () => {
                       </td>
                       <td>{registro.fecha}</td>
                       <td>{registro.turno}</td>
+                      <td>{registro.grupo}</td>
                       <td>{registro.tecnico}</td>
                       <td>{registro.totalGruesas}</td>
                       <td>{registro.totalGruesasLisas}</td>

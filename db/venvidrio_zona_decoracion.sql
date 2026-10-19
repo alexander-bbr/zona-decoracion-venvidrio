@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 18-10-2026 a las 21:06:39
+-- Tiempo de generación: 19-10-2026 a las 03:09:37
 -- Versión del servidor: 10.4.32-MariaDB
--- Versión de PHP: 8.2.12
+-- Versión de PHP: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -528,7 +528,7 @@ CREATE TABLE `moldes` (
 --
 
 INSERT INTO `moldes` (`item`, `nombre`, `descripcion`, `numero_camadas`, `numero_envases`, `numero_gruesas`, `estado`) VALUES
-('string', 'string', 'string', 0, 0, 0.00, 1),
+('V-0003567', 'GX01067', 'Molde de Prueba', 7, 1024, 7.11, 1),
 ('V-0003575', 'GX01335', 'CERVEZA 330,0 RET.', 8888, 3520, 24.44, 1),
 ('V-0003805', 'GX01944', 'POLAR LIGHT', 10, 5750, 39.93, 1),
 ('V-0003829', 'GV02156', 'GOLDEN 350 ML', 8, 3784, 26.28, 1),
@@ -605,7 +605,61 @@ INSERT INTO `permisos_usuarios` (`id_permisou`, `id_usuario`, `id_permisom`) VAL
 (596, 13, 15),
 (597, 13, 16),
 (598, 13, 17),
-(599, 13, 18);
+(599, 13, 18),
+(600, 14, 2),
+(601, 14, 1),
+(602, 14, 3),
+(603, 14, 7),
+(604, 14, 13),
+(605, 14, 4),
+(606, 14, 5),
+(607, 14, 6),
+(608, 14, 8),
+(609, 14, 9),
+(610, 14, 10),
+(611, 14, 11),
+(612, 14, 12),
+(613, 14, 18),
+(614, 14, 17),
+(615, 14, 16),
+(616, 14, 15),
+(617, 14, 14),
+(618, 15, 1),
+(619, 15, 2),
+(620, 15, 3),
+(621, 15, 7),
+(622, 15, 13),
+(623, 15, 4),
+(624, 15, 5),
+(625, 15, 6),
+(626, 15, 8),
+(627, 15, 9),
+(628, 15, 10),
+(629, 15, 11),
+(630, 15, 12),
+(631, 15, 18),
+(632, 15, 17),
+(633, 15, 16),
+(634, 15, 15),
+(635, 15, 14),
+(636, 16, 1),
+(637, 16, 2),
+(638, 16, 3),
+(639, 16, 7),
+(640, 16, 13),
+(641, 16, 4),
+(642, 16, 5),
+(643, 16, 6),
+(644, 16, 8),
+(645, 16, 9),
+(646, 16, 10),
+(647, 16, 11),
+(648, 16, 12),
+(649, 16, 18),
+(650, 16, 17),
+(651, 16, 16),
+(652, 16, 15),
+(653, 16, 14);
 
 -- --------------------------------------------------------
 
@@ -669,7 +723,10 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id_usuario`, `cedula`, `carnet_usuario`, `contrasena`, `nombres`, `apellidos`, `telefono`, `correo`, `rol`, `activo_usuario`, `creado_en`) VALUES
-(13, '30670857', '111', '$argon2id$v=19$m=65536,t=3,p=4$Q3u6fMBXG8gEHQIhfGUojg$Drm1LW+20g2J02h0dyKaQEoNoYJ8+oNb1zDS19NnQuI', 'Daniel', 'Perez', '04167383181', 'd30670857@gmail.com', 'administrador', 1, '2026-10-11 19:30:27');
+(13, '30670857', '111', '$argon2id$v=19$m=65536,t=3,p=4$Q3u6fMBXG8gEHQIhfGUojg$Drm1LW+20g2J02h0dyKaQEoNoYJ8+oNb1zDS19NnQuI', 'Daniel', 'Perez', '04167383181', 'd30670857@gmail.com', 'administrador', 1, '2026-10-11 19:30:27'),
+(14, '30717851', '000', '$argon2id$v=19$m=65536,t=3,p=4$x/QQCA/JxHuixjEeobBEmQ$0CZI5aV04wf+KST8GKZ5wlQAzHuGFVHaceyRh8Wo7z0', 'Miguel Alexander', 'Bethancourt Briceño', '0412-1986816', 'mbethancourt2005@gmail.com', 'administrador', 1, '2026-10-19 01:02:21'),
+(15, '30670913', '222', '$argon2id$v=19$m=65536,t=3,p=4$odFWrH453viyz2xUl7c+kA$FPOawPEHR3xs8bNLaJaQDScZISzmDbLb6TGq71E76VM', 'Fabio David', 'Romero Vera', '0416-3660482', 'fabioromero7809@gmail.com', 'administrador', 1, '2026-10-19 01:04:28'),
+(16, '30535948', '333', '$argon2id$v=19$m=65536,t=3,p=4$m5xx0hIvYu5dueetuyocOg$7snVCHPBYCz4IzVrGEsKDS4OCPc3IL/NIZ9igWBZwYU', 'Jose Andrés', 'Faria Peñaloza', '412-8908379', 'josefaria1409@gmail.com', 'administrador', 1, '2026-10-19 01:06:31');
 
 --
 -- Índices para tablas volcadas
@@ -884,13 +941,13 @@ ALTER TABLE `permisos_modulos`
 -- AUTO_INCREMENT de la tabla `permisos_usuarios`
 --
 ALTER TABLE `permisos_usuarios`
-  MODIFY `id_permisou` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=600;
+  MODIFY `id_permisou` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=654;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- Restricciones para tablas volcadas

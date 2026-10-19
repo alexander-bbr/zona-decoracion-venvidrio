@@ -35,6 +35,15 @@ const visibleMetricLabels: Record<keyof VisibleMetrics, string> = {
   meta: "Meta (%)",
 };
 
+//* Métricas que NO aplican al gráfico de Torta
+const TORTA_HIDDEN_METRICS: (keyof VisibleMetrics)[] = [
+  "pantallasFabricadas",
+  "pantallasConsumidas",
+  "eficiencia",
+  "deficiencia",
+  "meta",
+];
+
 //* Formatea un porcentaje: 85.0 -> "85", 85.5 -> "85.5", "85.50" -> "85.5"
 const formatearPorcentaje = (
   valor: number | string | null | undefined,
@@ -268,6 +277,13 @@ export const Rendimiento = () => {
     location.pathname === "/rendimiento/metas" ||
     location.pathname === "/rendimiento/analis-moldes";
 
+  //* Métricas visibles según el tipo de gráfico seleccionado
+  const metricasVisibles = (
+    Object.keys(visibleMetricLabels) as (keyof VisibleMetrics)[]
+  ).filter(
+    (metric) => chartType !== "torta" || !TORTA_HIDDEN_METRICS.includes(metric),
+  );
+
   return (
     <section className="container content">
       <header className={styles.moduleHeader}>
@@ -375,10 +391,9 @@ export const Rendimiento = () => {
 
               {/* Variables a observar */}
               <div className={styles.checkboxList}>
-                {Object.keys(visibleMetricLabels).map((metric) => {
-                  const key = metric as keyof VisibleMetrics;
+                {metricasVisibles.map((metric) => {
                   //* Deshabilitamos el checkbox de la meta si no hay meta activa
-                  const disabled = key === "meta" && metaActiva === null;
+                  const disabled = metric === "meta" && metaActiva === null;
                   return (
                     <label
                       className={styles.checkboxItem}
@@ -391,11 +406,11 @@ export const Rendimiento = () => {
                     >
                       <input
                         type="checkbox"
-                        checked={visibleMetrics[key]}
-                        onChange={() => toggleMetric(key)}
+                        checked={visibleMetrics[metric]}
+                        onChange={() => toggleMetric(metric)}
                         disabled={disabled}
                       />
-                      {visibleMetricLabels[key]}
+                      {visibleMetricLabels[metric]}
                     </label>
                   );
                 })}

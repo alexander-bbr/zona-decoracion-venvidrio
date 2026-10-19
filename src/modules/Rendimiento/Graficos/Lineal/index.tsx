@@ -89,26 +89,6 @@ export const Lineal = ({ data, visibleMetrics, metaActiva }: LinealProps) => {
             wrapperStyle={{ paddingBottom: "20px" }}
           />
 
-          {/* Línea de referencia: Meta activa */}
-          {mostrarMeta && metaActiva !== null && (
-            <ReferenceLine
-              yAxisId="right"
-              y={metaActiva.valor}
-              stroke={COLORS.meta}
-              strokeDasharray="6 4"
-              strokeWidth={2}
-              label={{
-                value: `Meta de Deficiencia (${capitalizar(
-                  metaActiva.mes,
-                )}): ${formatearPorcentaje(metaActiva.valor)}%`,
-                position: "insideTopRight",
-                fill: COLORS.meta,
-                fontSize: 12,
-                fontWeight: 600,
-              }}
-            />
-          )}
-
           {visibleMetrics.envasesLisos && (
             <Line
               yAxisId="left"
@@ -186,6 +166,27 @@ export const Lineal = ({ data, visibleMetrics, metaActiva }: LinealProps) => {
               strokeWidth={3}
               dot={false}
               strokeDasharray="5 3"
+            />
+          )}
+
+          {/* Línea de referencia: Meta activa (La colocamos al final para que se dibuje ENCIMA de las demás series) */}
+          {mostrarMeta && metaActiva !== null && (
+            <ReferenceLine
+              yAxisId="right"
+              y={metaActiva.valor}
+              stroke={COLORS.meta}
+              strokeDasharray="6 4"
+              strokeWidth={2}
+              ifOverflow="extendDomain"
+              label={{
+                value: `Meta de Deficiencia (${capitalizar(
+                  metaActiva.mes,
+                )}): ${formatearPorcentaje(metaActiva.valor)}%`,
+                position: "insideTopRight",
+                fill: COLORS.meta,
+                fontSize: 12,
+                fontWeight: 600,
+              }}
             />
           )}
         </LineChart>

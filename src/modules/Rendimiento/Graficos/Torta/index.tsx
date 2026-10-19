@@ -50,20 +50,10 @@ export const Torta = ({ visibleMetrics, totales }: TortaProps) => {
     },
   ].filter((item) => item.value > 0);
 
-  //* ¿El usuario tiene activa ALGUNA variable (aunque no sea de envases)?
-  const hayAlgunaVariableActiva =
-    visibleMetrics.envasesLisos ||
-    visibleMetrics.envasesDecorados ||
-    visibleMetrics.envasesPerdidos ||
-    visibleMetrics.pantallasFabricadas ||
-    visibleMetrics.pantallasConsumidas;
-
   if (slices.length === 0) {
     return (
       <div className={styles.noData}>
-        {hayAlgunaVariableActiva
-          ? "Este gráfico solo muestra información de envases. Activa al menos uno para verlo."
-          : "Activa al menos un tipo de envase para ver este gráfico."}
+        Activa al menos un tipo de envase para ver este gráfico.
       </div>
     );
   }

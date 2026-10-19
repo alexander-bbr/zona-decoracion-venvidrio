@@ -101,6 +101,7 @@ export const GestionProductiva = () => {
   const [fechaHasta, setFechaHasta] = useState("");
   const [criterio, setCriterio] = useState<Criterio>("");
   const [valorCriterio, setValorCriterio] = useState("");
+  /* Averigua si hice algo bien con mis cambios, ya que esta variable deice que está asignada pero su valor no se está utilizando */
   const [filtrosAplicados, setFiltrosAplicados] =
     useState<FiltrosAplicados | null>(null);
 
@@ -599,21 +600,7 @@ export const GestionProductiva = () => {
             </div>
           )}
 
-          {/* Indicador de filtros activos */}
-          {filtrosAplicados && (
-            <div className={styles.filtrosActivos}>
-              <strong>Filtros aplicados:</strong> {filtrosAplicados.desde} →{" "}
-              {filtrosAplicados.hasta}
-              {filtrosAplicados.criterio && (
-                <>
-                  {" | "}
-                  <strong>{filtrosAplicados.criterio}:</strong>{" "}
-                  {filtrosAplicados.valor}
-                </>
-              )}
-            </div>
-          )}
-
+          {/* Mensajes de Estado para el filtrado */}
           {cargando && <p>Cargando registros de producción...</p>}
           {error && <p className={styles.error}>{error}</p>}
           {!cargando && !error && registros.length === 0 && (

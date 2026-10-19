@@ -302,19 +302,18 @@
 
 .emptyMessage {
   text-align: center;
-  padding: 3rem;
   color: #6b7280;
-  font-size: 1rem;
+  font-weight: 600;
+  padding: 0.75rem 1rem;
+  margin: 3rem auto 4rem;
 }
 
 .error {
-  color: #b42318;
+  text-align: center;
+  color: #ac1d13e6;
   font-weight: 600;
   padding: 0.75rem 1rem;
-  background: #fef2f2;
-  border-radius: 6px;
-  border-left: 4px solid #b42318;
-  margin-bottom: 1rem;
+  margin: 3rem auto 4rem;
 }
 
 /* === PAGINACIÓN === */

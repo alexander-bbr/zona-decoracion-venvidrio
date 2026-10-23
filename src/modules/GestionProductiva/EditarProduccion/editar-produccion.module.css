@@ -557,3 +557,7 @@ input[readonly] {
     grid-template-columns: 1fr;
   }
 }
+
+.maquinaContainer select {
+  max-width: 180px !important;
+}
